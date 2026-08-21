@@ -1,0 +1,162 @@
+# =============================================================================
+# generator.yaml — eidos configuration for terraform-provider-gigavuecore
+# =============================================================================
+# ⚠️ UNVERIFIED DRAFT — DO NOT USE FOR GENERATION WITHOUT VALIDATION
+# -----------------------------------------------------------------------------
+# This file was authored without live access to either:
+#   1. the eidos repository (https://github.com/signalbreak-labs/eidos), or
+#   2. the GigaVUE-FM Core OpenAPI spec (openapi.fm.yaml),
+# because outbound network access is disabled in the CI sandbox where this
+# was generated (WebFetch/WebSearch/curl/gh/git all permission-blocked).
+#
+# The top-level schema and key names below are a best-effort reconstruction
+# from training knowledge and MUST be checked against the eidos README /
+# example generator.yaml before running `eidos generate`. API paths are a
+# candidate inventory of the GigaVUE-FM Core API and MUST be checked against
+# the actual spec (`paths` section of openapi.fm.yaml).
+#
+# To produce a fully verified file, re-run this task with outbound network
+# permission granted (WebFetch/WebSearch, or Bash curl/gh), or attach the
+# eidos example generator.yaml and openapi.fm.yaml to the issue.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Provider metadata
+# -----------------------------------------------------------------------------
+provider:
+  name: gigavuecore
+  # (verify key name) registry source for the generated provider
+  source: JUSTINWMYLES/terraform-provider-gigavuecore
+  version: "0.1.0"
+  terraform_version: ">= 1.0"
+  description: |-
+    Terraform provider for the Gigamon GigaVUE-FM Core API.
+    Generated from openapi.fm.yaml with eidos.
+
+# -----------------------------------------------------------------------------
+# OpenAPI specification input
+# -----------------------------------------------------------------------------
+# (verify key name — may be `spec`, `openapi`, or `api_spec`)
+spec:
+  url: >-
+    https://docs.gigamon.com/ref-api/Content/apiref_514onwards/doc/webapp/release/6.14.00%20GigaVUE-FM%20Core/openapi.fm.yaml
+
+# -----------------------------------------------------------------------------
+# Managed resources (CRUD configuration objects)
+# -----------------------------------------------------------------------------
+# Resource eligibility: a path is a good managed-resource candidate when the
+# spec defines GET (read) + POST/PUT/PATCH (create/update) + DELETE for the
+# collection, i.e. a full CRUD lifecycle. Paths that only support GET become
+# data sources (see data_sources below).
+#
+# The list below is the candidate inventory identified from the GigaVUE-FM
+# Core API surface. Verify each `path` against the spec and add any missing
+# collection paths. (verify key names — eidos may instead auto-discover all
+# spec paths and only require `exclude_paths` / overrides here.)
+resources:
+  # --- Sites & topology ---
+  site:            # /api/sites — fabric sites
+    path: /api/sites
+  node:            # /api/nodes — GigaVUE nodes in the fabric
+    path: /api/nodes
+  appliance:       # /api/appliances — managed appliances
+    path: /api/appliances
+  cluster:         # /api/clusters — cluster groups of nodes
+    path: /api/clusters
+
+  # --- Administration / RBAC ---
+  user:            # /api/users — local FM users
+    path: /api/users
+  role:            # /api/roles — RBAC roles
+    path: /api/roles
+  group:           # /api/groups — user groups
+    path: /api/groups
+  tenant:          # /api/tenants — multi-tenancy constructs
+    path: /api/tenants
+
+  # --- Network configuration ---
+  vlan:            # /api/vlans — VLAN definitions
+    path: /api/vlans
+  network:         # /api/networks — L2/L3 networks
+    path: /api/networks
+  interface:       # /api/interfaces — node/port interfaces
+    path: /api/interfaces
+  tunnel:          # /api/tunnels — GRE/VXLAN/etc. tunnels
+    path: /api/tunnels
+  routing:         # /api/routing — static/OSPF/BGP routing config
+    path: /api/routing
+
+  # --- Security / policy ---
+  acl:             # /api/security/acls — access control lists
+    path: /api/security/acls
+  firewall:        # /api/security/firewalls — firewall rules/policies
+    path: /api/security/firewalls
+  policy:          # /api/policies — traffic/security policies
+    path: /api/policies
+  rule:            # /api/rules — policy rules
+    path: /api/rules
+
+  # --- Visibility / monitoring ---
+  monitor:         # /api/monitors — flow/traffic monitors
+    path: /api/monitors
+  dashboard:       # /api/dashboards — dashboard definitions
+    path: /api/dashboards
+  report:          # /api/reports — report definitions
+    path: /api/reports
+  flow:            # /api/flows — flow definitions
+    path: /api/flows
+
+  # --- System administration ---
+  license:         # /api/licenses — feature licenses
+    path: /api/licenses
+  firmware:        # /api/firmware — firmware images & upgrade config
+    path: /api/firmware
+  backup:          # /api/config/backup — configuration backup jobs
+    path: /api/config/backup
+  syslog:          # /api/syslog — syslog server configuration
+    path: /api/syslog
+  snmp:            # /api/snmp — SNMP configuration
+    path: /api/snmp
+  ntp:             # /api/ntp — NTP server configuration
+    path: /api/ntp
+  dns:             # /api/dns — DNS server configuration
+    path: /api/dns
+
+# -----------------------------------------------------------------------------
+# Data sources (read-only GET endpoints)
+# -----------------------------------------------------------------------------
+# Any spec path that exposes GET but no create/update/delete is exposed to
+# Terraform as a data source rather than a managed resource.
+data_sources:
+  sites:           # GET /api/sites
+    path: /api/sites
+  nodes:           # GET /api/nodes
+    path: /api/nodes
+  users:           # GET /api/users
+    path: /api/users
+  roles:           # GET /api/roles
+    path: /api/roles
+  vlans:           # GET /api/vlans
+    path: /api/vlans
+  interfaces:      # GET /api/interfaces
+    path: /api/interfaces
+  topology:        # GET /api/topology — fabric topology (read-only)
+    path: /api/topology
+  alarms:          # GET /api/alarms — active alarms (read-only)
+    path: /api/alarms
+  auditlogs:       # GET /api/auditlogs — audit log entries (read-only)
+    path: /api/auditlogs
+  inventory:       # GET /api/inventory — hardware/software inventory (read-only)
+    path: /api/inventory
+
+# -----------------------------------------------------------------------------
+# Excluded paths / auth
+# -----------------------------------------------------------------------------
+# (verify key names — `exclude_paths`, `ignore_paths`, or `exclude`.)
+exclude_paths:
+  - /api/login          # session bootstrap, not a configuration resource
+  - /api/logout         # session teardown
+  - /api/auditlogs      # immutable event log (exposed as data source only)
+  - /api/alarms         # operational state (exposed as data source only)
+  - /api/system/status  # read-only system status
+  - /api/system/health  # read-only health checks
