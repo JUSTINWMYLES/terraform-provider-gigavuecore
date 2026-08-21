@@ -1,0 +1,65 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsSslProfiles.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Ssl Profiles schema",
+  "definitions": {
+    "AppsSslProfilesSpec": {
+      "id": "#/definitions/AppsSslProfilesSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "mtls": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "default": "disable"
+        },
+        "cipher": {
+          "type": "string",
+          "default": "TLS_AES_128_GCM_SHA256"
+        },
+        "version": {
+          "type": "string",
+          "default": "tls13"
+        }
+      }
+    },
+    "AppsSslProfilesQueryResponse": {
+      "id": "#/definitions/AppsSslProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsSslProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsSslProfilesSpec"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "AppsSslProfileQueryResponse": {
+      "id": "#/definitions/AppsSslProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsSslProfile": {
+          "type": "object",
+          "$ref": "#/definitions/AppsSslProfilesSpec"
+        }
+      }
+    }
+  }
+}
+
+    

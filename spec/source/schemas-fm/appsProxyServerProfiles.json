@@ -1,0 +1,131 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsProxyServerProfiles.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Proxy Server Profiles schema",
+  "definitions": {
+    "proxyServerProfile": {
+      "id": "#/definitions/proxyServerProfile",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias", "protocol", "proxyAddress", "port", "authType", "periodicPing"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minimum": 1
+        },
+        "comment": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "http"
+          ],
+          "default": "http"
+        },
+        "proxyAddress": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum":1 ,
+          "maximum":65535
+        },
+        "authType": {
+          "type": "string",
+          "enum": [
+            "none",
+            "basic"
+          ],
+          "default": "none"
+        },
+        "username": {
+          "type": "string",
+          "default": "none"
+        },
+        "password": {
+          "type": "string",
+          "default": "none"
+        },
+        "periodicPing": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "default": "disable"
+        },
+        "periodicPingType": {
+          "type": "string",
+          "enum": [
+            "http-connect"
+          ],
+          "default": "httpConnect"
+        },
+        "periodicPingInterval": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 5
+        },
+        "periodicPingFailureRetry": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 3,
+          "default": 3
+        },
+        "sslApps": {
+          "type": "object",
+          "$ref": "#/definitions/SSLAppSpec"
+        }
+      }
+    },
+    "SSLAppSpec": {
+      "id": "#/definitions/SSLAppSpec",
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "description": "Cluster Name where the proxy deployed",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+
+        }
+      }
+    },
+    "AppsProxyServerProfilesQueryResponse": {
+      "id": "#/definitions/AppsProxyServerProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsProxyServerProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/proxyServerProfile"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "AppsProxyServerProfileQueryResponse": {
+      "id": "#/definitions/AppsProxyServerProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsProxyServerProfile": {
+          "type": "object",
+          "$ref": "#/definitions/proxyServerProfile"
+        }
+      }
+    }
+  }
+}
+

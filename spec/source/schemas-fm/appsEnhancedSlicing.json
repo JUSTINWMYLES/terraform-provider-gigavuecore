@@ -1,0 +1,306 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsEnhancedSlicing.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Enhanced Slicing Configuration schema",
+  "definitions": {
+    "EnhancedSlicing": {
+      "id": "#/definitions/EnhancedSlicing",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "protocolFields"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "apps enhanced slicing alias"
+        },
+        "protocolFields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EnhancedSlicingProtocolField"
+          }
+        },
+        "maxSessions": {
+          "type": "integer",
+          "description": "Maximum number of session entries (in millions). Used only for flow-session option",
+          "minimum": 4,
+          "maximum": 80,
+          "default": 4
+        },
+        "hashField": {
+          "type": "string",
+          "enum": [
+            "5tuple",
+            "7tuple"
+          ],
+          "default": "5tuple",
+          "description": "Hash field for session"
+        }
+      }
+    },
+    "EnhancedSlicingProtocolField": {
+      "id": "#/definitions/EnhancedSlicingProtocolField",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "maxProperties": 1,
+      "properties": {
+        "ip": {
+          "$ref": "#/definitions/EnhancedSlicingIp"
+        },
+        "gtp": {
+          "$ref": "#/definitions/EnhancedSlicingGtp"
+        },
+        "gtpU": {
+          "$ref": "#/definitions/EnhancedSlicingGtpU"
+        },
+        "transport": {
+          "$ref": "#/definitions/EnhancedSlicingTransport"
+        },
+        "none": {
+          "$ref": "#/definitions/EnhancedSlicingNone"
+        }
+      }
+    },
+    "EnhancedSlicingIp": {
+      "id": "#/definitions/EnhancedSlicingIp",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "value",
+        "offset"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "ip",
+            "ipv4",
+            "ipv6"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "inner",
+            "outer"
+          ]
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 9000,
+          "description": "Number of bytes after 'protocol' header. 64-9000 if 'protocol' is none, 0-9000 for all protocols"
+        },
+        "flowSession": {
+          "$ref": "#/definitions/EnhancedSlicingFlowSession"
+        }
+      }
+    },
+    "EnhancedSlicingGtp": {
+      "id": "#/definitions/EnhancedSlicingIp",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "offset"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "gtp",
+            "gtp-ip",
+            "gtp-ipv4",
+            "gtp-ipv6"
+          ]
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 9000,
+          "description": "Number of bytes after 'protocol' header. 64-9000 if 'protocol' is none, 0-9000 for all protocols"
+        },
+        "flowSession": {
+          "$ref": "#/definitions/EnhancedSlicingFlowSession"
+        }
+      }
+    },
+    "EnhancedSlicingGtpU": {
+      "id": "#/definitions/EnhancedSlicingGtpU",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "offset"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "gtpu-tcp",
+            "gtpu-udp"
+          ]
+        },
+        "l4Port": {
+          "type": "integer",
+          "description": "Layer 4 Port Number",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 9000,
+          "description": "Number of bytes after 'protocol' header. 64-9000 if 'protocol' is none, 0-9000 for all protocols"
+        },
+        "flowSession": {
+          "$ref": "#/definitions/EnhancedSlicingFlowSession"
+        }
+      }
+    },
+    "EnhancedSlicingTransport": {
+      "id": "#/definitions/EnhancedSlicingTransport",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "value",
+        "offset"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "tcp",
+            "udp"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "inner",
+            "outer"
+          ]
+        },
+        "l4Port": {
+          "type": "integer",
+          "description": "Layer 4 Port Number",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 9000,
+          "description": "Number of bytes after 'protocol' header. 64-9000 if 'protocol' is none, 0-9000 for all protocols"
+        },
+        "flowSession": {
+          "$ref": "#/definitions/EnhancedSlicingFlowSession"
+        }
+      }
+    },
+    "EnhancedSlicingNone": {
+      "id": "#/definitions/EnhancedSlicingNone",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "offset"
+      ],
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 9000,
+          "description": "Number of bytes after 'protocol' header. 64-9000 if 'protocol' is none, 0-9000 for all protocols"
+        },
+        "flowSession": {
+          "$ref": "#/definitions/EnhancedSlicingFlowSession"
+        }
+      }
+    },
+    "EnhancedSlicingFlowSession": {
+      "id": "#/definitions/EnhancedSlicingFlowSession",
+      "description": "Always use 4-tuple (IP, L4 port) to identify a flow. Used only if user wants to start slicing after some packet count from the beginning of a session flow",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "skipPktCount"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "inner",
+            "outer"
+          ],
+          "description": "outer: first occurrence of IP and L4 port ; inner: second occurrence of IP and L4 port"
+        },
+        "skipPktCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Start slicing after 'packet-count' is reached. Only valid with 'flowSession'"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "slice",
+            "drop"
+          ],
+          "default": "slice",
+          "description": "Slice or drop packets after skip count"
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 10,
+          "maximum": 300,
+          "default": 30,
+          "description": "Session inactivity timeout in seconds"
+        }
+      }
+    },
+    "EnhancedSlicingQueryResponse": {
+      "id": "#/definitions/EnhancedSlicingQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enhancedSlicing"
+      ],
+      "properties": {
+        "enhancedSlicing": {
+          "$ref": "#/definitions/EnhancedSlicing"
+        }
+      }
+    },
+    "EnhancedSlicingsQueryResponse": {
+      "id": "#/definitions/EnhancedSlicingsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enhancedSlicings"
+      ],
+      "properties": {
+        "enhancedSlicings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EnhancedSlicing"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

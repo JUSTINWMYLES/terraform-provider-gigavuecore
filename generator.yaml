@@ -1,0 +1,6502 @@
+provider:
+  name: gigavuecore
+  display_name: terraform-provider-gigavuecore
+  version: 0.1.0
+  description: Terraform provider for the Gigamon GigaVUE-FM 6.14.00 Core API
+  author: JUSTINWMYLES
+  contact_email: opensource@gigamon.com
+  license: MPL-2.0
+  repository: https://github.com/JUSTINWMYLES/terraform-provider-gigavuecore
+  protocol_version: 6
+servers:
+- url: /api/v1.3
+resource_overrides:
+- operation: RedefinesTheFMTemplate
+  generate_resource: true
+  resource_name: global
+  read_operation: loadsGlobalFMTemplate
+  update_operation: RedefinesTheFMTemplate
+- schema: snmp_trap_receiver
+  operation: addExternalTrapReceiver
+  resource_name: snmp_trap_receiver
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - auth_password
+  - auth_protocol
+  - community
+  - priv_password
+  - priv_protocol
+  - security_level
+  - snmp_port
+  - snmp_retries
+  - snmp_timeout
+  - user_name
+  sensitive_attributes:
+  - auth_password
+  - priv_password
+- operation: addFMNTPServer
+  generate_resource: true
+  resource_name: fm_ntp_server
+  read_operation: getNTPServerForHost
+  update_operation: redefineFMNtpServer
+  delete_operation: deleteNtpServerByServerName
+- operation: addNtpServer
+  generate_resource: true
+  resource_name: ntp_server
+  read_operation: getNtpServerByAddress
+  update_operation: updateNtpServer
+  delete_operation: deleteNtpServer
+- schema: endpoint
+  operation: addSslDecryptionEndpoint
+  resource_name: endpoint
+  id_attribute: alias
+  import_format: '{alias}'
+- schema: interface
+  operation: configIpInterfaces
+  resource_name: interface
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - attach
+  - comment
+  - gateway
+  - gs_groups
+  - hw_address
+  - ip_address
+  - ip_mask
+  - ip_type
+  - mtu
+  - netflow_exporters
+  - tags
+- operation: configureCircuitTunnelL2GreGroup
+  generate_resource: true
+  resource_name: l2_gre_group
+  read_operation: loadAllCircuitTunnelL2GreGroups
+  update_operation: updateCircuitTunnelL2GreGroup
+  delete_operation: deleteCircuitTunnelL2Gre
+- operation: configureCircuitTunnelVxlanGroup
+  generate_resource: true
+  resource_name: vxlan_group
+  read_operation: loadAllCircuitTunnelVxlanGroup
+  update_operation: updateCircuitTunnelVxlanGroup
+  delete_operation: deleteCircuitTunnelVxlan
+- schema: engine
+  operation: configureGigasmartInterface
+  resource_name: engine
+  id_attribute: eport
+  import_format: '{eport}'
+  computed_attributes:
+  - cluster_id
+  - dhcp
+  - dns
+  - gateway
+  - hw_address
+  - interface
+  - ip_address
+  - ip_mask
+  - mtu
+  - proxy_server_profile
+  - status
+  - vlan
+- schema: header_strip
+  operation: configureHeaderStrip
+  resource_name: header_strip
+  id_attribute: box_id
+  import_format: '{box_id}'
+  computed_attributes:
+  - mpls_labels
+- operation: configureHeaderStripAging
+  generate_resource: true
+  resource_name: header_strip_aging
+  read_operation: loadBoxHeaderStripAging
+  update_operation: updateHeaderStripAging
+- schema: alert_policy
+  operation: createAlertPolicy
+  resource_name: alert_policy
+  id_attribute: policy_name
+  import_format: '{policy_name}'
+  computed_attributes:
+  - description
+  - enabled
+  - resource_type
+  - resource_entities
+  - parent_resource_id
+  - resource_ids
+  - source_type
+  - tag_configs
+  - tag_key
+  - tag_values
+- schema: app_visibility
+  operation: createAppVisibilitySolution
+  resource_name: app_visibility
+  id_attribute: solution_alias
+  import_format: '{solution_alias}'
+  computed_attributes:
+  - app_env_id
+  - app_exporter_config
+  - app_instance_name
+  - app_metadata_tiered_batch_id
+  - cache_config_alias
+  - destination_configs
+  - destination_name
+  - exporter_alias
+  - iface
+  - template_name
+  - app_filter_config
+  - app_filter_tiered_batch_id
+  - egress_traffic_configs
+  - drop_application_names
+  - attributes
+  - value
+  - is_user_defined
+  - pass_application_names
+  - priority
+  - tunnel_aliases
+  - map_alias
+  - sapf_profile_alias
+  - config_status
+  - config_status_reasons
+  - dedup
+  - app_config_id
+  - dedup_tiered_batch_id
+  - enabled
+  - gs_params_name
+  - dynamic_scale_unit
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - ingress_traffic_configs
+  - source_selector_aliases
+  - src_raw_end_point_interfaces
+  - tunnel_interface_mappings
+  - tunnel_alias
+  - app_instance_config_id
+  - app_viz_tiered_batch_id
+  - gs_param_config_id
+  - mgmt_interface
+  - user_defined_application_profile
+  - user_defined_applications
+  - scale_unit
+  - solution_created_timestamp
+  - solution_desc
+  - solution_modified_timestamp
+  - traffic_policy_graph_alias
+- schema: solution
+  operation: createAppVizSolution
+  resource_name: solution
+  id_attribute: solution_alias
+  import_format: '{solution_alias}'
+  computed_attributes:
+  - app_export_config
+  - cache_config
+  - advance_hash
+  - description
+  - dpi_inject_limit
+  - event
+  - exporters
+  - flow_behavior
+  - match
+  - datalink
+  - mac_dst
+  - mac_src
+  - in_name_width
+  - in_physical_width
+  - ip
+  - version
+  - ipv4
+  - destination
+  - prefix_min_mask
+  - dscp
+  - fragmentation
+  - flags
+  - header_len
+  - option_map
+  - precedence
+  - section
+  - header_size
+  - payload_size
+  - source
+  - tos
+  - total_length
+  - ttl
+  - ipv6
+  - extension_map
+  - flow_label
+  - hop_limit
+  - header
+  - payload
+  - total
+  - next_header
+  - traffic_class
+  - transport
+  - icmp
+  - ipv4_code
+  - ipv4_type
+  - ipv6_code
+  - ipv6_type
+  - tcp
+  - ack_number
+  - seq_number
+  - urgent_ptr
+  - window_size
+  - udp
+  - msg_len
+  - multi_collect
+  - network_profiles
+  - observation_domain_id
+  - sampling
+  - mode
+  - single_sampling_rate
+  - size
+  - flows
+  - timeout
+  - idle
+  - cache_config_alias
+  - destination_configs
+  - application_names
+  - attributes
+  - is_user_defined
+  - destination_name
+  - export_ip_interface
+  - export_meta_app_profile
+  - application_id
+  - applications
+  - counter
+  - bytes
+  - bytes_long
+  - inner_byte
+  - inner_byte_long
+  - packets
+  - packets_long
+  - flow
+  - end_reason
+  - gtpu
+  - qfi
+  - teid
+  - out_physical_width
+  - outer_ipv4
+  - outer_ipv6
+  - timestamp
+  - flow_end_msec
+  - flow_endsec
+  - flow_start_msec
+  - flow_startsec
+  - sys_up_time_first
+  - sys_up_time_last
+  - export_meta_app_profile_alias
+  - exporter_alias
+  - exporter_config
+  - application_profiles
+  - cef
+  - active_timeout
+  - inactive_timeout
+  - ipv4_address
+  - l4_port_dst
+  - l4_port_src
+  - l4_protocol
+  - max_pkt_size
+  - mobility_sam
+  - encoding
+  - encoding_format
+  - event_enable
+  - modify
+  - update
+  - trigger
+  - monitor
+  - netflow
+  - template_refresh
+  - template_type
+  - snmp
+  - ip_interface
+  - gsop_alias
+  - gsop_config
+  - cluster_id
+  - apf
+  - dedup
+  - diameter_whitelist
+  - flow_filter
+  - flow_sampling
+  - gseries_header_add
+  - gseries_header_remove
+  - gseries_load_balance
+  - fixed_offset
+  - variable_offset
+  - gseries_pattern_match
+  - gtp_whitelist
+  - header_add
+  - header_remove
+  - ah1
+  - ah2
+  - custom_len
+  - erspan_flow_id
+  - fp_dst_switch_id
+  - fp_src_switch_id
+  - header_count
+  - offset_range_value
+  - timestamp_format
+  - vlan_header
+  - vxlan_id
+  - icap
+  - inline_ssl
+  - load_balance
+  - enhanced
+  - stateful
+  - diameter_key_hash_type
+  - diameter_key_multi_hash_type
+  - avp_codevalue
+  - gtp_key_hash_type
+  - sip_key_hash_type
+  - stateless
+  - field_location
+  - masking
+  - content_type
+  - pattern
+  - metadata_export
+  - cache
+  - sa_apf
+  - sip_whitelist
+  - slicing
+  - ssl_decrypt
+  - in_port
+  - out_port
+  - trailer_add
+  - trailer_remove
+  - tunnel_decap
+  - custom
+  - gmip_port
+  - l2_gre_key
+  - tls_pcapng
+  - decap_key
+  - listener
+  - vxlan
+  - tunnel_encap
+  - gmip_config
+  - prec
+  - l2_gre_config
+  - pg_dst
+  - session_field
+  - session_pos
+  - exporter
+  - exporter_group
+  - vxlan_config
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - app_filter_config
+  - egress_traffic_config
+  - drop_app_profile_alias
+  - egress_traffic_map
+  - ap_rules
+  - drop_rules
+  - pass_rules
+  - comment
+  - egress_gigastream
+  - enable
+  - encap_tunnel
+  - flex_inline
+  - a_to_b
+  - ib_pathway
+  - tools
+  - b_to_a
+  - oob_copy
+  - direction
+  - tag
+  - svt_mode
+  - svt_tag
+  - tag_protocol_id
+  - vlan_id
+  - flex_inline_failover
+  - flex_inline_vlan_id
+  - flow_rules
+  - imei
+  - imsi
+  - msisdn
+  - flow_sample5_g_overlap_rules
+  - dnn
+  - gpsi
+  - nas_5_qi
+  - nci
+  - nsiid
+  - pei
+  - plmn_id
+  - supi
+  - tac
+  - flow_sample5_g_rules
+  - priority
+  - flow_sample_diameter_rules
+  - user_name
+  - flow_sample_overlap_rules
+  - apn
+  - eci
+  - qci
+  - snssai
+  - tac_5_g
+  - periodic_recalc
+  - flow_sample_rules
+  - flow_sample_sip_rules
+  - callee_id
+  - callee_id_range
+  - caller_id
+  - caller_id_range
+  - id_range
+  - flow_whitelist5_g_overlap_rules
+  - flow_whitelist5_g_rules
+  - whitelist_databases
+  - flow_whitelist_overlap_rules
+  - flow_whitelist_rules
+  - fstype
+  - timer
+  - gs_rules
+  - pos
+  - subset
+  - value_max
+  - mask
+  - cidr_mask
+  - net_mask
+  - hint
+  - end_of_match_offset
+  - from_to
+  - start_of_match_offset
+  - match_offset
+  - offset_end
+  - offset_start
+  - match_type
+  - gsop
+  - inline_traffic_path
+  - inline_traffic_type
+  - ip_rewrite
+  - src_ip
+  - mod_time
+  - null_dst_port
+  - order
+  - rewrite
+  - dst_mac
+  - src_mac
+  - roles
+  - editors
+  - listeners
+  - owners
+  - viewers
+  - rule_matching
+  - rules
+  - bidi
+  - vlan_tag
+  - rx_cluster_ports
+  - sub_type
+  - traffic_type
+  - tx_cluster_ports
+  - map_alias
+  - pass_app_profile_alias
+  - sapf_profile
+  - buffering
+  - buffer_count_before_match
+  - packet_count
+  - sapf_profile_alias
+  - associated_monitor_solution_alias
+  - config_status
+  - delete_monitor_sol
+  - egress_map_aliases_to_delete
+  - exporter_aliases_to_delete
+  - ingress_map_aliases_to_delete
+  - ingress_traffic_configs
+  - ingress_traffic_map
+  - updated_time
+  - monitor_solution_config
+  - action
+  - error_message
+  - monitor_ip_interface
+  - ref_sols
+  - associated_map
+  - solution_alias
+  - user_defined_application_profile
+  - user_defined_applications
+  - vport_alias
+  - vport_config
+  - deferred_binding
+  - fail_over_action
+  - inline_status
+  - inner_traffic_path
+  - metadata_monitoring
+  - outer_traffic_path
+  - sa_apf_profile
+  - solution_desc
+  - solution_status
+  - solution_type
+- schema: application_profile
+  operation: createApplicationProfile
+  resource_name: application_profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - application_id
+  - applications
+  - attributes
+  - value
+  - is_user_defined
+  - counter
+  - bytes
+  - bytes_long
+  - inner_byte
+  - inner_byte_long
+  - packets
+  - packets_long
+  - datalink
+  - mac_dst
+  - mac_src
+  - vlan
+  - description
+  - flow
+  - end_reason
+  - gtpu
+  - qfi
+  - teid
+  - interface
+  - in_name_width
+  - in_physical_width
+  - out_physical_width
+  - ip
+  - version
+  - ipv4
+  - destination
+  - prefix_min_mask
+  - dscp
+  - fragmentation
+  - flags
+  - offset
+  - header_len
+  - option_map
+  - precedence
+  - protocol
+  - section
+  - header_size
+  - payload_size
+  - source
+  - tos
+  - total_length
+  - ttl
+  - ipv6
+  - extension_map
+  - flow_label
+  - hop_limit
+  - length
+  - header
+  - payload
+  - total
+  - next_header
+  - traffic_class
+  - outer_ipv4
+  - outer_ipv6
+  - timestamp
+  - flow_end_msec
+  - flow_endsec
+  - flow_start_msec
+  - flow_startsec
+  - sys_up_time_first
+  - sys_up_time_last
+  - transport
+  - dst_port
+  - icmp
+  - ipv4_code
+  - ipv4_type
+  - ipv6_code
+  - ipv6_type
+  - src_port
+  - tcp
+  - ack_number
+  - seq_number
+  - urgent_ptr
+  - window_size
+  - udp
+  - msg_len
+  - type
+- schema: exporter
+  operation: createAppsExporter
+  resource_name: exporter
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - description
+  - destination
+  - l3
+  - ip
+  - dscp
+  - ttl
+  - ver4
+  - ver6
+  - l4
+  - port
+  - gs_group_associated
+  - source
+  - ssl_profile
+  - status
+  - tags
+  - tcp_profile
+  - type
+- schema: exporter_group
+  operation: createAppsExporterGroup
+  resource_name: exporter_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - description
+  - exporters
+- schema: listener
+  operation: createAppsListener
+  resource_name: listener
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - description
+  - gs_group_associated
+  - ip_interface
+  - l3
+  - dscp
+  - ttl
+  - l4
+  - mode
+  - ssl_profile
+  - status
+  - tags
+  - tcp_profile
+  - type
+- operation: createAppsProxyServerProfile
+  generate_resource: true
+  resource_name: proxy_server_profile
+  read_operation: getAppsProxyServerProfilesByAlias
+  update_operation: modifyAppsProxyServerProfile
+  delete_operation: deleteAppsProxyServerProfile
+- operation: createAppsSslProfile
+  generate_resource: true
+  resource_name: ssl_profile
+  read_operation: getAppsSslProfilesByAlias
+  update_operation: modifyAppsSslProfile
+  delete_operation: deleteAppsSslProfile
+- operation: createAppsTcpProfile
+  generate_resource: true
+  resource_name: tcp_profile
+  read_operation: getAppsTcpProfilesByAlias
+  update_operation: modifyAppsTcpProfile
+  delete_operation: deleteAppsTcpProfile
+- schema: tunnel_application
+  operation: createAppsTunnelApplication
+  resource_name: tunnel_application
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - alias
+  - cluster_id
+  - config_status
+  - config_status_reasons
+  - decap
+  - additonalgsops
+  - apf
+  - enabled
+  - dedup
+  - diameter_whitelist
+  - flow_filter
+  - flow_sampling
+  - gseries_header_add
+  - gseries_header_remove
+  - gseries_load_balance
+  - fixed_offset
+  - variable_offset
+  - gseries_pattern_match
+  - gtp_whitelist
+  - header_add
+  - header_remove
+  - ah1
+  - ah2
+  - custom_len
+  - erspan_flow_id
+  - fp_dst_switch_id
+  - fp_src_switch_id
+  - header_count
+  - offset_range_value
+  - timestamp_format
+  - vlan_header
+  - vxlan_id
+  - icap
+  - inline_ssl
+  - load_balance
+  - enhanced
+  - stateful
+  - diameter_key_hash_type
+  - diameter_key_multi_hash_type
+  - avp_codevalue
+  - gtp_key_hash_type
+  - sip_key_hash_type
+  - stateless
+  - field_location
+  - masking
+  - content_type
+  - pattern
+  - metadata_export
+  - cache
+  - netflow
+  - sa_apf
+  - sip_whitelist
+  - slicing
+  - ssl_decrypt
+  - in_port
+  - out_port
+  - trailer_add
+  - trailer_remove
+  - tunnel_decap
+  - custom
+  - gmip_port
+  - l2_gre_key
+  - tls_pcapng
+  - decap_key
+  - listener
+  - vxlan
+  - tunnel_encap
+  - gmip_config
+  - dscp
+  - flow_label
+  - prec
+  - ttl
+  - l2_gre_config
+  - pg_dst
+  - session_field
+  - session_pos
+  - exporter
+  - exporter_group
+  - vxlan_config
+  - application_ports
+  - destination_port
+  - gsop_alias
+  - listener_alias
+  - map_alias
+  - rules
+  - drop_rules
+  - bidi
+  - comment
+  - ip_rewrite
+  - src_ip
+  - pos
+  - subset
+  - value
+  - value_max
+  - mask
+  - cidr_mask
+  - net_mask
+  - rewrite
+  - dst_mac
+  - src_mac
+  - vlan_tag
+  - tag_protocol_id
+  - vlan_id
+  - pass_rules
+  - description
+  - encap
+  - export_configs
+  - exporter_alias
+  - remote_application_port
+  - remote_ip
+  - source_application_port
+  - exporter_group_alias
+  - source_port
+  - gsgroup
+  - ip_interface_in
+  - ip_interface_out
+  - local_key_alias
+  - remote_key_alias
+  - ssl_profile
+  - cipher
+  - mtls
+  - version
+  - ssl_profile_alias
+  - tcp_profile
+  - keep_alive_timer
+  - selective_ack
+  - syn_retries
+  - tcp_profile_alias
+  - traffic_dir
+  - tunnel_type
+- schema: policy
+  operation: createAvisiPolicy
+  resource_name: policy
+  id_attribute: policy_id
+  import_format: '{policy_id}'
+  computed_attributes:
+  - description
+  - enabled
+  - policy_id
+  - then_do
+  - params
+  - key
+  - value
+- schema: circuit_tunnel
+  operation: createCircuitTunnel
+  resource_name: circuit_tunnel
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - attach
+  - circuit_ids
+  - cluster_id
+  - comment
+  - dip_address
+  - l4_src_port
+  - mode
+  - type
+- schema: connection
+  operation: createConnection
+  resource_name: connection
+  computed_attributes:
+  - unified_resources_connection_get_query_response
+  - access_key
+  - auth_type
+  - proxy_server_id
+  - region_name
+  - secret_key
+  - secure_mirror_traffic
+  - tapping_method
+  - vpcs
+  - name
+  - owner_id
+  - application_client_id
+  - application_secret_key
+  - resource_group_names
+  - subscription_id
+  - tenant_id
+  - vnets
+  - fmpassword_encrypted
+  - fmusername
+  - hostname
+  - image_url
+  - nsxt_manager_ip
+  - nsxt_password
+  - nsxt_username
+  - password
+  - username
+  - vcenter_addr
+  - access_url
+  - domain_name
+  - encrypted_password
+  - monitored_project_ids
+  - prop1
+  - prop2
+  - project_id
+  - project_name
+  - project_names
+  - region
+  - user_domain_name
+  sensitive_attributes:
+  - access_key
+  - secret_key
+  - application_secret_key
+  - fmpassword_encrypted
+  - nsxt_password
+  - password
+  - encrypted_password
+- operation: createDeviceCredentials
+  generate_resource: true
+  resource_name: node_credentials
+  read_operation: getDeviceCredentialsByAlias
+  update_operation: updateDeviceCredentials
+  delete_operation: deleteDeviceCredentials
+- operation: createDiameterWhitelist
+  generate_resource: true
+  resource_name: diameter_whitelist
+  read_operation: loadDiameterWhitelists
+  delete_operation: deleteDiameterWhitelists
+- schema: elb
+  operation: createElb
+  resource_name: elb
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - hash_fields
+  - hash_location
+- operation: createEmailRecipient
+  generate_resource: true
+  resource_name: email_recipient
+  read_operation: getRecipients
+  delete_operation: deleteRecipientByEmailAddress
+- schema: enhanced_slicing
+  operation: createEnhancedSlicing
+  resource_name: enhanced_slicing
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - hash_field
+  - max_sessions
+  - gtp
+  - flow_session
+  - action
+  - timeout
+  - gtp_u
+  - l4_port
+  - ip
+  - none
+  - transport
+- schema: export_target
+  operation: createExternalExportServer
+  resource_name: export_target
+- schema: fabric_map
+  operation: createFabricMap
+  resource_name: fabric_map
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - ap_rules
+  - drop_rules
+  - pass_rules
+  - cluster_id
+  - comment
+  - egress_gigastream
+  - enable
+  - encap_tunnel
+  - flex_inline
+  - a_to_b
+  - ib_pathway
+  - tools
+  - b_to_a
+  - oob_copy
+  - direction
+  - tag
+  - svt_mode
+  - svt_tag
+  - tag_protocol_id
+  - vlan_id
+  - flex_inline_failover
+  - flex_inline_vlan_id
+  - flow_rules
+  - imei
+  - imsi
+  - msisdn
+  - version
+  - flow_sample5_g_overlap_rules
+  - dnn
+  - gpsi
+  - nas_5_qi
+  - nci
+  - nsiid
+  - pei
+  - plmn_id
+  - supi
+  - tac
+  - flow_sample5_g_rules
+  - priority
+  - flow_sample_diameter_rules
+  - user_name
+  - flow_sample_overlap_rules
+  - apn
+  - eci
+  - qci
+  - snssai
+  - tac_5_g
+  - periodic_recalc
+  - flow_sample_rules
+  - flow_sample_sip_rules
+  - callee_id
+  - callee_id_range
+  - caller_id
+  - caller_id_range
+  - id_range
+  - flow_whitelist5_g_overlap_rules
+  - flow_whitelist5_g_rules
+  - whitelist_databases
+  - flow_whitelist_overlap_rules
+  - flow_whitelist_rules
+  - fstype
+  - offset
+  - timer
+  - gs_rules
+  - pos
+  - subset
+  - value_max
+  - mask
+  - cidr_mask
+  - net_mask
+  - hint
+  - end_of_match_offset
+  - from_to
+  - pattern
+  - start_of_match_offset
+  - match_offset
+  - offset_end
+  - offset_start
+  - protocol
+  - match_type
+  - gsop
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - inline_traffic_path
+  - inline_traffic_type
+  - ip_rewrite
+  - dst_ip
+  - src_ip
+  - mod_time
+  - null_dst_port
+  - order
+  - rewrite
+  - dst_mac
+  - src_mac
+  - roles
+  - editors
+  - listeners
+  - owners
+  - viewers
+  - rule_matching
+  - rules
+  - bidi
+  - vlan_tag
+  - rx_cluster_ports
+  - sub_type
+  - traffic_type
+  - tx_cluster_ports
+  - updated_time
+  - child_map_aliases
+  - config_status
+  - creation_time
+  - decap_aliases
+  - encap_aliases
+  - error_message
+  - parent_map_aliases
+  - pending_reason
+- schema: fabric_port_group
+  operation: createFabricPortGroup
+  resource_name: fabric_port_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - comment
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - smart_lb
+  - tags
+  - traffic_health_state
+  - traffic_health_state_reasons
+- schema: filter_template
+  operation: createFilterTemplate
+  resource_name: filter_template
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - qualifier_set
+  - qualifiers
+- schema: flex_inline
+  operation: createFlexInlineSolution
+  resource_name: flex_inline
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - alias
+  - cluster_configs
+  - cluster_id
+  - export_criteria
+  - lsb
+  - export_type
+  - ib_pathway
+  - source
+  - type
+  - config_status
+  - config_status_reasons
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - resilient_config
+  - side_a
+  - side_b
+  - target_traffic_path
+- schema: inline_ssl_app
+  operation: createFlexInlineSslApp
+  resource_name: inline_ssl_app
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - app_intent_configs
+  - black_list_config
+  - operation
+  - profile_list
+  - file_source
+  - password
+  - username
+  - list
+  - global_default_configs
+  - caching
+  - persistence
+  - enable
+  - cluster_id
+  - dhe_ciphersuit
+  - monitor
+  - resumption
+  - client
+  - ssl_versions
+  - connection_reset_action_for_max_version
+  - connection_reset_action_for_min_version
+  - start_tls
+  - gs_engines
+  - gs_group_alias
+  - gs_group_param_configs
+  - hsm_group
+  - session_logging
+  - interface
+  - log_level
+  - remote_syslog_ip
+  - remote_syslog_port
+  - gsop_alias
+  - inline_ssl
+  - standalone
+  - key_store_configs
+  - deployment_type
+  - inbound_keys
+  - key_alias
+  - server_domain_alias
+  - outboundkeys
+  - signing_for
+  - m_tls_configs
+  - primary_signing
+  - secondary_signing
+  - trust_store
+  - network_access_configs
+  - network_access
+  - dhcp
+  - dns
+  - gateway
+  - hw_address
+  - ip_address
+  - ip_mask
+  - mtu
+  - proxy_server_profile
+  - status
+  - vlan
+  - ssl_path
+  - flex_inline_map
+  - a_to_b
+  - ib_pathway
+  - tools
+  - b_to_a
+  - oob_copy
+  - direction
+  - tag
+  - svt_mode
+  - svt_tag
+  - tag_protocol_id
+  - vlan_id
+  - ssl_profile_alias
+  - ssl_profile_config
+  - certificate
+  - expired
+  - invalid
+  - revocation
+  - crl
+  - defer
+  - enabled
+  - fail
+  - ocsp
+  - self_signed
+  - unknown_ca
+  - client_auth
+  - decrypt
+  - tcp
+  - inactive_timeout
+  - port_map
+  - default_out_port
+  - ports
+  - rule_id
+  - tool_bypass
+  - default_action
+  - high_avail
+  - active_standby
+  - key_map
+  - network_group
+  - multiple_entry
+  - no_decrypt
+  - non_ssl_tcp
+  - rules
+  - action
+  - value
+  - mask
+  - value_max
+  - split_proxy
+  - mode
+  - server_non_pfs_ciphers
+  - l4_port
+  - delayed_ack
+  - syn_retries
+  - timewait_timeout
+  - tool
+  - early_engage
+  - fail_action
+  - url_cache
+  - miss_action
+  - timeout
+  - trust_store_configs
+  - trust_store_append_configs
+  - file
+  - trust_store_replace_configs
+  - vport_alias
+  - vport_config
+  - deferred_binding
+  - fail_over_action
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - inline_status
+  - inner_traffic_path
+  - metadata_monitoring
+  - exporters
+  - outer_traffic_path
+  - sa_apf_profile
+  - white_list_config
+  - cluster_name
+  - config_status
+  - config_status_reasons
+  - m_tls
+  - ria_configs
+  - ria_enabled
+  sensitive_attributes:
+  - password
+- schema: archive_server
+  operation: createFmBackupArchiveServer
+  resource_name: archive_server
+  id_attribute: server_alias
+  import_format: '{server_alias}'
+  computed_attributes:
+  - server_alias
+  - user_pwd
+- schema: network_group
+  operation: createGigaFlexInlineNetworkGroup
+  resource_name: network_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - alias
+  - cluster_id
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - members
+  - cluster_name
+  - type
+- schema: gigastream
+  operation: createGigastream
+  resource_name: gigastream
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - comment
+  - drop_weight
+  - failover_status
+  - hash_size
+  - hash_tool_port
+  - hash_type
+  - hash_weights
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - ports
+  - threshold_level
+  - variance_threshold
+- schema: gpfcp_profile
+  operation: createGpfcpProfile
+  resource_name: gpfcp_profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - comment
+  - ip_addresses
+- schema: gs_group
+  operation: createGsGroup
+  resource_name: gs_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - hash
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - params
+  - app_tcp
+  - application
+  - load_balance
+  - tcp_control
+  - dedup
+  - action
+  - ip_tclass
+  - ip_tos
+  - tcp_seq
+  - timer
+  - vlan
+  - diameter_packet
+  - timeout
+  - diameter_s6_a_session
+  - limit
+  - diameter_whitelist
+  - whitelist
+  - eflow
+  - enabled
+  - interval
+  - log_enabled
+  - packet_count
+  - packet_ratio
+  - engine_watchdog_timer
+  - time
+  - erspan3
+  - timestamp_format
+  - flow_mask
+  - length
+  - offset
+  - flow_sampling
+  - ip_ranges
+  - ipv4_addr
+  - ipv4_mask
+  - ipv6_addr
+  - ipv6_mask
+  - rate
+  - type
+  - generic_session_timeout
+  - gpfcp_profiles
+  - g_pfcp_profiles
+  - gs_group_system
+  - cpu_load_alarm_threshold
+  - gta_profiles
+  - gtp_control_sampling
+  - gtp_flow
+  - gtp_gpfcp_delay
+  - gtp_persistence
+  - file_age_timeout
+  - restart_age_time
+  - gtp_random_sampling
+  - gtp_whitelist
+  - multi_whitelists
+  - health_check
+  - dst_port
+  - protocol
+  - rcv_port
+  - retries
+  - round_trip_time
+  - src_port
+  - hsm_group
+  - ip_frag
+  - forward
+  - head_session_timeout
+  - failover
+  - threshold_lt_bw
+  - threshold_lt_pkt_rate
+  - link_weight_type
+  - replicate_gtpc
+  - netflow
+  - monitor
+  - node_role
+  - mob5_g_limit
+  - mob_lte_limit
+  - stand_alone_mode
+  - port_throttle_sip
+  - port_throttle
+  - resource
+  - buffer_asf_size
+  - cpu
+  - overload_threshold
+  - hsm_ssl
+  - buffer
+  - packet_buffer
+  - session_count
+  - inline_ssl
+  - standalone
+  - metadata
+  - session_overload
+  - tunnel_overload
+  - xpkt_match
+  - flows
+  - rtp_ports
+  - range
+  - port
+  - port_max
+  - sa_apf
+  - buffer_size
+  - session_logging
+  - interface
+  - log_level
+  - remote_syslog_ip
+  - remote_syslog_port
+  - sffp_profiles
+  - sip_media
+  - sip_ports
+  - sip_session
+  - sip_tcp_idle_timeout
+  - sip_whitelist
+  - ssl_decrypt
+  - decrypt_fail_action
+  - hsm_pkcs11
+  - debug_level
+  - dynamic_object
+  - load_sharing
+  - hsm_timeout
+  - key_cache_timeout
+  - key_map
+  - non_ssl_traffic
+  - pending_session_timeout
+  - session_timeout
+  - tcp_syn_timeout
+  - ticket_cache_timeout
+- schema: gsop
+  operation: createGsop
+  resource_name: gsop
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - apf
+  - enabled
+  - dedup
+  - diameter_whitelist
+  - flow_filter
+  - flow_sampling
+  - gseries_header_add
+  - gseries_header_remove
+  - gseries_load_balance
+  - fixed_offset
+  - variable_offset
+  - gseries_pattern_match
+  - gtp_whitelist
+  - header_add
+  - header_remove
+  - ah1
+  - ah2
+  - custom_len
+  - erspan_flow_id
+  - fp_dst_switch_id
+  - fp_src_switch_id
+  - header_count
+  - offset_range_value
+  - timestamp_format
+  - vlan_header
+  - vxlan_id
+  - icap
+  - inline_ssl
+  - load_balance
+  - enhanced
+  - stateful
+  - diameter_key_hash_type
+  - diameter_key_multi_hash_type
+  - avp_codevalue
+  - gtp_key_hash_type
+  - sip_key_hash_type
+  - stateless
+  - field_location
+  - masking
+  - content_type
+  - pattern
+  - metadata_export
+  - cache
+  - netflow
+  - sa_apf
+  - sip_whitelist
+  - slicing
+  - ssl_decrypt
+  - in_port
+  - out_port
+  - trailer_add
+  - trailer_remove
+  - tunnel_decap
+  - custom
+  - gmip_port
+  - l2_gre_key
+  - tls_pcapng
+  - decap_key
+  - listener
+  - vxlan
+  - tunnel_encap
+  - gmip_config
+  - dscp
+  - flow_label
+  - prec
+  - ttl
+  - l2_gre_config
+  - pg_dst
+  - session_field
+  - session_pos
+  - exporter
+  - exporter_group
+  - vxlan_config
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+- schema: gta_profile
+  operation: createGtaProfile
+  resource_name: gta_profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - alias
+  - control_node
+  - core_network_nodes
+  - address_list
+  - address_range
+  - address_subnet
+  - dst_port
+  - src_port
+  - user_node
+- operation: createGtpWhitelist
+  generate_resource: true
+  resource_name: gtp_whitelist
+  read_operation: loadGtpWhitelists
+  delete_operation: deleteGtpWhitelists
+- schema: hb_profile
+  operation: createHeartbeatProfile
+  resource_name: hb_profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - custom_packet
+  - custom_packet_alias
+  - custom_packet_file_name
+  - direction
+  - packet_format
+  - period
+  - recovery_time
+  - retries
+  - timeout
+- schema: hsm
+  operation: createHsm
+  resource_name: hsm
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - esn
+  - kneti
+  - operational_status
+  - partition_label
+  - partition_password
+  - server_password
+  - server_username
+  sensitive_attributes:
+  - partition_password
+  - server_password
+- schema: hsm_group
+  operation: createHsmGroup
+  resource_name: hsm_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - comment
+  - hsms
+  - operational_status
+- schema: ib_pathway
+  operation: createIbPathway
+  resource_name: ib_pathway
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - comment
+  - min_ports_up
+  - operational_state
+  - ports
+  - traffic_path
+- schema: icap
+  operation: createIcapClient
+  resource_name: icap
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - config_status
+  - config_status_reasons
+  - gs_engines
+  - gs_grp_alias
+  - gsop_alias
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - icap_map_alias
+  - exceed_action
+  - inactivity_timeout
+  - preview
+  - resp_mod
+  - resp_timeout
+  - resp_timeout_action
+  - icap_server_grp_alias
+  - icap_servers
+  - comment
+  - options_service_url
+  - reqmod_service_url
+  - respmod_service_url
+  - ing_alias
+- schema: profile
+  operation: createIcapProfile
+  resource_name: profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - exceed_action
+  - inactivity_timeout
+  - preview
+  - resp_mod
+  - resp_timeout
+  - resp_timeout_action
+- schema: server
+  operation: createIcapServer
+  resource_name: server
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - comment
+  - options_service_url
+  - reqmod_service_url
+  - respmod_service_url
+- schema: server_group
+  operation: createIcapServerGroup
+  resource_name: server_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - comment
+  - icap_servers
+- schema: image_server
+  operation: createImageServer
+  resource_name: image_server
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - user_pwd
+  - username
+- schema: network
+  operation: createInlineNetwork
+  resource_name: network
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - comment
+  - forwarding_state
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - heartbeat
+  - lfp
+  - physical_bypass
+  - redundancy_control_state
+  - redundancy_profile
+  - traffic_path
+  - type
+- operation: createInlineNetworkGroup
+  generate_resource: true
+  resource_name: inline_network_group
+  read_operation: getInlineNetworkGroupByAlias
+  update_operation: updateInlineNetworkGroup
+  delete_operation: deleteInlineNetworkGroup
+- schema: network_lag
+  operation: createInlineNetworkLag
+  resource_name: network_lag
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cdp
+  - comment
+  - forwarding_state
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - lacp
+  - lfp
+  - physical_bypass
+  - redundancy_control_state
+  - redundancy_profile
+  - traffic_path
+- schema: serial_tool_group
+  operation: createInlineSerialToolGroup
+  resource_name: serial_tool_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - comment
+  - enabled
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - per_direction_order
+- operation: createInlineSslProfile
+  generate_resource: true
+  resource_name: inline_ssl_profile
+  read_operation: loadInlineSslProfile
+  update_operation: updateInlineSslProfile
+  delete_operation: deleteInlineSslProfile
+- schema: tool
+  operation: createInlineTool
+  resource_name: tool
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - combined_heart_beat_status
+  - comment
+  - failover_action
+  - flex_status
+  - flex_traffic_path
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - heartbeat
+  - status
+  - heartbeat_passing
+  - inline_tool_type
+  - negative_heartbeat
+  - operational_state
+  - port_a_status
+  - port_b_status
+  - recovery_mode
+  - shared
+  - timestamp
+- schema: tool_group
+  operation: createInlineToolGroup
+  resource_name: tool_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - comment
+  - current_state
+  - spare_tool
+  - spare_tool_status
+  - switched_inline_tool
+  - enabled
+  - flex_status
+  - flex_traffic_path
+  - hash
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - min_group_size
+  - oper_status
+  - release_spare_if_possible
+  - spare_inline_tool
+- schema: key
+  operation: createKeystoreKey
+  resource_name: key
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - certificate
+  - cluster_id
+  - cn
+  - comment
+  - expiry
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - installed_on
+  - o
+  - ou
+  - private
+  - status
+  sensitive_attributes:
+  - password
+- operation: createLdapServer
+  generate_resource: true
+  resource_name: ldap_server
+  read_operation: loadAllLdapServers
+  delete_operation: deleteLdapServer
+- schema: local_user
+  operation: createLocalUser
+  resource_name: local_user
+  id_attribute: username
+  import_format: '{username}'
+  computed_attributes:
+  - account_status
+  - capability
+  - enabled
+  - full_name
+  - roles
+  sensitive_attributes:
+  - current_password
+- schema: map
+  operation: createMap
+  resource_name: map
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - ap_rules
+  - drop_rules
+  - pass_rules
+  - cluster_id
+  - comment
+  - egress_gigastream
+  - enable
+  - encap_tunnel
+  - flex_inline
+  - a_to_b
+  - ib_pathway
+  - tools
+  - b_to_a
+  - oob_copy
+  - direction
+  - tag
+  - svt_mode
+  - svt_tag
+  - tag_protocol_id
+  - vlan_id
+  - flex_inline_failover
+  - flex_inline_vlan_id
+  - flow_rules
+  - imei
+  - imsi
+  - msisdn
+  - version
+  - flow_sample5_g_overlap_rules
+  - dnn
+  - gpsi
+  - nas_5_qi
+  - nci
+  - nsiid
+  - pei
+  - plmn_id
+  - supi
+  - tac
+  - flow_sample5_g_rules
+  - priority
+  - flow_sample_diameter_rules
+  - user_name
+  - flow_sample_overlap_rules
+  - apn
+  - eci
+  - qci
+  - snssai
+  - tac_5_g
+  - periodic_recalc
+  - flow_sample_rules
+  - flow_sample_sip_rules
+  - callee_id
+  - callee_id_range
+  - caller_id
+  - caller_id_range
+  - id_range
+  - flow_whitelist5_g_overlap_rules
+  - flow_whitelist5_g_rules
+  - whitelist_databases
+  - flow_whitelist_overlap_rules
+  - flow_whitelist_rules
+  - fstype
+  - offset
+  - timer
+  - gs_rules
+  - pos
+  - subset
+  - value_max
+  - mask
+  - cidr_mask
+  - net_mask
+  - hint
+  - end_of_match_offset
+  - from_to
+  - pattern
+  - start_of_match_offset
+  - match_offset
+  - offset_end
+  - offset_start
+  - protocol
+  - match_type
+  - gsop
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - inline_traffic_path
+  - inline_traffic_type
+  - ip_rewrite
+  - dst_ip
+  - src_ip
+  - mod_time
+  - null_dst_port
+  - order
+  - rewrite
+  - dst_mac
+  - src_mac
+  - roles
+  - editors
+  - listeners
+  - owners
+  - viewers
+  - rule_matching
+  - rules
+  - bidi
+  - vlan_tag
+  - rx_cluster_ports
+  - sub_type
+  - traffic_type
+  - tx_cluster_ports
+  - updated_time
+- schema: map_group
+  operation: createMapGroup
+  resource_name: map_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - comment
+- schema: map_template
+  operation: createMapTemplate
+  resource_name: map_template
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - comment
+  - roles
+  - editors
+  - owners
+  - viewers
+  - drop_rules
+  - bidi
+  - ip_rewrite
+  - dst_ip
+  - src_ip
+  - pos
+  - subset
+  - type
+  - value
+  - value_max
+  - mask
+  - cidr_mask
+  - net_mask
+  - offset
+  - rewrite
+  - dst_mac
+  - src_mac
+  - vlan_tag
+  - tag_protocol_id
+  - vlan_id
+  - pass_rules
+- schema: cache
+  operation: createMetadataCache
+  resource_name: cache
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - advance_hash
+  - description
+  - dpi_inject_limit
+  - event
+  - exporters
+  - flow_behavior
+  - match
+  - datalink
+  - mac_dst
+  - mac_src
+  - vlan
+  - interface
+  - in_name_width
+  - in_physical_width
+  - ip
+  - version
+  - ipv4
+  - destination
+  - prefix_min_mask
+  - dscp
+  - fragmentation
+  - flags
+  - offset
+  - header_len
+  - option_map
+  - precedence
+  - protocol
+  - section
+  - header_size
+  - payload_size
+  - source
+  - tos
+  - total_length
+  - ttl
+  - ipv6
+  - extension_map
+  - flow_label
+  - hop_limit
+  - length
+  - header
+  - payload
+  - total
+  - next_header
+  - traffic_class
+  - transport
+  - dst_port
+  - icmp
+  - ipv4_code
+  - ipv4_type
+  - ipv6_code
+  - ipv6_type
+  - src_port
+  - tcp
+  - ack_number
+  - seq_number
+  - urgent_ptr
+  - window_size
+  - udp
+  - msg_len
+  - multi_collect
+  - network_profiles
+  - observation_domain_id
+  - sampling
+  - mode
+  - single_sampling_rate
+  - size
+  - flows
+  - timeout
+  - idle
+- operation: createMetadataExporter
+  generate_resource: true
+  resource_name: metadata_exporter
+  read_operation: loadMetadataExporterByAlias
+  update_operation: updateMetadataExporter
+  delete_operation: deleteMetadataExporter
+- schema: negative_hb_profile
+  operation: createNegativeHeartbeatProfile
+  resource_name: negative_hb_profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - custom_packet
+  - custom_packet_file_name
+  - direction
+  - period
+  - recovery_time
+- operation: createNetflowExporter
+  generate_resource: true
+  resource_name: netflow_exporter
+  read_operation: getNetflowExporterByAlias
+  update_operation: redefineNetflowExporter
+  delete_operation: deleteNetflowExporter
+- schema: monitor
+  operation: createNetflowMonitor
+  resource_name: monitor
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - event
+  - timeout_active
+  - timeout_inactive
+  - type
+  - cluster_id
+  - description
+  - records
+  - sampling
+  - mode
+  - single_sampling_rate
+  - sampling_space
+  - ssl_port_restrictions
+  - ports
+  - ssl_ports
+- schema: record
+  operation: createNetflowRecord
+  resource_name: record
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - collect
+  - intf_neighbor_width
+  - ipv4_addr_dst_mask_len
+  - ipv4_addr_src_mask_len
+  - ipv4_section_header_size
+  - ipv4_section_payload_size
+  - ipv6_addr_dst_mask_len
+  - ipv6_addr_src_mask_len
+  - ipv6_section_header_size
+  - ipv6_section_payload_size
+  - pen_gigamon_url_size
+  - pen_gigamon_user_agent_width
+  - pen_http_host_width
+  - pen_ssl_certificate_issuer_common_name_width
+  - pen_ssl_certificate_issuer_width
+  - pen_ssl_certificate_subject_alt_name_width
+  - pen_ssl_certificate_subject_common_name_width
+  - pen_ssl_certificate_subject_width
+  - pen_ssl_server_name_indication_width
+  - phy_intf_in_width
+  - phy_intf_out_width
+  - tcp_flags
+  - collects
+  - collect_field
+  - width
+  - number_of_collects
+  - size
+  - mask_len
+  - flags
+  - description
+  - export_blank_pen
+  - exporters
+  - nf_version
+  - sampling_rate
+- schema: network_profile
+  operation: createNetworkProfile
+  resource_name: network_profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - description
+  - ipv4_subnets
+  - ipv6_masks
+- operation: createNewFMTemplate
+  generate_resource: true
+  resource_name: fm_template
+  read_operation: loadsFMTemplateByTemplateName
+  update_operation: updateFMTemplate
+  delete_operation: deleteFMTemplate
+- operation: createPCAPProfile
+  generate_resource: true
+  resource_name: pcap_profile
+  read_operation: getAllPCAPProfileByAlias
+  delete_operation: DeletePCAPCaptureByAlias
+- operation: createPolicy
+  generate_resource: true
+  resource_name: intent_policy
+  read_operation: getPolicy
+  update_operation: updatePolicy
+  delete_operation: deletePolicy
+- schema: port_filter
+  operation: createPortFilter
+  resource_name: port_filter
+  id_attribute: port_id
+  import_format: '{port_id}'
+  computed_attributes:
+  - port_id
+  - drop_rules
+  - comment
+  - pos
+  - subset
+  - type
+  - value
+  - value_max
+  - mask
+  - cidr_mask
+  - net_mask
+  - pass_rules
+- schema: port_group
+  operation: createPortGroup
+  resource_name: port_group
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - comment
+  - gigastreams
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - port_weights
+  - ports
+  - smart_lb
+  - tunnel_lb_endpoints
+  - weight
+- schema: port_pair
+  operation: createPortPair
+  resource_name: port_pair
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - comment
+  - config_mismatch
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - lfp_enabled
+- schema: port_throttle
+  operation: createPortThrottle
+  resource_name: port_throttle
+  id_attribute: alias
+  import_format: '{alias}'
+- schema: radius_server
+  operation: createRadiusServer
+  resource_name: radius_server
+  id_attribute: server_address
+  import_format: '{server_address}'
+  computed_attributes:
+  - enabled
+  - port
+  - retries
+  - timeout
+  sensitive_attributes:
+  - secret_key
+- schema: redundancy_profile
+  operation: createRedundancyProfile
+  resource_name: redundancy_profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - protection_role
+- schema: sa_apf_profile
+  operation: createSessionAwareApfProfile
+  resource_name: sa_apf_profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - bidi
+  - buffering
+  - buffer_count_before_match
+  - protocol
+  - cluster_id
+  - packet_count
+  - pos
+  - timeout
+- schema: sffp_profile
+  operation: createSffpProfile
+  resource_name: sffp_profile
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - ip_addresses
+- operation: createSipWhitelist
+  generate_resource: true
+  resource_name: sip_whitelist
+  read_operation: loadSipWhitelists
+  delete_operation: deleteSipWhitelists
+- schema: notif_target
+  operation: createSnmpNotifTarget
+  resource_name: notif_target
+  id_attribute: notif_target_address
+  import_format: '{notif_target_address}'
+  computed_attributes:
+  - enabled
+  - notif_target_address
+  - notify_config
+  - auth_key
+  - auth_protocol
+  - community
+  - engine_id
+  - port
+  - priv_key
+  - priv_protocol
+  - v3_user
+  - version
+  - notify_type
+- schema: spine_link
+  operation: createSpineLink
+  resource_name: spine_link
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - comment
+  - leaf_box_id
+  - links
+  - leaf_gigastream
+  - spine_box_id
+  - spine_gigastream
+  - stack_link
+- schema: key_map
+  operation: createSslDecryptionKeyMap
+  resource_name: key_map
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - endpoint
+  - address
+  - port
+  - key
+  - comment
+- schema: stack_link
+  operation: createStackLink
+  resource_name: stack_link
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - comment
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - port_list1
+  - port_list2
+- schema: tacacs_server
+  operation: createTacacsServer
+  resource_name: tacacs_server
+  id_attribute: server_address
+  import_format: '{server_address}'
+  computed_attributes:
+  - enabled
+  - port
+  - retries
+  - timeout
+  sensitive_attributes:
+  - secret_key
+- schema: tag
+  operation: createTag
+  resource_name: tag
+  id_attribute: tag_key
+  import_format: '{tag_key}'
+  computed_attributes:
+  - description
+  - hierarchical
+  - multi_valued
+- schema: ptp_config
+  operation: createTimeStampingPtpConfig
+  resource_name: ptp_config
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - domain
+  - local_priority
+  - mode
+  - priority2
+  - step_type
+- schema: tool_port_mirror
+  operation: createToolPortMirror
+  resource_name: tool_port_mirror
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - cluster_id
+  - comment
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+- schema: traffic_flow
+  operation: createTrafficFlows
+  resource_name: traffic_flow
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - comment
+  - config_status
+  - created_by
+  - created_time
+  - deployed_by
+  - deployed_time
+  - enable
+  - error_message
+  - destinations
+  - components
+  - encap_tunnel
+  - tags
+  - application
+  - app_dependant_components
+  - app_custom_profile_config
+  - user_defined_applications
+  - app_filter_profile_config
+  - app_filter_enable
+  - app_filter_session
+  - bidi
+  - buffering
+  - buffer_count_before_match
+  - enabled
+  - protocol
+  - packet_count
+  - session_fields
+  - pos
+  - timeout
+  - drop_app_profile_alias
+  - drop_application_names
+  - attributes
+  - name
+  - value
+  - is_user_defined
+  - pass_app_profile_alias
+  - pass_application_names
+  - app_metadata_export_config
+  - cache_config
+  - advance_hash
+  - description
+  - dpi_inject_limit
+  - event
+  - exporters
+  - flow_behavior
+  - match
+  - datalink
+  - mac_dst
+  - mac_src
+  - vlan
+  - interface
+  - in_name_width
+  - in_physical_width
+  - ip
+  - version
+  - ipv4
+  - destination
+  - prefix_min_mask
+  - dscp
+  - fragmentation
+  - flags
+  - offset
+  - header_len
+  - option_map
+  - precedence
+  - section
+  - header_size
+  - payload_size
+  - source
+  - tos
+  - total_length
+  - ttl
+  - ipv6
+  - extension_map
+  - flow_label
+  - hop_limit
+  - length
+  - header
+  - payload
+  - total
+  - next_header
+  - traffic_class
+  - transport
+  - dst_port
+  - icmp
+  - ipv4_code
+  - ipv4_type
+  - ipv6_code
+  - ipv6_type
+  - src_port
+  - tcp
+  - ack_number
+  - seq_number
+  - urgent_ptr
+  - window_size
+  - udp
+  - msg_len
+  - multi_collect
+  - network_profiles
+  - observation_domain_id
+  - sampling
+  - mode
+  - single_sampling_rate
+  - size
+  - idle
+  - metadata_exporters
+  - application_names
+  - destination_name
+  - export_meta_app_profile
+  - application_id
+  - applications
+  - counter
+  - bytes
+  - bytes_long
+  - inner_byte
+  - inner_byte_long
+  - packets
+  - packets_long
+  - flow
+  - end_reason
+  - gtpu
+  - qfi
+  - teid
+  - out_physical_width
+  - outer_ipv4
+  - outer_ipv6
+  - timestamp
+  - flow_end_msec
+  - flow_endsec
+  - flow_start_msec
+  - flow_startsec
+  - sys_up_time_first
+  - sys_up_time_last
+  - export_meta_app_profile_alias
+  - exporter_alias
+  - exporter_config
+  - application_profiles
+  - cef
+  - active_timeout
+  - inactive_timeout
+  - ipv4_address
+  - l4_port_dst
+  - l4_port_src
+  - l4_protocol
+  - max_pkt_size
+  - mobility_sam
+  - encoding
+  - encoding_format
+  - event_enable
+  - modify
+  - update
+  - trigger
+  - monitor
+  - netflow
+  - template_refresh
+  - template_type
+  - snmp
+  - ip_interface
+  - iface
+  - app_monitor_config
+  - monitor_enable
+  - monitor_exporter
+  - netflow_license_only
+  - engine_ports
+  - gs_group_alias
+  - gsgroup_params
+  - app_tcp
+  - load_balance
+  - tcp_control
+  - dedup
+  - action
+  - ip_tclass
+  - ip_tos
+  - tcp_seq
+  - timer
+  - diameter_packet
+  - diameter_s6_a_session
+  - limit
+  - diameter_whitelist
+  - whitelist
+  - eflow
+  - interval
+  - log_enabled
+  - packet_ratio
+  - engine_watchdog_timer
+  - time
+  - erspan3
+  - timestamp_format
+  - flow_mask
+  - flow_sampling
+  - ip_ranges
+  - ipv4_addr
+  - ipv4_mask
+  - ipv6_addr
+  - ipv6_mask
+  - rate
+  - generic_session_timeout
+  - gpfcp_profiles
+  - g_pfcp_profiles
+  - gs_group_system
+  - cpu_load_alarm_threshold
+  - gta_profiles
+  - gtp_control_sampling
+  - gtp_flow
+  - gtp_gpfcp_delay
+  - gtp_persistence
+  - file_age_timeout
+  - restart_age_time
+  - gtp_random_sampling
+  - gtp_whitelist
+  - multi_whitelists
+  - health_check
+  - rcv_port
+  - retries
+  - round_trip_time
+  - hsm_group
+  - ip_frag
+  - forward
+  - head_session_timeout
+  - failover
+  - threshold_lt_bw
+  - threshold_lt_pkt_rate
+  - link_weight_type
+  - replicate_gtpc
+  - node_role
+  - mob5_g_limit
+  - mob_lte_limit
+  - stand_alone_mode
+  - port_throttle_sip
+  - port_throttle
+  - resource
+  - buffer_asf_size
+  - cpu
+  - overload_threshold
+  - hsm_ssl
+  - buffer
+  - packet_buffer
+  - session_count
+  - inline_ssl
+  - standalone
+  - metadata
+  - session_overload
+  - tunnel_overload
+  - xpkt_match
+  - rtp_ports
+  - range
+  - port
+  - port_max
+  - sa_apf
+  - buffer_size
+  - session_logging
+  - log_level
+  - remote_syslog_ip
+  - remote_syslog_port
+  - sffp_profiles
+  - sip_media
+  - sip_ports
+  - ports
+  - sip_session
+  - sip_tcp_idle_timeout
+  - sip_whitelist
+  - ssl_decrypt
+  - decrypt_fail_action
+  - hsm_pkcs11
+  - debug_level
+  - dynamic_object
+  - load_sharing
+  - hsm_timeout
+  - key_cache_timeout
+  - key_map
+  - non_ssl_traffic
+  - pending_session_timeout
+  - session_timeout
+  - tcp_syn_timeout
+  - ticket_cache_timeout
+  - gsop
+  - gs_apps
+  - apf
+  - flow_filter
+  - gseries_header_add
+  - types
+  - gseries_header_remove
+  - gseries_load_balance
+  - fixed_offset
+  - hash
+  - variable_offset
+  - end_delim
+  - start_delim
+  - start_field
+  - gseries_pattern_match
+  - header_add
+  - header_remove
+  - ah1
+  - ah2
+  - custom_len
+  - erspan_flow_id
+  - fp_dst_switch_id
+  - fp_src_switch_id
+  - header_count
+  - offset_range_value
+  - vlan_header
+  - vxlan_id
+  - icap
+  - icap_profile
+  - inline_ssl_profile
+  - enhanced
+  - elb_alias
+  - stateful
+  - app_type
+  - diameter_key_hash_type
+  - diameter_key_multi_hash_type
+  - avp_codevalue
+  - key
+  - gtp_key_hash_type
+  - lb_type
+  - sip_key_hash_type
+  - stateless
+  - field_location
+  - hash_fields
+  - masking
+  - content_type
+  - pattern
+  - metadata_export
+  - cache
+  - slicing
+  - in_port
+  - out_port
+  - trailer_add
+  - trailer_remove
+  - tunnel_decap
+  - custom
+  - port_dst
+  - port_src
+  - gmip_port
+  - l2_gre_key
+  - tls_pcapng
+  - decap_key
+  - listener
+  - vxlan
+  - vni
+  - tunnel_encap
+  - gmip_config
+  - dst_ip
+  - prec
+  - l2_gre_config
+  - pg_dst
+  - session_field
+  - session_pos
+  - exporter
+  - exporter_group
+  - vxlan_config
+  - gs_group
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - gsop_alias
+  - virtual_port
+  - deferred_binding
+  - fail_over_action
+  - inline_status
+  - inner_traffic_path
+  - metadata_monitoring
+  - outer_traffic_path
+  - sa_apf_profile
+  - vport_alias
+  - application_flows
+  - ap_rules
+  - drop_rules
+  - application_profile
+  - pass_rules
+  - app_config_rules
+  - flow_rules
+  - gtp
+  - imei
+  - imsi
+  - msisdn
+  - flow_sample5_g_overlap_rules
+  - flow5_g
+  - dnn
+  - gpsi
+  - nas_5_qi
+  - nci
+  - nsiid
+  - pei
+  - plmn_id
+  - supi
+  - tac
+  - percentage
+  - flow_sample5_g_rules
+  - priority
+  - flow_sample_diameter_rules
+  - diameter
+  - user_name
+  - flow_sample_overlap_rules
+  - apn
+  - eci
+  - qci
+  - snssai
+  - tac_5_g
+  - periodic_recalc
+  - flow_sample_rules
+  - flow_sample_sip_rules
+  - sip
+  - callee_id
+  - callee_id_range
+  - max_value
+  - caller_id
+  - caller_id_range
+  - id_range
+  - flow_whitelist5_g_overlap_rules
+  - flow_whitelist5_g_rules
+  - whitelist_databases
+  - flow_whitelist_overlap_rules
+  - flow_whitelist_rules
+  - gs_rules
+  - subset
+  - value_max
+  - mask
+  - cidr_mask
+  - net_mask
+  - hint
+  - end_of_match_offset
+  - from_to
+  - start_of_match_offset
+  - match_offset
+  - offset_end
+  - offset_start
+  - match_type
+  - fstype
+  - inline_traffic_path
+  - inline_traffic_type
+  - rule_matching
+  - traffic_type
+  - global_application_flow_config
+  - has_draft
+  - policy_id
+  - metadata_details
+  - port_type
+  - traffic_health_state
+  - traffic_health_state_reasons
+  - ip_rewrite
+  - src_ip
+  - rewrite
+  - dst_mac
+  - src_mac
+  - vlan_tag
+  - tag_protocol_id
+  - vlan_id
+  - updated_by
+  - updated_time
+- schema: traffic_policy_graph
+  operation: createTrafficPolicyGraph
+  resource_name: traffic_policy_graph
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - alias
+  - comment
+  - end_points
+  - applications
+  - end_point_entry_references
+  - end_point_exit_references
+  - end_point_id
+  - end_point_node
+  - end_point_properties
+  - source
+  - port_list
+  - tunnel
+  - description
+  - dscp
+  - node_iface_subnet_cidr
+  - remote_address
+  - remote_ip
+  - traffic_direction
+  - d_port
+  - flow_label
+  - mtu
+  - prec
+  - s_port
+  - ttl
+  - vni
+  - ip_version
+  - key
+  - src_selectors
+  - destination
+  - map
+  - enable
+  - folder_comment
+  - folder_id
+  - folder_name
+  - name
+  - rule_sets
+  - aep_id
+  - drop_rules
+  - matches
+  - pos
+  - type
+  - value
+  - value_max
+  - mask
+  - subset
+  - cidr_mask
+  - net_mask
+  - rule_id
+  - pass_rules
+  - priority
+  - rule_set_id
+  - application_ref
+  - resource_ref
+  - end_point_resource
+  - end_point_template
+  - end_point_type
+  - end_point_universe
+  - destinations
+  - maps
+  - sources
+  - tunnels
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - tags
+  - tag_key
+  - tag_values
+  - traffic_flows
+  - flow_destination
+  - flow_destination_reference
+  - flow_id
+  - flow_source
+  - flow_source_reference
+  - traffic_health_state
+  - traffic_health_state_reasons
+- schema: tunnel_lb_endpoint
+  operation: createTunnelEndpoint
+  resource_name: tunnel_lb_endpoint
+  id_attribute: te_id
+  import_format: '{te_id}'
+  computed_attributes:
+  - alias
+  - ip_address
+- operation: createUser
+  generate_resource: true
+  resource_name: user
+  read_operation: loadUserByUsername
+- operation: createUserRole
+  generate_resource: true
+  resource_name: user_role
+  read_operation: loadAllUserRoles
+  update_operation: redefineUserRole
+  delete_operation: deleteUserRole
+- schema: v3_user
+  operation: createV3User
+  resource_name: v3_user
+  id_attribute: user_name
+  import_format: '{user_name}'
+  computed_attributes:
+  - auth_key
+  - auth_protocol
+  - enabled
+  - priv_key
+  - priv_protocol
+  - read_only
+  - user_name
+- schema: vport
+  operation: createVport
+  resource_name: vport
+  id_attribute: alias
+  import_format: '{alias}'
+  computed_attributes:
+  - deferred_binding
+  - fail_over_action
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - inline_status
+  - inner_traffic_path
+  - metadata_monitoring
+  - action
+  - exporters
+  - mode
+  - outer_traffic_path
+  - sa_apf_profile
+- schema: group
+  operation: create_new_user_group
+  resource_name: group
+  id_attribute: name
+  import_format: '{name}'
+  computed_attributes:
+  - description
+  - roles
+  - tags
+  - multi_valued
+  - override_user
+- schema: mobility
+  operation: createmobilitysolution
+  resource_name: mobility
+  id_attribute: solution_alias
+  import_format: '{solution_alias}'
+  computed_attributes:
+  - health_state
+  - health_state_reasons
+  - message
+  - severity
+  - traffic_health_state_computation_type
+  - cp_nodes
+  - additional_tool_ports
+  - app5_g_http2_ports
+  - app_tcp
+  - application
+  - load_balance
+  - tcp_control
+  - collector_tools
+  - config_status
+  - config_status_reasons
+  - control_metadata_ip_interface_alias
+  - deployed
+  - gtp_control_sample
+  - gtp_random_sampling
+  - enabled
+  - interval
+  - ip_interface_alias
+  - node_override_network_ports
+  - number_of5_g_sessions
+  - number_of_lte_sessions
+  - tags
+  - comment
+  - expand_port_identifier
+  - group_interfaces
+  - ip4_frag_rule_type
+  - interface_type
+  - source_override_dst_ports
+  - source_override_network_ports
+  - tunnel_identifiers
+  - cidr_mask
+  - interface_tunnel_identifier_type
+  - net_mask
+  - value
+  - subset
+  - value_max
+  - source_group_id
+  - gtp_nodes
+  - network_ports
+  - sam_exporter_nodes
+  - smaf_details
+  - control_application
+  - interface_address
+  - port
+  - protocol
+  - management_address
+  - user_application
+  - app_profile_config
+  - application_id
+  - applications
+  - attributes
+  - is_user_defined
+  - counter
+  - bytes
+  - bytes_long
+  - packets
+  - packets_long
+  - flow
+  - end_reason
+  - gtpu
+  - qfi
+  - teid
+  - inner_ipv4
+  - destination
+  - source
+  - inner_ipv6
+  - next_header
+  - outer_ipv4
+  - outer_ipv6
+  - timestamp
+  - flow_end_msec
+  - flow_endsec
+  - flow_start_msec
+  - flow_startsec
+  - transport
+  - dst_port
+  - src_port
+  - control_plane_setting
+  - encoding
+  - encoding_format
+  - event_enable
+  - modify
+  - update
+  - trigger
+  - deployment_details
+  - sam_node_alias
+  - engine_meta_data_cache_configs
+  - event
+  - flow_behavior
+  - flows_size
+  - idle_timeout
+  - match
+  - ipv4
+  - prefix_min_mask
+  - ipv6
+  - observation_domain_id
+  - engine_source_mappings
+  - exporter_config
+  - active_timeout
+  - inactive_timeout
+  - record_type
+  - param_configs
+  - resource_metadata
+  - site_override_of_policy_arrangements
+  - for5_g
+  - gtp_flow_timeout
+  - gtp_persistence
+  - file_age_timeout
+  - restart_age_time
+  - load_balancing
+  - overlap_mode
+  - sampling
+  - dnn
+  - gpsi
+  - nas_5_qi
+  - nci
+  - nsiid
+  - pei
+  - plmn_id
+  - supi
+  - tac
+  - whitelisting
+  - type
+  - whitelist_databases
+  - multi_whitelists
+  - white_list_alias
+  - for_lte
+  - load_balancing_lte
+  - apn
+  - eci
+  - imei
+  - imsi
+  - interface
+  - msisdn
+  - periodic_recalc
+  - qci
+  - snssai
+  - tac_5_g
+  - version
+  - for_non_cups_lte
+  - flowfiltering
+  - drop_rules
+  - pass_rules
+  - skip_deployment
+  - meta_data_exporter_alias
+  - tool_resource_id
+  - up_nodes
+  - stand_alone_mode
+  - traffic_policies
+- schema: role
+  operation: createrole
+  resource_name: role
+  id_attribute: name
+  import_format: '{name}'
+  computed_attributes:
+  - description
+  - hierarchy
+- schema: sysdump
+  operation: generateCopilotSysdump
+  resource_name: sysdump
+- operation: modifyNotificationConfig
+  generate_resource: true
+  resource_name: notif_config
+  read_operation: loadAFmNotificationTargetConfigByInterfaceType
+  update_operation: modifyNotificationConfig
+- operation: newEmsActivations
+  generate_resource: true
+  resource_name: activation
+  read_operation: getEmsActivations
+- operation: redefineMapChain
+  generate_resource: true
+  resource_name: map_chain
+  read_operation: loadMapChain
+  update_operation: redefineMapChain
+- operation: redefinePortConfig
+  generate_resource: true
+  resource_name: port_config
+  read_operation: getPortConfigByAlias
+  update_operation: redefinePortConfig
+- schema: source_rule
+  operation: replaceSourceRules
+  resource_name: source_rule
+  id_attribute: id
+  computed_attributes:
+  - drop_rules
+  - bidi
+  - comment
+  - ip_rewrite
+  - dst_ip
+  - src_ip
+  - pos
+  - subset
+  - type
+  - value
+  - value_max
+  - mask
+  - cidr_mask
+  - net_mask
+  - offset
+  - rewrite
+  - dst_mac
+  - src_mac
+  - vlan_tag
+  - tag_protocol_id
+  - vlan_id
+  - id
+  - pass_rules
+- operation: updateCopilotConfig
+  generate_resource: true
+  resource_name: copilot_config
+  read_operation: getCopilotConfig
+  update_operation: updateCopilotConfig
+  delete_operation: resetCopilotConfig
+- schema: adv_hash
+  operation: updateDeviceCardGigastreamAdvHash
+  resource_name: adv_hash
+  id_attribute: slot_id
+  import_format: '{slot_id}'
+  computed_attributes:
+  - cluster_id
+  - fields
+- schema: notif_meta_config
+  operation: updateEventNotificationConfiguration
+  resource_name: notif_meta_config
+  id_attribute: id
+  computed_attributes:
+  - allow_attachment
+  - attachment_limit
+  - comment
+  - email_subject_prefix
+  - enabled
+  - description
+  - display_name
+  - event_type
+  - name
+  - scope
+  - severity
+  - severity_type
+  - sub_type
+  - external_trap_receivers
+  - id
+  - instant_rate_limit
+  - recipients
+  - recurring_schedule
+  - send_mail_if_empty
+  - tags
+  - template_details
+  - time_interval
+  - time_left
+- schema: node
+  operation: updateGigaInsightToolConfig
+  resource_name: node
+  id_attribute: node_id
+  import_format: '{node_id}'
+- schema: sub_flow
+  operation: updateSubFlowByAlias
+  resource_name: sub_flow
+  id_attribute: id
+  computed_attributes:
+  - flow_rules
+  - drop_rules
+  - imei
+  - imsi
+  - msisdn
+  - version
+  - pass_rules
+  - flow_sample5_g_overlap_rules
+  - comment
+  - dnn
+  - gpsi
+  - nas_5_qi
+  - nci
+  - nsiid
+  - pei
+  - plmn_id
+  - supi
+  - tac
+  - flow_sample5_g_rules
+  - priority
+  - flow_sample_diameter_rules
+  - user_name
+  - flow_sample_overlap_rules
+  - apn
+  - eci
+  - qci
+  - snssai
+  - tac_5_g
+  - periodic_recalc
+  - flow_sample_rules
+  - flow_sample_sip_rules
+  - callee_id
+  - callee_id_range
+  - caller_id
+  - caller_id_range
+  - id_range
+  - flow_whitelist5_g_overlap_rules
+  - type
+  - flow_whitelist5_g_rules
+  - whitelist_databases
+  - flow_whitelist_overlap_rules
+  - flow_whitelist_rules
+  - gs_rules
+  - pos
+  - subset
+  - value_max
+  - mask
+  - cidr_mask
+  - net_mask
+  - hint
+  - end_of_match_offset
+  - from_to
+  - pattern
+  - start_of_match_offset
+  - match_offset
+  - offset_end
+  - offset_start
+  - protocol
+  - match_type
+  - id
+- schema: config
+  operation: uploadBulkReplicateConfigFile
+  resource_name: config
+  id_attribute: filename
+  import_format: '{filename}'
+  computed_attributes:
+  - comment
+  - created_ts
+  - created_ts_utc
+  - family
+- schema: hb_packet
+  operation: uploadHeartbeatPacket
+  resource_name: hb_packet
+  id_attribute: alias
+  import_format: '{alias}'
+- operation: uploadList
+  generate_resource: true
+  resource_name: file
+  read_operation: searchInlineSslProfileList
+datasource_overrides:
+- operation: getAcmeCertificateDetails
+  datasource_name: get_acme_certificate_details
+- operation: loadAllSystemAcmeCertificateDetails
+  datasource_name: load_all_system_acme_certificate_details
+- operation: loadSystemAcmeCertificateDetails
+  datasource_name: load_system_acme_certificate_details
+- operation: getAcmeServerDetails
+  datasource_name: get_acme_server_details
+- operation: loadAllAlarms
+  datasource_name: load_all_alarms
+- operation: getAllAlarmAutoSuppressionRules
+  datasource_name: get_all_alarm_auto_suppression_rules
+- operation: getAllCorrelatedAlarms
+  datasource_name: get_all_correlated_alarms
+- operation: getAlarmsCountByParameter
+  datasource_name: get_alarms_count_by_parameter
+- operation: getCorrelatedAlarmsCountByParameter
+  datasource_name: get_correlated_alarms_count_by_parameter
+- operation: getAllAlarmSuppressionMetadata
+  datasource_name: get_all_alarm_suppression_metadata
+- operation: getAlarmById
+  datasource_name: get_alarm_by_id
+- operation: getAllAppFilterRsc
+  datasource_name: get_all_app_filter_rsc
+- operation: getAppFilterRscBySlotId
+  datasource_name: get_app_filter_rsc_by_slot_id
+- operation: loadDiameterWhitelistEntry
+  datasource_name: load_diameter_whitelist_entry
+- operation: loadAllElbs
+  datasource_name: load_all_elbs
+- operation: loadAllEnhancedSlicings
+  datasource_name: load_all_enhanced_slicings
+- operation: getAllAppsExporter
+  datasource_name: get_all_apps_exporter
+- operation: getAllExporterGroup
+  datasource_name: get_all_exporter_group
+- operation: loadGtpWhitelistEntry
+  datasource_name: load_gtp_whitelist_entry
+- operation: getAllHsms
+  datasource_name: get_all_hsms
+- operation: getHsmKeyMaps
+  datasource_name: get_hsm_key_maps
+- operation: getRfsSync
+  datasource_name: get_rfs_sync
+- operation: getHsmGroupStatusReport
+  datasource_name: get_hsm_group_status_report
+- operation: loadAllIcapProfiles
+  datasource_name: load_all_icap_profiles
+- operation: loadAllIcapServers
+  datasource_name: load_all_icap_servers
+- operation: loadAllIcapServerGroups
+  datasource_name: load_all_icap_server_groups
+- operation: getInlineSslConfig
+  datasource_name: get_inline_ssl_config
+- operation: loadInlineSslCertValidStatus
+  datasource_name: load_inline_ssl_cert_valid_status
+- operation: loadInlineSslCertValidRecord
+  datasource_name: load_inline_ssl_cert_valid_record
+- operation: loadInlineSslUrlStatus
+  datasource_name: load_inline_ssl_url_status
+- operation: loadInlineSslUrlRecord
+  datasource_name: load_inline_ssl_url_record
+- operation: loadAllInlineSslProfiles
+  datasource_name: load_all_inline_ssl_profiles
+- operation: fetchInlineSslProfileAllListInfo
+  datasource_name: fetch_inline_ssl_profile_all_list_info
+- operation: fetchInlineSslProfileListInfo
+  datasource_name: fetch_inline_ssl_profile_list_info
+- operation: downloadList
+  datasource_name: download_list
+- operation: getInlineSslSigning
+  datasource_name: get_inline_ssl_signing
+- operation: getTrustStore
+  datasource_name: get_trust_store
+- operation: getTrustStoreCert
+  datasource_name: get_trust_store_cert
+- operation: getInlineSslTrustStoreFile
+  datasource_name: get_inline_ssl_trust_store_file
+- operation: getSslDecryptionKeysStoreState
+  datasource_name: get_ssl_decryption_keys_store_state
+- operation: getKeystoreKeys
+  datasource_name: get_keystore_keys
+- operation: getKeystoreKeyCert
+  datasource_name: get_keystore_key_cert
+- operation: getKeystorePreference
+  datasource_name: get_keystore_preference
+- operation: getKeystoreCounters
+  datasource_name: get_keystore_counters
+- operation: getAllAppsListener
+  datasource_name: get_all_apps_listener
+- operation: loadAllMetadataApplicationProfiles
+  datasource_name: load_all_metadata_application_profiles
+- operation: loadAllMetadataCache
+  datasource_name: load_all_metadata_cache
+- operation: loadAllMetadataExporters
+  datasource_name: load_all_metadata_exporters
+- operation: loadAllMetadataNetworkProfiles
+  datasource_name: load_all_metadata_network_profiles
+- operation: loadAllMetadataApplicationTemplates
+  datasource_name: load_all_metadata_application_templates
+- operation: loadAllNetflowExporters
+  datasource_name: load_all_netflow_exporters
+- operation: getNetflowExporterFilter
+  datasource_name: get_netflow_exporter_filter
+- operation: loadAllNetflowMonitors
+  datasource_name: load_all_netflow_monitors
+- operation: loadAllNetflowRecords
+  datasource_name: load_all_netflow_records
+- operation: loadAllPortThrottles
+  datasource_name: load_all_port_throttles
+- operation: getAllProxyServerProfiles
+  datasource_name: get_all_proxy_server_profiles
+- operation: loadAllSessionAwareApfProfiles
+  datasource_name: load_all_session_aware_apf_profiles
+- operation: loadSipWhitelistEntry
+  datasource_name: load_sip_whitelist_entry
+- operation: loadAllSslDecryptionEndpoints
+  datasource_name: load_all_ssl_decryption_endpoints
+- operation: loadAllSslDecryptionKeyMaps
+  datasource_name: load_all_ssl_decryption_key_maps
+- operation: getAllSslProfiles
+  datasource_name: get_all_ssl_profiles
+- operation: getSslClientTrustStoreList
+  datasource_name: get_ssl_client_trust_store_list
+- operation: getSslClientTrustStore
+  datasource_name: get_ssl_client_trust_store
+- operation: getSslClientTrustStoreCertificate
+  datasource_name: get_ssl_client_trust_store_certificate
+- operation: getSslClientTrustStoreFile
+  datasource_name: get_ssl_client_trust_store_file
+- operation: getAllTcpProfiles
+  datasource_name: get_all_tcp_profiles
+- operation: getTrustStoreList
+  datasource_name: get_trust_store_list
+- operation: getTrustStoreCertificate
+  datasource_name: get_trust_store_certificate
+- operation: getSslTrustStoreFile
+  datasource_name: get_ssl_trust_store_file
+- operation: getAllTunnelApplication
+  datasource_name: get_all_tunnel_application
+- operation: loadAllAppVizSolutions
+  datasource_name: load_all_app_viz_solutions
+- operation: loadAuditLogEntries
+  datasource_name: load_audit_log_entries
+- operation: getAuditLogEntryById
+  datasource_name: get_audit_log_entry_by_id
+- operation: getAvisiPolicies
+  datasource_name: get_avisi_policies
+- operation: getPoliciesInstantiationReports
+  datasource_name: get_policies_instantiation_reports
+- operation: getAvisiActionTempl
+  datasource_name: get_avisi_action_templ
+- operation: getAvisiConditionTempl
+  datasource_name: get_avisi_condition_templ
+- operation: getReportInfo
+  datasource_name: get_report_info
+- operation: loadAllCircuitTunnelGlobal
+  datasource_name: load_all_circuit_tunnel_global
+- operation: loadAllCircuitTunnels
+  datasource_name: load_all_circuit_tunnels
+- operation: listDeviceConfigFiles
+  datasource_name: list_device_config_files
+- operation: downloadBackupConfigFileOfFormatText
+  datasource_name: download_backup_config_file_of_format_text
+- operation: downloadConfigFile
+  datasource_name: download_config_file
+- operation: GenerateRunningTextBackupConfig
+  datasource_name: generate_running_text_backup_config
+- operation: listFmStoredClustersConfigBackupSnapshots
+  datasource_name: list_fm_stored_clusters_config_backup_snapshots
+- operation: listFmStoredClusterConfigBackupFileByTaskGroupId
+  datasource_name: list_fm_stored_cluster_config_backup_file_by_task_group_id
+- operation: listFmStoredClusterConfigBackupSnapshots
+  datasource_name: list_fm_stored_cluster_config_backup_snapshots
+- operation: listFmStoredClusterConfigBackupSnapshot
+  datasource_name: list_fm_stored_cluster_config_backup_snapshot
+- operation: listBulkReplicateConfigFiles
+  datasource_name: list_bulk_replicate_config_files
+- operation: downloadBulkReplicateConfigFile
+  datasource_name: download_bulk_replicate_config_file
+- operation: listBulkReplicateConfigRestoreLogs
+  datasource_name: list_bulk_replicate_config_restore_logs
+- operation: listBulkReplicateConfigRestoreLogsByConfigFilename
+  datasource_name: list_bulk_replicate_config_restore_logs_by_config_filename
+- operation: listBulkReplicateConfigRestoreLog
+  datasource_name: list_bulk_replicate_config_restore_log
+- operation: getClusterConfigState
+  datasource_name: get_cluster_config_state
+- operation: gsCards
+  datasource_name: gs_cards
+- operation: getAllClusterConfigImageUpgradeStatus
+  datasource_name: get_all_cluster_config_image_upgrade_status
+- operation: getAllClusterConfigImageUpgradeStatusByTaskGroupId
+  datasource_name: get_all_cluster_config_image_upgrade_status_by_task_group_id
+- operation: getClusterConfigImageUpgradeStatusByTaskGroupId
+  datasource_name: get_cluster_config_image_upgrade_status_by_task_group_id
+- operation: getClusterConfigImageUpgradeStatusByTaskId
+  datasource_name: get_cluster_config_image_upgrade_status_by_task_id
+- operation: getDeviceLocatorLedDetails
+  datasource_name: get_device_locator_led_details
+- operation: getUpgradeExecutionTimeline
+  datasource_name: get_upgrade_execution_timeline
+- operation: getUpgradeInfoByTaskId
+  datasource_name: get_upgrade_info_by_task_id
+- operation: getUpgradeInfoByTaskIdAndClusterId
+  datasource_name: get_upgrade_info_by_task_id_and_cluster_id
+- operation: getUpgradeJobInfo
+  datasource_name: get_upgrade_job_info
+- operation: getUpgradeJobs
+  datasource_name: get_upgrade_jobs
+- operation: getUpgradeSummary
+  datasource_name: get_upgrade_summary
+- operation: loadEvents
+  datasource_name: load_events
+- operation: getEventsCountBySeverity
+  datasource_name: get_events_count_by_severity
+- operation: getEventById
+  datasource_name: get_event_by_id
+- operation: loadFabricAdvHash
+  datasource_name: load_fabric_adv_hash
+- operation: getAllFabricMaps
+  datasource_name: get_all_fabric_maps
+- operation: loadNRTStatsFabricMap
+  datasource_name: load_nrt_stats_fabric_map
+- operation: getAllClusterCircuitTunnelsOfAnUserFabricMap
+  datasource_name: get_all_cluster_circuit_tunnels_of_an_user_fabric_map
+- operation: getClusterCircuitTunnelOfAnUserFabricMap
+  datasource_name: get_cluster_circuit_tunnel_of_an_user_fabric_map
+- operation: getAllClusterMapsOfAnUserFabricMap
+  datasource_name: get_all_cluster_maps_of_an_user_fabric_map
+- operation: getClusterMapOfAnUserFabricMap
+  datasource_name: get_cluster_map_of_an_user_fabric_map
+- operation: getAllInternalFabricMaps
+  datasource_name: get_all_internal_fabric_maps
+- operation: getInternalFabricMapByAlias
+  datasource_name: get_internal_fabric_map_by_alias
+- operation: getAllClusterCircuitTunnelsOfAnInternalFabricMap
+  datasource_name: get_all_cluster_circuit_tunnels_of_an_internal_fabric_map
+- operation: getClusterCircuitTunnelOfAnInternalFabricMap
+  datasource_name: get_cluster_circuit_tunnel_of_an_internal_fabric_map
+- operation: getAllClusterMapsOfAnInternalFabricMap
+  datasource_name: get_all_cluster_maps_of_an_internal_fabric_map
+- operation: getClusterMapOfAnInternalFabricMap
+  datasource_name: get_cluster_map_of_an_internal_fabric_map
+- operation: loadAllFabricPortGroups
+  datasource_name: load_all_fabric_port_groups
+- operation: getFabricResourceConfig
+  datasource_name: get_fabric_resource_config
+- operation: getL2CircuitResourceConfig
+  datasource_name: get_l2_circuit_resource_config
+- operation: loadAllFilterResources
+  datasource_name: load_all_filter_resources
+- operation: loadAllFilterResourcesBySlotId
+  datasource_name: load_all_filter_resources_by_slot_id
+- operation: loadAllFilterTemplates
+  datasource_name: load_all_filter_templates
+- operation: loadFilterTemplateLimits
+  datasource_name: load_filter_template_limits
+- operation: loadFilterTemplateLimitBySlotId
+  datasource_name: load_filter_template_limit_by_slot_id
+- operation: loadAllPlatformFilterLimits
+  datasource_name: load_all_platform_filter_limits
+- operation: getAllFlexInlineSolutions
+  datasource_name: get_all_flex_inline_solutions
+- operation: getAllFlexInlineSslApps
+  datasource_name: get_all_flex_inline_ssl_apps
+- operation: getFlexInlineVlanConfig
+  datasource_name: get_flex_inline_vlan_config
+- operation: getAllGigaFlexInlineNetworkGroup
+  datasource_name: get_all_giga_flex_inline_network_group
+- operation: loadNRTStatsFlexInlineSolution
+  datasource_name: load_nrt_stats_flex_inline_solution
+- operation: getFlexInlineConfig
+  datasource_name: get_flex_inline_config
+- operation: getFlexInlineNetworkConfig
+  datasource_name: get_flex_inline_network_config
+- operation: getFlexInlineMapConfig
+  datasource_name: get_flex_inline_map_config
+- operation: getFlexInlineMapConfigStatus
+  datasource_name: get_flex_inline_map_config_status
+- operation: getFlowFilteringDeltaReportSummary
+  datasource_name: get_flow_filtering_delta_report_summary
+- operation: loadAlertPolicies
+  datasource_name: load_alert_policies
+- operation: resourceSelection
+  datasource_name: resource_selection
+- operation: testConnection
+  datasource_name: test_connection
+- operation: getCopilotSysdumps
+  datasource_name: get_copilot_sysdumps
+- operation: loadAllFmNotificationTargetConfig
+  datasource_name: load_all_fm_notification_target_config
+- operation: loadAllFMTemplatesHierarchialConfig
+  datasource_name: load_all_fm_templates_hierarchial_config
+- operation: gigaStreamThreshold
+  datasource_name: giga_stream_threshold
+- operation: portPacketThreshold
+  datasource_name: port_packet_threshold
+- operation: loadsGlobalFMTemplateWithValues
+  datasource_name: loads_global_fm_template_with_values
+- operation: fmHaDetails
+  datasource_name: fm_ha_details
+- operation: getClusterState
+  datasource_name: get_cluster_state
+- operation: getFmHaRole
+  datasource_name: get_fm_ha_role
+- operation: getFmHastatus
+  datasource_name: get_fm_hastatus
+- operation: getSysInfo
+  datasource_name: get_sys_info
+- operation: loadAllCriticalNotifications
+  datasource_name: load_all_critical_notifications
+- operation: createApiToken
+  datasource_name: create_api_token
+- operation: loadFmBackupArchiveServers
+  datasource_name: load_fm_backup_archive_servers
+- operation: loadFmBackupArchiveFiles
+  datasource_name: load_fm_backup_archive_files
+- operation: loadGdpNodeReports
+  datasource_name: load_gdp_node_reports
+- operation: getGigaInsightNodes
+  datasource_name: get_giga_insight_nodes
+- operation: getEportsInterfaces
+  datasource_name: get_eports_interfaces
+- operation: getAllArpEntries
+  datasource_name: get_all_arp_entries
+- operation: getArpEntries
+  datasource_name: get_arp_entries
+- operation: getPingResult
+  datasource_name: get_ping_result
+- operation: getAllGpfcpProfile
+  datasource_name: get_all_gpfcp_profile
+- operation: loadAllUserGroups
+  datasource_name: load_all_user_groups
+- operation: loadAllGsGroups
+  datasource_name: load_all_gs_groups
+- operation: getFlowDiameterReportsS6aSummary
+  datasource_name: get_flow_diameter_reports_s6_a_summary
+- operation: getAllFlowFilteringSummary
+  datasource_name: get_all_flow_filtering_summary
+- operation: getAllFlowSamplingSummary
+  datasource_name: get_all_flow_sampling_summary
+- operation: getAllFlowSipSummary
+  datasource_name: get_all_flow_sip_summary
+- operation: getAllSslDecryptionSummary
+  datasource_name: get_all_ssl_decryption_summary
+- operation: loadAllGtpPersistenceBackupRestore
+  datasource_name: load_all_gtp_persistence_backup_restore
+- operation: getGtpBackupFiles
+  datasource_name: get_gtp_backup_files
+- operation: getPortThrottleReport
+  datasource_name: get_port_throttle_report
+- operation: getFlowOpsReport
+  datasource_name: get_flow_ops_report
+- operation: getFlowDiameterReportS6aSummary
+  datasource_name: get_flow_diameter_report_s6_a_summary
+- operation: getFlowFilteringSummary
+  datasource_name: get_flow_filtering_summary
+- operation: getFlowSamplingSummary
+  datasource_name: get_flow_sampling_summary
+- operation: getFlowSipSummary
+  datasource_name: get_flow_sip_summary
+- operation: getSslDecryptionStatistics
+  datasource_name: get_ssl_decryption_statistics
+- operation: getSslDecryptionSummary
+  datasource_name: get_ssl_decryption_summary
+- operation: getGtpPersistenceBackupRestoreByAlias
+  datasource_name: get_gtp_persistence_backup_restore_by_alias
+- operation: getPortThrottleReportByAlias
+  datasource_name: get_port_throttle_report_by_alias
+- operation: loadAllGsops
+  datasource_name: load_all_gsops
+- operation: getAllGtaProfiles
+  datasource_name: get_all_gta_profiles
+- operation: loadBatteryOptimization
+  datasource_name: load_battery_optimization
+- operation: loadAllGtapPortGroup
+  datasource_name: load_all_gtap_port_group
+- operation: loadGtapPortGroup
+  datasource_name: load_gtap_port_group
+- operation: loadAllHeaderStrip
+  datasource_name: load_all_header_strip
+- operation: loadAllHeaderStripAging
+  datasource_name: load_all_header_strip_aging
+- operation: getAllicapClient
+  datasource_name: get_allicap_client
+- operation: loadNRTStatsIcapSolution
+  datasource_name: load_nrt_stats_icap_solution
+- operation: loadAllImageRepoImages
+  datasource_name: load_all_image_repo_images
+- operation: downloadImageFile
+  datasource_name: download_image_file
+- operation: getImageServerRepoByVersion
+  datasource_name: get_image_server_repo_by_version
+- operation: loadAllImageServers
+  datasource_name: load_all_image_servers
+- operation: loadAllHeartbeatPackets
+  datasource_name: load_all_heartbeat_packets
+- operation: loadAllHeartbeatProfiles
+  datasource_name: load_all_heartbeat_profiles
+- operation: loadAllIbPathways
+  datasource_name: load_all_ib_pathways
+- operation: loadAllNegativeHeartbeatProfiles
+  datasource_name: load_all_negative_heartbeat_profiles
+- operation: loadAllInlineNetworkGroups
+  datasource_name: load_all_inline_network_groups
+- operation: loadAllInlineNetworkLags
+  datasource_name: load_all_inline_network_lags
+- operation: loadAllInlineNetworks
+  datasource_name: load_all_inline_networks
+- operation: loadAllRedundancyProfile
+  datasource_name: load_all_redundancy_profile
+- operation: loadAllInlineSerialToolGroups
+  datasource_name: load_all_inline_serial_tool_groups
+- operation: loadAllInlineToolGroups
+  datasource_name: load_all_inline_tool_groups
+- operation: loadAllInlineTools
+  datasource_name: load_all_inline_tools
+- operation: loadAllAppVisibilitySolutions
+  datasource_name: load_all_app_visibility_solutions
+- operation: loadAppVisibilitySolutionsByAliasWithConfigObjects
+  datasource_name: load_app_visibility_solutions_by_alias_with_config_objects
+- operation: getAllIntentMobility
+  datasource_name: get_all_intent_mobility
+- operation: loadMobilityControlNode
+  datasource_name: load_mobility_control_node
+- operation: loadMobilityControlNodeConfigs
+  datasource_name: load_mobility_control_node_configs
+- operation: loadMobilityGtpNode
+  datasource_name: load_mobility_gtp_node
+- operation: loadMobilityGtpNodeConfigs
+  datasource_name: load_mobility_gtp_node_configs
+- operation: loadMobilitySamNode
+  datasource_name: load_mobility_sam_node
+- operation: loadMobilitySAMNodeConfigs
+  datasource_name: load_mobility_sam_node_configs
+- operation: loadMobilityUserNode
+  datasource_name: load_mobility_user_node
+- operation: loadMobilityUserNodeConfigs
+  datasource_name: load_mobility_user_node_configs
+- operation: getPolicyDeploymentStatus
+  datasource_name: get_policy_deployment_status
+- operation: exportPolicy
+  datasource_name: export_policy
+- operation: getGsopInfo
+  datasource_name: get_gsop_info
+- operation: getTools
+  datasource_name: get_tools
+- operation: getPolicyDeploymentLog
+  datasource_name: get_policy_deployment_log
+- operation: getPolicyFabricMaps
+  datasource_name: get_policy_fabric_maps
+- operation: loadGigaChassis
+  datasource_name: load_giga_chassis
+- operation: loadCardsDetails
+  datasource_name: load_cards_details
+- operation: loadCardDetails
+  datasource_name: load_card_details
+- operation: loadGigaPorts
+  datasource_name: load_giga_ports
+- operation: getPortNeighbors
+  datasource_name: get_port_neighbors
+- operation: getGigaPortByPortId
+  datasource_name: get_giga_port_by_port_id
+- operation: loadIpDestinationStatuses
+  datasource_name: load_ip_destination_statuses
+- operation: loadIpDestinationStatus
+  datasource_name: load_ip_destination_status
+- operation: loadAllIpInterfaces
+  datasource_name: load_all_ip_interfaces
+- operation: getAllIpInterfaceConfigs
+  datasource_name: get_all_ip_interface_configs
+- operation: getEligibleRenewers
+  datasource_name: get_eligible_renewers
+- operation: getAllFeatureActivations
+  datasource_name: get_all_feature_activations
+- operation: getExpiringCount
+  datasource_name: get_expiring_count
+- operation: getExpiringSoonAndRecentlyExpiredCount
+  datasource_name: get_expiring_soon_and_recently_expired_count
+- operation: getAllFloatingFeatureActivations
+  datasource_name: get_all_floating_feature_activations
+- operation: getAllVBLFeatureActivations
+  datasource_name: get_all_vbl_feature_activations
+- operation: loadLicensingConfig
+  datasource_name: load_licensing_config
+- operation: isEmailServerConfigured
+  datasource_name: is_email_server_configured
+- operation: getAllDevices
+  datasource_name: get_all_devices
+- operation: getSerialNumberOfCard
+  datasource_name: get_serial_number_of_card
+- operation: getSerialNumbersOfChassisRequiringGVOSLicense
+  datasource_name: get_serial_numbers_of_chassis_requiring_gvos_license
+- operation: getEmsEntitlements
+  datasource_name: get_ems_entitlements
+- operation: getEmsRegistrationStatus
+  datasource_name: get_ems_registration_status
+- operation: getEmsPreferences
+  datasource_name: get_ems_preferences
+- operation: loadFmLicensingSummary
+  datasource_name: load_fm_licensing_summary
+- operation: loadFmLicenses
+  datasource_name: load_fm_licenses
+- operation: getAllAllocationMaps
+  datasource_name: get_all_allocation_maps
+- operation: alertableFloatingLicenseExpiries
+  datasource_name: alertable_floating_license_expiries
+- operation: alertableNodeLockedLicenseExpiries
+  datasource_name: alertable_node_locked_license_expiries
+- operation: getAllClusterLicenses
+  datasource_name: get_all_cluster_licenses
+- operation: getAllClusterLicenses_licensing_module_all_flat
+  datasource_name: get_all_cluster_licenses_licensing_module_all_flat
+- operation: getCurrentPhysicalApps
+  datasource_name: get_current_physical_apps
+- operation: expiryCountFlAndNll
+  datasource_name: expiry_count_fl_and_nll
+- operation: getAllUnlicensedChassisAndCards
+  datasource_name: get_all_unlicensed_chassis_and_cards
+- operation: expiryNotifAndEmailAndCount
+  datasource_name: expiry_notif_and_email_and_count
+- operation: refreshAllClusterLicenses
+  datasource_name: refresh_all_cluster_licenses
+- operation: getLicenseSkus
+  datasource_name: get_license_skus
+- operation: getAppsInLastNPeriods
+  datasource_name: get_apps_in_last_n_periods
+- operation: getBundlesInPeriod
+  datasource_name: get_bundles_in_period
+- operation: getCurrentAllowance
+  datasource_name: get_current_allowance
+- operation: getCurrentAppTiers
+  datasource_name: get_current_app_tiers
+- operation: getCurrentApps
+  datasource_name: get_current_apps
+- operation: getCurrentMonSessionsToAppTierMap
+  datasource_name: get_current_mon_sessions_to_app_tier_map
+- operation: getCurrentPosIds
+  datasource_name: get_current_pos_ids
+- operation: getCustomerName
+  datasource_name: get_customer_name
+- operation: getDeactivableVbls
+  datasource_name: get_deactivable_vbls
+- operation: getDetailedReportForLastNPeriods
+  datasource_name: get_detailed_report_for_last_n_periods
+- operation: displayPeriods
+  datasource_name: display_periods
+- operation: sendEmail
+  datasource_name: send_email
+- operation: sendEmail2
+  datasource_name: send_email2
+- operation: getHighestVblBundle
+  datasource_name: get_highest_vbl_bundle
+- operation: getLastNPeriodsSummaryVolumes
+  datasource_name: get_last_n_periods_summary_volumes
+- operation: getLastNPeriodsSummaryWithUnit
+  datasource_name: get_last_n_periods_summary_with_unit
+- operation: getLatestPeriodVolumeDetailedAndPeriods
+  datasource_name: get_latest_period_volume_detailed_and_periods
+- operation: getPeriodVolumes
+  datasource_name: get_period_volumes
+- operation: getPeriodVolumeByDate
+  datasource_name: get_period_volume_by_date
+- operation: getPeriodVolumeDetailedByDate
+  datasource_name: get_period_volume_detailed_by_date
+- operation: getProcessedVolumes
+  datasource_name: get_processed_volumes
+- operation: loadAllMapChains
+  datasource_name: load_all_map_chains
+- operation: loadAllMapAliasChains
+  datasource_name: load_all_map_alias_chains
+- operation: loadMapAliasChain
+  datasource_name: load_map_alias_chain
+- operation: getMapGroups
+  datasource_name: get_map_groups
+- operation: loadAllMapTemplates
+  datasource_name: load_all_map_templates
+- operation: loadAllMaps
+  datasource_name: load_all_maps
+- operation: loadClusterPortFilterCounters
+  datasource_name: load_cluster_port_filter_counters
+- operation: getAllPtpCounters
+  datasource_name: get_all_ptp_counters
+- operation: getPtpCountersByAlias
+  datasource_name: get_ptp_counters_by_alias
+- operation: getAllPtpPortsCounters
+  datasource_name: get_all_ptp_ports_counters
+- operation: getPtpPortsCountersByPortId
+  datasource_name: get_ptp_ports_counters_by_port_id
+- operation: loadAllDeviceCredentials
+  datasource_name: load_all_device_credentials
+- operation: getManagedClusters
+  datasource_name: get_managed_clusters
+- operation: getManagedDevices
+  datasource_name: get_managed_devices
+- operation: loadPermittedAddresses
+  datasource_name: load_permitted_addresses
+- operation: loadEmailServerConfiguration
+  datasource_name: load_email_server_configuration
+- operation: getEventNotificationCategory
+  datasource_name: get_event_notification_category
+- operation: getAllEventNotificationConfiguration
+  datasource_name: get_all_event_notification_configuration
+- operation: getEventNotificationTemplate
+  datasource_name: get_event_notification_template
+- operation: getAllExternalTrapReceiver
+  datasource_name: get_all_external_trap_receiver
+- operation: LoadAvailablePCAPFilenames
+  datasource_name: load_available_pcap_filenames
+- operation: loadPcapFile
+  datasource_name: load_pcap_file
+- operation: loadAllGigastream
+  datasource_name: load_all_gigastream
+- operation: loadAllPortConfig
+  datasource_name: load_all_port_config
+- operation: loadAllPortFilter
+  datasource_name: load_all_port_filter
+- operation: loadAllPortGroup
+  datasource_name: load_all_port_group
+- operation: loadAllPortPair
+  datasource_name: load_all_port_pair
+- operation: loadAllStackLinks
+  datasource_name: load_all_stack_links
+- operation: loadAllToolPortMirror
+  datasource_name: load_all_tool_port_mirror
+- operation: getAllPtpClockStates
+  datasource_name: get_all_ptp_clock_states
+- operation: getPtpClockStateQueryResponse
+  datasource_name: get_ptp_clock_state_query_response
+- operation: getAllPtpParent
+  datasource_name: get_all_ptp_parent
+- operation: getPtpParentByAlias
+  datasource_name: get_ptp_parent_by_alias
+- operation: getAllPtpPorts
+  datasource_name: get_all_ptp_ports
+- operation: getAllForeignMasters
+  datasource_name: get_all_foreign_masters
+- operation: getAllForeignSources
+  datasource_name: get_all_foreign_sources
+- operation: getPtpPortByPortId
+  datasource_name: get_ptp_port_by_port_id
+- operation: getForeignMasters
+  datasource_name: get_foreign_masters
+- operation: getForeignSources
+  datasource_name: get_foreign_sources
+- operation: getAllTimeStampingPtpConfigs
+  datasource_name: get_all_time_stamping_ptp_configs
+- operation: getAllTimeProperties
+  datasource_name: get_all_time_properties
+- operation: getTimePropertiesByAlias
+  datasource_name: get_time_properties_by_alias
+- operation: loadAllRoles
+  datasource_name: load_all_roles
+- operation: getAllSffpProfile
+  datasource_name: get_all_sffp_profile
+- operation: loadSnmpThrottleConfig
+  datasource_name: load_snmp_throttle_config
+- operation: loadSpineLinkAll
+  datasource_name: load_spine_link_all
+- operation: getCryptoCa
+  datasource_name: get_crypto_ca
+- operation: getAllExternalExportTargetServer
+  datasource_name: get_all_external_export_target_server
+- operation: validateExternalExportServer
+  datasource_name: validate_external_export_server
+- operation: loadAllNameServers
+  datasource_name: load_all_name_servers
+- operation: loadAllNameServersGroupedByInterface
+  datasource_name: load_all_name_servers_grouped_by_interface
+- operation: loadAaaAuthConfig
+  datasource_name: load_aaa_auth_config
+- operation: loadRemoteAuthSystemConfig
+  datasource_name: load_remote_auth_system_config
+- operation: getSystemArpEntries
+  datasource_name: get_system_arp_entries
+- operation: getSystemArpRefreshInterval
+  datasource_name: get_system_arp_refresh_interval
+- operation: getActiveConfig
+  datasource_name: get_active_config
+- operation: downloadNodeSystemConfigFile
+  datasource_name: download_node_system_config_file
+- operation: getNodeSystemConfigFiles
+  datasource_name: get_node_system_config_files
+- operation: getNodeSystemConfigTextFile
+  datasource_name: get_node_system_config_text_file
+- operation: downloadNodeSystemConfigTextFile
+  datasource_name: download_node_system_config_text_file
+- operation: getUserSelectedCiphers
+  datasource_name: get_user_selected_ciphers
+- operation: getCryptoStatus
+  datasource_name: get_crypto_status
+- operation: getFMCryptoStatus
+  datasource_name: get_fm_crypto_status
+- operation: getSupportedCiphers
+  datasource_name: get_supported_ciphers
+- operation: getSystemDiag
+  datasource_name: get_system_diag
+- operation: getSystemDiagPsu
+  datasource_name: get_system_diag_psu
+- operation: getSystemDiagPsuPerSlot
+  datasource_name: get_system_diag_psu_per_slot
+- operation: getEmailNotifConfigSpec
+  datasource_name: get_email_notif_config_spec
+- operation: getEmailServer
+  datasource_name: get_email_server
+- operation: loadClusterEventNotificationStatus
+  datasource_name: load_cluster_event_notification_status
+- operation: loadGsDump
+  datasource_name: load_gs_dump
+- operation: loadGsDumpFile
+  datasource_name: load_gs_dump_file
+- operation: getSystemHostBanner
+  datasource_name: get_system_host_banner
+- operation: getSystemHostname
+  datasource_name: get_system_hostname
+- operation: loadAllSystemInterfaces
+  datasource_name: load_all_system_interfaces
+- operation: loadAllManagementInterfaces
+  datasource_name: load_all_management_interfaces
+- operation: loadManagementInterfaceNeighbors
+  datasource_name: load_management_interface_neighbors
+- operation: loadIpv6Neighbors
+  datasource_name: load_ipv6_neighbors
+- operation: getLicensedFeaturesFromNode
+  datasource_name: get_licensed_features_from_node
+- operation: loadAllLocalUsers
+  datasource_name: load_all_local_users
+- operation: getSystemNdp
+  datasource_name: get_system_ndp
+- operation: loadAllRadiusServers
+  datasource_name: load_all_radius_servers
+- operation: loadSecurityConfig
+  datasource_name: load_security_config
+- operation: loadSnmpServerConfig
+  datasource_name: load_snmp_server_config
+- operation: loadAllSnmpNotifTargets
+  datasource_name: load_all_snmp_notif_targets
+- operation: loadSnmpThrottleStatus
+  datasource_name: load_snmp_throttle_status
+- operation: loadAllV3Users
+  datasource_name: load_all_v3_users
+- operation: getSupportedSnmpV3UserProtocols
+  datasource_name: get_supported_snmp_v3_user_protocols
+- operation: getSSHCiphers
+  datasource_name: get_ssh_ciphers
+- operation: loadSSHSupportedParameters
+  datasource_name: load_ssh_supported_parameters
+- operation: loadSysdump
+  datasource_name: load_sysdump
+- operation: loadSysdumpFile
+  datasource_name: load_sysdump_file
+- operation: loadDeviceSyslog
+  datasource_name: load_device_syslog
+- operation: loadSyslogConfig
+  datasource_name: load_syslog_config
+- operation: loadAllTacacsServers
+  datasource_name: load_all_tacacs_servers
+- operation: getNodeSystemTime
+  datasource_name: get_node_system_time
+- operation: loadNtpConfig
+  datasource_name: load_ntp_config
+- operation: loadAllNtpServers
+  datasource_name: load_all_ntp_servers
+- operation: loadPpsSource
+  datasource_name: load_pps_source
+- operation: loadPtpConfig
+  datasource_name: load_ptp_config
+- operation: getCommonCiphers
+  datasource_name: get_common_ciphers
+- operation: getSystemWebConfiguration
+  datasource_name: get_system_web_configuration
+- operation: getSystemWebProxy
+  datasource_name: get_system_web_proxy
+- operation: loadAllUserTags
+  datasource_name: load_all_user_tags
+- operation: latestImportTagResult
+  datasource_name: latest_import_tag_result
+- operation: getAllTimestampBrief
+  datasource_name: get_all_timestamp_brief
+- operation: getUserTokens
+  datasource_name: get_user_tokens
+- operation: getUserTokensForPrivilegeUsers
+  datasource_name: get_user_tokens_for_privilege_users
+- operation: loadTopology
+  datasource_name: load_topology
+- operation: loadFabricPath
+  datasource_name: load_fabric_path
+- operation: loadTopologyVizConfig
+  datasource_name: load_topology_viz_config
+- operation: loadTopologyVizEndPoints
+  datasource_name: load_topology_viz_end_points
+- operation: get_topoviz_external_devices
+  datasource_name: get_topoviz_external_devices
+- operation: get_topoviz_links
+  datasource_name: get_topoviz_links
+- operation: loadTopologyVizNodes
+  datasource_name: load_topology_viz_nodes
+- operation: getAllTrafficFlows
+  datasource_name: get_all_traffic_flows
+- operation: getTrafficFlowsOverview
+  datasource_name: get_traffic_flows_overview
+- operation: getCopiedRules
+  datasource_name: get_copied_rules
+- operation: getTrafficFlowsGlobalSettings
+  datasource_name: get_traffic_flows_global_settings
+- operation: getMapChain
+  datasource_name: get_map_chain
+- operation: getMapGroup
+  datasource_name: get_map_group
+- operation: getMapMigrationResults
+  datasource_name: get_map_migration_results
+- operation: getAllMapMigrationResults
+  datasource_name: get_all_map_migration_results
+- operation: getAllMapMigrationResultsByAlias
+  datasource_name: get_all_map_migration_results_by_alias
+- operation: getPolicyNrtStats
+  datasource_name: get_policy_nrt_stats
+- operation: getOverlapComponents
+  datasource_name: get_overlap_components
+- operation: getConnectedLinks
+  datasource_name: get_connected_links
+- operation: getConnectedNodes
+  datasource_name: get_connected_nodes
+- operation: getConnectedLinks_traffic_flows_troubleshoot_flows_topology
+  datasource_name: get_connected_links_traffic_flows_troubleshoot_flows_topology
+- operation: getTroubleshootSummary
+  datasource_name: get_troubleshoot_summary
+- operation: getTroubleshootClusterConfig
+  datasource_name: get_troubleshoot_cluster_config
+- operation: getDeployedDraftTrafficFlows
+  datasource_name: get_deployed_draft_traffic_flows
+- operation: getTrafficPolicyGraphTunnelInterfaceMappings
+  datasource_name: get_traffic_policy_graph_tunnel_interface_mappings
+- operation: getAllTrafficPolicyGraph
+  datasource_name: get_all_traffic_policy_graph
+- operation: getTrafficPolicyGraphStatus
+  datasource_name: get_traffic_policy_graph_status
+- operation: queryFabricMapTimeSeries
+  datasource_name: query_fabric_map_time_series
+- operation: queryGsEngineTimeSeries
+  datasource_name: query_gs_engine_time_series
+- operation: queryGsGroupTimeSeries
+  datasource_name: query_gs_group_time_series
+- operation: queryGsopTimeSeries
+  datasource_name: query_gsop_time_series
+- operation: queryMapTimeSeries
+  datasource_name: query_map_time_series
+- operation: queryNetflowExporterTimeSeries
+  datasource_name: query_netflow_exporter_time_series
+- operation: queryNetflowMonitorTimeSeries
+  datasource_name: query_netflow_monitor_time_series
+- operation: queryPortGroupLbTimeSeries
+  datasource_name: query_port_group_lb_time_series
+- operation: queryPortTimeSeries
+  datasource_name: query_port_time_series
+- operation: queryForApplications
+  datasource_name: query_for_applications
+- operation: queryDBForTrafficFlows
+  datasource_name: query_db_for_traffic_flows
+- operation: queryTunneledPortTimeSeries
+  datasource_name: query_tunneled_port_time_series
+- operation: queryVportTimeSeries
+  datasource_name: query_vport_time_series
+- operation: loadTunnelEndpointEntries
+  datasource_name: load_tunnel_endpoint_entries
+- operation: loadAllTunnelEndpoints
+  datasource_name: load_all_tunnel_endpoints
+- operation: getAllTunnelLogicalGroups
+  datasource_name: get_all_tunnel_logical_groups
+- operation: getTunnelLogicalGroupStats
+  datasource_name: get_tunnel_logical_group_stats
+- operation: listEnv
+  datasource_name: list_env
+- operation: getEnv
+  datasource_name: get_env
+- operation: listConnections
+  datasource_name: list_connections
+- operation: getMonitoringDomain
+  datasource_name: get_monitoring_domain
+- operation: getConnectionStatus
+  datasource_name: get_connection_status
+- operation: getDeploy
+  datasource_name: get_deploy
+- operation: getAllAppInfo
+  datasource_name: get_all_app_info
+- operation: getAppInfo
+  datasource_name: get_app_info
+- operation: getAppIntelTemplate
+  datasource_name: get_app_intel_template
+- operation: getInterfaces
+  datasource_name: get_interfaces
+- operation: getNetworkInterfaces
+  datasource_name: get_network_interfaces
+- operation: getNodeInterfaces
+  datasource_name: get_node_interfaces
+- operation: getNodeSysStats
+  datasource_name: get_node_sys_stats
+- operation: getNodeVersion
+  datasource_name: get_node_version
+- operation: getNodes
+  datasource_name: get_nodes
+- operation: getNodeStatus
+  datasource_name: get_node_status
+- operation: loadAllUsers
+  datasource_name: load_all_users
+- operation: loadActiveUser
+  datasource_name: load_active_user
+- operation: loadAllVlanResources
+  datasource_name: load_all_vlan_resources
+- operation: loadAllVports
+  datasource_name: load_all_vports
+action_overrides:
+- operation: deleteAcmecertificateDetailsOfFM
+  name: delete_acmecertificate_details_of_fm
+  description: Delete ACME certificate details of FM
+- operation: issueAcmeCertificate
+  name: issue_acme_certificate
+  description: issue ACME certificate for FM
+- operation: deleteAcmecertificateDetailsOfDevice
+  name: delete_acmecertificate_details_of_device
+  description: Delete ACME certificate details
+- operation: configureAcmeCertificateDetailsOfDevice
+  name: configure_acme_certificate_details_of_device
+  description: issue renew revoke ACME certificate of device
+- operation: uploadACMEServerConfigDetails
+  name: upload_acme_server_config_details
+  description: upload ACME server details
+- operation: deleteAcmeServerDetails
+  name: delete_acme_server_details
+  description: Delete ACME server details
+- operation: configureAcmeCertificateDetailsOfFM
+  name: configure_acme_certificate_details_of_fm
+  description: renew/revoke ACME certificate of FM
+- operation: enableAlarmAutoSuppression
+  name: enable_alarm_auto_suppression
+  description: Edit auto alarm suppression rules
+- operation: acknowledgeMultipleAlarms
+  name: acknowledge_multiple_alarms
+  description: Acknowledge Multiple Alarms
+- operation: deleteMultipleAlarms
+  name: delete_multiple_alarms
+  description: Delete Multiple Alarms
+- operation: unacknowledgeMultipleAlarms
+  name: unacknowledge_multiple_alarms
+  description: Unacknowledge Multiple Alarms
+- operation: enableAlarmSuppression
+  name: enable_alarm_suppression
+  description: Enable alarm suppression rules for multiple resources
+- operation: editAlarmSuppression
+  name: edit_alarm_suppression
+  description: Edit multiple alarm suppression rules
+- operation: deleteAlarmSuppression
+  name: delete_alarm_suppression
+  description: Delete multiple alarm suppression rules
+- operation: updateAlarm
+  name: update_alarm
+  description: Update Alarm
+- operation: deleteAlarm
+  name: delete_alarm
+  description: Delete Alarm
+- operation: createDiameterWhitelistEntries
+  name: create_diameter_whitelist_entries
+  description: Create Diameter Whitelist Entries
+- operation: deleteDiameterWhitelistEntry
+  name: delete_diameter_whitelist_entry
+  description: Delete Diameter Whitelist Entry
+- operation: uploadDiameterWhitelistEntriesFromFile
+  name: upload_diameter_whitelist_entries_from_file
+  description: Upload Diameter Whitelist Entries from file
+- operation: uploadDiameterWhitelistEntriesFromRemote
+  name: upload_diameter_whitelist_entries_from_remote
+  description: Upload Diameter Whitelist Entries from Remote
+- operation: deleteAllElb
+  name: delete_all_elb
+  description: Delete all Elb
+- operation: deleteAllEnhancedSlicing
+  name: delete_all_enhanced_slicing
+  description: new in version H 5.7
+- operation: deleteAllAppsExporter
+  name: delete_all_apps_exporter
+  description: new in H 5.8
+- operation: deleteAllAppsExporterGroup
+  name: delete_all_apps_exporter_group
+  description: Delete all Apps Exporter Group
+- operation: createGtpWhitelistEntries
+  name: create_gtp_whitelist_entries
+  description: Create GTP Whitelist Entries
+- operation: deleteGtpWhitelistEntry
+  name: delete_gtp_whitelist_entry
+  description: Delete GTP Whitelist Entry
+- operation: deleteAllGtpWhitelistEntries
+  name: delete_all_gtp_whitelist_entries
+  description: Delete All GTP Whitelist Entries
+- operation: uploadGtpWhitelistEntriesFromFile
+  name: upload_gtp_whitelist_entries_from_file
+  description: Upload GTP Whitelist Entries from file
+- operation: uploadGtpWhitelistEntriesFromUrl
+  name: upload_gtp_whitelist_entries_from_url
+  description: Upload GTP Whitelist Entries from URL
+- operation: deleteAllHsm
+  name: delete_all_hsm
+  description: Delete all HSM
+- operation: deleteAllHsmGroup
+  name: delete_all_hsm_group
+  description: Delete all HSM Group
+- operation: addHsmToHsmGroup
+  name: add_hsm_to_hsm_group
+  description: Add HSM alias to HSM Group
+- operation: deleteHsmFromHsmGroup
+  name: delete_hsm_from_hsm_group
+  description: Delete HSM alias from HSM Group
+- operation: fetchKeyHandlerRemote
+  name: fetch_key_handler_remote
+  description: Fetch Key Handler from Remote
+- operation: uploadKeyHandlerFromLocal
+  name: upload_key_handler_from_local
+  description: Upload world and module file from local
+- operation: addKeyMapToHsmGroup
+  name: add_key_map_to_hsm_group
+  description: Add keymap to HSM Group
+- operation: delKeyMapFromHsmGroup
+  name: del_key_map_from_hsm_group
+  description: Delete keymaps from HSM Group
+- operation: fetchKeyMap
+  name: fetch_key_map
+  description: Fetch Key Maps from Remote
+- operation: uploadKeyMapFromLocal
+  name: upload_key_map_from_local
+  description: Upload Key Map file from local
+- operation: actionRfsSyncNow
+  name: action_rfs_sync_now
+  description: Force Sync Now
+- operation: setRfsSyncServer
+  name: set_rfs_sync_server
+  description: Set RFS server configuration
+- operation: patchRtfsSyncServer
+  name: patch_rtfs_sync_server
+  description: Update RFS server configuration
+- operation: deleteAllIcapProfiles
+  name: delete_all_icap_profiles
+  description: Delete all ICAP Profiles
+- operation: deleteAllIcapServers
+  name: delete_all_icap_servers
+  description: Delete all ICAP Servers
+- operation: deleteAllIcapServerGroups
+  name: delete_all_icap_server_groups
+  description: Delete all ICAP Server Groups
+- operation: updateInlineSslConfig
+  name: update_inline_ssl_config
+  description: Update inline SSL global configuration
+- operation: clearInlineSslCertValidCache
+  name: clear_inline_ssl_cert_valid_cache
+  description: Clear Inline SSL certificate validation cache
+- operation: clearInlineSslUrlCache
+  name: clear_inline_ssl_url_cache
+  description: Clear Inline SSL URL cache
+- operation: deleteAllInlineSslProfiles
+  name: delete_all_inline_ssl_profiles
+  description: Delete all inline SSL profiles
+- operation: replaceInlineSslProfile
+  name: replace_inline_ssl_profile
+  description: Replace inline SSL profile
+- operation: addProfileDecryptPortMap
+  name: add_profile_decrypt_port_map
+  description: Add a new port map entry to the profile
+- operation: deleteProfileDecryptPortMap
+  name: delete_profile_decrypt_port_map
+  description: Delete all port map entries from the profile
+- operation: deleteProfileDecryptPortMapById
+  name: delete_profile_decrypt_port_map_by_id
+  description: Delete a port map entry from the profile
+- operation: replaceProfileDecryptPortMap
+  name: replace_profile_decrypt_port_map
+  description: Replace port map in the profile
+- operation: addProfileKeyMap
+  name: add_profile_key_map
+  description: Add a new key map entry to the profile
+- operation: deleteProfileKeyMaps
+  name: delete_profile_key_maps
+  description: Delete all key map entries from the profile
+- operation: deleteProfileKeyMapById
+  name: delete_profile_key_map_by_id
+  description: Delete a key map entry from the profile
+- operation: replaceProfileKeyMaps
+  name: replace_profile_key_maps
+  description: Replace key map entries in the profile
+- operation: fetchInlineSslProfileList
+  name: fetch_inline_ssl_profile_list
+  description: Fetch inline SSL profile nodecryptlist or decryptlist
+- operation: deleteInlineSslProfileList
+  name: delete_inline_ssl_profile_list
+  description: Delete inline SSL profile nodecryptlist or decryptlist
+- operation: createInlineSslProfileRule
+  name: create_inline_ssl_profile_rule
+  description: 'This must match one of the rule objects: InlineSslProfileRuleDomain, InlineSslProfileRuleCategory, InlineSslProfileRuleIssuer, InlineSslProfileRuleIpv4, InlineSslProfileRuleL4Port, InlineSslProfileRuleVlan'
+- operation: deleteInlineSslProfileRule
+  name: delete_inline_ssl_profile_rule
+  description: Delete inline SSL profile rule
+- operation: replaceAllInlineSslProfileRules
+  name: replace_all_inline_ssl_profile_rules
+  description: Replace all inline SSL profile rules
+- operation: uploadInlineSslSigning
+  name: upload_inline_ssl_signing
+  description: Upload inline SSL signing
+- operation: deleteSigning
+  name: delete_signing
+  description: Delete the primary or secondary certificate and key
+- operation: uploadInlineSslTrustStore
+  name: upload_inline_ssl_trust_store
+  description: Upload inline SSL trust-store
+- operation: addInlineSslTrustStoreCert
+  name: add_inline_ssl_trust_store_cert
+  description: Add certificate to the inline SSL trust-store
+- operation: appendInlineSslTrustStoreFile
+  name: append_inline_ssl_trust_store_file
+  description: Append inline SSL trust-store from local file
+- operation: deleteTrustStoreCert
+  name: delete_trust_store_cert
+  description: Delete the Trust Store Certificate
+- operation: resetInlineSslTrustStore
+  name: reset_inline_ssl_trust_store
+  description: Reset inline SSL trust-store to default trust-store
+- operation: uploadInlineSslTrustStoreFile
+  name: upload_inline_ssl_trust_store_file
+  description: Upload inline SSL trust-store from local file
+- operation: unlockSslDecryptionKeyStore
+  name: unlock_ssl_decryption_key_store
+  description: Unlock keystore keychain
+- operation: setSslDecryptionKeyStorePassword
+  name: set_ssl_decryption_key_store_password
+  description: Set keystore keychain password
+- operation: resetSslDecryptionKeys
+  name: reset_ssl_decryption_keys
+  description: Reset keystore keychain password and invalidate all keys
+- operation: deleteKeystoreKeys
+  name: delete_keystore_keys
+  description: delete all keystore keys
+- operation: uploadKeystoreKey
+  name: upload_keystore_key
+  description: upload a key to the keystore from local file
+- operation: generateKeystoreKey
+  name: generate_keystore_key
+  description: generate a self-signed key in the keystore
+- operation: updateKeystorePreference
+  name: update_keystore_preference
+  description: Set keystore preference
+- operation: createRiaKeystoreKey
+  name: create_ria_keystore_key
+  description: add key and/or certificate to the keystore for two devices needed for Resilient Inline SSL
+- operation: clearKeystoreCounters
+  name: clear_keystore_counters
+  description: Clear keystore hit counters
+- operation: deleteAllAppsListener
+  name: delete_all_apps_listener
+  description: Delete all Apps Listener
+- operation: redefineMetadataExporter
+  name: redefine_metadata_exporter
+  description: Redefine a metadata exporter
+- operation: createNetflowExporterFilter
+  name: create_netflow_exporter_filter
+  description: Create Netflow Exporter Filter
+- operation: redefineNetflowExporterFilter
+  name: redefine_netflow_exporter_filter
+  description: Redefine Netflow Exporter Filter
+- operation: deleteNetflowExporterFilter
+  name: delete_netflow_exporter_filter
+  description: Delete Netflow Exporter Filter
+- operation: addNetflowExporterFilterRule
+  name: add_netflow_exporter_filter_rule
+  description: Add a new rule to a Netflow Exporter Filter
+- operation: removeNetflowExporterFilterRule
+  name: remove_netflow_exporter_filter_rule
+  description: Remove a rule from Netflow Exporter Filter
+- operation: deleteAllPortThrottles
+  name: delete_all_port_throttles
+  description: Delete all Port Throttles
+- operation: deleteAllAppsProxyServerProfile
+  name: delete_all_apps_proxy_server_profile
+  description: Delete all Apps Proxy Server Profile
+- operation: addSessionAwareApfField
+  name: add_session_aware_apf_field
+  description: Add a new session field to a SA-APF Profile
+- operation: createSipWhitelistEntries
+  name: create_sip_whitelist_entries
+  description: Create SIP Whitelist Entries
+- operation: deleteSipWhitelistEntry
+  name: delete_sip_whitelist_entry
+  description: Delete SIP Whitelist Entry
+- operation: deleteAllSipWhitelistEntries
+  name: delete_all_sip_whitelist_entries
+  description: Delete All SIP Whitelist Entries
+- operation: uploadSipWhitelistEntriesFromFile
+  name: upload_sip_whitelist_entries_from_file
+  description: Upload SIP Whitelist Entries from file
+- operation: uploadSipWhitelistEntriesFromRemote
+  name: upload_sip_whitelist_entries_from_remote
+  description: Upload SIP Whitelist Entries from Remote location
+- operation: deleteSslDecryptionEndpoints
+  name: delete_ssl_decryption_endpoints
+  description: Delete SSL Decryption Endpoints
+- operation: addSslDecryptionKeyMapping
+  name: add_ssl_decryption_key_mapping
+  description: Add an Endpoint-to-Key mapping
+- operation: deleteSslDecryptionKeyMapping
+  name: delete_ssl_decryption_key_mapping
+  description: Delete an Endpoint-to-Key mapping
+- operation: deleteAllAppsSslProfile
+  name: delete_all_apps_ssl_profile
+  description: Delete all Apps Ssl Profile
+- operation: createSslClientTrustStore
+  name: create_ssl_client_trust_store
+  description: Create the SSL Client trust-store
+- operation: deleteClientTrustStore
+  name: delete_client_trust_store
+  description: Delete the SSL Client Trust Store
+- operation: appendSslClientTrustStoreCert
+  name: append_ssl_client_trust_store_cert
+  description: Append certificate to the SSL client trust-store
+- operation: replaceSslClientTrustStoreCert
+  name: replace_ssl_client_trust_store_cert
+  description: Replace certificate to the SSL client trust-store
+- operation: appendSslClientTrustStoreFile
+  name: append_ssl_client_trust_store_file
+  description: Append certificate to the the SSL Client trust-store from local file
+- operation: deleteClientTrustStoreCertificate
+  name: delete_client_trust_store_certificate
+  description: Delete the Client Trust Store Certificate
+- operation: uploadSslClientTrustStoreFile
+  name: upload_ssl_client_trust_store_file
+  description: Create/Replace the SSL Client trust-store from local file
+- operation: deleteAllAppsTcpProfile
+  name: delete_all_apps_tcp_profile
+  description: Delete all Apps TCP Profile
+- operation: uploadSslTrustStore
+  name: upload_ssl_trust_store
+  description: Upload inline SSL trust-store
+- operation: addSslTrustStoreCert
+  name: add_ssl_trust_store_cert
+  description: Add certificate to the inline SSL trust-store
+- operation: appendSslTrustStoreFile
+  name: append_ssl_trust_store_file
+  description: Append inline SSL trust-store from local file
+- operation: deleteTrustStoreCertificate
+  name: delete_trust_store_certificate
+  description: Delete the Trust Store Certificate
+- operation: resetSslTrustStore
+  name: reset_ssl_trust_store
+  description: Reset inline SSL trust-store to default trust-store
+- operation: uploadSslTrustStoreFile
+  name: upload_ssl_trust_store_file
+  description: Upload inline SSL trust-store from local file
+- operation: purgeAuditLog
+  name: purge_audit_log
+  description: Purge Audit Log
+- operation: downloadAuditArchive
+  name: download_audit_archive
+  description: Archive Audit Log
+- operation: bulkPolicyEnable
+  name: bulk_policy_enable
+  description: Enable all policies or by policy Ids
+- operation: addAvPolicyAction
+  name: add_av_policy_action
+  description: Add Active Visibility Policy Action
+- operation: deleteAvisiPolicyAction
+  name: delete_avisi_policy_action
+  description: Delete Active Visibility Policy Action
+- operation: addAvPolicyCondition
+  name: add_av_policy_condition
+  description: Add Active Visibility Policy Condition
+- operation: deleteAvisiPolicyCondition
+  name: delete_avisi_policy_condition
+  description: Delete Active Visibility Policy Condition
+- operation: deleteFabricMaps
+  name: delete_fabric_maps
+  description: Delete all user-defined fabric maps
+- operation: deleteAllTrafficFlows
+  name: delete_all_traffic_flows
+  description: Delete all traffic flows
+- operation: deleteAllFlowRules
+  name: delete_all_flow_rules
+  description: Delete all flow rules for a subflow
+- operation: deleteAllSourceRules
+  name: delete_all_source_rules
+  description: Delete all source rules for a policy
+- operation: deleteReport
+  name: delete_report
+  description: Delete CDA Audit Report
+- operation: generateReport
+  name: generate_report
+  description: Customer Deployed Assets Report Generation
+- operation: updateCircuitTunnelGlobal
+  name: update_circuit_tunnel_global
+  description: Update Circuit Tunnel global configurations
+- operation: deleteAllCircuitTunnelL2Gre
+  name: delete_all_circuit_tunnel_l2_gre
+  description: Delete all Circuit Tunnel L2Gre Groups
+- operation: deleteCircuitTunnelVxlanGroups
+  name: delete_circuit_tunnel_vxlan_groups
+  description: Delete all Circuit Tunnel VxLan Groups
+- operation: deleteAllCircuitTunnels
+  name: delete_all_circuit_tunnels
+  description: Delete all Circuit Tunnels
+- operation: createClusterConfig
+  name: create_cluster_config
+  description: creates the cluster with the given device members list and cluster parameters
+- operation: backupClustersConfig
+  name: backup_clusters_config
+  description: Backup of multiple clusters can be requested
+- operation: backupClusterConfig
+  name: backup_cluster_config
+  description: Backup of cluster can be requested
+- operation: activetDeviceConfigFile
+  name: activet_device_config_file
+  description: Activate the specified device-stored config file
+- operation: deleteDeviceConfigFile
+  name: delete_device_config_file
+  description: Delete specified device-side config file
+- operation: uploadDeviceConfigFile
+  name: upload_device_config_file
+  description: upload device config file
+- operation: updateClusterConfigBackup
+  name: update_cluster_config_backup
+  description: Update meta data of selected config backup snapshot for a given cluster
+- operation: deleteAllStoredConfigBackupSnapshots
+  name: delete_all_stored_config_backup_snapshots
+  description: Delete all config backup snapshots associated with a cluster
+- operation: restoreCluaterConfigBackupSnapshot
+  name: restore_cluater_config_backup_snapshot
+  description: Restore selected config backup snapshot for a given cluster
+- operation: deleteStoredClusterConfigBackupSnapshot
+  name: delete_stored_cluster_config_backup_snapshot
+  description: Delete a labeled config backup snapshot
+- operation: deleteBulkReplicateConfigRestoreLog
+  name: delete_bulk_replicate_config_restore_log
+  description: Delete bulk replicate config restore log
+- operation: upgradeClusterGsCardImage
+  name: upgrade_cluster_gs_card_image
+  description: upgrade the GS cards for selected clusters, it is an async only
+- operation: upgradeClusterNodesImage
+  name: upgrade_cluster_nodes_image
+  description: upgrade cluster nodes image
+- operation: deleteClusterConfigImageUpgradeStatusByTaskGroupId
+  name: delete_cluster_config_image_upgrade_status_by_task_group_id
+  description: Delete cluster configuration imageUpgrade status by taskGroupId
+- operation: deleteClusterConfigImageUpgradeStatusByTaskId
+  name: delete_cluster_config_image_upgrade_status_by_task_id
+  description: Delete cluster configuration imageUpgrade status by taskId
+- operation: ClusterConfigSwitchIPprotocolSpec
+  name: cluster_config_switch_i_pprotocol_spec
+  description: switch ip protocol for physical cluster nodes
+- operation: clusterConfigAddMember
+  name: cluster_config_add_member
+  description: adds the device to the specified cluster id
+- operation: clusterConfigEditLeaderPreference
+  name: cluster_config_edit_leader_preference
+  description: update the leader preference of the specified member
+- operation: clusterConfigDeleteMember
+  name: cluster_config_delete_member
+  description: removes the specified member from the cluster
+- operation: rebootClusterNodes
+  name: reboot_cluster_nodes
+  description: reboot physical cluster nodes
+- operation: updateStackingMode
+  name: update_stacking_mode
+  description: updating the stacking mode on the cluster
+- operation: updateGigaInsightNodePromptUpgrade
+  name: update_giga_insight_node_prompt_upgrade
+  description: Upload prompt bundle upgrade for a GigaInsight Node
+- operation: testGigaInsightNodeConnection
+  name: test_giga_insight_node_connection
+  description: Test LLM provider connection via a GigaInsight Node
+- operation: updateDeviceLocatorLedDetails
+  name: update_device_locator_led_details
+  description: Enable or disable Device Locator Led Details
+- operation: createSpec
+  name: create_spec
+  description: Create Device Upgrade Specification
+- operation: resetDeviceUpgrade
+  name: reset_device_upgrade
+  description: Reset Device Upgrade
+- operation: resumeDeviceUpgrade
+  name: resume_device_upgrade
+  description: Resume Device Upgrade
+- operation: retryDeviceUpgrade
+  name: retry_device_upgrade
+  description: Retry Device Upgrade
+- operation: deleteUpgradeJobs
+  name: delete_upgrade_jobs
+  description: Delete Upgrade Jobs
+- operation: validateDeviceUpgradeSpec
+  name: validate_device_upgrade_spec
+  description: Validate Device Upgrade Spec
+- operation: Delete_by_ScrollId
+  name: delete_by_scroll_id
+  description: Delete by ScrollId
+- operation: purgeEvent
+  name: purge_event
+  description: Purge Event
+- operation: downloadEventArchive
+  name: download_event_archive
+  description: Archive Events
+- operation: redefineFabricAdvHash
+  name: redefine_fabric_adv_hash
+  description: Redefine fabric advanced hash
+- operation: auditFabricMaps
+  name: audit_fabric_maps
+  description: Audit all user-defined fabric maps
+- operation: convertToFabricMap
+  name: convert_to_fabric_map
+  description: convert the afm maps in the cluster to fabric maps
+- operation: registerNRTStatsFabricMap
+  name: register_nrt_stats_fabric_map
+  description: Register / de-register user-defined fabric map to NRT stats
+- operation: clearNRTStatsFabricMap
+  name: clear_nrt_stats_fabric_map
+  description: Clear registered Fabric Map from NRT stats
+- operation: reApplyAllFabricMap
+  name: re_apply_all_fabric_map
+  description: Re-apply the failed or pending configuration operations for all fabric maps in partial success, failed or pending state
+- operation: replaceFabricMapWithLastUpdateTimestampValidation
+  name: replace_fabric_map_with_last_update_timestamp_validation
+  description: since FM 6.8.00
+- operation: updateFabricMapWithLastUpdateTimestampValidation
+  name: update_fabric_map_with_last_update_timestamp_validation
+  description: since FM 6.8.00
+- operation: deleteFabricMapWithLastUpdateTimestampValidation
+  name: delete_fabric_map_with_last_update_timestamp_validation
+  description: since FM 6.8.00
+- operation: updateFabricResourceConfig
+  name: update_fabric_resource_config
+  description: Update fabric resource allocation policy configuration
+- operation: updateL2CircuitResourceConfig
+  name: update_l2_circuit_resource_config
+  description: Update L2Circuit resource pool configuration
+- operation: deleteFilterTemplates
+  name: delete_filter_templates
+  description: Delete all Filter Templates
+- operation: clearNRTStatsCounters
+  name: clear_nrt_stats_counters
+  description: Clears Registered flexinline solution from  NRT
+- operation: updateFlexInlineNRTStatsConfig
+  name: update_flex_inline_nrt_stats_config
+  description: Register FlexInline solution to NRT stats
+- operation: updateFlexInlineNetworkConfig
+  name: update_flex_inline_network_config
+  description: Updates inline network details used in the given solution
+- operation: createFlexInlineConfig
+  name: create_flex_inline_config
+  description: Creates flexInline maps under the given solution alias
+- operation: replaceFlexInlineMapConfig
+  name: replace_flex_inline_map_config
+  description: Replace the existing map config with the provided configs
+- operation: deleteFlexInlineMapConfig
+  name: delete_flex_inline_map_config
+  description: Deletes the map configs from the given solution
+- operation: updateAlertPolicies
+  name: update_alert_policies
+  description: Update of list of given alert-policies
+- operation: deleteAlertPolicies
+  name: delete_alert_policies
+  description: Delete all or given list of alert policies
+- operation: deleteAllCopilotSysdumpFile
+  name: delete_all_copilot_sysdump_file
+  description: Delete all Copilot Sysdump Files
+- operation: deleteNtpServerByServerName
+  name: delete_ntp_server_by_server_name
+  description: Delete NTP Server by servername as pathparam
+- operation: enableFMNTPService
+  name: enable_fmntp_service
+  description: Enable/Disable NTP Service in FM
+- operation: resetGlobalTemplateDefaults
+  name: reset_global_template_defaults
+  description: new in FM 5.14
+- operation: upload_certificate
+  name: upload_certificate
+  description: Upload a certificate file to push SSL Certificate Global configuration to all the devices
+- operation: delete_certificate
+  name: delete_certificate
+  description: Push global delete configuration for the selected certificate to all the devices
+- operation: auditFMTemplate
+  name: audit_fm_template
+  description: new in FM 5.7
+- operation: resetTemplateValueToGlobal
+  name: reset_template_value_to_global
+  description: new in FM 5.14
+- operation: AddFMTemplateChild
+  name: add_fm_template_child
+  description: new in FM 5.13.01
+- operation: DeleteFMTemplateChild
+  name: delete_fm_template_child
+  description: Delete child entry from template configuration
+- operation: createHaGroup
+  name: create_ha_group
+  description: create HA group
+- operation: fmBuildInfo
+  name: fm_build_info
+  description: Get FM build info
+- operation: serviceStateChange
+  name: service_state_change
+  description: Service State Change Request
+- operation: changeTunnelAuthMode
+  name: change_tunnel_auth_mode
+  description: Change FMHA tunnel auth mode
+- operation: haGroupName
+  name: ha_group_name
+  description: Add FM Instance to HA Group
+- operation: joinHaGroup
+  name: join_ha_group
+  description: Join FM Instance to HA Group
+- operation: leaveHaInstance
+  name: leave_ha_instance
+  description: Join FM Instance to HA Group
+- operation: reloadFmInstances
+  name: reload_fm_instances
+  description: Reload all FM Instances in HA Group
+- operation: reloadFmInstance
+  name: reload_fm_instance
+  description: Reload FM Instance in HA Group
+- operation: removeFmInstance
+  name: remove_fm_instance
+  description: Remove FM Instance in HA Group
+- operation: resetFmInstance
+  name: reset_fm_instance
+  description: Reset all FM Instances in HA Group
+- operation: updateFmInstance
+  name: update_fm_instance
+  description: Update FM Instances in HA Group
+- operation: configDiskUsageThreshold
+  name: config_disk_usage_threshold
+  description: Config Disk Usage Threshold
+- operation: createApiToken_fmSystem_apiRateLimiting
+  name: create_api_token_fm_system_api_rate_limiting
+  description: Modify FM API rate limit configuration.
+- operation: backupFmConfig
+  name: backup_fm_config
+  description: Backup FM configuration state
+- operation: upgradeFmImage
+  name: upgrade_fm_image
+  description: Upgrade FM image
+- operation: rebootFm
+  name: reboot_fm
+  description: Reboot FM
+- operation: restoreFmConfig
+  name: restore_fm_config
+  description: Restore backed up FM state
+- operation: deleteAllGsEngineInterface
+  name: delete_all_gs_engine_interface
+  description: Delete All GigaSMART port interface
+- operation: deleteAllIps
+  name: delete_all_ips
+  description: new in H 6.8
+- operation: deleteAllGtpBackupFile
+  name: delete_all_gtp_backup_file
+  description: Delete all Gtp backup files
+- operation: deleteGtpBackupFile
+  name: delete_gtp_backup_file
+  description: Delete a Gtp backup file
+- operation: uploadFlowOpsReport
+  name: upload_flow_ops_report
+  description: Upload a FlowOps Report
+- operation: redefineGsGroupParams
+  name: redefine_gs_group_params
+  description: Redefine GS Group's Params
+- operation: updateGsGroupParams
+  name: update_gs_group_params
+  description: Incremental updates to GS Group's Params
+- operation: redefineGsGroupTcpParams
+  name: redefine_gs_group_tcp_params
+  description: Redefine GS Group's TCP Params
+- operation: redefineGsGroupDedupParams
+  name: redefine_gs_group_dedup_params
+  description: Redefine GS Group's Dedup Params
+- operation: redefineGsGroupDiameterPacket
+  name: redefine_gs_group_diameter_packet
+  description: Redefine GS Group's Diameter packet
+- operation: redefineGsGroupDiameterS6aSession
+  name: redefine_gs_group_diameter_s6_a_session
+  description: Redefine GS Group's Diameter s6a session
+- operation: redefineGsGroupDiameterWhitelist
+  name: redefine_gs_group_diameter_whitelist
+  description: Redefine GS Group's Diameter whitelist
+- operation: redefineGsGroupEflowParams
+  name: redefine_gs_group_eflow_params
+  description: Redefine GS Group's Eflow Params
+- operation: redefineGsGroupEngineWatchdogTimer
+  name: redefine_gs_group_engine_watchdog_timer
+  description: Redefine GS Group's Engine Watchdog Timer
+- operation: redefineGsGroupGsGroupErspan3Params
+  name: redefine_gs_group_gs_group_erspan3_params
+  description: Redefine GS Group's ERSPAN III Params
+- operation: redefineGsGroupGsGroupFlowMaskParams
+  name: redefine_gs_group_gs_group_flow_mask_params
+  description: Redefine GS Group's Flow Mask Params
+- operation: redefineGsGroupFlowSamplingParams
+  name: redefine_gs_group_flow_sampling_params
+  description: Redefine GS Group's Flow Sampling Params
+- operation: redefineGsGroupGenericSessionTimeout
+  name: redefine_gs_group_generic_session_timeout
+  description: Redefine GS Group's Session Timeout
+- operation: redefineGsGroupGpfcpProfilesParams
+  name: redefine_gs_group_gpfcp_profiles_params
+  description: new in H 5.8
+- operation: redefineGsGroupGtaProfilesParams
+  name: redefine_gs_group_gta_profiles_params
+  description: Redefine GS Group's Gta Profiles Params
+- operation: redefineGsGroupParamsGtpControlSampling
+  name: redefine_gs_group_params_gtp_control_sampling
+  description: Redefine GS Group's Gtp Control Sampling Params
+- operation: redefineGsGroupGtpFlowParams
+  name: redefine_gs_group_gtp_flow_params
+  description: Redefine GS Group's Gtp Flow Params
+- operation: redefineGsGroupGtpGpfcpDelayParams
+  name: redefine_gs_group_gtp_gpfcp_delay_params
+  description: new in H 5.8
+- operation: redefineGsGroupParamsGtpPersistenceParams
+  name: redefine_gs_group_params_gtp_persistence_params
+  description: Redefine GS Group's Gtp Persistence Params
+- operation: redefineGsGroupParamsGtpRandomSampling
+  name: redefine_gs_group_params_gtp_random_sampling
+  description: new in H 5.7
+- operation: redefineGsGroupGtpWhitelistParams
+  name: redefine_gs_group_gtp_whitelist_params
+  description: Redefine GS Group's GTP Whitelist Params
+- operation: redefineGsGroupHealthCheck
+  name: redefine_gs_group_health_check
+  description: Redefine GS Group's health check
+- operation: redefineGsGroupHsmGroupParams
+  name: redefine_gs_group_hsm_group_params
+  description: Redefine GS Group's HSM Group Params
+- operation: redefineGsGroupIpFragParams
+  name: redefine_gs_group_ip_frag_params
+  description: Redefine GS Group's IP Fragmentation Params
+- operation: redefineGsGroupLoadBalanceParams
+  name: redefine_gs_group_load_balance_params
+  description: Redefine GS Group's Load Balancing Params
+- operation: redefineGsGroupNetflowParams
+  name: redefine_gs_group_netflow_params
+  description: Redefine GS Group's Netflow Params
+- operation: redefineGsGroupNodeRoleParams
+  name: redefine_gs_group_node_role_params
+  description: Redefine GS Group's Node Role Params
+- operation: redefineGsGroupPortThrottleSipParams
+  name: redefine_gs_group_port_throttle_sip_params
+  description: Redefine GS Group's Port Throttle Sip Params
+- operation: redefineGsGroupGsGroupResourceParams
+  name: redefine_gs_group_gs_group_resource_params
+  description: Redefine GS Group's resource Params
+- operation: redefineGsGroupRtpPorts
+  name: redefine_gs_group_rtp_ports
+  description: Redefine GS Group's Rtp Ports
+- operation: redefineGsGroupGsGroupSaApfParams
+  name: redefine_gs_group_gs_group_sa_apf_params
+  description: 'Redefine GS Group''s saApf Params(Deprecated: use PUT/gsGroups/{alias}/params/resource)'
+- operation: redefineGsGroupSessionLogging
+  name: redefine_gs_group_session_logging
+  description: Redefine GS Group's Session Logging Info
+- operation: redefineGsGroupSffpProfilesParams
+  name: redefine_gs_group_sffp_profiles_params
+  description: new in H 5.8
+- operation: redefineGsGroupSipMedia
+  name: redefine_gs_group_sip_media
+  description: Redefine GS Group's Sip Media
+- operation: redefineGsGroupSipPorts
+  name: redefine_gs_group_sip_ports
+  description: Redefine GS Group's Sip Ports
+- operation: redefineGsGroupSipSession
+  name: redefine_gs_group_sip_session
+  description: Redefine GS Group's Sip Session
+- operation: redefineGsGroupSipTcpIdleTimeout
+  name: redefine_gs_group_sip_tcp_idle_timeout
+  description: Redefine GS Group's Sip Tcp Idle Timeout
+- operation: redefineGsGroupSipWhitelistParams
+  name: redefine_gs_group_sip_whitelist_params
+  description: Redefine GS Group's SIP Whitelist Params
+- operation: redefineGsGroupSslDecryptParams
+  name: redefine_gs_group_ssl_decrypt_params
+  description: Redefine GS Group's SSL Decryption Params
+- operation: redefineGsGroupGsGroupSystemParams
+  name: redefine_gs_group_gs_group_system_params
+  description: Redefine GS Group's System Params
+- operation: redefineGsGroupXpktMatch
+  name: redefine_gs_group_xpkt_match
+  description: Redefine GS Group's Xpkt match
+- operation: updateGsopApps
+  name: update_gsop_apps
+  description: Update GSOP apps configuration
+- operation: deleteAllGtaProfiles
+  name: delete_all_gta_profiles
+  description: delete all GTA profiles
+- operation: updateBatteryOptimization
+  name: update_battery_optimization
+  description: update battery optimization
+- operation: deleteAllHeaderStrip
+  name: delete_all_header_strip
+  description: Delete header strip for all boxes
+- operation: updateHeaderStrip
+  name: update_header_strip
+  description: Update header strip for target box
+- operation: clearIcapNRTStatsCounters
+  name: clear_icap_nrt_stats_counters
+  description: Clears Registered icap solution Stats
+- operation: updateIcapNRTStatsConfig
+  name: update_icap_nrt_stats_config
+  description: Register Icap solution to NRT stats
+- operation: uploadImageFile
+  name: upload_image_file
+  description: Upload an image file from local file
+- operation: deleteImageFile
+  name: delete_image_file
+  description: Delete Image by File Name
+- operation: uploadHeartbeatPacketFromFile
+  name: upload_heartbeat_packet_from_file
+  description: Upload a Heartbeat Packet from local file
+- operation: uploadNegativeHeartbeatPacketFromFile
+  name: upload_negative_heartbeat_packet_from_file
+  description: Upload a Negative Heartbeat Packet from local file
+- operation: redefineInlineNetworkGroup
+  name: redefine_inline_network_group
+  description: Redefine an Inline Network Group
+- operation: clearHbStatisticsInlineTool
+  name: clear_hb_statistics_inline_tool
+  description: Clear heartbeat statistics of all Inline Tools
+- operation: clearNhbStatisticsInlineTool
+  name: clear_nhb_statistics_inline_tool
+  description: Clear negative heartbeat statistics of all Inline Tools
+- operation: clearHbStatisticsInlineToolByAlias
+  name: clear_hb_statistics_inline_tool_by_alias
+  description: Clear heartbeat statistics of Inline Tool by alias
+- operation: clearNhbStatisticsInlineToolByAlias
+  name: clear_nhb_statistics_inline_tool_by_alias
+  description: Clear negative heartbeat statistics of Inline Tool by alias
+- operation: recoverInlineTool
+  name: recover_inline_tool
+  description: Recover Inline Tool
+- operation: clearPolicy
+  name: clear_policy
+  description: clear all policy
+- operation: deployPolicy
+  name: deploy_policy
+  description: Deploy a new policy
+- operation: importPolicy
+  name: import_policy
+  description: Import Policy
+- operation: validatePolicy
+  name: validate_policy
+  description: Validate Policy
+- operation: validateUpdatedPolicy
+  name: validate_updated_policy
+  description: Validate Policy
+- operation: clearPolicyStatus
+  name: clear_policy_status
+  description: Clear policy deployment status
+- operation: undeployPolicy
+  name: undeploy_policy
+  description: Undeploy policy
+- operation: updateDeployedPolicy
+  name: update_deployed_policy
+  description: Update deployed policy
+- operation: configureAllChassisCard
+  name: configure_all_chassis_card
+  description: Configure all device Chassis Cards
+- operation: unconfigureAllChassisCards
+  name: unconfigure_all_chassis_cards
+  description: Unconfigure all device Chassis Cards
+- operation: updateDeviceCard
+  name: update_device_card
+  description: Update Device Card configuration
+- operation: configureChassisCard
+  name: configure_chassis_card
+  description: Configure a device Chassis Card
+- operation: unconfigureChassisCard
+  name: unconfigure_chassis_card
+  description: Unconfigure a device Chassis Card
+- operation: configureDeviceChassis
+  name: configure_device_chassis
+  description: Configure Device Chassis
+- operation: reconfigureDeviceChassis
+  name: reconfigure_device_chassis
+  description: Reconfigure device chassis. Can change the boxId as long as the chassis is not configured first.
+- operation: unconfigureDeviceChassis
+  name: unconfigure_device_chassis
+  description: Unconfigure Device Chassis
+- operation: updateDevicePort
+  name: update_device_port
+  description: Update Device Port configuration
+- operation: createIpInterfaceSolution
+  name: create_ip_interface_solution
+  description: Define/redefine Ip Interface solution configuration
+- operation: patchIpInterfaceSolution
+  name: patch_ip_interface_solution
+  description: Modify existing Ip Interface solution configuration
+- operation: deleteAllIpInterfaceSolutions
+  name: delete_all_ip_interface_solutions
+  description: Delete all Ip Interface solutions
+- operation: createBindings
+  name: create_bindings
+  description: Create an array of bindings to various license targets (chassis or card type, but not both)
+- operation: transferBindings
+  name: transfer_bindings
+  description: Transfer an array of bindings to various license targets (Gigasmart cards) based on a list of pairs consisting of source bindings to be deleted and the destination to be transferred to (s1,
+    d1, s2, d2, ... where "s" is source and "d" is destination)
+- operation: deleteBindings
+  name: delete_bindings
+  description: Delete FM License Bindings
+- operation: replaceOldFmBindings
+  name: replace_old_fm_bindings
+  description: Replaces old FM's bindings on a new FM
+- operation: renewBindings
+  name: renew_bindings
+  description: Renew eligible licenses
+- operation: deactivateByAID
+  name: deactivate_by_aid
+  description: Deactivate a license (floating or VBL) by its Activation ID; floating licenses still assigned to at least one card or chassis will be skipped
+- operation: configureExpiryAlertEnable
+  name: configure_expiry_alert_enable
+  description: Configure license expiry alert enable
+- operation: configureVolumeUsageAlertEnable
+  name: configure_volume_usage_alert_enable
+  description: Configure volume usage alert enable
+- operation: updateEmailReceivers
+  name: update_email_receivers
+  description: Update the optional email receivers, separate lists for VBL reports and license expiry (for upcoming renewals)
+- operation: setEmsPreferences
+  name: set_ems_preferences
+  description: Set opt-in preferences for entitlements/automatic renewals, usage reporting and telemetry
+- operation: reclaimEmsActivations
+  name: reclaim_ems_activations
+  description: Reclaim a license activation, return to entitlement the associated quantity(number of licenses)
+- operation: registerWithEms
+  name: register_with_ems
+  description: Register FM with EMS
+- operation: unregisterFromEMS
+  name: unregister_from_ems
+  description: Unregister FM from EMS
+- operation: importLicense
+  name: import_license
+  description: Import FM License
+- operation: importRevocation
+  name: import_revocation
+  description: Import FM License Revocation
+- operation: addFmLicense
+  name: add_fm_license
+  description: Add FM License
+- operation: revokeFmLicense
+  name: revoke_fm_license
+  description: Revoke FM License
+- operation: removeFmLicense
+  name: remove_fm_license
+  description: Remove FM License
+- operation: revokeLicenseKey
+  name: revoke_license_key
+  description: Revoke Node-Locked Device License
+- operation: revokeDefaultVbl
+  name: revoke_default_vbl
+  description: Revoke free trial 1-month volume licenses provided at initial installation of FM
+- operation: getAggregateLinks
+  name: get_aggregate_links
+  description: Link speed and count information between 2 set of nodes having different tag values for a given key
+- operation: updateMapPriority
+  name: update_map_priority
+  description: Update Map priority within its Chain
+- operation: deleteMapGroups
+  name: delete_map_groups
+  description: Delete all Map Groups
+- operation: removeAllMapTemplateRules
+  name: remove_all_map_template_rules
+  description: Remove all map template rules
+- operation: removeMapTemplateRule
+  name: remove_map_template_rule
+  description: Remove a rule from a map template
+- operation: addMapTemplateRule
+  name: add_map_template_rule
+  description: Add new rule to a map template
+- operation: updateMapTemplateRule
+  name: update_map_template_rule
+  description: Update a map template rule
+- operation: deleteMaps
+  name: delete_maps
+  description: Delete all maps
+- operation: removeAllMapApRules
+  name: remove_all_map_ap_rules
+  description: Remove all apRules from a 'secondlevel/byRule' map
+- operation: removeMapApRule
+  name: remove_map_ap_rule
+  description: Remove a apRule from a 'secondlevel/byRule' map
+- operation: addMapApRule
+  name: add_map_ap_rule
+  description: Add new apRule to a 'secondlevel/byRule' map
+- operation: updateMapApRule
+  name: update_map_ap_rule
+  description: update apRule of a 'secondlevel/byRule' map
+- operation: removeAllMapFlowRules
+  name: remove_all_map_flow_rules
+  description: Remove all flowRules from a 'secondLevel/flowFilter' map
+- operation: removeMapFlowRule
+  name: remove_map_flow_rule
+  description: Remove a flowRule from a 'secondLevel/flowFilter' map
+- operation: addMapFlowRule
+  name: add_map_flow_rule
+  description: Add new flowRule to a 'secondLevel/flowFilter' map
+- operation: updateMapFlowRule
+  name: update_map_flow_rule
+  description: update flowRule of a 'secondLevel/flowFilter' map
+- operation: removeAllMapFlowSample5gOverlapRules
+  name: remove_all_map_flow_sample5_g_overlap_rules
+  description: Remove all flowSample5gOverlapRules from a 'secondLevel/flowSample5gOverlap' map
+- operation: addMapFlowSample5gOverlapRule
+  name: add_map_flow_sample5_g_overlap_rule
+  description: Add new flowSample5gOverlapRule to a 'secondLevel/flowSample5gOverlap' map
+- operation: updateMapFlowSample5gOverlapRule
+  name: update_map_flow_sample5_g_overlap_rule
+  description: update flowSample5gOverlapRule of a 'secondLevel/flowSample5gOverlap' map
+- operation: removeMapFlowSample5gOverlapRule
+  name: remove_map_flow_sample5_g_overlap_rule
+  description: Remove a flowSample5gOverlapRule from a 'secondLevel/flowSample5gOverlap' map
+- operation: removeAllMapFlowSample5gRules
+  name: remove_all_map_flow_sample5_g_rules
+  description: Remove all flowSample5gRules from a 'secondLevel/flowSample5g' map
+- operation: addMapFlowSample5gRule
+  name: add_map_flow_sample5_g_rule
+  description: Add new flowSample5gRule to a 'secondLevel/flowSample5g' map
+- operation: updateMapFlowSample5gRule
+  name: update_map_flow_sample5_g_rule
+  description: update flowSample5gRule of a 'secondLevel/flowSample5g' map
+- operation: removeMapFlowSample5gRule
+  name: remove_map_flow_sample5_g_rule
+  description: Remove a flowSample5gRule from a 'secondLevel/flowSample5g' map
+- operation: removeAllMapFlowSampleDiameterRules
+  name: remove_all_map_flow_sample_diameter_rules
+  description: Remove all flowSampleDiameterRules from a 'secondLevel/flowSampleDiameter' map
+- operation: addMapFlowSampleDiameterRule
+  name: add_map_flow_sample_diameter_rule
+  description: Add new flowSampleDiameterRule to a 'secondLevel/flowSampleDiameter' map
+- operation: updateMapFlowSampleDiameterRule
+  name: update_map_flow_sample_diameter_rule
+  description: update flowSampleDiameterRule of a 'secondLevel/flowSampleDiameter' map
+- operation: removeMapFlowSampleDiameterRule
+  name: remove_map_flow_sample_diameter_rule
+  description: Remove a flowSampleDiameterRule from a 'secondLevel/flowSampleDiameter' map
+- operation: removeAllMapFlowSampleOverlapRules
+  name: remove_all_map_flow_sample_overlap_rules
+  description: Remove all flowRules from a 'secondLevel/flowSampleOverlap' map
+- operation: addMapFlowSampleOverlapRule
+  name: add_map_flow_sample_overlap_rule
+  description: Add new flowSampleOverlapRule to a 'secondLevel/flowSampleOverlap' map
+- operation: updateMapFlowSampleOverlapRule
+  name: update_map_flow_sample_overlap_rule
+  description: update flowRule of a 'secondLevel/flowSampleOverlap' map
+- operation: removeMapFlowSampleOverlapRule
+  name: remove_map_flow_sample_overlap_rule
+  description: Remove a flowRule from a 'secondLevel/flowSampleOverlap' map
+- operation: removeAllMapFlowSampleRules
+  name: remove_all_map_flow_sample_rules
+  description: Remove all flowRules from a 'secondLevel/flowSample' map
+- operation: addMapFlowSampleRule
+  name: add_map_flow_sample_rule
+  description: Add new flowSampleRule to a 'secondLevel/flowSample' map
+- operation: updateMapFlowSampleRule
+  name: update_map_flow_sample_rule
+  description: update flowRule of a 'secondLevel/flowSample' map
+- operation: removeMapFlowSampleRule
+  name: remove_map_flow_sample_rule
+  description: Remove a flowRule from a 'secondLevel/flowSample' map
+- operation: removeAllMapFlowSampleSipRules
+  name: remove_all_map_flow_sample_sip_rules
+  description: Remove all flowSampleSipRules from a 'secondLevel/flowSampleSip' map
+- operation: addMapFlowSampleSipRule
+  name: add_map_flow_sample_sip_rule
+  description: Add new flowSampleSipRule to a 'secondLevel/flowSampleSip' map
+- operation: updateMapFlowSampleSipRule
+  name: update_map_flow_sample_sip_rule
+  description: update flowSampleSipRule of a 'secondLevel/flowSampleSip' map
+- operation: removeMapFlowSampleSipRule
+  name: remove_map_flow_sample_sip_rule
+  description: Remove a flowSampleSipRule from a 'secondLevel/flowSampleSip' map
+- operation: removeAllMapFlowWhitelistOverlapRules
+  name: remove_all_map_flow_whitelist_overlap_rules
+  description: Remove all flowRules from a 'secondLevel/flowWhitelistOverlap' map
+- operation: addMapFlowWhitelistOverlapRule
+  name: add_map_flow_whitelist_overlap_rule
+  description: Add new flowWhitelistOverlapRule to a 'secondLevel/flowWhitelistOverlap' map
+- operation: updateMapFlowWhitelistOverlapRule
+  name: update_map_flow_whitelist_overlap_rule
+  description: update flowRule of a 'secondLevel/flowWhitelistOverlap' map
+- operation: removeMapFlowWhitelistOverlapRule
+  name: remove_map_flow_whitelist_overlap_rule
+  description: Remove a flowRule from a 'secondLevel/flowWhitelistOverlap' map
+- operation: removeAllMapFlowWhitelistRules
+  name: remove_all_map_flow_whitelist_rules
+  description: Remove all flowRules from a 'secondLevel/flowWhitelist' map
+- operation: addMapFlowWhitelistRule
+  name: add_map_flow_whitelist_rule
+  description: Add new flowWhitelistRule to a 'secondLevel/flowWhitelist' map
+- operation: updateMapFlowWhitelistRule
+  name: update_map_flow_whitelist_rule
+  description: update flowRule of a 'secondLevel/flowWhitelist' map
+- operation: removeMapFlowWhitelistRule
+  name: remove_map_flow_whitelist_rule
+  description: Remove a flowRule from a 'secondLevel/flowWhitelist' map
+- operation: removeAllMapGsRules
+  name: remove_all_map_gs_rules
+  description: Remove all gsRules from a 'secondLevel/byRule' map
+- operation: removeMapGsRule
+  name: remove_map_gs_rule
+  description: Remove a gsRule from a 'secondLevel/byRule' map
+- operation: addMapGsRule
+  name: add_map_gs_rule
+  description: Add new gsRule to a 'secondLevel/byRule' map
+- operation: updateMapGsRule
+  name: update_map_gs_rule
+  description: update gsRule of a 'secondLevel/byRule' map
+- operation: removeAllMapRules
+  name: remove_all_map_rules
+  description: Remove all rules from a 'regular/byRule', 'inline/byRule' or 'firstLevel/byRule' map
+- operation: addMapRulesFromTemplate
+  name: add_map_rules_from_template
+  description: add template rules to a 'regular/byRule', 'inline/byRule' or 'firstLevel/byRule' map
+- operation: removeMapRule
+  name: remove_map_rule
+  description: Remove a rule from a 'regular/byRule', 'inline/byRule' or 'firstLevel/byRule' map
+- operation: addMapRule
+  name: add_map_rule
+  description: Add new rule to a 'regular/byRule', 'inline/byRule' or 'firstLevel/byRule' map
+- operation: updateMapRule
+  name: update_map_rule
+  description: update rule of a 'regular/byRule', 'inline/byRule' or 'firstLevel/byRule' map
+- operation: deleteClusterPortFilterCounters
+  name: delete_cluster_port_filter_counters
+  description: Clear Cluster Port Filter Counters
+- operation: clearAllPtpCounters
+  name: clear_all_ptp_counters
+  description: clear all PTP counters
+- operation: clearPtpCountersByAlias
+  name: clear_ptp_counters_by_alias
+  description: clear PTP counters by alias
+- operation: clearPtpPortsCountersByPortId
+  name: clear_ptp_ports_counters_by_port_id
+  description: clear PTP port counters by port ID
+- operation: redefineDeviceCredentials
+  name: redefine_device_credentials
+  description: Redefine Device Credentials configuration
+- operation: addDevicesToDomain
+  name: add_devices_to_domain
+  description: add clusters/devices to the FM-managed domain
+- operation: rediscoverDomainClusters
+  name: rediscover_domain_clusters
+  description: Rediscovers all managed clusters and standalone nodes under FM management
+- operation: removeClustersFromDomain
+  name: remove_clusters_from_domain
+  description: Removes all managed clusters and standalone nodes from FM management
+- operation: clearTaskStatus
+  name: clear_task_status
+  description: Clear task status by cluster IDs.
+- operation: Communication
+  name: communication
+  description: stop/resume communcation by cluster IDs.
+- operation: configurePermittedAddresses
+  name: configure_permitted_addresses
+  description: Configure Permitted Addresses
+- operation: deletePermittedAddress
+  name: delete_permitted_address
+  description: Delete Permitted Address
+- operation: ConfigureEmailServer
+  name: configure_email_server
+  description: Configure Email Server
+- operation: VerifyEmailServer
+  name: verify_email_server
+  description: Verify Email Server Configuration
+- operation: disableBatchEventNotificationConfiguration
+  name: disable_batch_event_notification_configuration
+  description: Disable Batch Notification Configuration
+- operation: enableBatchEventNotificationConfiguration
+  name: enable_batch_event_notification_configuration
+  description: Enable Batch Notification Configuration
+- operation: createEventNotificationConfiguration
+  name: create_event_notification_configuration
+  description: Create Notification Configuration
+- operation: collectHeartbeatfromGigaInsightNode
+  name: collect_heartbeatfrom_giga_insight_node
+  description: Accept Heartbeat from Gigamon Insights in FM
+- operation: registerGigaInsightNode
+  name: register_giga_insight_node
+  description: Register a GigaInsight Node with FM
+- operation: deletePcapFile
+  name: delete_pcap_file
+  description: Delete Pcap File
+- operation: removeHashToolMapping
+  name: remove_hash_tool_mapping
+  description: Remove mapping of hash bucket to port
+- operation: updatePortConfig
+  name: update_port_config
+  description: Update a PortConfig configuration
+- operation: removePortFilterRule
+  name: remove_port_filter_rule
+  description: Remove a filtering rule from a Port
+- operation: addPortFilterRule
+  name: add_port_filter_rule
+  description: Add new filtering rule to a Port
+- operation: updatePortFilterRule
+  name: update_port_filter_rule
+  description: update filtering rule of a Port
+- operation: deleteAllSxIps
+  name: delete_all_sx_ips
+  description: new in H 5.8
+- operation: redefineSnmpThrottleConfig
+  name: redefine_snmp_throttle_config
+  description: Redefine Snmp Throttle config
+- operation: updateSnmpThrottleConfig
+  name: update_snmp_throttle_config
+  description: Update Snmp Throttle config
+- operation: deleteSpineLinkAll
+  name: delete_spine_link_all
+  description: Delete all spine-link configurations
+- operation: removeCertificateFromCaList
+  name: remove_certificate_from_ca_list
+  description: delete a certificate from the list of trusted certificate authorities (CA List)
+- operation: uploadCertificate_ssl_nodeCertificate_upload_name
+  name: upload_certificate_ssl_node_certificate_upload_name
+  description: upload a new certificate and add it to the device' CA List the device
+- operation: fmServerAaaConfig
+  name: fm_server_aaa_config
+  description: fmServer AAA Config
+- operation: addNameServer
+  name: add_name_server
+  description: Add name server
+- operation: bulkUpdateNameservers
+  name: bulk_update_nameservers
+  description: update name servers
+- operation: deleteNameServer
+  name: delete_name_server
+  description: Delete name server by address
+- operation: addSearchDomain
+  name: add_search_domain
+  description: Add search domain
+- operation: bulkUpdateSearchDomain
+  name: bulk_update_search_domain
+  description: update search domains
+- operation: deleteSearchDomain
+  name: delete_search_domain
+  description: Delete search domain server by name
+- operation: redefineAaaAuthConfig
+  name: redefine_aaa_auth_config
+  description: Redefine Node Authentication config
+- operation: updateAaaAuthConfig
+  name: update_aaa_auth_config
+  description: Update Node Authentication config
+- operation: resetUserAccountLocks
+  name: reset_user_account_locks
+  description: Clears history of login failures, and/or unlocks user account
+- operation: redefineRemoteAuthSystemConfig
+  name: redefine_remote_auth_system_config
+  description: Redefine Remote Auth servers system configuration
+- operation: updateRemoteAuthSystemConfig
+  name: update_remote_auth_system_config
+  description: Update Remote Auth servers system configuration
+- operation: redefineLdapSystemConfig
+  name: redefine_ldap_system_config
+  description: Redefine LDAP system configuration
+- operation: deleteLdapUserGroupMapping
+  name: delete_ldap_user_group_mapping
+  description: Delete System LDAP User Group Mapping
+- operation: redefineRadiusSystemConfig
+  name: redefine_radius_system_config
+  description: Redefine RADIUS system configuration
+- operation: redefineTacacsSystemConfig
+  name: redefine_tacacs_system_config
+  description: Redefine TACACS+ system configuration
+- operation: clearSystemArpEntries
+  name: clear_system_arp_entries
+  description: Clear System ARP Entries
+- operation: redefineSystemArpRefreshInterval
+  name: redefine_system_arp_refresh_interval
+  description: Redefine System Arp's Refresh Interval
+- operation: createNodeSystemConfigFile
+  name: create_node_system_config_file
+  description: Save the running configuration
+- operation: uploadSystemConfigFile
+  name: upload_system_config_file
+  description: Upload a configuration file from local file.
+- operation: fetchNodeSystemConfigFile
+  name: fetch_node_system_config_file
+  description: Instruct the device to download a configuration file from a remote host
+- operation: deleteNodeSystemConfigFile
+  name: delete_node_system_config_file
+  description: Delete a system configuration file
+- operation: revertNodeSystemConfigFile
+  name: revert_node_system_config_file
+  description: Revert running configuration to last saved configuration
+- operation: switchNodeSystemConfigFile
+  name: switch_node_system_config_file
+  description: Load a configuration file and make it the active configuration
+- operation: generateNodeSystemConfigTextFile
+  name: generate_node_system_config_text_file
+  description: Generate active running text configuration file
+- operation: uploadTextConfigFile
+  name: upload_text_config_file
+  description: Upload a text configuration file from local file.
+- operation: restoreNodeSystemConfigTextFile
+  name: restore_node_system_config_text_file
+  description: Apply the text configuration to the running system from a remote host or local storage
+- operation: deleteTextConfigFile
+  name: delete_text_config_file
+  description: Delete a system text configuration file
+- operation: deleteTrafficConfig
+  name: delete_traffic_config
+  description: Delete all traffic configurations
+- operation: setUserSelectedCiphers
+  name: set_user_selected_ciphers
+  description: Set user-selected ciphers by protocol type
+- operation: enableCryptoMode
+  name: enable_crypto_mode
+  description: Enable crypto mode.
+- operation: enableFIPSMode
+  name: enable_fips_mode
+  description: Enable FIPS mode.
+- operation: runIntegrityCheck
+  name: run_integrity_check
+  description: Run FM Integrity check.
+- operation: updateEmailNotifConfigSpec
+  name: update_email_notif_config_spec
+  description: Update system email notification settings
+- operation: modifyEmailServer
+  name: modify_email_server
+  description: Modify system email server
+- operation: modifyEventNotificationConfig
+  name: modify_event_notification_config
+  description: Modify Event notification config
+- operation: generateGigasmartDump
+  name: generate_gigasmart_dump
+  description: Generate Gigasmart Dump
+- operation: deleteGsDumpFile
+  name: delete_gs_dump_file
+  description: Delete Gigasmart dump File
+- operation: updateSystemHostBanner
+  name: update_system_host_banner
+  description: Update system banner configurations
+- operation: updateSystemHostname
+  name: update_system_hostname
+  description: Update system hostname configurations
+- operation: updateManagementInterface
+  name: update_management_interface
+  description: since FM 5.8
+- operation: clearIpv6NeighborEntries
+  name: clear_ipv6_neighbor_entries
+  description: Clear Ipv6 Neighbor Entries
+- operation: installNodeLockedLicenseKeyOnNode
+  name: install_node_locked_license_key_on_node
+  description: Install a node-locked license key on a node
+- operation: redefineSystemNdp
+  name: redefine_system_ndp
+  description: Redefine System Ndp's Config
+- operation: redefineSecurityConfig
+  name: redefine_security_config
+  description: Redefine Security config
+- operation: updateSecurityConfig
+  name: update_security_config
+  description: Update Security config
+- operation: redefineSnmpServerCommunityConfig
+  name: redefine_snmp_server_community_config
+  description: Redefine Snmp Server Community config
+- operation: updateSnmpServerCommunityConfig
+  name: update_snmp_server_community_config
+  description: Update Snmp Server Community config
+- operation: redefineSnmpServerNofifyConfig
+  name: redefine_snmp_server_nofify_config
+  description: Redefine Snmp Server Notification settings
+- operation: updateSnmpServerNofifyConfig
+  name: update_snmp_server_nofify_config
+  description: Update Snmp Server Notification settings
+- operation: redefineSnmpServerSystemConfig
+  name: redefine_snmp_server_system_config
+  description: Redefine Snmp Server System config
+- operation: updateSnmpServerSystemConfig
+  name: update_snmp_server_system_config
+  description: Update Snmp Server System config
+- operation: redefineSnmpThrottleConfig_system_snmp_throttle
+  name: redefine_snmp_throttle_config_system_snmp_throttle
+  description: Redefine Snmp Throttle config
+- operation: updateSnmpThrottleConfig_system_snmp_throttle
+  name: update_snmp_throttle_config_system_snmp_throttle
+  description: Update Snmp Throttle config
+- operation: updateSSHCiphers
+  name: update_ssh_ciphers
+  description: Update all ciphers, Kex, Macs and HostKey
+- operation: generateSysdump
+  name: generate_sysdump
+  description: Generate New Sysdump File
+- operation: deleteSysdumpFile
+  name: delete_sysdump_file
+  description: Delete Sysdump File
+- operation: purgeSyslog
+  name: purge_syslog
+  description: Purge Syslogs
+- operation: downloadSyslogArchive
+  name: download_syslog_archive
+  description: Archive Syslogs
+- operation: redefineSyslogConfig
+  name: redefine_syslog_config
+  description: Redefine Syslog config
+- operation: updateSyslogConfig
+  name: update_syslog_config
+  description: Update Syslog Config
+- operation: updateNodeSystemTime
+  name: update_node_system_time
+  description: Update Node System Time configuration
+- operation: redefineNtpConfig
+  name: redefine_ntp_config
+  description: Redefine NTP Configuration
+- operation: updateNtpConfig
+  name: update_ntp_config
+  description: Update NTP Configuration
+- operation: addNtpAuthKey
+  name: add_ntp_auth_key
+  description: Add an NTP Authentication Key
+- operation: deleteNtpAuthKey
+  name: delete_ntp_auth_key
+  description: Delete NTP Auth Key by alias
+- operation: redefineNtpServer
+  name: redefine_ntp_server
+  description: Redefine NTP Server configuration
+- operation: ntpSync
+  name: ntp_sync
+  description: Perform one-time synchronization of the H Series node's system clock with a specified NTP server.
+- operation: redefinePpsSource
+  name: redefine_pps_source
+  description: Redefine Pulse-Per-Second Source
+- operation: redefinePtpConfig
+  name: redefine_ptp_config
+  description: Redefine PTP Configuration
+- operation: ubootInstall
+  name: uboot_install
+  description: Install the binary bootloader code included with the active/booted image
+- operation: updateSystemWebConfiguration
+  name: update_system_web_configuration
+  description: Update system web configuration
+- operation: updateSystemWebProxy
+  name: update_system_web_proxy
+  description: Update system web proxy
+- operation: Audit_tag_details
+  name: audit_tag_details
+  description: Reapply cluster and node level tags to ports
+- operation: import_tags
+  name: import_tags
+  description: Upload an csv file from local  to import tags
+- operation: download_tag_resources
+  name: download_tag_resources
+  description: download the tag resources as a file
+- operation: import_tag_resources
+  name: import_tag_resources
+  description: Upload an csv file from local to import tag resources
+- operation: revokeApiTokensForPrivilegeUsers
+  name: revoke_api_tokens_for_privilege_users
+  description: Revoke other user token of FM Users. Users with FM Security Management role with write access can access API.
+- operation: revokeAllApiTokens
+  name: revoke_all_api_tokens
+  description: Revoke token for FM Users
+- operation: createManualTopologyEntity
+  name: create_manual_topology_entity
+  description: Create Manual Topology Nodes and Links
+- operation: updateManualTopologyEntity
+  name: update_manual_topology_entity
+  description: Update Manual Topology Nodes and Links
+- operation: deleteManualTopologyEntities
+  name: delete_manual_topology_entities
+  description: Delete Manual Topology Nodes ans Links
+- operation: ImportManualTopologyEntity
+  name: import_manual_topology_entity
+  description: Imports topology nodes and links from the information provided in csv file. For importing network devices "Tool Name", "Vendor", "Type", "Model", "Comment" and for tools the additional properties
+    like "Max Throughput(Gbps)","Storage Capacity(TB)", "Compression Ratio" column headers are required. Similarly for links "Source Device"(device alias/hostname), "Source Cluster Name", "Source Device
+    Type"(gigamon/manual), "Source EndPoint Type"(Port/Gigastream), "Source EndPoint Alias"(port/gigastream alias), "Destination Device", "Destination Cluster Name", "Destination Device Type", "Destination
+    EndPoint Alias", "Destination EndPoint Type", "Link Type"(port/gigaStream) are required in the csv file.
+- operation: deleteManualTopology
+  name: delete_manual_topology
+  description: Delete all manually-augmented topology elements
+- operation: createTopologyLink
+  name: create_topology_link
+  description: Returns generated Topology Link Id for future reference
+- operation: updateTopologyLink
+  name: update_topology_link
+  description: Update Manual Topology Link
+- operation: deleteTopologyLink
+  name: delete_topology_link
+  description: Delete Manual Topology Link
+- operation: createManualTopologyNode
+  name: create_manual_topology_node
+  description: Returns generated Topology Node Id for future reference
+- operation: updateManualTopologyNode
+  name: update_manual_topology_node
+  description: Update Manual Topology Node
+- operation: deleteManualTopologyNode
+  name: delete_manual_topology_node
+  description: Delete Manual Topology Node
+- operation: updateTopologyVizConfigs
+  name: update_topology_viz_configs
+  description: Configuring topology hierarchical and placement tags
+- operation: getSmartSankeyData
+  name: get_smart_sankey_data
+  description: FM's best guess sankey constructed based on nodes' neighborship count
+- operation: getHierarchialData
+  name: get_hierarchial_data
+  description: Response for bubble diagram representation
+- operation: loadTopovizLinks
+  name: load_topoviz_links
+  description: load links from given nodes or nodeGroups
+- operation: resetTopologyViz
+  name: reset_topology_viz
+  description: resets topology data by reconstructing links and node neighbour details
+- operation: getSankeyData
+  name: get_sankey_data
+  description: Response for sankey representation
+- operation: auditTrafficFlowGeneratedFMap
+  name: audit_traffic_flow_generated_f_map
+  description: Check the integrity of traffic flow configurations
+- operation: copyRules
+  name: copy_rules
+  description: 'Copy rules from one or more source traffic flow policies to a user-specific clipboard.
+
+    Supports both SOURCE and APPLICATION rule categories with optimistic locking for concurrent conflict detection.'
+- operation: deleteCopiedRules
+  name: delete_copied_rules
+  description: 'Remove all previously copied rules from the user-specific clipboard.
+
+    This operation clears the entire clipboard for the authenticated user.'
+- operation: deployTrafficFlows
+  name: deploy_traffic_flows
+  description: Deploy a Traffic Flows configuration
+- operation: addTrafficFlowsDeployedDraft
+  name: add_traffic_flows_deployed_draft
+  description: Add a new deployed traffic flows draft
+- operation: updateTrafficFlowsGlobalSettings
+  name: update_traffic_flows_global_settings
+  description: Update global settings for Traffic Flows
+- operation: updateMapChain
+  name: update_map_chain
+  description: Update map chain for a given policy and source rule
+- operation: updateMapChainPriority
+  name: update_map_chain_priority
+  description: Update map chain priority for a given policy and source rule
+- operation: updateMapGroup
+  name: update_map_group
+  description: Update map group for a given policy and source rule
+- operation: deleteMapGroup_traffic_flows_mapGroups_policyAlias_sourceRules_sourceRulesAlias
+  name: delete_map_group_traffic_flows_map_groups_policy_alias_source_rules_source_rules_alias
+  description: Delete map group by source
+- operation: migrateAppIntelToTrafficFlows
+  name: migrate_app_intel_to_traffic_flows
+  description: Migrate AppIntel solution to Traffic Flows
+- operation: rollbackTrafficFlows
+  name: rollback_traffic_flows
+  description: Roll back Traffic Flow migration
+- operation: migrateFabricMapsToTrafficFlows_1
+  name: migrate_fabric_maps_to_traffic_flows_1
+  description: Migrate specific fabric maps to traffic flows
+- operation: migrateAllFabricMapsToTrafficFlows
+  name: migrate_all_fabric_maps_to_traffic_flows
+  description: Migrate all fabric maps to traffic flows
+- operation: migrateAllFlowMapToTrafficFlowsInMultipleClusters
+  name: migrate_all_flow_map_to_traffic_flows_in_multiple_clusters
+  description: Migrate all flow maps to traffic flows in multiple clusters
+- operation: migrateFabricMapsToTrafficFlows
+  name: migrate_fabric_maps_to_traffic_flows
+  description: Migrate specific fabric maps to traffic flows in a cluster
+- operation: migrateAllFlowMapToTrafficFlowsInCluster
+  name: migrate_all_flow_map_to_traffic_flows_in_cluster
+  description: Migrate all flow maps to traffic flows in a cluster
+- operation: rollbackTrafficFlowsMigration
+  name: rollback_traffic_flows_migration
+  description: Rollback traffic flows migration
+- operation: registerOrDeRegisterNrt
+  name: register_or_de_register_nrt
+  description: Register or deregister near real-time statistics for a traffic flow
+- operation: pasteRules
+  name: paste_rules
+  description: 'Paste rules from the user-specific clipboard into one or more target traffic flow policies.
+
+    Supports duplicate detection with two options:
+
+    - DETECT_DUPLICATES: Returns duplicate rules without saving (409 Conflict)
+
+    - PROCEED_WITHOUT_DUPLICATES: Saves only non-duplicate rules
+
+    Uses optimistic locking for concurrent conflict detection.'
+- operation: reApplyTrafficFlowGeneratedFMap
+  name: re_apply_traffic_flow_generated_f_map
+  description: Re-apply all pending traffic flow configurations
+- operation: getPolicyRules
+  name: get_policy_rules
+  description: Retrieve policy rules for a given alias
+- operation: addTrafficFlowsDraft
+  name: add_traffic_flows_draft
+  description: Add a new traffic flows draft
+- operation: buildFlowPath
+  name: build_flow_path
+  description: Build traffic flow path for a cluster
+- operation: undeployTrafficFlows
+  name: undeploy_traffic_flows
+  description: Undeploy a traffic flow by alias
+- operation: deleteDeployedDraftTrafficFlows
+  name: delete_deployed_draft_traffic_flows
+  description: Delete deployed draft Traffic Flows by alias
+- operation: updateTrafficFlowsDeployedDraft
+  name: update_traffic_flows_deployed_draft
+  description: Update an existing deployed traffic flows draft
+- operation: addFlowRules
+  name: add_flow_rules
+  description: Add rules within a flow
+- operation: addTemplateRules
+  name: add_template_rules
+  description: Add template rules to a traffic flow
+- operation: updateTrafficFlowsDraft
+  name: update_traffic_flows_draft
+  description: Update an existing traffic flows draft
+- operation: addSourceRules
+  name: add_source_rules
+  description: Add source rules to a policy and sourceRulesAlias
+- operation: deployOrSaveTrafficPolicyGraph
+  name: deploy_or_save_traffic_policy_graph
+  description: Perform the batch operation defined in body. Then deploy the traffic policy graph if it has been deployed or save it
+- operation: deployTrafficPolicyGraph
+  name: deploy_traffic_policy_graph
+  description: Deploy the traffic policy graph
+- operation: purgeStats
+  name: purge_stats
+  description: Purge Time Series(Deprecated)
+- operation: deleteAllTunnelEndpoint
+  name: delete_all_tunnel_endpoint
+  description: Delete all tunnel endpoints
+- operation: modifyTunnelLogicalGroup
+  name: modify_tunnel_logical_group
+  description: Edit Tunnel Logical Group. API handles activate/deactivate tunnel logical group and modification of Tunnel logical group name.
+- operation: createEnv
+  name: create_env
+  description: Create a unified resource environment
+- operation: updateEnv
+  name: update_env
+  description: Update a unified resource environment
+- operation: deleteEnv
+  name: delete_env
+  description: Delete unified resource environment
+- operation: reloadInventory
+  name: reload_inventory
+  description: Reload unified resource connection artifacts
+- operation: createDeploy
+  name: create_deploy
+  description: Create unified resource deployment by environment id
+- operation: updateDeploy
+  name: update_deploy
+  description: Update unified resource deployment by environment and unified resource id
+- operation: deleteDeploy
+  name: delete_deploy
+  description: Delete unified resource deployment by environment and unified resource id
+- operation: applyGvTapPrecryptionPolicyConfig
+  name: apply_gv_tap_precryption_policy_config
+  description: Apply Precryption Policy Config [marked for deprecation]
+- operation: clearGvTapPrecryptionPolicyConfiguration
+  name: clear_gv_tap_precryption_policy_configuration
+  description: Clear Precryption Policy configuration [marked for deprecation]
+- operation: applyGvTapPrefilteringPolicyConfig
+  name: apply_gv_tap_prefiltering_policy_config
+  description: Apply Prefiltering Policy Config [marked for deprecation]
+- operation: clearGvTapTrafficPolicyConfiguration
+  name: clear_gv_tap_traffic_policy_configuration
+  description: Clear Prefiltering Policy configuration [marked for deprecation]
+- operation: applyPrecryptionPolicyConfig
+  name: apply_precryption_policy_config
+  description: Apply Precryption Policy Config
+- operation: clearPrecryptionPolicyConfiguration
+  name: clear_precryption_policy_configuration
+  description: Clear Precryption Policy configuration
+- operation: applyPrefilteringPolicyConfig
+  name: apply_prefiltering_policy_config
+  description: Apply Prefiltering Policy Config
+- operation: clearTrafficPolicyConfiguration
+  name: clear_traffic_policy_configuration
+  description: Clear Prefiltering Policy configuration
+- operation: editUserDetails
+  name: edit_user_details
+  description: Edit User details
+- operation: deleteUser
+  name: delete_user
+  description: Delete a user
+- operation: fmUnlockUserConfig
+  name: fm_unlock_user_config
+  description: FM Unlock User
+- operation: loadAliasesMetaData
+  name: load_aliases_meta_data
+  description: Get meta data details for given list of resources
+- operation: loadSrcPortMetaData
+  name: load_src_port_meta_data
+  description: Load source port metadata for traffic flows
+ephemeral_resource_overrides:
+- operation: createApiToken_tokens_create
+  name: create_api_token_tokens_create
+  description: Create token for FM Users
+  open_mapping: POST /tokens/create
+  result_fields:
+  - name: authentication_type
+    type: string
+  - name: created_by
+    type: string
+  - name: created_ts
+    type: dynamic
+  - name: expiry_time
+    type: string
+  - name: expiry_ts
+    type: string
+  - name: groups
+    type: list(string)
+  - name: token
+    type: string
+    sensitive: true
+  - name: token_id
+    type: string
+  - name: token_name
+    type: string
+  - name: usage_count
+    type: dynamic
+  - name: username
+    type: string
+- operation: regenerateSecret
+  name: regenerate_secret
+  description: Revoke other user tokens of FM Users. Users with FM Security Management role with write access can access API.
+  open_mapping: POST /tokens/manage/secret/regenerate
+list_resource_overrides:
+- resource: load_all_alarms
+  operation: loadAllAlarms
+- resource: get_all_app_filter_rsc
+  operation: getAllAppFilterRsc
+- resource: load_all_elbs
+  operation: loadAllElbs
+- resource: load_all_enhanced_slicings
+  operation: loadAllEnhancedSlicings
+- resource: get_all_apps_exporter
+  operation: getAllAppsExporter
+- resource: get_all_exporter_group
+  operation: getAllExporterGroup
+- resource: get_all_hsms
+  operation: getAllHsms
+- resource: load_all_icap_profiles
+  operation: loadAllIcapProfiles
+  config_schema:
+  - name: cluster_id
+    type: string
+    description: Target Cluster ID
+  - name: page
+    type: string
+    optional: true
+    description: parentheses-enclosed pair of values in a (pageNo:pageSize) format. 'pageNo' is 1-based. If omitted, entire list of entities is returned
+  - name: sort
+    type: string
+    optional: true
+    description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
+- resource: load_all_icap_servers
+  operation: loadAllIcapServers
+  config_schema:
+  - name: cluster_id
+    type: string
+    description: Target Cluster ID
+  - name: page
+    type: string
+    optional: true
+    description: parentheses-enclosed pair of values in a (pageNo:pageSize) format. 'pageNo' is 1-based. If omitted, entire list of entities is returned
+  - name: sort
+    type: string
+    optional: true
+    description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
+- resource: load_all_icap_server_groups
+  operation: loadAllIcapServerGroups
+  config_schema:
+  - name: cluster_id
+    type: string
+    description: Target Cluster ID
+  - name: page
+    type: string
+    optional: true
+    description: parentheses-enclosed pair of values in a (pageNo:pageSize) format. 'pageNo' is 1-based. If omitted, entire list of entities is returned
+  - name: sort
+    type: string
+    optional: true
+    description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
+- resource: load_inline_ssl_cert_valid_status
+  operation: loadInlineSslCertValidStatus
+- resource: load_inline_ssl_url_status
+  operation: loadInlineSslUrlStatus
+- resource: fetch_inline_ssl_profile_all_list_info
+  operation: fetchInlineSslProfileAllListInfo
+- resource: download_list
+  operation: downloadList
+- resource: get_keystore_keys
+  operation: getKeystoreKeys
+- resource: get_all_apps_listener
+  operation: getAllAppsListener
+- resource: load_all_metadata_application_profiles
+  operation: loadAllMetadataApplicationProfiles
+- resource: load_all_metadata_cache
+  operation: loadAllMetadataCache
+- resource: load_all_metadata_network_profiles
+  operation: loadAllMetadataNetworkProfiles
+- resource: load_all_netflow_monitors
+  operation: loadAllNetflowMonitors
+- resource: load_all_netflow_records
+  operation: loadAllNetflowRecords
+- resource: load_all_port_throttles
+  operation: loadAllPortThrottles
+- resource: load_all_session_aware_apf_profiles
+  operation: loadAllSessionAwareApfProfiles
+- resource: load_all_ssl_decryption_endpoints
+  operation: loadAllSslDecryptionEndpoints
+- resource: load_all_ssl_decryption_key_maps
+  operation: loadAllSslDecryptionKeyMaps
+- resource: get_ssl_client_trust_store_list
+  operation: getSslClientTrustStoreList
+- resource: get_all_tunnel_application
+  operation: getAllTunnelApplication
+- resource: load_all_app_viz_solutions
+  operation: loadAllAppVizSolutions
+  config_schema:
+  - name: cluster_id
+    type: string
+    description: clusterId
+- resource: load_audit_log_entries
+  operation: loadAuditLogEntries
+- resource: get_avisi_policies
+  operation: getAvisiPolicies
+- resource: load_all_circuit_tunnels
+  operation: loadAllCircuitTunnels
+- resource: list_fm_stored_clusters_config_backup_snapshots
+  operation: listFmStoredClustersConfigBackupSnapshots
+- resource: list_bulk_replicate_config_files
+  operation: listBulkReplicateConfigFiles
+  config_schema:
+  - name: page
+    type: string
+    optional: true
+    description: parentheses-enclosed pair of values in a (pageNo:pageSize) format. 'pageNo' is 1-based. If omitted, entire list of entities is returned
+  - name: sort
+    type: string
+    optional: true
+    description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
+- resource: list_bulk_replicate_config_restore_logs
+  operation: listBulkReplicateConfigRestoreLogs
+  config_schema:
+  - name: page
+    type: string
+    optional: true
+    description: parentheses-enclosed pair of values in a (pageNo:pageSize) format. 'pageNo' is 1-based. If omitted, entire list of entities is returned
+  - name: sort
+    type: string
+    optional: true
+    description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
+- resource: get_all_cluster_config_image_upgrade_status
+  operation: getAllClusterConfigImageUpgradeStatus
+- resource: get_all_cluster_config_image_upgrade_status_by_task_group_id
+  operation: getAllClusterConfigImageUpgradeStatusByTaskGroupId
+- resource: load_events
+  operation: loadEvents
+- resource: get_all_fabric_maps
+  operation: getAllFabricMaps
+- resource: get_all_cluster_circuit_tunnels_of_an_user_fabric_map
+  operation: getAllClusterCircuitTunnelsOfAnUserFabricMap
+- resource: get_all_cluster_maps_of_an_user_fabric_map
+  operation: getAllClusterMapsOfAnUserFabricMap
+- resource: get_all_internal_fabric_maps
+  operation: getAllInternalFabricMaps
+- resource: load_all_fabric_port_groups
+  operation: loadAllFabricPortGroups
+- resource: load_all_filter_resources
+  operation: loadAllFilterResources
+- resource: load_all_filter_templates
+  operation: loadAllFilterTemplates
+- resource: get_all_flex_inline_solutions
+  operation: getAllFlexInlineSolutions
+- resource: get_all_flex_inline_ssl_apps
+  operation: getAllFlexInlineSslApps
+  config_schema:
+  - name: cluster_id
+    type: string
+    optional: true
+    description: If provided, ssl apps only for that cluster are returned
+- resource: get_all_giga_flex_inline_network_group
+  operation: getAllGigaFlexInlineNetworkGroup
+  config_schema:
+  - name: cluster_id
+    type: string
+    optional: true
+    description: if provided, Network groups only for that cluster is returned
+- resource: load_alert_policies
+  operation: loadAlertPolicies
+- resource: get_copilot_sysdumps
+  operation: getCopilotSysdumps
+- resource: load_all_fm_notification_target_config
+  operation: loadAllFmNotificationTargetConfig
+- resource: load_fm_backup_archive_servers
+  operation: loadFmBackupArchiveServers
+- resource: get_eports_interfaces
+  operation: getEportsInterfaces
+  config_schema:
+  - name: cluster_id
+    type: string
+    description: Target Cluster ID
+  - name: page
+    type: string
+    optional: true
+    description: parentheses-enclosed pair of values in a (pageNo:pageSize) format. 'pageNo' is 1-based. If omitted, entire list of entities is returned
+  - name: sort
+    type: string
+    optional: true
+    description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
+- resource: get_all_gpfcp_profile
+  operation: getAllGpfcpProfile
+- resource: load_all_user_groups
+  operation: loadAllUserGroups
+- resource: load_all_gs_groups
+  operation: loadAllGsGroups
+- resource: load_all_gsops
+  operation: loadAllGsops
+- resource: get_all_gta_profiles
+  operation: getAllGtaProfiles
+- resource: load_all_header_strip
+  operation: loadAllHeaderStrip
+- resource: load_all_header_strip_aging
+  operation: loadAllHeaderStripAging
+- resource: get_allicap_client
+  operation: getAllicapClient
+  config_schema:
+  - name: cluster_id
+    type: string
+    optional: true
+    description: If provided, icap client only for that cluster are returned
+- resource: load_all_image_servers
+  operation: loadAllImageServers
+- resource: load_all_heartbeat_packets
+  operation: loadAllHeartbeatPackets
+- resource: load_all_heartbeat_profiles
+  operation: loadAllHeartbeatProfiles
+- resource: load_all_ib_pathways
+  operation: loadAllIbPathways
+- resource: load_all_negative_heartbeat_profiles
+  operation: loadAllNegativeHeartbeatProfiles
+- resource: load_all_inline_network_lags
+  operation: loadAllInlineNetworkLags
+- resource: load_all_inline_networks
+  operation: loadAllInlineNetworks
+- resource: load_all_redundancy_profile
+  operation: loadAllRedundancyProfile
+- resource: load_all_inline_serial_tool_groups
+  operation: loadAllInlineSerialToolGroups
+- resource: load_all_inline_tool_groups
+  operation: loadAllInlineToolGroups
+- resource: load_all_inline_tools
+  operation: loadAllInlineTools
+- resource: load_all_app_visibility_solutions
+  operation: loadAllAppVisibilitySolutions
+- resource: get_all_intent_mobility
+  operation: getAllIntentMobility
+- resource: load_cards_details
+  operation: loadCardsDetails
+- resource: load_giga_ports
+  operation: loadGigaPorts
+- resource: load_ip_destination_statuses
+  operation: loadIpDestinationStatuses
+- resource: load_all_ip_interfaces
+  operation: loadAllIpInterfaces
+- resource: load_all_map_chains
+  operation: loadAllMapChains
+- resource: load_all_map_alias_chains
+  operation: loadAllMapAliasChains
+- resource: get_map_groups
+  operation: getMapGroups
+- resource: load_all_map_templates
+  operation: loadAllMapTemplates
+- resource: load_all_maps
+  operation: loadAllMaps
+- resource: get_all_ptp_counters
+  operation: getAllPtpCounters
+  config_schema:
+  - name: box_id
+    type: integer
+    optional: true
+    description: specify the cluster node by boxId. By default all nodes are selected.
+  - name: cluster_id
+    type: string
+    description: Target Cluster ID
+- resource: get_all_ptp_ports_counters
+  operation: getAllPtpPortsCounters
+  config_schema:
+  - name: box_id
+    type: integer
+    optional: true
+    description: specify the cluster node by boxId. By default all nodes are selected.
+  - name: cluster_id
+    type: string
+    description: Target Cluster ID
+- resource: load_all_device_credentials
+  operation: loadAllDeviceCredentials
+- resource: get_all_event_notification_configuration
+  operation: getAllEventNotificationConfiguration
+- resource: get_all_external_trap_receiver
+  operation: getAllExternalTrapReceiver
+  config_schema:
+  - name: alias
+    type: string
+    optional: true
+    description: alias
+  - name: auth_protocol
+    type: string
+    optional: true
+    description: authProtocol
+  - name: community
+    type: string
+    optional: true
+    description: community
+  - name: ip_address
+    type: string
+    optional: true
+    description: ipAddress
+  - name: page
+    type: string
+    optional: true
+    description: page
+  - name: priv_protocol
+    type: string
+    optional: true
+    description: privProtocol
+  - name: security_level
+    type: string
+    optional: true
+    description: securityLevel
+  - name: snmp_port
+    type: string
+    optional: true
+    description: snmpPort
+  - name: snmp_retries
+    type: string
+    optional: true
+    description: snmpRetries
+  - name: snmp_timeout
+    type: string
+    optional: true
+    description: snmpTimeout
+  - name: snmp_version
+    type: string
+    optional: true
+    description: snmpVersion
+  - name: sort
+    type: string
+    optional: true
+    description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
+  - name: user_name
+    type: string
+    optional: true
+    description: userName
+- resource: load_all_gigastream
+  operation: loadAllGigastream
+- resource: load_all_port_config
+  operation: loadAllPortConfig
+- resource: load_all_port_filter
+  operation: loadAllPortFilter
+- resource: load_all_port_group
+  operation: loadAllPortGroup
+- resource: load_all_port_pair
+  operation: loadAllPortPair
+- resource: load_all_stack_links
+  operation: loadAllStackLinks
+- resource: load_all_tool_port_mirror
+  operation: loadAllToolPortMirror
+- resource: get_all_ptp_clock_states
+  operation: getAllPtpClockStates
+  config_schema:
+  - name: box_id
+    type: integer
+    optional: true
+    description: specify the cluster node by boxId. By default all nodes are selected.
+- resource: get_all_ptp_parent
+  operation: getAllPtpParent
+  config_schema:
+  - name: box_id
+    type: integer
+    optional: true
+    description: specify the cluster node by boxId. By default all nodes are selected.
+- resource: get_all_ptp_ports
+  operation: getAllPtpPorts
+  config_schema:
+  - name: box_id
+    type: integer
+    optional: true
+    description: specify the cluster node by boxId. By default all nodes are selected.
+- resource: get_all_time_stamping_ptp_configs
+  operation: getAllTimeStampingPtpConfigs
+  config_schema:
+  - name: box_id
+    type: integer
+    optional: true
+    description: specify the cluster node by boxId. By default all nodes are selected.
+- resource: get_all_time_properties
+  operation: getAllTimeProperties
+  config_schema:
+  - name: box_id
+    type: integer
+    optional: true
+    description: specify the cluster node by boxId. By default all nodes are selected.
+- resource: load_all_roles
+  operation: loadAllRoles
+- resource: get_all_sffp_profile
+  operation: getAllSffpProfile
+- resource: load_spine_link_all
+  operation: loadSpineLinkAll
+- resource: get_all_external_export_target_server
+  operation: getAllExternalExportTargetServer
+- resource: get_system_diag_psu
+  operation: getSystemDiagPsu
+- resource: load_all_local_users
+  operation: loadAllLocalUsers
+- resource: load_all_radius_servers
+  operation: loadAllRadiusServers
+- resource: load_all_snmp_notif_targets
+  operation: loadAllSnmpNotifTargets
+- resource: load_all_v3_users
+  operation: loadAllV3Users
+- resource: load_all_tacacs_servers
+  operation: loadAllTacacsServers
+- resource: load_all_user_tags
+  operation: loadAllUserTags
+- resource: get_all_traffic_flows
+  operation: getAllTrafficFlows
+- resource: get_map_migration_results
+  operation: getMapMigrationResults
+- resource: get_all_traffic_policy_graph
+  operation: getAllTrafficPolicyGraph
+- resource: load_all_tunnel_endpoints
+  operation: loadAllTunnelEndpoints
+- resource: list_env
+  operation: listEnv
+- resource: list_connections
+  operation: listConnections
+- resource: get_all_app_info
+  operation: getAllAppInfo
+  config_schema:
+  - name: env_id
+    type: string
+    description: unified environment identifier
+  - name: unify_id
+    type: string
+    description: unified resource identifier
+- resource: load_all_users
+  operation: loadAllUsers
+- resource: load_all_vports
+  operation: loadAllVports
+function_overrides:
+- operation: Query_Raw_Data
+  name: query_raw_data
+  type: giga-vue-fm-6-14-api-reference_query_raw_data
+  arguments:
+  - name: since
+    type: string
+  - name: start_time
+    type: string
+  - name: end_time
+    type: string
+  - name: index_pattern
+    type: string
+  - name: fm_tags
+    type: string
+  - name: group_by
+    type: string
+  - name: tags
+    type: string
+  - name: size
+    type: string
+  - name: scroll
+    type: boolean
+  - name: response_scroll_timeout
+    type: string
+  - name: sort_by
+    type: string
+  - name: query_objects
+    type: string
+  - name: agg_field
+    type: string
+  - name: bucket_interval
+    type: string
+  - name: trending
+    type: boolean
+  - name: rate
+    type: boolean
+  - name: date_time_stamp_field
+    type: string
+  - name: exclude
+    type: boolean
+  - name: exclude_fields
+    type: string
+  - name: sort_by_field
+    type: string
+  - name: inventory_index
+    type: boolean
+  - name: aggregator
+    type: string
+  - name: metrics
+    type: string
+  - name: skip_normalized
+    type: boolean
+  - name: skip_zero_values
+    type: boolean
+  - name: is_source_req_in_aggregation
+    type: boolean
+  - name: result_aggregator
+    type: string
+  - name: exclude_agg_from_response
+    type: string
+  return_type: string
+- operation: Load_results_based_on_ScrollId
+  name: load_results_based_on_scroll_id
+  type: giga-vue-fm-6-14-api-reference_load_results_based_on_scroll_id
+  arguments:
+  - name: scroll_id
+    type: string
+  - name: response_scroll_timeout
+    type: string
+  return_type: string
+- operation: loadAllDefaultSearchDomains
+  name: load_all_default_search_domains
+  type: giga-vue-fm-6-14-api-reference_load_all_default_search_domains
+  return_type: dynamic
+auth:
+- scheme: basic
+global_timeouts:
+  create: 20m
+  read: 10m
+  update: 20m
+  delete: 10m
+polymorphism:
+  strategy: dynamic_union
+  oneOf:
+  - schema: UnifiedResourcesConnectionGetQueryResponse
+    variants:
+    - schema: AwsConnection
+    - schema: AzureConnection
+    - schema: NsxtConnection
+    - schema: EsxiConnection
+    - schema: OpenStackConnection
+  - schema: UnifiedResourcesConnectionListQueryResponse
+    variants:
+    - schema: AwsConnections
+    - schema: AzureConnections
+    - schema: NsxtConnections
+    - schema: EsxiConnections
+    - schema: OpenStackConnection
+  - schema: UnifiedResourcesDeployGetGvTapQueryResponse
+    variants:
+    - schema: AwsGvTapDeployment
+    - schema: AzureGvTapDeployment
+    - schema: NsxtDeployment
+    - schema: EsxiDeployment
+    - schema: OpenStackGvTapDeployment
+generate_terraform_tests: false
+spec:
+  path: spec/openapi.fm.bundled.yaml
+  format: yaml

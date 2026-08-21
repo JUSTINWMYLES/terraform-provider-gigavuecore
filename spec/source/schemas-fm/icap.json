@@ -1,0 +1,458 @@
+{
+  "id": "http://gigamon.com/schemas-fm/icap.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "ICAP  configuration schema",
+  "definitions": {
+    "IcapServerQueryResponse": {
+      "id": "#/definitions/IcapServerQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "ICAP Server definition",
+      "required": [
+        "icapServer"
+      ],
+      "properties": {
+        "icapServer": {
+          "$ref": "#/definitions/IcapServer"
+        }
+      }
+    },
+    "IcapServersQueryResponse": {
+      "id": "#/definitions/IcapServersQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "All ICAP Servers definitions",
+      "required": [
+        "icapServers"
+      ],
+      "properties": {
+        "icapServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IcapServer"
+          }
+        }
+      }
+    },
+    "IcapServer": {
+      "id": "#/definitions/IcapServer",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "ICAP Server",
+      "required": [
+        "alias",
+        "l4Port",
+        "l3Address"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Icap Server Alias"
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Icap Server Comment"
+        },
+        "l4Port": {
+          "type": "integer",
+          "format": "int32",
+          "default": 1344,
+          "description": "Icap Server l4 Port"
+        },
+        "l3Address": {
+          "type": "string",
+          "description": "Icap Server IP Address"
+        },
+        "reqmodServiceUrl": {
+          "type": "string",
+          "description": "Request Modification Service URL"
+        },
+        "respmodServiceUrl": {
+          "type": "string",
+          "description": "Response Modification Service URL"
+        },
+        "optionsServiceUrl": {
+          "type": "string",
+          "description": "Options Service URL"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "IcapServerGroupQueryResponse": {
+      "id": "#/definitions/IcapServerGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "ICAP Server Group definition",
+      "required": [
+        "icapServerGroup"
+      ],
+      "properties": {
+        "icapServerGroup": {
+          "$ref": "#/definitions/IcapServerGroup"
+        }
+      }
+    },
+    "IcapServerGroupsQueryResponse": {
+      "id": "#/definitions/IcapServerGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "All ICAP Server Groups definitions",
+      "required": [
+        "icapServerGroups"
+      ],
+      "properties": {
+        "icapServerGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IcapServerGroup"
+          }
+        }
+      }
+    },
+    "IcapServerGroup": {
+      "id": "#/definitions/IcapServerGroup",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "ICAP Server Group",
+      "required": [
+        "alias",
+        "icapServerList"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Icap Server Group Alias"
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Icap Server Group Comment"
+        },
+        "icapServers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "ICAP Servers list separated by comma','"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "IcapProfileQueryResponse": {
+      "id": "#/definitions/IcapProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "ICAP Profile definition",
+      "required": [
+        "icapProfile"
+      ],
+      "properties": {
+        "icapProfile": {
+          "$ref": "#/definitions/IcapProfile"
+        }
+      }
+    },
+    "IcapProfilesQueryResponse": {
+      "id": "#/definitions/IcapProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "All ICAP Profiles definitions",
+      "required": [
+        "icapProfiles"
+      ],
+      "properties": {
+        "icapProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IcapProfile"
+          }
+        }
+      }
+    },
+    "IcapProfile": {
+      "id": "#/definitions/IcapProfile",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "ICAP Profile",
+      "required": [
+        "alias",
+        "httpReqBuf",
+        "serverGroup",
+        "srcMinL4Port",
+        "srcMaxL4Port"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Icap Alias"
+        },
+        "httpReqBuf": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 10,
+          "maximum": 10000,
+          "default": 10,
+          "description": "Icap Profile Http request buffer in KB"
+        },
+        "exceedAction": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass"
+          ],
+          "default": "bypass",
+          "description": "Icap Profile action incase of Http request buffer exceeded"
+        },
+        "respMod": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "default": "enable",
+          "description": "Icap Response Modification Enable|Disable"
+        },
+        "respTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 5,
+          "maximum": 60,
+          "default": 5,
+          "description": "Icap Server Response Timeout value in seconds"
+        },
+        "respTimeoutAction": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass"
+          ],
+          "default": "bypass",
+          "description": "Response Timeout action Drop|Bypass"
+        },
+        "preview": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 50,
+          "default": 4,
+          "description": "Icap Preview bytes in KB"
+        },
+        "serverGroup": {
+          "type": "string",
+          "description": "Icap Server Group Alias"
+        },
+        "inactivityTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 2,
+          "maximum": 1440,
+          "default": 5,
+          "description": "Icap Inactivity timeout in minutes"
+        },
+        "srcMinL4Port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 10000,
+          "maximum": 60000,
+          "description": "Icap Service Source l4 port minimum"
+        },
+        "srcMaxL4Port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 10000,
+          "maximum": 60000,
+          "description": "Icap Service Source l4 port maximum"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "FMNearRealTimeCachedStatisticsListQueryResponse": {
+      "id": "#/definitions/FMNearRealTimeCachedStatisticsListQueryResponse",
+      "type": "object",
+      "properties": {
+        "fmNearRealTimeCachedStatisticsList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FMNearRealTimeCachedStatistics"
+          }
+        }
+      }
+    },
+    "FMNearRealTimeCachedStatistics": {
+      "id": "#/definitions/FMNearRealTimeCachedStatistics",
+      "type": "object",
+      "properties": {
+        "componentType": {
+          "type": "string",
+          "enum": [
+            "INLINE_NETWORK",
+            "PORT",
+            "IP_INTERFACE_PORT",
+            "ICAP_SERVER",
+            "ICAP_SESSION_SUMMARY",
+            "GS_GROUP"
+          ]
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "string"
+        },
+        "statsData": {
+          "$ref": "inline.json#/definitions/GigaFlexInlineNRTStats"
+        }
+      }
+    },
+    "GigaIcapClient": {
+      "id": "#/definitions/GigaIcapClient",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "ICAP Profile",
+      "required": [
+        "alias",
+        "clusterId",
+        "inlineNetworks",
+        "icapProfileConfig",
+        "ipInterfaceAlias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Icap Alias"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        },
+        "gsEngines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inlineNetworks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ipInterfaceAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "IpInterface Alias"
+        },
+        "icapServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IcapServer"
+          }
+        },
+        "icapProfileConfig": {
+          "$ref": "#/definitions/IcapProfile"
+        },
+        "ingAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Inline network group Alias //Auto-generated"
+        },
+        "icapServerGrpAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Icap Server Group Alias // Auto-generated"
+        },
+        "gsGrpAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "GSGroup Alias // User provided (or) Auto-generated"
+        },
+        "gsopAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "GSOP Alias"
+        },
+        "icapMapAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Icap MAP Alias"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "SUCCESS",
+            "PARTIAL_SUCCESS",
+            "FAILED",
+            "PENDING",
+            "INCOMPLETE_DELETION",
+            "DAMAGED"
+          ],
+          "description": "Configuration status of this ICAP Client app"
+        },
+        "configStatusReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "In case of configuration failure, this message provides details about the possible cause of the failure"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "GigaIcapClientListQueryResponse": {
+      "id": "#/definitions/GigaIcapClientListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigaIcapClients"
+      ],
+      "properties": {
+        "gigaIcapClients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaIcapClient"
+          }
+        }
+      }
+    },
+    "GigaIcapClientSingleQueryResponse": {
+      "id": "#/definitions/GigaIcapClientSingleQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigaIcapClient"
+      ],
+      "properties": {
+        "gigaIcapClient": {
+          "$ref": "#/definitions/GigaIcapClient"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,903 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemAaa.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device AAA Configuration schema",
+  "definitions": {
+    "AaaAuthConfig": {
+      "id": "#/definitions/AaaAuthConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node AAA Authentication config",
+      "required": [
+        "authSequence"
+      ],
+      "properties": {
+        "authSequence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "local",
+              "ldap",
+              "radius",
+              "tacacs"
+            ]
+          },
+          "maxItems": 4,
+          "uniqueItems": true,
+          "description": "Authentication methods order for user login. Valid values are 'local', 'ldap', 'radius', 'tacacs'"
+        },
+        "externalLoginMapping": {
+          "$ref": "#/definitions/ExternalLoginMapping"
+        },
+        "passwordExpiration": {
+          "$ref": "#/definitions/UserPasswordExpiration"
+        },
+        "userLockout": {
+          "$ref": "#/definitions/UserLockout"
+        },
+        "nonLocalUsers": {
+          "$ref": "#/definitions/NonLocalUserAuth"
+        },
+        "sshdMaxSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Maximum concurrent session that can be logged into devices"
+
+        }
+      }
+    },
+    "ExternalLoginMapping": {
+      "id": "#/definitions/ExternalLoginMapping",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Specifies how externally authenticated logins (RADIUS, TACACS+, or LDAP) are mapped to local accounts. Private class",
+      "properties": {
+        "userMapOrder": {
+          "type": "string",
+          "enum": [
+            "localOnly",
+            "remoteFirst",
+            "remoteOnly"
+          ],
+          "default": "remoteFirst",
+          "description": "Specifies how externally authenticated logins (RADIUS, TACACS+, or LDAP) are mapped to local accounts"
+        },
+        "defaultLocalUser": {
+          "type": "string",
+          "description": "Specifies the account to which externally authenticated logins are mapped when map order is set to remote-first (if there is no matching local account) or local-only"
+        }
+      }
+    },
+    "UserPasswordExpiration": {
+      "id": "#/definitions/UserPasswordExpiration",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node Password Expiration config. Private class",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables password expiration"
+        },
+        "duration": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "description": "the number of days password is valid"
+        }
+      }
+    },
+    "UserLockout": {
+      "id": "#/definitions/UserLockout",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node AAA user lockout settings. Private class",
+      "properties": {
+        "trackAuthFailures": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enables or disables tracking of authentication failures. Can be used for informational purposes of for user account lockout"
+        },
+        "enableLockout": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enables or disables locking out of user accounts based on authentication failures"
+        },
+        "lockTime": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "description": "In seconds. Specifies that no logins are permitted for this number of seconds following any login failure (not counting failures caused by the lockout mechanism, or the lockTime itself). This is not based on the number of consecutive failures. If both 'unlockTime' and 'lockTime' are set, the 'unlockTime' must be greater than the 'lockTime'"
+        },
+        "unlockTime": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "default": 15,
+          "description": "In seconds. Specifies that if a user account is locked due to authentication failures, another login attempt will be permitted if this number of seconds has elapsed since the last login failure. That does not count failures caused by the lockout mechanism itself. A user must have been permitted to attempt to login, and then failed. After this interval has elapsed, the account does not become unlocked, nor does its history reset. It simply permits one more login attempt even if the account is locked"
+        },
+        "maxFail": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "default": 5,
+          "description": "Sets the maximum number of consecutive authentication failures (attempts) permitted for a user account before the account is locked. After this number of failures, the account is locked and subsequent attempts are not permitted"
+        },
+        "enableAdminLockout": {
+          "type": "boolean",
+          "default": false,
+          "description": "Overrides the global settings for tracking and lockouts for the 'admin' account. Disabling means that the admin user will never be locked out, though their authentication failure history will still be tracked if tracking is enabled overall. This applies only to the single account with the username 'admin'. It does not apply to any other users with administrative privileges"
+        }
+      }
+    },
+    "NonLocalUserAuth": {
+      "id": "#/definitions/NonLocalUserAuth",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Settings for treating usernames that are not recognized as real accounts (not a locally configured account). Private class",
+      "properties": {
+        "trackAuthFailures": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables tracking authentication failures for usernames that are not recognized as real accounts (not a locally configured account)"
+        },
+        "hashUsername": {
+          "type": "boolean",
+          "default": true,
+          "description": "Apply a hash function to the username and store the hashed result for usernames that are not recognized as real accounts (not a locally configured account)"
+        }
+      }
+    },
+    "AccountLockoutResetSpec": {
+      "id": "#/definitions/AccountLockoutResetSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Config spec to clear the history of login failures, and/or unlocks the account. By default, both are done",
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "account to reset lockout settings for. If left out, all user accounts are affected"
+        },
+        "unlock": {
+          "type": "boolean",
+          "default": true,
+          "description": "If set to 'false', clear the history, but leave the account's lock alone. Therefore, if it was locked, it remains locked until further action is taken"
+        },
+        "clearHistory": {
+          "type": "boolean",
+          "default": true,
+          "description": "If set to 'false', leave the history alone and only unlock the account. Therefore, one more login will be permitted, but the account could then become re-locked after another failure (if it was already over the threshold)"
+        }
+      }
+    },
+    "LocalUserDb": {
+      "id": "#/definitions/LocalUserDb",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Local Node Users DB",
+      "required": [
+        "localUsers"
+      ],
+      "properties": {
+        "localUsers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LocalUser"
+          }
+        }
+      }
+    },
+    "LocalUser": {
+      "id": "#/definitions/LocalUser",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Local System User",
+      "required": [
+        "username",
+        "userPwd",
+        "currentPassword"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "Specifies the username of the local user"
+        },
+        "userPwd": {
+          "type": "string",
+          "minLength": 1
+        },
+        "currentPassword": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Specifies the logged in password"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Temporarily enable/disable logins for the specified account. Disabling an account closes any currently open sessions for the specified account"
+        },
+        "capability": {
+          "type": "string",
+          "enum": [
+            "admin",
+            "monitor",
+            ""
+          ]
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Full name for the account (referred to sometimes as the gecos)"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "References to the Roles defined for the User"
+        },
+        "accountStatus": {
+          "type": "string",
+          "enum": [
+            "accountDisabled",
+            "passwordDisabled",
+            "accountLockedOut",
+            "noPassword",
+            "passwordSet"
+          ],
+          "default": "passwordDisabled",
+          "since": "H 4.8",
+          "readonly": true
+        }
+      }
+    },
+    "RemoteAuthSystemConfig": {
+      "id": "#/definitions/RemoteAuthSystemConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Remote Auth Servers",
+      "properties": {
+        "ldapConfig": {
+          "$ref": "#/definitions/LdapSystemConfig"
+        },
+        "radiusConfig": {
+          "$ref": "#/definitions/RadiusSystemConfig"
+        },
+        "tacacsConfig": {
+          "$ref": "#/definitions/TacacsSystemConfig"
+        }
+      }
+    },
+    "LdapSystemConfig": {
+      "id": "#/definitions/LdapSystemConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "System-level LDAP config",
+      "properties": {
+        "serverConfigDefaults": {
+          "$ref": "#/definitions/LdapServerDefaults"
+        },
+        "acceptUserRoles": {
+          "type": "boolean",
+          "description": "Enables the GigaVUE H Series node to accept user roles assigned in the LDAP server",
+          "default": false
+        },
+        "referrals": {
+          "type": "boolean",
+          "description": "Toggles support for LDAP referrals",
+          "default": true
+        },
+        "remoteMapTable": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LdapRemoteMapEntry"
+          }
+        },
+        "mapEnable": {
+          "type": "boolean",
+          "description": "Enables mapping of remote base DN to local account",
+          "defaultValue": false
+        }
+      }
+    },
+    "LdapServerDefaults": {
+      "id": "#/definitions/LdapServerDefaults",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Remote LDAP Server default config",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "default": 389
+        },
+        "version": {
+          "type": "string",
+          "enum": [
+            "v2",
+            "v3"
+          ],
+          "default": "v3"
+        },
+        "bindDn": {
+          "type": "string",
+          "description": "Specifies the distinguished name (dn) on the LDAP server with which to bind. By default, this is left empty for anonymous login"
+        },
+        "bindPwd": {
+          "type": "string",
+          "description": "Provides the credentials to be used for binding with the LDAP server. If bind-dn is left undefined for anonymous login (the default), bind-password should be left undefined, too"
+        },
+        "bindTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 60,
+          "default": 5,
+          "description": "in seconds"
+        },
+        "baseDn": {
+          "type": "string",
+          "description": "Identifies the base distinguished name (location) of the user information in the LDAP server's schema",
+          "default": "ou=users,dc=example,dc=com"
+        },
+        "groupDn": {
+          "type": "string",
+          "description": "You can use this option to require membership in the named group-dn for successful login to the H Series node"
+        },
+        "loginAttribute": {
+          "type": "string",
+          "__enum": [
+            "uid",
+            "sAMAccountName"
+          ],
+          "default": "uid",
+          "description": "Specify the name of the LDAP attribute containing the login name"
+        },
+        "groupAttribute": {
+          "type": "string",
+          "__enum": [
+            "member",
+            "uniqueMember"
+          ],
+          "default": "uniqueMember",
+          "description": "Use this argument to specify the name of the attribute to check for group membership. If you specify a value for group-dn, the attribute you name here will be checked to see whether it contains the user's distinguished name as one of the values in the LDAP server"
+        },
+        "searchScope": {
+          "type": "string",
+          "enum": [
+            "oneLevel",
+            "subtree"
+          ],
+          "default": "subtree",
+          "description": "Specifies the search scope for the user under the base distinguished name"
+        },
+        "searchTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 60,
+          "default": 5,
+          "description": "in seconds"
+        },
+        "ssl": {
+          "$ref": "#/definitions/LdapServerSslDefaults"
+        }
+      }
+    },
+    "LdapServerSslDefaults": {
+      "id": "#/definitions/LdapServerSslDefaults",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Remote LDAP Server SSL config",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "ssl",
+            "tls"
+          ],
+          "default": "none",
+          "description": "LDAP either in SSL or TLS"
+        },
+        "serverPort": {
+          "type": "integer",
+          "default": 636,
+          "description": "LDAP SSL port number"
+        },
+        "certVerify": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable LDAP SSL/TLS certificate verification"
+        },
+        "caList": {
+          "type": "string",
+          "enum": [
+            "none",
+            "defaultCaList"
+          ],
+          "default": "defaultCaList",
+          "description": "LDAP to use a supplemental CA list."
+        }
+      }
+    },
+    "LdapServer": {
+      "id": "#/definitions/LdapServer",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Remote LDAP Server config",
+      "required": [
+        "serverAddress"
+      ],
+      "properties": {
+        "serverAddress": {
+          "type": "string",
+          "description": "ipv4 or ipv6 or hostname. Specifies address of the LDAP server where authentication requests will be sent"
+        },
+        "order": {
+          "type": "string",
+          "description": "The order in which the server is to be reached. 1 means server will be contacted first"
+        }
+      }
+    },
+    "LdapRemoteMapEntry": {
+      "id": "LdapRemoteMapEntry",
+      "type": "object",
+      "description": "System level LDAP remap table entry",
+      "properties": {
+        "remoteBaseDn": {
+          "type": "string",
+          "description": "Specifies the base-dn of the remote user group to be mapped to local account"
+        },
+        "localAccountName": {
+          "type": "string",
+          "description": "Specifies local account to which remote base-dn needs to be mapped."
+        }
+      }
+    },
+    "RadiusSystemConfig": {
+      "id": "#/definitions/RadiusSystemConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "System-level RADIUS config",
+      "properties": {
+        "serverConfigDefaults": {
+          "$ref": "#/definitions/RadiusServerDefaults"
+        },
+        "acceptUserRoles": {
+          "type": "boolean",
+          "description": "Enables the GigaVUE H Series node to accept user roles assigned in the RADIUS server",
+          "default": false
+        }
+      }
+    },
+    "RadiusServerDefaults": {
+      "id": "#/definitions/RadiusServerDefaults",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Remote RADIUS Server default config",
+      "properties": {
+        "secretKey": {
+          "type": "string"
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 60,
+          "default": 3,
+          "description": "in seconds"
+        },
+        "retries": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 1,
+          "description": "value of 0 disables retries"
+        }
+      }
+    },
+    "RadiusServer": {
+      "id": "#/definitions/RadiusServer",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Remote RADIUS Server config",
+      "required": [
+        "serverAddress",
+        "secretKey"
+      ],
+      "properties": {
+        "serverAddress": {
+          "type": "string",
+          "description": "ipv4 or ipv6 or hostname"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 1812
+        },
+        "secretKey": {
+          "type": "string",
+          "description": "if not included, defaults to the value defined in the RadiusServerDefaults"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 60,
+          "description": "in seconds. Defaults to the value defined in the RadiusServerDefaults"
+        },
+        "retries": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 5,
+          "description": "value of 0 disables retries. Defaults to the value defined in the RadiusServerDefaults"
+        }
+      }
+    },
+    "TacacsSystemConfig": {
+      "id": "#/definitions/TacacsSystemConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "System-level TACACS+ config",
+      "properties": {
+        "serverConfigDefaults": {
+          "$ref": "#/definitions/TacacsServerDefaults"
+        },
+        "acceptUserRoles": {
+          "type": "boolean",
+          "description": "Enables the GigaVUE H Series node to accept user roles assigned in the TACACS+ server",
+          "default": false
+        }
+      }
+    },
+    "TacacsServerDefaults": {
+      "id": "#/definitions/TacacsServerDefaults",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Remote TACACS+ Server default config",
+      "properties": {
+        "secretKey": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string",
+          "enum": [
+            "gigamon",
+            "shell"
+          ],
+          "default": "shell",
+          "description": "Specify which authorization service will be used for TACACS"
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 60,
+          "default": 3,
+          "description": "in seconds"
+        },
+        "retries": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 1,
+          "description": "value of 0 disables retries"
+        }
+      }
+    },
+    "TacacsServer": {
+      "id": "#/definitions/TacacsServer",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Remote TACACS+ Server config",
+      "required": [
+        "serverAddress",
+        "secretKey",
+        "authType"
+      ],
+      "properties": {
+        "serverAddress": {
+          "type": "string",
+          "description": "ipv4 or ipv6 or hostname"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 49
+        },
+        "secretKey": {
+          "type": "string",
+          "description": "if not included, defaults to the value defined in the TacacsServerDefaults"
+        },
+        "authType": {
+          "type": "string",
+          "enum": [
+            "ascii",
+            "pap"
+          ],
+          "default": "ascii",
+          "description": "Specify whether this TACACS+ server uses ASCII or PAP authentication"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 60,
+          "description": "in seconds. Defaults to the value defined in the TacacsServerDefaults"
+        },
+        "retries": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 5,
+          "description": "value of 0 disables retries. Defaults to the value defined in the TacacsServerDefaults"
+        }
+      }
+    },
+    "UserRole": {
+      "id": "#/definitions/UserRole",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "User Role",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "CurrentUser": {
+      "id": "#/definitions/CurrentUser",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Currently Logged-in user details",
+      "required": [
+        "username",
+        "roles"
+      ],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "capability": {
+          "type": "string",
+          "enum": [
+            "admin",
+            "monitor"
+          ],
+          "default": "monitor"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "User roles"
+        },
+        "loginTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "User Login time"
+        }
+      }
+    },
+    "LdapUserGroupMappingRequest": {
+      "id": "#/definitions/LdapRemoteMapEntryRequest",
+      "type": "object",
+      "required": [
+        "remoteMapTable"
+      ],
+      "properties": {
+        "remoteMapTable": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LdapRemoteMapEntry"
+          }
+        }
+      }
+    },
+    "UserRoleQueryResponse": {
+      "id": "#/definitions/UserRoleQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "userRole"
+      ],
+      "properties": {
+        "userRole": {
+          "$ref": "#/definitions/UserRole"
+        }
+      }
+    },
+    "UserRolesQueryResponse": {
+      "id": "#/definitions/UserRolesQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "userRoles"
+      ],
+      "properties": {
+        "userRoles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserRole"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "LocalUserQueryResponse": {
+      "id": "#/definitions/LocalUserQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "localUser"
+      ],
+      "properties": {
+        "localUser": {
+          "$ref": "#/definitions/LocalUser"
+        }
+      }
+    },
+    "LocalUsersQueryResponse": {
+      "id": "#/definitions/LocalUsersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "localUsers"
+      ],
+      "properties": {
+        "localUsers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LocalUser"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "LdapServerQueryResponse": {
+      "id": "#/definitions/LdapServerQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "ldapServer"
+      ],
+      "properties": {
+        "ldapServer": {
+          "$ref": "#/definitions/LdapServer"
+        }
+      }
+    },
+    "LdapServersQueryResponse": {
+      "id": "#/definitions/LdapServersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "ldapServers"
+      ],
+      "properties": {
+        "ldapServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LdapServer"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "RadiusServerQueryResponse": {
+      "id": "#/definitions/RadiusServerQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "radiusServer"
+      ],
+      "properties": {
+        "radiusServer": {
+          "$ref": "#/definitions/RadiusServer"
+        }
+      }
+    },
+    "RadiusServersQueryResponse": {
+      "id": "#/definitions/RadiusServersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "radiusServers"
+      ],
+      "properties": {
+        "radiusServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RadiusServer"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "TacacsServerQueryResponse": {
+      "id": "#/definitions/TacacsServerQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "tacacsServer"
+      ],
+      "properties": {
+        "tacacsServer": {
+          "$ref": "#/definitions/TacacsServer"
+        }
+      }
+    },
+    "TacacsServersQueryResponse": {
+      "id": "#/definitions/TacacsServersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "tacacsServers"
+      ],
+      "properties": {
+        "tacacsServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TacacsServer"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "CurrentUserQueryResponse": {
+      "id": "#/definitions/CurrentUserQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "currentUser"
+      ],
+      "properties": {
+        "currentUser": {
+          "$ref": "#/definitions/CurrentUser"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "http://gigamon.com/schemas-fm/cryptoMode.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device Email Notifications",
+  "definitions": {
+    "CryptoMode": {
+      "id": "#/definitions/CryptoMode",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Crypto Configuration",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Alias for Crypto mode status message"
+        },
+        "status": {
+          "type": "string",
+          "description": "Crypto mode of FM"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gigaInsightTestConnectionRequest.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Insight Test Connection Request schema",
+  "definitions": {
+    "GigaInsightTestConnectionRequest": {
+      "id": "#/definitions/GigaInsightTestConnectionRequest",
+      "type": "object",
+      "description": "Request model for testing LLM provider connection via GI node",
+      "required": ["provider"],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": ["openAI", "bedrock", "google", "private"],
+          "description": "The LLM provider type"
+        },
+        "proxyUrl": {
+          "type": "string",
+          "description": "Optional proxy URL for the connection"
+        },
+        "openAIConfig": {
+          "$ref": "#/definitions/OpenAIConfig"
+        },
+        "bedrockConfig": {
+          "$ref": "#/definitions/BedrockConfig"
+        },
+        "googleConfig": {
+          "$ref": "#/definitions/GoogleConfig"
+        },
+        "privateConfig": {
+          "$ref": "#/definitions/PrivateConfig"
+        }
+      }
+    },
+    "OpenAIConfig": {
+      "id": "#/definitions/OpenAIConfig",
+      "type": "object",
+      "description": "OpenAI provider configuration",
+      "required": ["apiKey"],
+      "properties": {
+        "apiKey": {
+          "type": "string",
+          "description": "OpenAI API key"
+        }
+      }
+    },
+    "BedrockConfig": {
+      "id": "#/definitions/BedrockConfig",
+      "type": "object",
+      "description": "AWS Bedrock provider configuration",
+      "required": ["region", "accessKeyId", "secretAccessKey"],
+      "properties": {
+        "region": {
+          "type": "string",
+          "description": "AWS region"
+        },
+        "accessKeyId": {
+          "type": "string",
+          "description": "AWS access key ID"
+        },
+        "secretAccessKey": {
+          "type": "string",
+          "description": "AWS secret access key"
+        }
+      }
+    },
+    "GoogleConfig": {
+      "id": "#/definitions/GoogleConfig",
+      "type": "object",
+      "description": "Google Vertex AI provider configuration",
+      "required": ["projectId", "region", "serviceAccountKeyJson"],
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "description": "Google Cloud project ID"
+        },
+        "region": {
+          "type": "string",
+          "description": "Google Cloud region"
+        },
+        "serviceAccountKeyJson": {
+          "type": "object",
+          "description": "Google service account key JSON"
+        }
+      }
+    },
+    "PrivateConfig": {
+      "id": "#/definitions/PrivateConfig",
+      "type": "object",
+      "description": "Private (Azure AI Foundry) provider configuration",
+      "required": ["endpointUrl", "apiKey"],
+      "properties": {
+        "endpointUrl": {
+          "type": "string",
+          "description": "Private LLM endpoint URL"
+        },
+        "apiKey": {
+          "type": "string",
+          "description": "API key for the private endpoint"
+        }
+      }
+    }
+  }
+}
+

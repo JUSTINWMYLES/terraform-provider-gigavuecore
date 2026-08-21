@@ -1,0 +1,78 @@
+{
+  "id": "http://gigamon.com/schemas-fm/tags.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Tags Management schema",
+  "definitions": {
+    "Tag": {
+      "id": "#/definitions/Tag",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tagKey",
+        "tagValues",
+        "tagType"
+      ],
+      "properties": {
+        "tagKey": {
+          "type": "string",
+          "minLength": 1,
+          "description": "tag key"
+        },
+        "tagValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string",
+          "minLength": 8
+        },
+        "multiValued": {
+          "type": "boolean",
+          "default": true
+        },
+        "hierarchical": {
+          "type": "boolean",
+          "default": true
+        },
+        "tagType": {
+          "type": "string",
+          "enum": [
+            "Rbac",
+            "Aggregation"
+          ]
+        }
+      }
+    },
+    "TagQueryResponse": {
+      "id": "#/definitions/TagsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tag"
+      ],
+      "properties": {
+        "tag": {
+          "$ref": "#/definitions/Tag"
+        }
+      }
+    },
+    "TagsQueryResponse": {
+      "id": "#/definitions/TagsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

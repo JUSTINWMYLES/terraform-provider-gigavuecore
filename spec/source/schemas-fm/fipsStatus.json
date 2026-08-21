@@ -1,0 +1,20 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fipsStatus.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device Email Notifications",
+  "definitions": {
+    "FIPSStatus": {
+      "id": "#/definitions/FIPSStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Crypto Configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "FIPS mode of FM"
+        }
+      }
+    }
+  }
+}

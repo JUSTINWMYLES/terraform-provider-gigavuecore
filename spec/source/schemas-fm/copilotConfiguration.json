@@ -1,0 +1,123 @@
+{
+  "id": "http://gigamon.com/schemas-fm/copilotConfiguration.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Copilot Configuration schema",
+  "definitions": {
+    "FmCopilotConfig": {
+      "id": "#/definitions/FmCopilotConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Fm Copilot Configuration Domain Class",
+      "required": [
+        "enabled",
+        "serverUrl"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable/Disable the copilot feature"
+        },
+        "serverUrl": {
+          "type": "string",
+          "description": "Copilot VM URL"
+        },
+        "apiKey": {
+          "type": "string",
+          "description": "API key for Copilot"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Copilot provider name. Bedrock"
+        },
+        "bedrockConfig": {
+          "$ref": "#/definitions/BedrockConfig",
+          "description": "Bedrock specific configuration"
+        },
+        "connectionStatus": {
+          "$ref": "#/definitions/ConnectionStatus"
+        }
+      }
+    },
+    "FmCopilotConfigSpec": {
+      "id": "#/definitions/FmCopilotConfigSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Fm Copilot Configuration Domain Class",
+      "required": [
+        "enabled",
+        "serverUrl"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable/Disable the copilot feature"
+        },
+        "serverUrl": {
+          "type": "string",
+          "description": "Copilot VM URL"
+        },
+        "apiKey": {
+          "type": "string",
+          "description": "API key for Copilot"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Copilot provider name. Bedrock"
+        },
+        "bedrockConfig": {
+          "$ref": "#/definitions/BedrockConfig",
+          "description": "Bedrock specific configuration"
+        }
+      }
+    },
+    "ConnectionStatus" : {
+        "id": "#/definitions/ConnectionStatus",
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Connection Status Domain Class",
+        "required": [
+            "status",
+            "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "default": "HTTP status code of Copilot connection response"
+          },
+          "status": {
+            "type": "string",
+            "description": "Copilot Connection status code reason string"
+          },
+          "message": {
+            "type": "string",
+            "description": "Copilot Connection status message"
+          }
+        }
+    },
+    "BedrockConfig": {
+      "id": "#/definitions/BedrockConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Bedrock specific configuration",
+      "required": [
+          "region",
+          "accessKeyId",
+          "secretAccessKey"
+      ],
+      "properties": {
+          "region": {
+          "type": "string",
+          "description": "AWS region for Bedrock service"
+          },
+          "accessKeyId": {
+          "type": "string",
+          "description": "AWS Access Key ID for Bedrock service"
+          },
+          "secretAccessKey": {
+          "type": "string",
+          "description": "AWS Secret Access Key for Bedrock service"
+          }
+      }
+    }
+  }
+}

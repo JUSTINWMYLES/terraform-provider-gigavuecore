@@ -1,0 +1,207 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsExporter.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Exporter schema",
+  "definitions": {
+    "AppsExporterSpec": {
+      "id": "#/definitions/AppsExporterSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the exporter"
+        },
+        "description": {
+          "type": "string",
+          "description": "Comments if necessary"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "mobility-cups",
+            "gtp-cups",
+            "tunnel",
+            "tls-pcapng"
+          ],
+          "default": "gtp-cups",
+          "description": "Type of Apps that export"
+        },
+        "source": {
+          "$ref": "#/definitions/SourceSpec"
+        },
+        "destination": {
+          "$ref": "#/definitions/DestinationSpec"
+        },
+        "tcpProfile": {
+          "type": "string",
+          "description": "TCP profile alias"
+        },
+        "sslProfile": {
+          "type": "string",
+          "description": "SSL profile alias"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive"
+          ],
+          "readonly": true
+        },
+        "gsGroupAssociated": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "SourceSpec": {
+      "id": "#/definitions/SourceSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "l4Port",
+        "interface"
+      ],
+      "properties": {
+        "l4Port": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Base source port number to use for outgoing connections"
+        },
+        "interface": {
+          "type": "string",
+          "description": "Alias of IP Interface"
+        }
+      }
+    },
+    "DestinationSpec": {
+      "id": "#/definitions/DestinationSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "l4": {
+          "$ref": "#/definitions/L4Spec"
+        },
+        "l3": {
+          "$ref": "#/definitions/L3SpecForDestination"
+        }
+      }
+    },
+    "L4Spec": {
+      "id": "#/definitions/L4Spec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol"
+      ],
+      "properties": {
+        "port": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Base port used to export, port is optional for type:gtp-cups"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "tcp",
+            "udp"
+          ],
+          "description": "Protocol used - TCP or UDP"
+        }
+      }
+    },
+    "L3SpecForDestination": {
+      "id": "#/definitions/L3SpecForDestination",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "ipv4",
+            "ipv6",
+            "auto"
+          ],
+          "description": "Protocol used (when it's auto, it's determined by the App based on context or by discovery)"
+        },
+        "ip": {
+          "$ref": "#/definitions/IpSpecForDestination"
+        }
+      }
+    },
+    "IpSpecForDestination": {
+      "id": "#/definitions/IpSpecForDestination",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ver4": {
+          "type": "string",
+          "description": "IPv4 address. If not specified, it will be determined by the App based on other traffic correlation or external means (auto mode)."
+        },
+        "ver6": {
+          "type": "string",
+          "description": "IPv6 address. If not specified, it will be determined by the App based on other traffic correlation or external means (auto mode)."
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 255,
+          "description": "TTL Value to use"
+        },
+        "dscp": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 63,
+          "description": "DSCP Value to use"
+        }
+      }
+    },
+    "AppsExporterQueryResponse": {
+      "id": "#/definitions/AppsExporterQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "appsExporter"
+      ],
+      "properties": {
+        "appsExporter": {
+          "$ref": "#/definitions/AppsExporterSpec"
+        }
+      }
+    },
+    "AppsExportersQueryResponse": {
+      "id": "#/definitions/AppsExportersQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsExporters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsExporterSpec"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gsCards.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Giga Gscards schema",
+  "definitions": {
+    "gsCardsListResponse": {
+      "id": "#/definitions/gsCardsListResponse",
+      "description": "",
+      "type": "object",
+      "properties": {
+        "gsCards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "clusterId": {
+                "type": "string"
+              },
+              "cards": {
+                "type": "object",
+                "$ref": "#/definitions/cards"
+              }
+            }
+          }
+        }
+      }
+    },
+    "cards": {
+      "id": "#/definitions/cards",
+      "description": "",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/cardObject"
+      }
+    },
+    "cardObject": {
+      "id": "#/definitions/cardObject",
+      "description": "",
+      "type": "object",
+      "properties": {
+        "boxId": {
+          "type": "string"
+        },
+        "slotId": {
+          "type": "string"
+        },
+        "hwType": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "sigRevision": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sigRevision"
+          }
+        },
+        "relatedGsGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/relatedGsGroups"
+          }
+        }
+      }
+    },
+    "sigRevision": {
+      "id": "#definitions/sigRevision",
+      "description": "",
+      "type": "object",
+      "properties": {
+        "engineId": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "relatedGsGroups": {
+      "id": "#definitions/relatedGsGroups",
+      "description": "",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

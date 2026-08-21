@@ -1,0 +1,1847 @@
+{
+  "id": "http://gigamon.com/schemas-fm/flowMaps.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "V Series 2.0 Flow Map schema",
+  "definitions": {
+    "VmMap": {
+      "id": "#/definitions/VmMap",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Flow Map Definition",
+      "since": "v5.10",
+      "required": [
+        "name",
+        "ruleSets"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Flow Map id, auto generated when map is created"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "readOnly": true,
+          "description": "Flow Map name, must be unique. Name should not have special characters. Valid characters are A-Z, a-z, 0-9, '&','_','=','|'"
+        },
+        "folderName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Folder name"
+        },
+        "folderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Folder id"
+        },
+        "folderComment": {
+          "type": "string",
+          "description": "Folder comment. Required if a new folder name is specified, which has to be created."
+        },
+        "comment": {
+          "type": "string",
+          "description": "Flow Map comment"
+        },
+        "enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/Disable map"
+        },
+        "ruleSets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapRuleSet"
+          },
+          "description": "Flow Map Rule Sets."
+        }
+      }
+    },
+    "MapRuleSet": {
+      "id": "#/definitions/MapRuleSet",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Flow Map Rule Sets",
+      "since": "v5.10",
+      "required": [
+        "ruleSetId"
+      ],
+      "properties": {
+        "ruleSetId": {
+          "type": "string",
+          "format": "[1-5]",
+          "description": "The id of the rule set. Each rule set must have a unique ruleSetId"
+        },
+        "priority": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "The priority of the rule set. The lower the number the higher the precedence"
+        },
+        "aepId": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 1,
+          "maximum": 1023,
+          "description": "Traffic is forwarded to this AEP if it does not match any drop rules and matches at least 1 pass rule."
+        },
+        "passRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapRule"
+          },
+          "description": "Flow Map Pass Rules. Only used in traffic and inclusion maps. Not relevant for exclusion maps."
+        },
+        "dropRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapRule"
+          },
+          "description": "Flow Map Drop Rules. Only used in traffic and exclusion maps. Not relevant for inclusion maps."
+        }
+      }
+    },
+    "MapRule": {
+      "id": "#/definitions/MapRule",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Flow Map Rule Definition",
+      "since": "v5.10",
+      "required": [
+        "ruleId",
+        "matches"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 1,
+          "description": "Rule Id"
+        },
+        "matches": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/RuleElementL2EtherType"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL2SrcMacAddress"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL2DstMacAddress"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL2Vlan"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL2MplsLabel"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3IpVer"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip4Dscp"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip4Protocol"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip4Frag"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip4Ttl"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip4Tos"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip4SrcAddr"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip4DstAddr"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip6SrcAddr"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip6DstAddr"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip6Dscp"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL3Ip6FlowLabel"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL4TcpCtl"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL4SrcPort"
+              },
+              {
+                "$ref": "#/definitions/RuleElementL4DstPort"
+              },
+              {
+                "$ref": "#/definitions/RuleElementTunnelId"
+              },
+              {
+                "$ref": "#/definitions/RuleElementSrcVmNamePrefix"
+              },
+              {
+                "$ref": "#/definitions/RuleElementDstVmNamePrefix"
+              },
+              {
+                "$ref": "#/definitions/RuleElementSrcHostNamePrefix"
+              },
+              {
+                "$ref": "#/definitions/RuleElementDstHostNamePrefix"
+              },
+              {
+                "$ref": "#/definitions/RuleElementSrcVmTag"
+              },
+              {
+                "$ref": "#/definitions/RuleElementDstVmTag"
+              },
+              {
+                "$ref": "#/definitions/RuleElementTunnelSrcNamePrefix"
+              },
+              {
+                "$ref": "#/definitions/RuleElementTunnelErspanId"
+              },
+              {
+                "$ref": "#/definitions/RuleElementTunnelGreKey"
+              },
+              {
+                "$ref": "#/definitions/RuleElementTunnelVxlanId"
+              },
+              {
+                "$ref": "#/definitions/RuleElementTunnelGtputeId"
+              },
+              {
+                "$ref": "#/definitions/RuleElementTunnelVntagDvifId"
+              },
+              {
+                "$ref": "#/definitions/RuleElementTunnelVntagSvifId"
+              },
+              {
+                "$ref": "#/definitions/RuleElementTunnelVntagVifListId"
+              }
+            ],
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "description": "A set of rule's matching elements. Within a rule, matching elements of the the same type may be repeated. However, their matching positions must be unique."
+        }
+      }
+    },
+    "RuleElementL2EtherType": {
+      "id": "#/definitions/RuleElementL2EtherType",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "etherType"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 6,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "format": "hex",
+          "description": "Ethernet Type as 2-byte hex value. For example - 0x0800."
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "hex",
+          "description": "Ethernet Type as 2-byte hex value. For example - 0x0800. Only applicable in a context of secondLevel/byRule map rule. If present, 'valueMax' must be greater than 'value'"
+        }
+      }
+    },
+    "RuleElementL2Vlan": {
+      "id": "#/definitions/RuleElementL2Vlan",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "vlan"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 4,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 1,
+          "maximum": 4094,
+          "description": "Vlan Id in the range [1..4094]"
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 1,
+          "maximum": 4094,
+          "description": "If present, valueMax must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementL2SrcMacAddress": {
+      "id": "#/definitions/RuleElementL2SrcMacAddress",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "macSrc"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "format": "mac",
+          "description": "If neither 'mask' nor 'valueMax' is included, specifies a single address to match. Otherwise, it is an address range reference"
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "mac",
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Mutually exclusive with 'mask'. If present, 'valueMax' must be greater than 'value'"
+        },
+        "mask": {
+          "type": "string",
+          "format": "mac",
+          "description": "Mac address mask, used to select a range of mac addresses. Mutually exclusive with 'valueMax'"
+        }
+      }
+    },
+    "RuleElementL2DstMacAddress": {
+      "id": "#/definitions/RuleElementL2DstMacAddress",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "macDst"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "format": "mac",
+          "description": "If neither 'mask' nor 'valueMax' is included, specifies a single address to match.Otherwise, it is an address range reference."
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "mac",
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Mutually exclusive with 'mask'. If present, 'valueMax' must be greater than 'value'"
+        },
+        "mask": {
+          "type": "string",
+          "format": "mac",
+          "description": "Mac address mask, used to select a range of mac addresses. Mutually exclusive with 'valueMax'"
+        }
+      }
+    },
+    "RuleElementL2MplsLabel": {
+      "id": "#/definitions/RuleElementL2MplsLabel",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "mplsLabel"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 4,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 1,
+          "maximum": 1048576,
+          "description": "Mpls Label is a 3-byte value in the range [1..0x100000]"
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 1,
+          "maximum": 1048576,
+          "description": "3-Byte value in the range [1..0x100000]. If present, valueMax must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementL3IpVer": {
+      "id": "#/definitions/RuleElementL3IpVer",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ipVer"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "v4",
+            "v6"
+          ],
+          "description": "Ip Version, either 'v4' or 'v6'."
+        }
+      }
+    },
+    "RuleElementL3Ip4Dscp": {
+      "id": "#/definitions/RuleElementL3Ip4Dscp",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip4Dscp"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "af11",
+            "af12",
+            "af13",
+            "af21",
+            "af22",
+            "af23",
+            "af31",
+            "af32",
+            "af33",
+            "af41",
+            "af42",
+            "af43",
+            "ef"
+          ],
+          "description": "Ip Dscp value."
+        }
+      }
+    },
+    "RuleElementL3Ip4Protocol": {
+      "id": "#/definitions/RuleElementL3Ip4Protocol",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip4Proto"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "protocol number in a range [0..255]. Well-known protocols numbers are: 0-ipv6Hop, 1-icmpIpv4, 2-igmp, 4-ipv4, 6-tcp, 17-udp, 41-ipv6, 46-rsvp, 47-gre, 58-icmpIpv6, 132-Sctp. Valid only if the etherType is one of IPv4, IPv6, ARP, RARP."
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "protocol number in a range [0..255]. Only applicable in a context of 'secondLevel/byRule' map rule. If present, 'valueMax' must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementL3Ip4Frag": {
+      "id": "#/definitions/RuleElementL3Ip4Frag",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip4Frag"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "noFrag",
+            "allFrag",
+            "allFragNoFirst",
+            "firstFrag",
+            "firstOrNoFrag"
+          ],
+          "description": "noFrag - no fragments, allFrag - only fragments, allFragNoFirst - all fragments only but not first, firstFrag - first fragments only, firstOrNoFrag - first fragments or no fragments."
+        }
+      }
+    },
+    "RuleElementL3Ip4Ttl": {
+      "id": "#/definitions/RuleElementL3Ip4Ttl",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip4Ttl"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "Time To Live(Ttl) or Hop Limit value in the range [0..255]. Valid only if etherType is Ipv4 or Ipv6."
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "Time To Live(Ttl) or Hop Limit value in the range [0..255]. Valid only if etherType is Ipv4 or Ipv6. If present, 'valueMax' must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementL3Ip4Tos": {
+      "id": "#/definitions/RuleElementL3Ip4Tos",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip4Tos"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[0-9a-fA-F]{1,2}$",
+          "description": "Type Of Service(Tos) as 1-byte hex value. Valid only if etherType is Ipv4 or Ipv6."
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[0-9a-fA-F]{1,2}$",
+          "description": "Type Of Service(Tos) as 1-byte hex value. Only applicable in a context of 'secondLevel/byRule' map rule. If present, 'valueMax' must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementL3Ip4SrcAddr": {
+      "id": "#/definitions/RuleElementL3Ip4SrcAddr",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip4Src"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "If none of 'valueMax','netMask','cidrMask' are included, specifies a single address to match. Otherwise, it is an address range reference."
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Mutually exclusive with 'netMask', and 'cidrMask'. If present, 'valueMax' must be greater than 'value'"
+        },
+        "netMask": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Mutually exclusive with 'valueMax' and 'cidrMask'."
+        },
+        "cidrMask": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "Mutually exclusive with 'valueMax' and 'netMask'."
+        }
+      }
+    },
+    "RuleElementL3Ip4DstAddr": {
+      "id": "#/definitions/RuleElementL3Ip4DstAddr",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip4Dst"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "If none of 'valueMax','netMask','cidrMask' are included, specifies a single address to match. Otherwise, it is an address range reference."
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Mutually exclusive with 'netMask', and 'cidrMask'. If present, 'valueMax' must be greater than 'value'"
+        },
+        "netMask": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Mutually exclusive with 'valueMax' and 'cidrMask'."
+        },
+        "cidrMask": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "Mutually exclusive with 'valueMax' and 'netMask'."
+        }
+      }
+    },
+    "RuleElementL3Ip6SrcAddr": {
+      "id": "#/definitions/RuleElementL3Ip6SrcAddr",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip6Src"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "If none of 'valueMax', 'netMask', 'cidrMask' are included, specifies a single address to match. Otherwise, it is an address range reference."
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Mutually exclusive with 'netMask', 'cidrMask'. If present, 'valueMax' must be greater than 'value'."
+        },
+        "netMask": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "Mutually exclusive with 'valueMax' and 'cidrMask'."
+        },
+        "cidrMask": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Mutually exclusive with 'valueMax' and 'netMask'."
+        }
+      }
+    },
+    "RuleElementL3Ip6DstAddr": {
+      "id": "#/definitions/RuleElementL3Ip6DstAddr",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip6Dst"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "If none of 'valueMax', 'netMask', 'cidrMask' are included, specifies a single address to match. Otherwise, it is an address range reference."
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Mutually exclusive with 'netMask', 'cidrMask'. If present, 'valueMax' must be greater than 'value'."
+        },
+        "netMask": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "Mutually exclusive with 'valueMax' and 'cidrMask'."
+        },
+        "cidrMask": {
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Mutually exclusive with 'valueMax' and 'netMask'."
+        }
+      }
+    },
+    "RuleElementL3Ip6Dscp": {
+      "id": "#/definitions/RuleElementL3Ip6Dscp",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip6Dscp"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "af11",
+            "af12",
+            "af13",
+            "af21",
+            "af22",
+            "af23",
+            "af31",
+            "af32",
+            "af33",
+            "af41",
+            "af42",
+            "af43",
+            "ef"
+          ],
+          "description": "Ip Dscp value."
+        }
+      }
+    },
+    "RuleElementL3Ip6FlowLabel": {
+      "id": "#/definitions/RuleElementL3Ip6FlowLabel",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip6Flow"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,6}$",
+          "description": "Flow Label as 3-byte hex value."
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[0-9a-fA-F]{1,2}$",
+          "description": "Flow label as 3-byte hex value. Only applicable in a context of 'secondLevel/byRule' map rule. If present, 'valueMax' must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementL4TcpCtl": {
+      "id": "#/definitions/RuleElementL4TcpCtl",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "tcpCtl"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,2}$",
+          "default": "FF",
+          "description": "1-byte Hex value"
+        },
+        "mask": {
+          "type": "string",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,2}$",
+          "default": "FF",
+          "description": "1-byte Hex value. If omitted, all tcpCtl bits are matched"
+        }
+      }
+    },
+    "RuleElementL4SrcPort": {
+      "id": "#/definitions/RuleElementL4SrcPort",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "portSrc"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "If present, 'valueMax' must be greater than 'value'. Valid only if Ip protocol is TCP or UDP or SCTP."
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementL4DstPort": {
+      "id": "#/definitions/RuleElementL4DstPort",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "portDst"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0,
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "If present, 'valueMax' must be greater than 'value'. Valid only if Ip protocol is TCP or UDP or SCTP."
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only applicable in a context of 'secondLevel/byRule' map rule. Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementTunnelId": {
+      "id": "#/definitions/RuleElementTunnelId",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "tunnelId"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0,
+          "maximum": 4294967295,
+          "description": "tunnel id in a range [0..4294967295]."
+        },
+        "mask": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0,
+          "maximum": 4294967295,
+          "description": "tunnel id mask in a range [0..4294967295]."
+        }
+      }
+    },
+    "RuleElementSrcVmNamePrefix": {
+      "id": "#/definitions/RuleElementSrcVmNamePrefix",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "srcVmPrefix"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "RuleElementDstVmNamePrefix": {
+      "id": "#/definitions/RuleElementDstVmNamePrefix",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "dstVmPrefix"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "RuleElementSrcHostNamePrefix": {
+      "id": "#/definitions/RuleElementSrcHostNamePrefix",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "srcHostPrefix"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "RuleElementDstHostNamePrefix": {
+      "id": "#/definitions/RuleElementDstHostNamePrefix",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "dstHostPrefix"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "RuleElementSrcVmTag": {
+      "id": "#/definitions/RuleElementSrcVmTag",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "name",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "srcVmTag"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "Tag name",
+          "minLength": 1
+        },
+        "value": {
+          "type": "string",
+          "description": "Tag value",
+          "minLength": 1
+        }
+      }
+    },
+    "RuleElementDstVmTag": {
+      "id": "#/definitions/RuleElementDstVmTag",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "name",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "dstVmTag"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "Tag name",
+          "minLength": 1
+        },
+        "value": {
+          "type": "string",
+          "description": "Tag value",
+          "minLength": 1
+        }
+      }
+    },
+    "RuleElementTunnelSrcNamePrefix": {
+      "id": "#/definitions/RuleElementTunnelSrcNamePrefix",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Filter for selecting tunnel endpoint specs/tunnel endpoints to be used as a traffic source.  A prefix searched is performed on the tunnel spec alias to match this filter.",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "tunnelSrcNamePrefix"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "description": "Name prefix of tunnel spec",
+          "minLength": 1
+        }
+      }
+    },
+    "RuleElementSrcAepId": {
+      "id": "#/definitions/RuleElementSrcAepId",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "srcAepId"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 63,
+          "description": "Src Aep Id value"
+        }
+      }
+    },
+    "RuleElementPmatch": {
+      "id": "#/definitions/RuleElementPmatch",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value",
+        "matchType"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "pmatch"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "description": "Match value"
+        },
+        "matchType": {
+          "type": "string",
+          "enum": [
+            "string",
+            "regex"
+          ],
+          "description": "Indicates whether 'value' is a Regex pattern or a plain value to find"
+        },
+        "matchOffset": {
+          "$ref": "#/definitions/RuleElementPmatchOffsetRef"
+        },
+        "mask": {
+          "$ref": "#/definitions/RuleElementPmatchMask"
+        },
+        "hint": {
+          "type": "string",
+          "description": "Fast pattern hint string"
+        }
+      }
+    },
+    "RuleElementPmatchOffsetRef": {
+      "id": "#/definitions/RuleElementPmatchOffsetRef",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "offsetStart"
+      ],
+      "properties": {
+        "offsetStart": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0,
+          "maximum": 9000,
+          "description": "Starting postion for the pattern matching. If the reference protocl header type is included, counted after the corresponding protocol header. Otherwise, counted from the beginning of the packet."
+        },
+        "offsetEnd": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0,
+          "maximum": 9000,
+          "description": "End postion for ranged pattern matching. If included, pattern matching. If included, pattern match is considered as a ranged match. Must be greater than 'offsetStart'."
+        },
+        "protocol": {
+          "$ref": "#/definitions/RuleElementPmatchOffsetProtocolRef"
+        }
+      }
+    },
+    "RuleElementPmatchOffsetProtocolRef": {
+      "id": "#/definitions/RuleElementPmatchOffsetProtocolRef",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "protocol",
+        "pos"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "ipv4",
+            "ipv6",
+            "tcp",
+            "udp"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 1,
+          "maximum": 2,
+          "default": 1,
+          "description": "Protocol header position. Could be 1 or 2. If omitted, outer header is used"
+        }
+      }
+    },
+    "RuleElementPmatchMask": {
+      "id": "#/definitions/RuleElementPmatchMask",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "pattern"
+      ],
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,2}$",
+          "description": "1-byte hex value"
+        },
+        "fromTo": {
+          "type": "string",
+          "enum": [
+            "matchStartToMatchEnd",
+            "matchStartToPacketLen",
+            "matchEndToPacketLen"
+          ]
+        },
+        "startOfMatchOffset": {
+          "type": "integer",
+          "format": "uint32",
+          "description": "Only valid if 'fromTo' is matchStartToMatchEnd or matchStartToPacketLen"
+        },
+        "endOfMatchOffset": {
+          "type": "integer",
+          "format": "uint32",
+          "description": "Only valid if 'fromTo' is matchEndToPacketLen or matchStartToMatchEnd"
+        }
+      }
+    },
+    "RuleElementTunnelErspanId": {
+      "id": "#/definitions/RuleElementTunnelErspanId",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "erspanId"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1024
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 1024,
+          "description": "If present, 'valueMax' must be greater than 'value'."
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementTunnelGreKey": {
+      "id": "#/definitions/RuleElementTunnelGreKey",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "greKey"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,8}$",
+          "description": "4-byte hex value."
+        },
+        "valueMax": {
+          "type": "string",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,8}$",
+          "description": "4-byte hex value. If present, 'valueMax' must be greater than 'value'."
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementTunnelVxlanId": {
+      "id": "#/definitions/RuleElementTunnelVxlanId",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "vxlanId"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16777215,
+          "description": "Vxlan Id as 24-bite value"
+        },
+        "valueMax": {
+          "type": "string",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,8}$",
+          "description": "4-byte hex value. If present, 'valueMax' must be greater than 'value'."
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementTunnelGtputeId": {
+      "id": "#/definitions/RuleElementTunnelGtputeId",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gtputeId"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,8}$",
+          "description": "4-byte hex value."
+        },
+        "valueMax": {
+          "type": "string",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,8}$",
+          "description": "4-byte hex value. If present, 'valueMax' must be greater than 'value'."
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementTunnelVntagDvifId": {
+      "id": "#/definitions/RuleElementTunnelVntagDvifId",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "vntagDvifId"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 16384
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 16384,
+          "description": "If present, 'valueMax' must be greater than 'value'."
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementTunnelVntagSvifId": {
+      "id": "#/definitions/RuleElementTunnelVntagSvifId",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "vntagSvifId"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4096
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4096,
+          "description": "If present, 'valueMax' must be greater than 'value'."
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "RuleElementTunnelVntagVifListId": {
+      "id": "#/definitions/RuleElementTunnelVntagDvifId",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "vntagVifListId"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 0
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 16384
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 16384,
+          "description": "If present, 'valueMax' must be greater than 'value'."
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "VmMapPatch": {
+      "id": "#/definitions/VmMapPatch",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Flow Map Patch Definition",
+      "since": "v5.10",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "readOnly": true,
+          "description": "Flow Map name, must be unique. Name should not have special characters. Valid characters are A-Z, a-z, 0-9, '&','_','=','|'"
+        },
+        "folderName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Folder name"
+        },
+        "folderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Folder id"
+        }
+      }
+    },
+    "MapsQueryResponse": {
+      "id": "#/definitions/MapsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Maps query response",
+      "required": [
+        "vmMaps"
+      ],
+      "properties": {
+        "vmMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VmMap"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "MapQueryResponse": {
+      "id": "#/definitions/MapsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Maps query response",
+      "required": [
+        "vmMap"
+      ],
+      "properties": {
+        "vmMap": {
+          "$ref": "#/definitions/VmMap"
+        }
+      }
+    }
+  }
+}

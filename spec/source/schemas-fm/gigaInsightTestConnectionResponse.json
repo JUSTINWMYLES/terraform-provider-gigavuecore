@@ -1,0 +1,35 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gigaInsightTestConnectionResponse.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Insight Test Connection Response schema",
+  "definitions": {
+    "GigaInsightTestConnectionResponse": {
+      "id": "#/definitions/GigaInsightTestConnectionResponse",
+      "type": "object",
+      "description": "Response model for LLM provider test connection result from GI node",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether the test connection was successful"
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of available models from the provider"
+        },
+        "latencyMs": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Connection latency in milliseconds"
+        },
+        "error": {
+          "type": "string",
+          "description": "Error message if connection failed"
+        }
+      }
+    }
+  }
+}
+

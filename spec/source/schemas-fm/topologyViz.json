@@ -1,0 +1,1010 @@
+{
+  "id": "http://gigamon.com/schemas-fm/topologyViz.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Topology visualization schema",
+  "definitions": {
+    "GigaTopologyVizConfig": {
+      "id": "#/definitions/GigaTopologyVizConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "FM Global Topology Visualization Configurations",
+      "required": [
+        "topologyType",
+        "warn"
+      ],
+      "properties": {
+        "topologyType": {
+          "type": "string",
+          "enum": [
+            "TAG_BASED_SANKEY",
+            "SMART_SANKEY",
+            "NOT_DEFINED"
+          ],
+          "description": "Topology type. Decided based on the number of managed nodes and tags configuration. 'TAG_BASED_SANKEY' if the topology tags are configured,'SMART_SANKEY' if the tags are not configured and number of managed nodes is lesser than or equal to 100, 'NOT_DEFINED' if the tags are not configured and number of managed nodes is greater than 100"
+        },
+        "hierarchicalTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of topology hierarchical tag keys(Ids). This will allow the user to drill down from a top level hierarchy view to a lower level detailed view"
+        },
+        "placementTags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaTopologyPlacementTags"
+          }
+        },
+        "warn": {
+          "type": "boolean",
+          "default": false,
+          "readOnly": true,
+          "description": "'true' if the tags are not configured and no. of managed nodes is more than the warning threshold(55 nodes),'false' otherwise"
+        },
+        "linkRepresentationConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TopologyLinkRepresentationConfig"
+          }
+        },
+        "subGroupKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "clusterId",
+              "clusterMode",
+              "boxId",
+              "model"
+            ]
+          }
+        },
+        "toolsViewEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "shows tools information in topology view if it is set to 'true'. By default it will be false"
+        },
+        "aliasConfig": {
+          "type": "array",
+          "description": "Title of node groups in smart sankey.",
+          "items": {
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "gdpLinkCacheTtlInSecs": {
+          "type": "integer",
+          "description": "When a link is not reported by the GDP, how long the Topology has to maintain the unreported link. If the link reports within the configured TTL time, no changes to the existing link. But the link doesn't report then it will be deleted from Topology maintained links",
+          "default": 43200
+        }
+      }
+    },
+    "GigaTopologyVizUpdateSpec": {
+      "id": "#/definitions/GigaTopologyVizUpdateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Update FM Global Topology Visualization Configurations",
+      "required": [
+        "hierarchicalTags",
+        "placementTags"
+      ],
+      "properties": {
+        "topologyType": {
+          "type": "string",
+          "enum": [
+            "TAG_BASED_SANKEY",
+            "SMART_SANKEY",
+            "NOT_DEFINED"
+          ],
+          "description": "Topology type. Decided based on the number of managed nodes and tags configuration. 'TAG_BASED_SANKEY' if the topology tags are configured,'SMART_SANKEY' if the tags are not configured and number of managed nodes is lesser than or equal to 100, 'NOT_DEFINED' if the tags are not configured and number of managed nodes is greater than 100"
+        },
+        "hierarchicalTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of topology hierarchical tag keys(Ids). This will allow the user to drill down from a top level hierarchy view to a lower level detailed view"
+        },
+        "placementTags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaTopologyPlacementTags"
+          }
+        },
+        "subGroupKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "clusterId",
+              "clusterMode",
+              "boxId",
+              "model"
+            ]
+          }
+        },
+        "aliasConfig": {
+          "type": "array",
+          "description": "Node group titles can be set using this property. This is applicable only for smart sankey.",
+          "items": {
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "toolsViewEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "set this to 'true' in-order to view tools information in topology view, false by default"
+        },
+        "networkDevicesEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "set this to 'true' in-order to view network devices information in topology view, false by default"
+        },
+        "linkRepresentationConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TopologyLinkRepresentationConfig"
+          }
+        }
+      }
+    },
+    "GigaTopologyPlacementTags": {
+      "id": "#/definitions/GigaTopologyPlacementTags",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of topology placement tags.This will allow the user to see a detailed view in a left to right source to tool view",
+      "required": [
+        "name",
+        "tagKey",
+        "tagValues"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique alias for the placement config. This will help the user to  give a meaning full name for placement tag config"
+        },
+        "tagKey": {
+          "type": "string",
+          "description": "Unique placement tag key(Id)"
+        },
+        "tagValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of placement tag values associated with the specified tag key"
+        }
+      }
+    },
+    "TopologyLinkRepresentationConfig": {
+      "id": "#/definitions/TopologyLinkRepresentationConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "This is used by the UI to maintain the color code and representation format for each link type",
+      "properties": {
+        "linkType": {
+          "type": "string",
+          "enum": [
+            "cascade",
+            "stack",
+            "circuit",
+            "tool"
+          ],
+          "description": "Represents the type of the link"
+        },
+        "colorCode": {
+          "type": "string",
+          "description": "The color code of the link"
+        },
+        "linkFormat": {
+          "type": "string",
+          "enum": [
+            "SOLID",
+            "DASHED_SM",
+            "DASHED_LG",
+            "DOTTED_SM",
+            "DOTTED_LG",
+            "DOUBLE_DOTTED_SM"
+          ],
+          "description": "The format of the link"
+        }
+      }
+    },
+    "GigaTopologyVizConfigQueryResponse": {
+      "id": "#/definitions/GigaTopologyVizConfigQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "topologyConfigs"
+      ],
+      "properties": {
+        "topologyConfigs": {
+          "$ref": "#/definitions/GigaTopologyVizConfig"
+        }
+      }
+    },
+    "HierarchyRequestPayload": {
+      "id": "#/definitions/HierarchyRequestPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tagsFilter"
+      ],
+      "properties": {
+        "tagsFilter": {
+          "type": "object",
+          "required": [
+            "tagKey"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "parentTags": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "tagKey": {
+                    "type": "string"
+                  },
+                  "tagValue": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "tagKey": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "HierarchyResponse": {
+      "id": "#/definitions/HierarchyResponse",
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "string"
+        },
+        "nextLevel": {
+          "type": "string"
+        },
+        "totalNodes": {
+          "type": "integer"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tagValue": {
+                "type": "string"
+              },
+              "totalNodes": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "connectingLinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tagValue1": {
+                "type": "string"
+              },
+              "tagValue2": {
+                "type": "string"
+              },
+              "linksCount": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "AggregateLinksViewRequestPayload": {
+      "id": "#/definitions/AggregateLinksViewRequestPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tagsFilter"
+      ],
+      "properties": {
+        "tagsFilter": {
+          "type": "object",
+          "required": [
+            "tagKey",
+            "endpoint1TagValue",
+            "endpoint2TagValue"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "tagKey": {
+              "type": "string"
+            },
+            "endpoint1TagValue": {
+              "type": "string"
+            },
+            "endpoint2TagValue": {
+              "type": "string"
+            },
+            "linkType": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "AggregateLinksViewResponse": {
+      "id": "#/definitions/AggregateLinksViewResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tagKey": {
+          "type": "string"
+        },
+        "endpoint1TagValue": {
+          "type": "string"
+        },
+        "endpoint2TagValue": {
+          "type": "string"
+        },
+        "1G": {
+          "type": "integer"
+        },
+        "10G": {
+          "type": "integer"
+        },
+        "40G": {
+          "type": "integer"
+        },
+        "100G": {
+          "type": "integer"
+        }
+      }
+    },
+    "LinksViewRequestSpec": {
+      "id": "#/definitions/LinksViewRequestSpec",
+      "type": "object",
+      "properties": {
+        "sourceHierarchicalTagsFilter": {
+          "type": "array",
+          "description": "List of tag key and tag values which specifies the hierarchy of source node group",
+          "items": {
+            "properties": {
+              "tagKey": {
+                "type": "string"
+              },
+              "tagValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "destinationHierarchicalTagsFilter": {
+          "type": "array",
+          "description": "List of tag key and tag values which specifies the hierarchy of destination node group",
+          "items": {
+            "properties": {
+              "tagKey": {
+                "type": "string"
+              },
+              "tagValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "sourcePlacementTagFilter": {
+          "type": "object",
+          "description": "Tag key and tag values which specifies the placement of source node group in sankey view",
+          "properties": {
+            "tagKey": {
+              "type": "string"
+            },
+            "tagValue": {
+              "type": "string"
+            }
+          }
+        },
+        "destinationPlacementTagFilter": {
+          "type": "object",
+          "description": "Tag key and tag values which specifies the placement of destination node group in sankey view",
+          "properties": {
+            "tagKey": {
+              "type": "string"
+            },
+            "tagValue": {
+              "type": "string"
+            }
+          }
+        },
+        "sourceSubGroupFilter": {
+          "type": "object",
+          "description": "Property name and value based on which the nodes are subGrouped",
+          "properties": {
+            "tagKey": {
+              "type": "string"
+            },
+            "tagValue": {
+              "type": "string"
+            }
+          }
+        },
+        "destinationSubGroupFilter": {
+          "type": "object",
+          "description": "Property name and value based on which the nodes are subGrouped",
+          "properties": {
+            "tagKey": {
+              "type": "string"
+            },
+            "tagValue": {
+              "type": "string"
+            }
+          }
+        },
+        "endpoint1GlobalNodeId": {
+          "type": "string"
+        },
+        "endpoint2GlobalNodeId": {
+          "type": "string"
+        },
+        "linksFilter": {
+          "type": "object",
+          "$ref": "#/definitions/TopologyLinksFilter"
+        }
+      }
+    },
+    "LinksViewResponse": {
+      "id": "#/definitions/LinksViewResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "groupLinks": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "globalNodeId": {
+                "type": "string",
+                "description": "Global nodeId of the selected node for which the connecting links information is to be fetched"
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/TopologyLinks"
+                }
+              }
+            }
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "TopologyEndPoints": {
+      "id": "#/definitions/TopologyEndPoints",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/TopoLinksEndPoint"
+      }
+    },
+    "TopologyNodes": {
+      "id": "#/definitions/TopologyNodes",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "topology.json#/definitions/GigaTopologyManualNode"
+          },
+          {
+            "$ref": "topology.json#/definitions/GigaTopologyGigamonNode"
+          }
+        ]
+      }
+    },
+    "TopoLinksEndPoint": {
+      "id": "#/definitions/TopoLinksEndPoint",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "endpointType": {
+          "type": "string",
+          "enum": [
+            "gigastream",
+            "port"
+          ]
+        },
+        "portType": {
+          "type": "string",
+          "enum": [
+            "network",
+            "tool",
+            "stack",
+            "circuit"
+          ]
+        },
+        "alias": {
+          "type": "string",
+          "description": "PortId if endpointType is port, alias if it is a gigastream"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of portIds in the gigastream"
+        }
+      }
+    },
+    "TopologyLinks": {
+      "id": "#/definitions/TopologyLinks",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "linkId": {
+          "type": "string"
+        },
+        "linkType": {
+          "type": "string",
+          "enum": [
+            "cascade",
+            "stack",
+            "circuit",
+            "network",
+            "tool"
+          ]
+        },
+        "endpoint1GlobalNodeId": {
+          "type": "string"
+        },
+        "endpoint2GlobalNodeId": {
+          "type": "string"
+        },
+        "endpoint1ClusterName": {
+          "type": "string"
+        },
+        "endpoint2ClusterName": {
+          "type": "string"
+        },
+        "linkSpeed": {
+          "type": "string"
+        },
+        "endpoint1": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TopoLinksEndPoint"
+          }
+        },
+        "endpoint2": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TopoLinksEndPoint"
+          }
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "port1": {
+                "type": "string"
+              },
+              "port2": {
+                "type": "string"
+              },
+              "port1Reported": {
+                "type": "boolean"
+              },
+              "port2Reported": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "SankeyRequestPayload": {
+      "id": "#/definitions/SankeyRequestPayload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tagsFilter"
+      ],
+      "properties": {
+        "tagsFilter": {
+          "type": "object",
+          "required": [
+            "tagKey",
+            "tagValue",
+            "placementTagAlias"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "parentTags": {
+              "type": "array",
+              "description": "Parent hierarchy information for the requested sankey",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "tagKey": {
+                    "type": "string"
+                  },
+                  "tagValue": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "tagKey": {
+              "type": "string",
+              "description": "Sankey tag key"
+            },
+            "tagValue": {
+              "type": "string",
+              "description": "Sankey tag value"
+            },
+            "placementTagAlias": {
+              "type": "string",
+              "description": "Configured placement tag alias"
+            }
+          }
+        },
+        "nodesFilter": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "placementTagValue": {
+                "type": "string"
+              },
+              "sort": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string"
+                    },
+                    "order": {
+                      "type": "string",
+                      "enum": [
+                        "asc",
+                        "des"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "TagBasedSankeyResponse": {
+      "id": "#/definitions/SankeyResponse",
+      "type": "object",
+      "properties": {
+        "parentHierarchicalTagKey": {
+          "type": "string"
+        },
+        "parentHierarchicalTagValue": {
+          "type": "string"
+        },
+        "lastHierarchicalTagKey": {
+          "type": "string"
+        },
+        "sankey": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TagBasedSankey"
+          }
+        },
+        "crossSankeyLinks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CrossSankeyLink"
+          }
+        }
+      }
+    },
+    "TagBasedSankey": {
+      "id": "#/definitions/TagBasedSankey",
+      "type": "object",
+      "properties": {
+        "hierarchicalTagValue": {
+          "type": "string",
+          "description": "Sankey tag value"
+        },
+        "placement": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SankeyPlacement"
+          }
+        },
+        "externalTools": {
+          "type": "array",
+          "items": {
+            "$ref": "topology.json#/definitions/GigaTopologyManualNode"
+          },
+          "description": "List of tools connected to the gigamon nodes in the layout. Visible only if the tools view is enabled by the user"
+        },
+        "networkDevices": {
+          "type": "array",
+          "items": {
+            "$ref": "topology.json#/definitions/GigaTopologyManualNode"
+          },
+          "description": "List of network devices connected to the gigamon nodes in the layout. Visible only if the tools view is enabled by the user"
+        },
+        "connectingLinks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SankeyConnectingLink"
+          }
+        },
+        "nodesFilter" : {
+          "type": "object",
+          "$ref": "#/definitions/TopologyNodesFilter"
+        },
+        "linksFilter" : {
+          "type": "object",
+          "$ref": "#/definitions/TopologyLinksFilter"
+        }
+      }
+    },
+    "SmartSankeyResponse": {
+      "id": "#/definitions/SmartSankeyResponse",
+      "type": "object",
+      "properties": {
+        "placement": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SankeyPlacement"
+          },
+          "description": "Best guess sankey populated by FM based on the neighbor-ship count. The placement values are GTAP NODES, TAP NODES, LEAF NODES, SPINE NODES, TOOL NODES, CORE NODES"
+        },
+        "externalTools": {
+          "type": "array",
+          "description": "List of external tools connected to the gigamon nodes in the layout. Visible only if the tools view is enabled by the user",
+          "items": {
+            "$ref": "topology.json#/definitions/GigaTopologyManualNode"
+          }
+        },
+        "networkDevices": {
+          "type": "array",
+          "description": "List of network devices connected to the gigamon nodes in the layout. Visible only if the tools view is enabled by the user",
+          "items": {
+            "$ref": "topology.json#/definitions/GigaTopologyManualNode"
+          }
+        },
+        "connectingLinks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SankeyConnectingLink"
+          }
+        },
+        "nodesFilter" : {
+          "type": "object",
+          "$ref": "#/definitions/TopologyNodesFilter"
+        },
+        "linksFilter" : {
+          "type": "object",
+          "$ref": "#/definitions/TopologyLinksFilter"
+        }
+      }
+    },
+    "TaggedSankeyNodeGroup": {
+      "id": "#/definitions/TaggedSankeyNodeGroup",
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string"
+        },
+        "groupParams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tagKey": {
+                "type": "string"
+              },
+              "tagValue": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "nodeGroup": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PlacementNode"
+          }
+        }
+      }
+    },
+    "SankeyPlacement": {
+      "id": "#/definitions/SankeyPlacement",
+      "type": "object",
+      "properties": {
+        "tagValue": {
+          "type": "string"
+        },
+        "group": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TaggedSankeyNodeGroup"
+          }
+        }
+      }
+    },
+    "PlacementNode": {
+      "id": "#/definitions/PlacementNode",
+      "type": "object",
+      "properties": {
+        "globalNodeId": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "stackMode": {
+          "type": "string"
+        },
+        "boxId": {
+          "type": "string"
+        },
+        "deviceIp": {
+          "type": "string"
+        },
+        "deviceFamily": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "key": {
+                "type": "string",
+                "description": "Sankey tag value"
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "SankeyConnectingLink": {
+      "id": "#/definitions/SankeyConnectingLink",
+      "type": "object",
+      "properties": {
+        "placementTagValue1": {
+          "type": "string"
+        },
+        "placementTagValue2": {
+          "type": "string"
+        },
+        "totalLinks": {
+          "type": "integer",
+          "description": "Number of links between nodes with placementTagValue1 and placementTagValue2"
+        },
+        "linksComposition": {
+          "type": "object",
+          "description": "Key value pairs, that holds the count for each type of links",
+          "properties" : {
+            "circuit": {
+              "type": "integer"
+            },
+            "cascade": {
+              "type": "integer"
+            },
+            "network": {
+              "type": "integer"
+            },
+            "tool": {
+              "type": "integer"
+            },
+            "stack": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "CrossSankeyLink": {
+      "id": "#/definitions/CrossSankeyLink",
+      "type": "object",
+      "properties": {
+        "hierarchicalTagKey": {
+          "type": "string"
+        },
+        "hierarchicalTagValue1": {
+          "type": "string"
+        },
+        "hierarchicalTagValue2": {
+          "type": "string"
+        },
+        "placementTagValue1": {
+          "type": "string"
+        },
+        "placementTagValue2": {
+          "type": "string"
+        },
+        "totalLinks": {
+          "type": "string"
+        }
+      }
+    },
+    "TopologyLinksFilter": {
+      "id": "#/definitions/TopologyLinksFilter",
+      "type": "object",
+      "description": "Property name and values based on which the link are to be filtered",
+      "properties": {
+        "linkType": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Type of topology links - cascade, circuit, stack, tool, network"
+        }
+      }
+    },
+    "TopologyNodesFilter": {
+      "id": "#/definitions/TopologyNodesFilter",
+      "type": "object",
+      "description": "Property name and values based on which the nodes in the layout are to be filtered",
+      "properties": {
+        "clusterId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hostname": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "clusterMode": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "model": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

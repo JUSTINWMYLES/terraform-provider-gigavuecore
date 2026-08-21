@@ -1,0 +1,22 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmUnlockUserConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Unlock User Config",
+  "definitions": {
+    "FmUnlockUserConfig": {
+      "id": "#/definitions/FmUnlockUserConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Configure UnLock User Config",
+      "required": [
+        "username"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "User Name"
+        }
+      }
+    }
+  }
+}

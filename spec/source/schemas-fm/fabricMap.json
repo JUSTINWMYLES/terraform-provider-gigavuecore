@@ -1,0 +1,475 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fabricMap.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon fabric map schema",
+  "definitions": {
+    "FabricMap": {
+      "id": "#/definitions/FabricMap",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "afmMap"
+      ],
+      "properties": {
+        "afmMap": {
+          "$ref": "map.json#/definitions/Map",
+          "description": "Detailed definition of this fabric map"
+        },
+        "parentMapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the fabric maps that this fabric map supports. Applicable only to internally generated fabric maps that support user-defined fabric maps. For user-defined fabric maps, there is no parent maps. This list is empty."
+        },
+        "childMapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the fabric maps that support this fabric map. Applicable only to user-defined fabric maps. For internally generated fabric maps, there is no child maps. This list is empty."
+        },
+        "encapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the encap tunnel endpoints supporting this fabric map. Applicable only to internally generated fabric maps."
+        },
+        "decapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the decap tunnel endpoints supporting this fabric map. Applicable only to internally generated fabric maps."
+        },
+        "pendingReason": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "MAP_SPLIT_FAIL",
+            "BLOCKED"
+          ]
+        },
+        "configStatus": {
+          "type": "string",
+          "description": "Configuration status of this fabric map."
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "In case of configuration failure, this message provides details about the possible cause of the failure."
+        },
+        "creationTime": {
+          "type": "number",
+          "description": "Fabric map creation timestamp in UTC"
+        },
+        "updatedTime": {
+          "type": "number",
+          "description": "Fabric map updated timestamp in UTC"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        }
+      }
+    },
+    "FabricMapQueryResponse": {
+      "id": "#/definitions/FabricMapQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "fabricMap"
+      ],
+      "properties": {
+        "fabricMap": {
+          "$ref": "#/definitions/FabricMap"
+        }
+      }
+    },
+    "FabricMapsQueryResponse": {
+      "id": "#/definitions/FabricMapsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "fabricMaps"
+      ],
+      "properties": {
+        "fabricMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FabricMap"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "ClusterMap": {
+      "id": "#/definitions/ClusterMap",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "clusterId",
+        "afmMap"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "id of the cluster in which the map is created."
+        },
+        "afmMap": {
+          "$ref": "map.json#/definitions/Map",
+          "description": "Detailed definition of this map"
+        },
+        "fabricMapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the fabric maps that this map supports."
+        },
+        "configStatus": {
+          "type": "string",
+          "description": "Configuration status of this map."
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "In case of configuration failure, this message provides details about the possible cause of the failure."
+        }
+      }
+    },
+    "ClusterMapQueryResponse": {
+      "id": "#/definitions/ClusterMapQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "clusterMap"
+      ],
+      "properties": {
+        "clusterMap": {
+          "$ref": "#/definitions/ClusterMap"
+        }
+      }
+    },
+    "ClusterMapsQueryResponse": {
+      "id": "#/definitions/ClusterMapsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "clusterMaps"
+      ],
+      "properties": {
+        "clusterMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterMap"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "ClusterCircuitTunnel": {
+      "id": "#/definitions/ClusterCircuitTunnel",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "clusterId"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "id of the cluster in which the circuit tunnel endpoint is created."
+        },
+        "circuitTunnel": {
+          "$ref": "circuitTunnel.json#/definitions/CircuitTunnel",
+          "description": "Detailed definition of this circuit tunnel endpoint"
+        },
+        "fabricMapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the fabric maps that this circuit tunnel endpoint supports."
+        },
+        "configStatus": {
+          "type": "string",
+          "description": "Configuration status of this circuit tunnel endpoint."
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "In case of configuration failure, this message provides details about the possible cause of the failure."
+        }
+      }
+    },
+    "ClusterCircuitTunnelQueryResponse": {
+      "id": "#/definitions/ClusterCircuitTunnelQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "clusterMap": {
+          "$ref": "#/definitions/ClusterCircuitTunnel"
+        }
+      }
+    },
+    "ClusterCircuitTunnelsQueryResponse": {
+      "id": "#/definitions/ClusterCircuitTunnelsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "clusterMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterCircuitTunnel"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "FabricMapSpec": {
+      "id": "#/definitions/FabricMapSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "afmMap"
+      ],
+      "properties": {
+        "afmMap": {
+          "$ref": "map.json#/definitions/MapSpec",
+          "description": "Detailed definition of this fabric map"
+        },
+        "parentMapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the fabric maps that this fabric map supports. Applicable only to internally generated fabric maps that support user-defined fabric maps. For user-defined fabric maps, there is no parent maps. This list is empty."
+        },
+        "childMapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the fabric maps that support this fabric map. Applicable only to user-defined fabric maps. For internally generated fabric maps, there is no child maps. This list is empty."
+        },
+        "encapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the encap tunnel endpoints supporting this fabric map. Applicable only to internally generated fabric maps."
+        },
+        "decapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Aliases of the decap tunnel endpoints supporting this fabric map. Applicable only to internally generated fabric maps."
+        },
+        "configStatus": {
+          "type": "string",
+          "description": "Configuration status of this fabric map."
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "In case of configuration failure, this message provides details about the possible cause of the failure."
+        }
+      }
+    },
+    "FMNearRealTimeCachedStatisticsListQueryResponse": {
+      "id": "#/definitions/FMNearRealTimeCachedStatisticsListQueryResponse",
+      "type": "object",
+      "properties": {
+        "fmNearRealTimeCachedStatisticsList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FMNearRealTimeCachedStatistics"
+          }
+        }
+      }
+    },
+    "FMNearRealTimeCachedStatistics": {
+      "id": "#/definitions/FMNearRealTimeCachedStatistics",
+      "type": "object",
+      "properties": {
+        "componentType": {
+          "type": "string",
+          "enum": [
+            "FABRIC_MAP"
+          ]
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "cluster name"
+        },
+        "alias": {
+          "type": "string",
+          "description": "unique nrt alias"
+        },
+        "nrtAlias": {
+          "type": "string",
+          "description": "unique nrt alias"
+        },
+        "statsData": {
+          "$ref": "#/definitions/GigaFabricMapsNRTStats"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string",
+          "description": "Last Updated time of the fabric map"
+        },
+        "healthState": {
+          "type": "string",
+          "description": "Read-only. 'green' indicates healthy state; 'yellow'  indicates warning state; 'orange'  indicates error state; 'red'  indicates critical state; 'grey' indicates undeployed state;"
+        },
+        "trafficHealthState": {
+          "type": "string",
+          "description": "Read-only. 'green' indicates traffic healthy state; 'red'  indicates traffic critical state; 'grey' indicates traffic not monitored state;"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        }
+      }
+    },
+    "GigaFabricMapsNRTStats": {
+      "id": "#/definitions/GigaFabricMapsNRTStats",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "'regular' maps are from network/hybrid ports to tool/hybrid/gigastream; 'inline' maps are from inline ports to inline/tool/hybrid/gigastream; 'firstLevel' are from network/hybrid ports to vPorts/tool/hybrid/gigastream; 'secondLevel' maps are from vPorts to tool/hybrid/gigastream; 'inlineFirstLevel is from inline network to vport; 'inlineSecondLevel' is from vport to inline tool; 'flexInline' is from inline network to tools; 'transitLevel' is from vport to vport"
+        },
+        "flexDir": {
+          "type": "string",
+          "description": "only applicable for flexInline maps"
+        },
+        "subType": {
+          "type": "string",
+          "description": "'byRule' is applicable to all map types; 'collector' is applicable to 'regular', 'inline', 'flexInline' and 'secondLevel' maps; 'passAll' is applicable to 'regular' and 'inline' maps; 'flowFilter', 'flowSample', 'flowWhitelist', 'flowSampleSip', 'flowWhitelistSip', 'flowSampleDiameter', 'flowWhitelistDiameter', 'flowSampleOverlap', 'flowWhitelistOverlap', 'flowSample5g','flowWhitelist5g','flowSample5gOverlap' and 'flowWhitelist5gOverlap' are applicable to 'secondLevel' maps"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fmInternal/fabricCounters.json#/definitions/MapRuleCounters"
+          }
+        },
+        "octets": {
+          "type": "string"
+        },
+        "packets": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Counter collection date and time in ISO 8601 format",
+          "since": "H 5.0"
+        },
+        "fabricMapAlias": {
+          "type": "string",
+          "description": "unique fabric map alias"
+        },
+        "totalDropOctets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPassOctets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalDropPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalPassPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "fstype": {
+          "type": "string"
+        },
+        "intervalDuration": {
+          "type": "string"
+        },
+        "offsetShiftPerInterval": {
+          "type": "integer"
+        },
+        "currentOffsetAmount": {
+          "type": "integer"
+        },
+        "currentIntervalStart": {
+          "type": "string"
+        },
+        "nextIntervalStart": {
+          "type": "string"
+        },
+        "rotationalTimeRem": {
+          "type": "string"
+        },
+        "tags": {
+          "description": "A label with key and list of values that can be tagged to a resource",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "FMNearRealTimeStatisticsConfigResult": {
+      "id": "#/definitions/FMNearRealTimeStatisticsConfigResult",
+      "type": "object",
+      "properties": {
+        "failedConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NRTComponentConfigResult"
+          }
+        }
+      }
+    },
+    "NRTComponentConfigResult": {
+      "id": "#/definitions/NRTComponentConfigResult",
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "description": "cluster name"
+        },
+        "message": {
+          "type": "string"
+        },
+        "componentTypeToAliasSetMap": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

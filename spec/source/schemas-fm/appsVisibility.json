@@ -1,0 +1,980 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsVisibility.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Visibility Configuration schema",
+  "definitions": {
+    "AppsVisibilitySolutionsQueryResponse": {
+      "id": "#/definitions/AppsVisibilitySolutionsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsVisibilitySolutions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsVisibilitySolutionGetSpec"
+          }
+        }
+      }
+    },
+    "AppsVisibilitySolutionQueryResponse": {
+      "id": "#/definitions/AppsVisibilitySolutionQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsVisibilitySolution": {
+          "$ref": "#/definitions/AppsVisibilitySolutionGetSpec"
+        }
+      }
+    },
+    "AppsVisibilitySolutionQueryResponseWithConfigObjects": {
+      "id": "#/definitions/AppsVisibilitySolutionQueryResponseWithConfigObjects",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsVisibilitySolution": {
+          "$ref": "#/definitions/AppsVisibilitySolutionGetSpecWithConfigObjects"
+        }
+      }
+    },
+    "AppsVisibilitySolutionGetSpec": {
+      "id": "#/definitions/AppsVisibilitySolutionGetSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "solutionDesc": {
+          "type": "string",
+          "description": "Description of the solution"
+        },
+        "envId": {
+          "type": "string",
+          "description": "ID of the Environment"
+        },
+        "connId": {
+          "type": "string",
+          "description": "ID of the Connection Domain"
+        },
+        "appEnvId": {
+          "type": "string",
+          "description": "ID of the Application Environment"
+        },
+        "dynamicScaleUnit": {
+          "type": "boolean",
+          "description": "When set as true, FM automatically sets the optimal scaleUnit",
+          "default": false
+        },
+        "scaleUnit": {
+          "type": "integer",
+          "description": "Number of units of memory needed for each Application"
+        },
+        "trafficPolicyGraphAlias": {
+          "type": "string",
+          "description": "Alias of the Traffic Policy Graph"
+        },
+        "ingressTrafficConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IngressTrafficConfig"
+          }
+        },
+        "monitorSolutionConfig": {
+          "type": "object",
+          "properties": {
+            "appInstanceConfigId": {
+              "type": "string"
+            },
+            "appInstanceName": {
+              "type": "string"
+            },
+            "appVizTieredBatchId": {
+              "type": "string",
+              "description": "ID of the monitoringSolutionConfig tiered batch"
+            },
+            "mgmtInterface": {
+              "type": "string",
+              "description": "Pass this value if you would like to use the management interface of the Node to export App Monitoring metadata to FM",
+              "enum": [
+                "internal"
+              ]
+            },
+            "userDefinedApplications" : {
+              "type": "array",
+              "items": {
+                "$ref": "appsMetadata.json#/definitions/UserDefinedApplications"
+              }
+            },
+            "userDefinedApplicationProfile" : {
+              "items": {
+                "$ref": "appsMetadata.json#/definitions/UserDefinedApplicationProfile"
+              }
+            },
+            "gsParamConfigId" : {
+              "type": "string",
+              "description": "Gs param name on which the solution is applied"
+            },
+            "destinationConfig": {
+              "type": "object",
+              "properties": {
+                "destinationName": {
+                  "type": "string"
+                },
+                "exporterAlias": {
+                  "type": "string"
+                },
+                "iface": {
+                  "type": "string",
+                  "description": "Interface Mapping for Egress Tunnel"
+                }
+              }
+            }
+          }
+        },
+        "appFilterConfig": {
+          "type": "object",
+          "properties": {
+            "mapAlias": {
+              "type": "string",
+              "description": "Alias of the appFiltering map"
+            },
+            "sapfProfileAlias": {
+              "type": "string",
+              "description": "Alias of the SAPF Profile"
+            },
+            "appFilterTieredBatchId": {
+              "type": "string",
+              "description": "ID of the appFilterConfig tiered batch"
+            },
+            "egressTrafficConfigs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EgressTrafficConfigGetSpec"
+              }
+            }
+          }
+        },
+        "dedup": {
+          "type": "object",
+          "properties": {
+            "appConfigId": {
+              "type": "string"
+            },
+            "appInstanceName": {
+              "type": "string"
+            },
+            "dedupTieredBatchId": {
+              "type": "string"
+            },
+            "gsParamsName": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "appExporterConfig": {
+          "type": "object",
+          "properties": {
+            "appInstanceName": {
+              "type": "string",
+              "description": "The name of the AppMetadata app instance"
+            },
+            "cacheConfigAlias": {
+              "type": "string",
+              "description": "Alias of the cacheConfig"
+            },
+            "appMetadataTieredBatchId": {
+              "type": "string",
+              "description": "ID of the appExporterConfig tiered batch"
+            },
+            "destinationConfigs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DestinationConfigGetSpec"
+              }
+            }
+          }
+        },
+        "configStatus": {
+          "type": "string",
+          "description": "configuration status"
+        },
+        "configStatusReasons": {
+          "type": "string",
+          "description": "configuration status reasons"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "solutionCreatedTimestamp": {
+          "type": "string"
+        },
+        "solutionModifiedTimestamp": {
+          "type": "string"
+        }
+      }
+    },
+    "DestinationConfigGetSpec": {
+      "id": "#/definitions/DestinationConfigGetSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destinationName": {
+          "type": "string",
+          "description": "Alias of the destination tool"
+        },
+        "templateName": {
+          "type": "string",
+          "description": "Name of the App Profile Template Used"
+        },
+        "exporterAlias": {
+          "type": "string",
+          "description": "Alias of the exporter"
+        },
+        "iface": {
+          "type": "string",
+          "description": "Interface Mapping for Egress Tunnel"
+        }
+      }
+    },
+    "EgressTrafficConfig": {
+      "id": "#/definitions/EgressTrafficConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tunnelAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tunnelInterfaceMappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "tunnelAlias" : {
+                "type": "string"
+              },
+              "iface": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "ruleSet": {
+          "$ref": "../schemas-vmm/flowMaps.json#/definitions/MapRuleSet"
+        },
+        "passApplicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+          }
+        },
+        "dropApplicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+          }
+        }
+      }
+    },
+    "EgressTrafficConfigGetSpec": {
+      "id": "#/definitions/EgressTrafficConfigGetSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tunnelAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "passApplicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+          }
+        },
+        "dropApplicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+          }
+        }
+      }
+    },
+    "IngressTrafficConfig": {
+      "id": "#/definitions/IngressTrafficConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tunnelAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tunnelInterfaceMappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "tunnelAlias" : {
+                "type": "string"
+              },
+              "iface": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "srcRawEndPointInterfaces": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceSelectorAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AppExporterConfig": {
+      "id": "#/definitions/AppExporterConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cacheConfigId": {
+          "type": "string"
+        },
+        "cacheConfig": {
+          "$ref": "appsMetadata.json#/definitions/MetadataCacheConfig"
+        },
+        "destinationConfig": {
+          "type": "object",
+          "properties": {
+            "destinationName": {
+              "type": "string"
+            },
+            "exporterConfigId": {
+              "type": "string"
+            },
+            "exporterConfig": {
+              "$ref": "appsMetadata.json#/definitions/MetadataExporter"
+            },
+            "exportMetaAppProfileAliases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "exportMetaAppProfile": {
+              "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfile"
+            },
+            "applicationNames": {
+              "type": "array",
+              "items": {
+                "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+              }
+            }
+          }
+        }
+      }
+    },
+    "AppsVisibilitySolutionCreateSpec": {
+      "id": "#/definitions/AppsVisibilitySolutionCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "solutionAlias",
+        "envId",
+        "connId",
+        "monitorSolutionConfig"
+      ],
+      "properties": {
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "solutionDesc": {
+          "type": "string",
+          "description": "Description of the solution"
+        },
+        "envId": {
+          "type": "string",
+          "description": "ID of the Environment"
+        },
+        "connId": {
+          "type": "string",
+          "description": "ID of the Connection domain"
+        },
+        "dynamicScaleUnit": {
+          "type": "boolean",
+          "description": "When set as true, FM automatically sets the optimal scaleUnit",
+          "default": false
+        },
+        "scaleUnit": {
+          "type": "integer",
+          "description": "Number of units of memory needed for each Application"
+        },
+        "distributeTraffic": {
+          "type": "boolean",
+          "description": "Indicates Traffic Distribution enabled or not"
+        },
+        "ingressTrafficConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IngressTrafficConfig"
+          }
+        },
+        "monitorSolutionConfig": {
+          "$ref": "#/definitions/MonitorSolutionConfigCreateSpec",
+          "description": "Application Monitoring configuration"
+        },
+        "appFilterConfig": {
+          "$ref": "#/definitions/AppFilterConfigCreateSpec",
+          "description": "Application Filtering Configuration"
+        },
+        "appExportConfig": {
+          "$ref": "#/definitions/AppMetadataSolutionConfigCreateSpec",
+          "description": "Application Metadata Configuration"
+        }
+      }
+    },
+    "MonitorSolutionConfigCreateSpec": {
+      "id": "#/definitions/MonitorSolutionConfigCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "appInstanceConfig",
+        "destinationConfig"
+      ],
+      "properties": {
+        "appInstanceConfig": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "boolean"
+            }
+          }
+        },
+        "mgmtInterface": {
+          "type": "string",
+          "description": "Pass this value if you would like to use the management interface of the Node to export App Monitoring metadata to FM",
+          "enum": [
+            "internal"
+          ]
+        },
+        "destinationConfig": {
+          "type": "object",
+          "properties": {
+            "exporterConfig": {
+              "type": "object",
+              "properties": {
+                "monitor": {
+                  "type": "object",
+                  "properties": {
+                    "timeout": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              }
+            },
+            "iface": {
+              "type": "string",
+              "description": "Interface Mapping for Egress Tunnel"
+            }
+          }
+        }
+      }
+    },
+    "AppFilterConfigCreateSpec": {
+      "id": "#/definitions/AppFilterConfigCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "egressTrafficConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EgressTrafficConfig"
+          }
+        },
+        "sapfProfile": {
+          "$ref": "#/definitions/SessionAwareApfProfile"
+        }
+      }
+    },
+    "AppMetadataSolutionConfigCreateSpec": {
+      "id": "#/definitions/AppMetadataSolutionConfigCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destinationConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaMetadataExportDestinationConfig"
+          }
+        },
+        "cacheConfig": {
+          "$ref": "appsMetadata.json#/definitions/MetadataCacheConfig"
+        }
+      }
+    },
+    "AppsVisibilitySolutionPatchSpec": {
+      "id": "#/definitions/AppsVisibilitySolutionPatchSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "solutionAlias",
+        "envId",
+        "connId",
+        "monitorSolutionConfig"
+      ],
+      "properties": {
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "solutionDesc": {
+          "type": "string",
+          "description": "Description of the solution"
+        },
+        "envId": {
+          "type": "string",
+          "description": "ID of the Environment"
+        },
+        "connId": {
+          "type": "string",
+          "description": "ID of the Connection domain"
+        },
+        "appEnvId": {
+          "type": "string",
+          "description": "ID of the Application Environment"
+        },
+        "dynamicScaleUnit": {
+          "type": "boolean",
+          "description": "When set as true, FM automatically sets the optimal scaleUnit",
+          "default": false
+        },
+        "scaleUnit": {
+          "type": "integer",
+          "description": "Number of units of memory needed for each Application"
+        },
+        "ingressTrafficConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IngressTrafficConfig"
+          }
+        },
+        "monitorSolutionConfig": {
+          "$ref": "#/definitions/MonitorSolutionConfigCreateSpec",
+          "description": "Application Monitoring configuration"
+        },
+        "appFilterConfig": {
+          "$ref": "#/definitions/AppFilterConfigCreateSpec",
+          "description": "Application Filtering configuration"
+        },
+        "appExporterConfig": {
+          "$ref": "#/definitions/AppMetadataSolutionConfigCreateSpec",
+          "description": "Application Metadata configuration"
+        }
+      }
+    },
+    "AppsVisibilitySolutionGetSpecWithConfigObjects": {
+      "id": "#/definitions/AppsVisibilitySolutionGetSpecWithConfigObjects",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "solutionDesc": {
+          "type": "string",
+          "description": "Description of the solution"
+        },
+        "envId": {
+          "type": "string",
+          "description": "ID of the Environment"
+        },
+        "connId": {
+          "type": "string",
+          "description": "ID of the Connection Domain"
+        },
+        "appEnvId": {
+          "type": "string",
+          "description": "ID of the Application Environment"
+        },
+        "dynamicScaleUnit": {
+          "type": "boolean",
+          "description": "When set as true, FM automatically sets the optimal scaleUnit",
+          "default": false
+        },
+        "scaleUnit": {
+          "type": "integer",
+          "description": "Number of units of memory needed for each Application"
+        },
+        "trafficPolicyGraphAlias": {
+          "type": "string",
+          "description": "Alias of the Traffic Policy Graph"
+        },
+        "appEnvConfig": {
+          "$ref": "#/definitions/AppEnvConfig"
+        },
+        "ingressTrafficConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IngressTrafficConfig"
+          }
+        },
+        "monitorSolutionConfig": {
+          "$ref": "#/definitions/MonitorSolutionConfigGetSpecWithConfigObjects"
+        },
+        "appFilterConfig": {
+          "$ref": "#/definitions/AppFilterConfigGetSpecWithConfigObjects"
+        },
+        "dedup": {
+          "type": "object",
+          "properties": {
+            "appConfigId": {
+              "type": "string"
+            },
+            "appInstanceName": {
+              "type": "string"
+            },
+            "dedupTieredBatchId": {
+              "type": "string"
+            },
+            "gsParamsName": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "appExporterConfig": {
+          "$ref": "#/definitions/AppMetadataConfigGetSpecWithConfigObjects"
+        },
+        "configStatus": {
+          "type": "string",
+          "description": "configuration status"
+        },
+        "configStatusReason": {
+          "type": "string",
+          "description": "configuration status reasons"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "solutionCreatedTimestamp": {
+          "type": "string"
+        },
+        "solutionModifiedTimestamp": {
+          "type": "string"
+        }
+      }
+    },
+    "MonitorSolutionConfigGetSpecWithConfigObjects": {
+      "id": "#/definitions/MonitorSolutionConfigGetSpecWithConfigObjects",
+      "type": "object",
+      "properties": {
+        "appInstanceConfigId": {
+          "type": "string"
+        },
+        "appInstanceName": {
+          "type": "string"
+        },
+        "appVizTieredBatchId": {
+          "type": "string",
+          "description": "ID of the monitoringSolutionConfig tiered batch"
+        },
+        "mgmtInterface": {
+          "type": "string",
+          "description": "Pass this value if you would like to use the management interface of the Node to export App Monitoring metadata to FM",
+          "enum": [
+            "internal"
+          ]
+        },
+        "appInstanceConfig": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "boolean"
+            },
+            "exporter": {
+              "type": "string"
+            }
+          }
+        },
+        "destinationConfig": {
+          "type": "object",
+          "properties": {
+            "destinationName": {
+              "type": "string"
+            },
+            "exporterAlias": {
+              "type": "string"
+            },
+            "exporterConfig": {
+              "type": "object",
+              "properties": {
+                "alias": {
+                  "type": "string"
+                },
+                "destination": {
+                  "type": "object",
+                  "properties": {
+                    "ipv4Address": {
+                      "type": "string"
+                    },
+                    "ipv6Address": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "monitor": {
+                  "type": "object",
+                  "properties": {
+                    "timeout": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "AppFilterConfigGetSpecWithConfigObjects": {
+      "id": "#/definitions/AppFilterConfigGetSpecWithConfigObjects",
+      "type": "object",
+      "properties": {
+        "mapAlias": {
+          "type": "string",
+          "description": "Alias of the appFiltering map"
+        },
+        "appFilterTieredBatchId": {
+          "type": "string",
+          "description": "ID of the appFilterConfig tiered batch"
+        },
+        "sapfProfileAlias": {
+          "type": "string",
+          "description": "Alias of the SAPF Profile"
+        },
+        "sapfProfile": {
+          "$ref": "#/definitions/SessionAwareApfProfile"
+        },
+        "egressTrafficConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EgressTrafficConfigGetSpecWithConfigObjects"
+          }
+        }
+      }
+    },
+    "AppMetadataConfigGetSpecWithConfigObjects": {
+      "id": "AppMetadataConfigGetSpecWithConfigObjects",
+      "type": "object",
+      "properties": {
+        "cacheConfigAlias": {
+          "type": "string",
+          "description": "Alias of the cacheConfig"
+        },
+        "cacheConfig": {
+          "$ref": "appsMetadata.json#/definitions/MetadataCacheConfig"
+        },
+        "appInstanceName": {
+          "type": "string"
+        },
+        "appMetadataTieredBatchId": {
+          "type": "string",
+          "description": "ID of the appExporterConfig tiered batch"
+        },
+        "destinationConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaMetadataExportDestinationConfig"
+          }
+        }
+      }
+    },
+    "EgressTrafficConfigGetSpecWithConfigObjects": {
+      "id": "#/definitions/EgressTrafficConfigGetSpecWithConfigObjects",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "tunnelAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tunnelInterfaceMappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "tunnelAlias" : {
+                "type": "string"
+              },
+              "iface": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "ruleSets": {
+          "$ref": "../schemas-vmm/flowMaps.json#/definitions/MapRuleSet"
+        },
+        "passAppProfileAlias": {
+          "type": "string"
+        },
+        "passApplicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+          }
+        },
+        "dropAppProfileAlias": {
+          "type": "string"
+        },
+        "dropApplicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+          }
+        }
+      }
+    },
+    "AppEnvConfig": {
+      "id": "#/definitions/AppEnvConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "appInfo": {
+          "type": "string"
+        },
+        "nrCores": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "argv": {
+          "type": "string"
+        },
+        "nrSCores": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "SessionAwareApfProfile": {
+      "id": "#/definitions/SessionAwareApfProfile",
+      "description": "Session-Aware APF",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "sessionFields"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "sessionFields": {
+          "type": "array",
+          "items": {
+            "$ref": "apps.json#/definitions/SessionAwareApfField"
+          },
+          "minItems": 1,
+          "maxItems": 20,
+          "uniqueItems": true,
+          "description": "A sessionField cannot contain overlapping session attribute, position pairs (e.g. ipv4-5tuple pos 1 and ipv4-src pos 1 is not allowed). Max number of session fields is 20"
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 10,
+          "maximum": 120,
+          "default": 15,
+          "description": "in seconds"
+        },
+        "bidi": {
+          "type": "boolean",
+          "default": true,
+          "description": "include reverse traffic for the selected sessionFields. Not applicable for 'mplsLabel', 'gtpuTeid', 'vlanId'"
+        },
+        "buffering": {
+          "$ref": "apps.json#/definitions/SessionAwareApfBuffering",
+          "description": "SAPF Buffering configuration"
+        }
+      }
+    },
+    "GigaMetadataExportDestinationConfig": {
+      "id": "#/definitions/GigaMetadataExportDestinationConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destinationName": {
+          "type": "string"
+        },
+        "exporterConfig": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporter"
+        },
+        "exporterAlias": {
+          "type": "string"
+        },
+        "exportMetaAppProfileAlias": {
+          "type": "string"
+        },
+        "applicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+          }
+        },
+        "exportMetaAppProfile": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfile"
+        },
+        "iface": {
+          "type": "string",
+          "description": "Interface Mapping for Egress Tunnel"
+        }
+      }
+    }
+  }
+}

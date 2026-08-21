@@ -1,0 +1,144 @@
+{
+  "id": "http://gigamon.com/schemas-fm/eventNotification.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Event Notification Configuration",
+  "since": "H 5.3",
+  "definitions": {
+    "ClusterEventNotificationStatus": {
+      "id": "#/definitions/ClusterEventNotificationStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clusterName"
+      ],
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the cluster"
+        },
+        "eventNotifStatusList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeEventNotificationStatus"
+          },
+          "description": "Status of event notification for every node in the cluster"
+        }
+      }
+    },
+    "NodeEventNotificationStatus": {
+      "id": "#/definitions/NodeEventNotificationStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deviceIp",
+        "enabled"
+      ],
+      "properties": {
+        "deviceIp": {
+          "type": "string",
+          "minLength": 1,
+          "description": "IP address of cluster member"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should events be streamed from this device"
+        },
+        "eventTargetsStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeEventTargetStatus"
+          },
+          "description": "Status of every notification target the device is configured to stream to"
+        }
+      }
+    },
+    "NodeEventTargetStatus": {
+      "id": "#/definitions/NodeEventTargetStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "targetId",
+        "state",
+        "targetAddress",
+        "targetPort",
+        "protocol",
+        "encoding",
+        "username",
+        "secured",
+        "error"
+      ],
+      "properties": {
+        "targetId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ID of the notification target"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive"
+          ],
+          "description": "Indicates if the device can reach this target"
+        },
+        "targetAddress": {
+          "type": "string",
+          "minLength": 1,
+          "description": "IP address of the notification target"
+        },
+        "targetPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1024,
+          "maximum": 65535,
+          "default": 5672,
+          "description": "The port where notification target is listening"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "amqp"
+          ],
+          "description": "Messaging Protocol the notification target is configured with "
+        },
+        "encoding": {
+          "type": "string",
+          "enum": [
+            "json"
+          ],
+          "description": "Encoding format the notification target is configured with "
+        },
+        "username": {
+          "type": "string",
+          "description": "Username of the notification target"
+        },
+        "secured": {
+          "type": "boolean",
+          "default": false,
+          "description": "Is communication channel secured for the notification target"
+        },
+        "error": {
+          "type": "string",
+          "description": "Errors encountered when connecting to notification target"
+        }
+      }
+    },
+    "NodeEventNotificationConfig": {
+      "id": "#/definitions/NodeEventNotificationConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should events be streamed from this device"
+        }
+      }
+    }
+  }
+}

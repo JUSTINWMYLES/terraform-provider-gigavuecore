@@ -1,0 +1,1542 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsMetadata.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Metadata Configuration schema",
+  "definitions": {
+    "MetadataApplicationTemplate": {
+      "id": "#/definitions/MetadataApplicationTemplate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "application id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "application name"
+        },
+        "family": {
+          "type": "string",
+          "minLength": 1,
+          "description": "application category name"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User friendly application name"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetadataApplicationAttributes"
+          }
+        }
+      }
+    },
+    "MetadataCacheConfig": {
+      "id": "#/definitions/MetadataCacheConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1
+        },
+        "size": {
+          "$ref": "#/definitions/MetadataCacheSize",
+          "description": "Size of flows"
+        },
+        "timeout": {
+          "$ref": "#/definitions/MetadataCacheTimeout"
+        },
+        "event": {
+          "type": "string",
+          "enum": [
+            "txnEnd",
+            "none"
+          ],
+          "defaultValue": "txnEnd"
+        },
+        "sampling": {
+          "$ref": "#/definitions/MetadataCacheSampling"
+        },
+        "exporters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "alias of metadata exporters to attach this cache"
+        },
+        "networkProfiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "alias of metadata network profiles to attach this cache"
+        },
+        "match": {
+          "$ref": "#/definitions/MetadataCacheMatch",
+          "description": "match criteria for record generation"
+        },
+        "flowBehavior": {
+          "type": "string",
+          "enum": [
+            "unidir",
+            "bidir"
+          ],
+          "description": "direction for flow identification"
+        },
+        "observationDomainId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "dpiInjectLimit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "multiCollect": {
+          "type": "boolean",
+          "description": "Collect all attributes as it is discovered when enable. It will export the same record once when disable."
+        },
+        "advanceHash": {
+          "type": "boolean",
+          "description": "When scheduling flows for processing, use external encapsulate packet header if disable, use inner packet header if enable."
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "MetadataCacheSize": {
+      "id": "#/definitions/MetadataCacheSize",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "size of the flows",
+      "properties": {
+        "flows": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "size of flows in millions"
+        }
+      }
+    },
+    "MetadataCacheMatch": {
+      "id": "#/definitions/MetadataCacheMatch",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "datalink": {
+          "$ref": "#/definitions/MetadataCacheMatchDatalink"
+        },
+        "interface": {
+          "$ref": "#/definitions/MetadataCacheMatchInterface"
+        },
+        "ip": {
+          "$ref": "#/definitions/MetadataCacheIp"
+        },
+        "ipv4": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv4"
+        },
+        "ipv6": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv6"
+        },
+        "transport": {
+          "$ref": "#/definitions/MetadataCacheMatchTransport"
+        }
+      }
+    },
+    "MetadataCacheIp": {
+      "id": "#/definitions/MetadataCacheIp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileTransport": {
+      "id": "#/definitions/MetadataApplicationProfileTransport",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dstPort": {
+          "type": "boolean"
+        },
+        "srcPort": {
+          "type": "boolean"
+        },
+        "icmp": {
+          "$ref": "#/definitions/MetadataApplicationProfileTransportIcmp"
+        },
+        "tcp": {
+          "$ref": "#/definitions/MetadataApplicationProfileTransportTcp"
+        },
+        "udp": {
+          "$ref": "#/definitions/MetadataApplicationProfileTransportUdp"
+        }
+      }
+    },
+    "MetadataCacheMatchTransport": {
+      "id": "#/definitions/MetadataCacheMatchTransport",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dstPort": {
+          "type": "boolean"
+        },
+        "srcPort": {
+          "type": "boolean"
+        },
+        "icmp": {
+          "$ref": "#/definitions/MetadataCacheMatchTransportIcmp"
+        },
+        "tcp": {
+          "$ref": "#/definitions/MetadataCacheMatchTransportTcp"
+        },
+        "udp": {
+          "$ref": "#/definitions/MetadataCacheMatchTransportUdp"
+        }
+      }
+    },
+    "MetadataApplicationProfileTransportUdp": {
+      "id": "#/definitions/MetadataApplicationProfileTransportUdp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dstPort": {
+          "type": "boolean"
+        },
+        "srcPort": {
+          "type": "boolean"
+        },
+        "msgLen": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchTransportUdp": {
+      "id": "#/definitions/MetadataCacheMatchTransportUdp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dstPort": {
+          "type": "boolean"
+        },
+        "srcPort": {
+          "type": "boolean"
+        },
+        "msgLen": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileTransportTcp": {
+      "id": "#/definitions/MetadataApplicationProfileTransportTcp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ackNumber": {
+          "type": "boolean"
+        },
+        "dstPort": {
+          "type": "boolean"
+        },
+        "flags": {
+          "type": "boolean"
+        },
+        "headerLen": {
+          "type": "boolean"
+        },
+        "seqNumber": {
+          "type": "boolean"
+        },
+        "srcPort": {
+          "type": "boolean"
+        },
+        "urgentPtr": {
+          "type": "boolean"
+        },
+        "windowSize": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchTransportTcp": {
+      "id": "#/definitions/MetadataCacheMatchTransportTcp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ackNumber": {
+          "type": "boolean"
+        },
+        "dstPort": {
+          "type": "boolean"
+        },
+        "flags": {
+          "type": "boolean"
+        },
+        "headerLen": {
+          "type": "boolean"
+        },
+        "seqNumber": {
+          "type": "boolean"
+        },
+        "srcPort": {
+          "type": "boolean"
+        },
+        "urgentPtr": {
+          "type": "boolean"
+        },
+        "windowSize": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileTransportIcmp": {
+      "id": "#/definitions/MetadataApplicationProfileTransportIcmp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ipv4Code": {
+          "type": "boolean"
+        },
+        "ipv4Type": {
+          "type": "boolean"
+        },
+        "ipv6Code": {
+          "type": "boolean"
+        },
+        "ipv6Type": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchTransportIcmp": {
+      "id": "#/definitions/MetadataCacheMatchTransportIcmp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ipv4Code": {
+          "type": "boolean"
+        },
+        "ipv4Type": {
+          "type": "boolean"
+        },
+        "ipv6Code": {
+          "type": "boolean"
+        },
+        "ipv6Type": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchIpv6": {
+      "id": "#/definitions/MetadataCacheMatchIpv6",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destination": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv6Destination"
+        },
+        "dscp": {
+          "type": "boolean"
+        },
+        "extensionMap": {
+          "type": "boolean"
+        },
+        "flowLabel": {
+          "type": "boolean"
+        },
+        "fragmentation": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv6Fragmentation"
+        },
+        "hopLimit": {
+          "type": "boolean"
+        },
+        "length": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv6Length"
+        },
+        "nextHeader": {
+          "type": "boolean"
+        },
+        "precedence": {
+          "type": "boolean"
+        },
+        "section": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv6Section"
+        },
+        "source": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv6Source"
+        },
+        "trafficClass": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv6": {
+      "id": "#/definitions/MetadataApplicationProfileIpv6",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destination": {
+          "$ref": "#/definitions/MetadataApplicationProfileIpv6Destination"
+        },
+        "dscp": {
+          "type": "boolean"
+        },
+        "extensionMap": {
+          "type": "boolean"
+        },
+        "flowLabel": {
+          "type": "boolean"
+        },
+        "fragmentation": {
+          "$ref": "#/definitions/MetadataApplicationProfileIpv6Fragmentation"
+        },
+        "hopLimit": {
+          "type": "boolean"
+        },
+        "length": {
+          "$ref": "#/definitions/MetadataApplicationProfileIpv6Length"
+        },
+        "nextHeader": {
+          "type": "boolean"
+        },
+        "precedence": {
+          "type": "boolean"
+        },
+        "section": {
+          "$ref": "#/definitions/MetadataApplicationProfileIpv6Section"
+        },
+        "source": {
+          "$ref": "#/definitions/MetadataApplicationProfileIpv6Source"
+        },
+        "trafficClass": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv6Length": {
+      "id": "#/definitions/MetadataApplicationProfileIpv6Length",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "header": {
+          "type": "boolean"
+        },
+        "payload": {
+          "type": "boolean"
+        },
+        "total": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchIpv6Length": {
+      "id": "#/definitions/MetadataCacheMatchIpv6Length",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "header": {
+          "type": "boolean"
+        },
+        "payload": {
+          "type": "boolean"
+        },
+        "total": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileIp": {
+      "id": "#/definitions/MetadataApplicationProfileIp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv4": {
+      "id": "#/definitions/MetadataApplicationProfileIpv4",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destination": {
+          "$ref": "#/definitions/MetadataApplicationProfileIpv4Destination"
+        },
+        "dscp": {
+          "type": "boolean"
+        },
+        "fragmentation": {
+          "$ref": "#/definitions/MetadataApplicationProfileIpv4Fragmentation"
+        },
+        "headerLen": {
+          "type": "boolean"
+        },
+        "optionMap": {
+          "type": "boolean"
+        },
+        "precedence": {
+          "type": "boolean"
+        },
+        "protocol": {
+          "type": "boolean"
+        },
+        "section": {
+          "$ref": "#/definitions/MetadataApplicationProfileIpv4Section"
+        },
+        "source": {
+          "$ref": "#/definitions/MetadataApplicationProfileIpv4Source"
+        },
+        "tos": {
+          "type": "boolean"
+        },
+        "totalLength": {
+          "type": "boolean"
+        },
+        "ttl": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileOuterIp": {
+      "id": "#/definitions/MetadataApplicationProfileOuterIp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "boolean"
+        },
+        "destination": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileGtpu": {
+      "id": "#/definitions/MetadataApplicationProfileGtpu",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "teid": {
+          "type": "boolean"
+        },
+        "qfi": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchIpv4": {
+      "id": "#/definitions/MetadataCacheMatchIpv4",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destination": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv4Destination"
+        },
+        "dscp": {
+          "type": "boolean"
+        },
+        "fragmentation": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv4Fragmentation"
+        },
+        "headerLen": {
+          "type": "boolean"
+        },
+        "optionMap": {
+          "type": "boolean"
+        },
+        "precedence": {
+          "type": "boolean"
+        },
+        "protocol": {
+          "type": "boolean"
+        },
+        "section": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv4Section"
+        },
+        "source": {
+          "$ref": "#/definitions/MetadataCacheMatchIpv4Source"
+        },
+        "tos": {
+          "type": "boolean"
+        },
+        "ttl": {
+          "type": "boolean"
+        },
+        "totalLength": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchIpv4Source": {
+      "id": "#/definitions/MetadataCacheMatchIpv4Source",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prefixMinMask": {
+          "type": "string",
+          "description": "ipv4 source prefix minimum-mask - netmask or mask length"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv4Source": {
+      "id": "#/definitions/MetadataApplicationProfileIpv4Source",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prefixMinMask": {
+          "type": "string",
+          "description": "ipv4 source prefix minimum-mask - netmask or mask length"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv6Source": {
+      "id": "#/definitions/MetadataApplicationProfileIpv6Source",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prefixMinMask": {
+          "type": "string"
+        }
+      }
+    },
+    "MetadataCacheMatchIpv6Source": {
+      "id": "#/definitions/MetadataCacheMatchIpv6Source",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prefixMinMask": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ipv6 source prefix minimum-mask - netmask or mask length"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv4Section": {
+      "id": "#/definitions/MetadataApplicationProfileIpv4Section",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "headerSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128
+        },
+        "payloadSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128
+        }
+      }
+    },
+    "MetadataCacheMatchIpv4Section": {
+      "id": "#/definitions/MetadataCacheMatchIpv4Section",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "headerSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128
+        },
+        "payloadSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv6Section": {
+      "id": "#/definitions/MetadataApplicationProfileIpv6Section",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "headerSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128
+        },
+        "payloadSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128
+        }
+      }
+    },
+    "MetadataCacheMatchIpv6Section": {
+      "id": "#/definitions/MetadataCacheMatchIpv6Section",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "headerSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128
+        },
+        "payloadSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128
+        }
+      }
+    },
+    "MetadataCacheMatchIpv4Fragmentation": {
+      "id": "#/definitions/MetadataCacheMatchIpv4Fragmentation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flags": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "boolean"
+        },
+        "offset": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv4Fragmentation": {
+      "id": "#/definitions/MetadataApplicationProfileIpv4Fragmentation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flags": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "boolean"
+        },
+        "offset": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv6Fragmentation": {
+      "id": "#/definitions/MetadataApplicationProfileIpv6Fragmentation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flags": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "boolean"
+        },
+        "offset": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchIpv6Fragmentation": {
+      "id": "#/definitions/MetadataCacheMatchIpv6Fragmentation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flags": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "boolean"
+        },
+        "offset": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchIpv4Destination": {
+      "id": "#/definitions/MetadataCacheMatchIpv4Destination",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prefixMinMask": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ipv4 destination prefix minimum-mask - netmask or mask length"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv4Destination": {
+      "id": "#/definitions/MetadataApplicationProfileIpv4Destination",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prefixMinMask": {
+          "type": "string"
+        }
+      }
+    },
+    "MetadataApplicationProfileIpv6Destination": {
+      "id": "#/definitions/MetadataApplicationProfileIpv6Destination",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prefixMinMask": {
+          "type": "string"
+        }
+      }
+    },
+    "MetadataCacheMatchIpv6Destination": {
+      "id": "#/definitions/MetadataCacheMatchIpv6Destination",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prefixMinMask": {
+          "type": "string"
+        }
+      }
+    },
+    "MetadataApplicationProfileInterface": {
+      "id": "#/definitions/MetadataApplicationProfileInterface",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inPhysicalWidth": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            2,
+            4
+          ]
+        },
+        "inNameWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32
+        },
+        "outPhysicalWidth": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            2,
+            4
+          ]
+        }
+      }
+    },
+    "MetadataCacheMatchInterface": {
+      "id": "#/definitions/MetadataCacheMatchInterface",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inPhysicalWidth": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            2,
+            4
+          ]
+        },
+        "inNameWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32
+        }
+      }
+    },
+    "MetadataApplicationProfileCounter": {
+      "id": "#/definitions/MetadataApplicationProfileCounter",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "packets": {
+          "type": "boolean"
+        },
+        "packetsLong": {
+          "type": "boolean"
+        },
+        "bytes": {
+          "type": "boolean"
+        },
+        "bytesLong": {
+          "type": "boolean"
+        },
+        "innerByte": {
+          "type": "boolean"
+        },
+        "innerByteLong": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileDatalink": {
+      "id": "#/definitions/MetadataApplicationProfileDatalink",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "macSrc": {
+          "type": "boolean"
+        },
+        "macDst": {
+          "type": "boolean"
+        },
+        "vlan": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheMatchDatalink": {
+      "id": "#/definitions/MetadataCacheMatchDatalink",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "macSrc": {
+          "type": "boolean"
+        },
+        "macDst": {
+          "type": "boolean"
+        },
+        "vlan": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataCacheSampling": {
+      "id": "#/definitions/MetadataCacheSampling",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "multiRate",
+            "noSampling",
+            "singleRate"
+          ],
+          "default": "noSampling"
+        },
+        "singleSamplingRate": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 16000,
+          "default": 10,
+          "description": "Packet interval window size. Valid values: 10-16000 (in packets)"
+        }
+      }
+    },
+    "MetadataCacheTimeout": {
+      "id": "#/definitions/MetadataCacheTimeout",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "idle": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 604800,
+          "default": 1800,
+          "description": "idle timeout in seconds. max value 7days. default 30 min"
+        }
+      }
+    },
+    "MetadataExporter": {
+      "id": "appsMetadata.json#/definitions/MetadataExporter",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "cef",
+            "netflow",
+            "monitor"
+          ]
+        },
+        "destination": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporterDestination",
+          "description": "destination attributes"
+        },
+        "source": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporterSource",
+          "description": "source tunnel port"
+        },
+        "netflow": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporterNetflow",
+          "description": "netflow attributes"
+        },
+        "cef": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporterCef",
+          "description": "cef attributes"
+        },
+        "monitor": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporterMonitor",
+          "description": "monitor attributes"
+        },
+        "snmp": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporterSnmp"
+        },
+        "maxPktSize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "applicationProfiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "application profile aliases to attach to the exporter"
+        },
+        "mobilitySam": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporterSam"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "MetadataExporterSnmp": {
+      "id": "#/definitions/MetadataExporterSnmp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "snmp reverse lookup enable/disable"
+        }
+      }
+    },
+    "MetadataExporterSam": {
+      "id": "#/definitions/MetadataExporterSam",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trigger": {
+          "type": "string",
+          "default": "Immediate"
+        },
+        "encoding": {
+          "type": "string",
+          "default": "JSON"
+        },
+        "encodingFormat": {
+          "type": "string",
+          "enum": [
+            "hierarchy",
+            "flat"
+          ],
+          "default": "hierarchy"
+        },
+        "eventEnable": {
+          "type": "object",
+          "properties": {
+            "modify": {
+              "default": false,
+              "type": "boolean"
+            },
+            "update": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "MetadataExporterMonitor": {
+      "id": "#/definitions/MetadataExporterMonitor",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 60,
+          "maximum": 900,
+          "description": "how often to export in seconds"
+        }
+      }
+    },
+    "MetadataExporterCef": {
+      "id": "#/definitions/MetadataExporterCef",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activeTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 604800,
+          "description": "in seconds"
+        },
+        "inactiveTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 604800,
+          "description": "in seconds"
+        }
+      }
+    },
+    "MetadataExporterDestination": {
+      "id": "#/definitions/MetadataExporterDestination",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ipv4Address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "ipv4 address"
+        },
+        "dscp": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 63,
+          "default": 0
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 255
+        },
+        "l4Protocol": {
+          "type": "string",
+          "enum": [
+            "udp",
+            "tcp"
+          ]
+        },
+        "l4PortDst": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "l4PortSrc": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      }
+    },
+    "MetadataExporterSource": {
+      "id": "#/definitions/MetadataExporterSource",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ipInterface": {
+          "type": "string"
+        }
+      }
+    },
+    "MetadataExporterNetflow": {
+      "id": "#/definitions/MetadataExporterNetflow",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "string",
+          "enum": [
+            "v5",
+            "v9",
+            "ipfix"
+          ]
+        },
+        "templateRefresh": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 216000,
+          "default": 1,
+          "description": "template refresh interval in seconds"
+        },
+        "templateType": {
+          "type": "string",
+          "enum": [
+            "cohesive",
+            "segregated"
+          ]
+        },
+        "activeTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 604800,
+          "description": "in seconds"
+        },
+        "inactiveTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 604800,
+          "description": "in seconds"
+        }
+      }
+    },
+    "MetadataNetworkProfile": {
+      "id": "#/definitions/MetadataNetworkProfile",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "identify client and server side of flows",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "network profile alias"
+        },
+        "ipv4Subnets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "ipv4 subnets, to identify client"
+        },
+        "ipv6Masks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "ipv6 subnets, to identify client"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "MetadataApplicationProfile": {
+      "id": "#/definitions/MetadataApplicationProfile",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "application profile alias"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "export",
+            "filter"
+          ]
+        },
+        "applicationId": {
+          "type": "boolean",
+          "default": false,
+          "description": "only valid with 'export' type"
+        },
+        "applications": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+          },
+          "description": "application and attributes."
+        },
+        "counter": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileCounter"
+        },
+        "datalink": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileDatalink"
+        },
+        "flow": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileFlow"
+        },
+        "interface": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileInterface"
+        },
+        "ip": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileIp"
+        },
+        "ipv4": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileIpv4"
+        },
+        "ipv6": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileIpv6"
+        },
+        "outerIpv4": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileOuterIp"
+        },
+        "outerIpv6": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileOuterIp"
+        },
+        "gtpu": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileGtpu"
+        },
+        "timestamp": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileTimestamp"
+        },
+        "transport": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfileTransport"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "MetadataApplicationProfileTimestamp": {
+      "id": "#/definitions/MetadataApplicationProfileTimestamp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowEndMsec": {
+          "type": "boolean"
+        },
+        "flowEndsec": {
+          "type": "boolean"
+        },
+        "flowStartMsec": {
+          "type": "boolean"
+        },
+        "flowStartsec": {
+          "type": "boolean"
+        },
+        "sysUpTimeFirst": {
+          "type": "boolean"
+        },
+        "sysUpTimeLast": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationProfileFlow": {
+      "id": "#/definitions/MetadataApplicationProfileFlow",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "endReason": {
+          "type": "boolean"
+        }
+      }
+    },
+    "MetadataApplicationSpec": {
+      "id": "#/definitions/MetadataApplicationSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "application name"
+        },
+        "isUserDefined": {
+          "type": "boolean",
+          "description": "Default value is false. Must be set to true only for App Intel solution while configuring user defined apps"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationAttributes"
+          }
+        }
+      }
+    },
+    "MetadataApplicationAttributes": {
+      "id": "#/definitions/MetadataApplicationAttributes",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "attribute name"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "description": "application's attribute value"
+        }
+      }
+    },
+    "MetadataNetworkProfileQueryResponse": {
+      "id": "#/definitions/MetadataNetworkProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "networkProfile"
+      ],
+      "properties": {
+        "networkProfile": {
+          "$ref": "appsMetadata.json#/definitions/MetadataNetworkProfile"
+        }
+      }
+    },
+    "MetadataNetworkProfilesQueryResponse": {
+      "id": "#/definitions/MetadataNetworkProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "networkProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetadataNetworkProfile"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "MetadataApplicationProfileQueryResponse": {
+      "id": "#/definitions/MetadataApplicationProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicationProfile"
+      ],
+      "properties": {
+        "applicationProfile": {
+          "$ref": "#/definitions/MetadataApplicationProfile"
+        }
+      }
+    },
+    "MetadataApplicationProfilesQueryResponse": {
+      "id": "#/definitions/MetadataApplicationProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "applicationProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetadataApplicationProfile"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "MetadataExporterQueryResponse": {
+      "id": "#/definitions/MetadataExporterQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadataExporter"
+      ],
+      "properties": {
+        "metadataExporter": {
+          "$ref": "#/definitions/MetadataExporter"
+        }
+      }
+    },
+    "MetadataExportersQueryResponse": {
+      "id": "#/definitions/MetadataExportersQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "metadataExporters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetadataExporter"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "MetadataCacheQueryResponse": {
+      "id": "#/definitions/MetadataCacheQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadataCache"
+      ],
+      "properties": {
+        "metadataCache": {
+          "$ref": "#/definitions/MetadataCacheConfig"
+        }
+      }
+    },
+    "MetadataCachesQueryResponse": {
+      "id": "#/definitions/MetadataCacheQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "metadataCaches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetadataCacheConfig"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "MetadataApplicationTemplatesQueryResponse": {
+      "id": "#/definitions/MetadataCacheQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "metadataApplicationTemplates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetadataApplicationTemplate"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "UserDefinedApplications" : {
+      "id": "#/definitions/UserDefinedApplications",
+      "type": "array",
+      "description": "Pass this the user defined apps while configuring it in solution",
+      "items": {
+        "type": "string"
+      }
+    },
+    "UserDefinedApplicationProfile" : {
+      "id": "#/definitions/UserDefinedApplicationProfile",
+      "type": "object",
+      "description": "Pass this the user defined apps while updating the solution. Solution will fetch the config from this attribute",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "userDefinedApplications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserDefinedApplications"
+          }
+        }
+      }
+    }
+  }
+}

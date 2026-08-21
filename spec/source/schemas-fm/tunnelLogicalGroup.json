@@ -1,0 +1,671 @@
+{
+  "id": "http://gigamon.com/schemas-fm/topology.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Tunnel Logical Group schema",
+  "definitions": {
+    "GigaTunnelLogicalGroup": {
+      "id": "#/definitions/GigaTunnelLogicalGroup",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "encapTunnelInfos",
+        "decapTunnelInfos"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "FM Tunnel Logical Group Alias. FM auto generated alias cannot be edited."
+        },
+        "customAlias": {
+          "type": "string",
+          "description": "FM Tunnel Logical Group custom alias"
+        },
+        "key": {
+          "type": "string",
+          "readOnly": true,
+          "description": "FM Tunnel Logical Group Key"
+        },
+        "alertPolicyName": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Alert policy name"
+        },
+        "tunnelType": {
+          "type": "string",
+          "description": "Giga Tunnel Type",
+          "enum": [
+            "Embedded Circuit",
+            "Embedded L2GRE",
+            "Embedded VXLAN",
+            "GigaSmart L2GRE",
+            "GigaSmart VXLAN",
+            "Physical Embedded/GigaSMART L2GRE",
+            "Physical Embedded/GigaSMART VXLAN",
+            "Hybrid VXLAN",
+            "Hybrid L2GRE",
+            "Hybrid ERSPAN"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "description": "Giga Tunnel Logical Group discovery state",
+          "enum": [
+            "Complete",
+            "Incomplete"
+          ]
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "isActive": {
+          "type": "boolean",
+          "default": false,
+          "description": "User can activate or deactive Tunnel logical group. Active Tunnel logical groups of Complete state will be eligible for tunnel monitoring."
+        },
+        "tunnelId": {
+          "type": "long",
+          "default": false,
+          "description": "Tunnel logical group Id used for encapsulation and decapsulation"
+        },
+        "encapTunnelInfos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BaseOperationTypeInfo"
+          },
+          "uniqueItems": true
+        },
+        "decapTunnelInfos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BaseOperationTypeInfo"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "GigaTunnelLogicalGroupQueryResponse": {
+      "id": "#/definitions/GigaTunnelLogicalGroupQueryResponse",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "tunnelLogicalGroups"
+      ],
+      "properties": {
+        "tunnelLogicalGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaTunnelLogicalGroup"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "BaseOperationTypeInfo": {
+      "id": "#/definitions/BaseOperationTypeInfo",
+      "type": "object",
+      "since": "FM 6.3",
+      "additionalProperties": true,
+      "required": [
+      ],
+      "properties": {
+        "tunnelType": {
+          "type": "string",
+          "description": "Giga Tunnel Type",
+          "enum": [
+            "Circuit",
+            "L2GRE",
+            "VXLAN",
+            "GS_L2GRE",
+            "GS_VXLAN",
+            "VIRTUAL_L2GRE",
+            "VIRTUAL_VXLAN",
+            "VIRTUAL_ERPSAN"
+          ]
+        },
+        "tunnelOperationType": {
+          "type": "string",
+          "description": "Giga Tunnel Operational Type",
+          "enum": [
+            "Encap",
+            "Decap"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/GigaTunnelOperationTypeInfo"
+        },
+        {
+          "$ref": "#/definitions/GigaVirtualTunnelOperationTypeInfo"
+        }
+      ]
+    },
+    "GigaTunnelOperationTypeInfo": {
+      "id": "#/definitions/GigaTunnelOperationTypeInfo",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "clusterId"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "Cluster Id of Tunnel Encap/Decap operation"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "Cluster Id of Tunnel Encap/Decap operation"
+        },
+        "gigaTunnelIpInterfaceInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaTunnelIpInterfaceInfo"
+          },
+          "uniqueItems": true
+        },
+        "gigaTunnelConfigInfo": {
+          "$ref": "#/definitions/GigaTunnelConfigInfo"
+        },
+        "gigaTunnelGSOPInfo": {
+          "$ref": "#/definitions/GigaTunnelGSOPInfo"
+        },
+        "gigaTunnelMapInfo": {
+          "$ref": "#/definitions/GigaTunnelMapInfo"
+        }
+      }
+    },
+    "GigaVirtualTunnelOperationTypeInfo": {
+      "id": "#/definitions/GigaVirtualTunnelOperationTypeInfo",
+      "type": "object",
+      "since": "FM 6.3",
+      "additionalProperties": true,
+      "required": [
+        "clusterId"
+      ],
+      "properties": {
+        "monitorSessionId": {
+          "type": "string",
+          "description": "Monitoring Session Id"
+        },
+        "vSeriesId": {
+          "type": "string",
+          "description": "V Series Id"
+        },
+        "vSeriesName": {
+          "type": "string",
+          "description": "V Series Name"
+        },
+        "mgmtIp": {
+          "type": "string",
+          "description": "Management IP"
+        },
+        "monitoringSessionSpecId": {
+          "type": "string",
+          "description": "Actual Monitoring Session Id"
+        },
+        "monitoringSessionSpecName": {
+          "type": "string",
+          "description": "Actual Monitoring Session Name"
+        },
+        "monitoringDomainId": {
+          "type": "string",
+          "description": "Monitoring Domain Id"
+        },
+        "monitoringConnId": {
+          "type": "string",
+          "description": "Monitoring Connection Name"
+        },
+        "virtualTunnelConfigInfo": {
+          "$ref": "#/definitions/GigaVirtualTunnelConfigInfo"
+        }
+      }
+    },
+    "GigaVirtualTunnelConfigInfo": {
+      "id": "#/definitions/GigaVirtualTunnelConfigInfo",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "tepAlias": {
+          "type": "string",
+          "description": "Ingress/Egress Tunnel Endpoint Alias"
+        },
+        "ports": {
+          "type": "array",
+          "description": "Participating Ports",
+          "items": {
+            "type": "string"
+          }
+        },
+        "remoteIp": {
+          "type": "string",
+          "description": "Remote IP"
+        },
+        "gwIp": {
+          "type": "string",
+          "description": "Remote gateway IP"
+        },
+        "ipType": {
+          "type": "string",
+          "description": "ipv4/ipv6"
+        },
+        "sourceIp": {
+          "type": "string",
+          "description": "Source IP"
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/GigaVirtualVxlanTunnelConfigInfo"
+        },
+        {
+          "$ref": "#/definitions/GigaVirtualL2greTunnelConfigInfo"
+        },
+        {
+          "$ref": "#/definitions/GigaVirtualErspanTunnelConfigInfo"
+        }
+      ]
+    },
+    "GigaVirtualVxlanTunnelConfigInfo": {
+      "id": "#/definitions/GigaVirtualVxlanTunnelConfigInfo",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "portDst": {
+          "type": "integer",
+          "description": "Destination Port"
+        },
+        "vni": {
+          "type": "long",
+          "description": "VXLAN VNI"
+        },
+        "portSrc": {
+          "type": "integer",
+          "description": "Source Port"
+        }
+      }
+    },
+    "GigaVirtualL2greTunnelConfigInfo": {
+      "id": "#/definitions/GigaVirtualL2greTunnelConfigInfo",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "l2greKey": {
+          "type": "long",
+          "description": "L2GRE Key"
+        }
+      }
+    },
+    "GigaVirtualErspanTunnelConfigInfo": {
+      "id": "#/definitions/GigaVirtualErspanTunnelConfigInfo",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "flowId": {
+          "type": "long",
+          "description": "ERSPAN Flow Id"
+        }
+      }
+    },
+    "GigaTunnelGSOPInfo": {
+      "id": "#/definitions/GigaTunnelGSOPInfo",
+      "type": "object",
+      "additionalProperties": true,
+      "oneOf": [
+        {
+          "$ref": "#/definitions/GigaTunnelL2GREGSOPTunnelInfo"
+        },
+        {
+          "$ref": "#/definitions/GigaTunnelVxlanGSOPTunnelInfo"
+        },
+        {
+          "$ref": "#/definitions/GigaTunnelErspanGSOPTunnelInfo"
+        }
+      ]
+    },
+    "GigaTunnelL2GREGSOPTunnelInfo": {
+      "id": "#/definitions/GigaTunnelL2GREGSOPTunnelInfo",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "gsopAlias",
+        "dstIpAddress"
+      ],
+      "properties": {
+        "gsopAlias": {
+          "type": "string",
+          "description": "GSOP Alias. Participating in tunnel encapsulation/decapsulation."
+        },
+        "dstIpAddress": {
+          "type": "string",
+          "description": "Destination IP IPV4/IPv6 Address"
+        },
+        "l2grekey": {
+          "type": "long",
+          "description": "L2GRE Key"
+        },
+        "portgroupAlias": {
+          "type": "string",
+          "description": "Portgroup Alias. Participating in tunnel encapsulation/decapsulation."
+        },
+        "gsGroupAlias": {
+          "type": "string",
+          "description": "Gigasmart Group alias.Participating in tunnel encapsulation/decapsulation."
+        }
+      }
+    },
+    "GigaTunnelVxlanGSOPTunnelInfo": {
+      "id": "#/definitions/GigaTunnelVxlanGSOPTunnelInfo",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "gsopAlias",
+        "dstIpAddress"
+      ],
+      "properties": {
+        "gsopAlias": {
+          "type": "string",
+          "description": "GSOP Alias. Participating in tunnel encapsulation/decapsulation."
+        },
+        "dstIpAddress": {
+          "type": "string",
+          "description": "Destination IP IPV4/IPv6 Address"
+        },
+        "vni": {
+          "type": "integer",
+          "description": "VNI"
+        },
+        "portDst": {
+          "type": "integer",
+          "description": "Destination Port"
+        },
+        "portSrc": {
+          "type": "integer",
+          "description": "Source Port"
+        }
+      }
+    },
+
+    "GigaTunnelErspanGSOPTunnelInfo": {
+      "id": "#/definitions/GigaTunnelErspanGSOPTunnelInfo",
+      "type": "object",
+      "since": "FM 6.3",
+      "additionalProperties": true,
+      "required": [
+        "gsopAlias",
+        "dstIpAddress"
+      ],
+      "properties": {
+        "gsopAlias": {
+          "type": "string",
+          "description": "GSOP Alias. Participating in tunnel encapsulation/decapsulation."
+        },
+        "dstIpAddress": {
+          "type": "string",
+          "description": "Destination IP IPV4/IPv6 Address"
+        },
+        "flowId": {
+          "type": "integer",
+          "description": "FLOWID"
+        }
+      }
+    },
+
+    "GigaTunnelConfigInfo": {
+      "id": "#/definitions/GigaTunnelConfigInfo",
+      "type": "object",
+      "additionalProperties": true,
+      "oneOf": [
+        {
+          "$ref": "#/definitions/GigaCircuitTunnelConfigInfo"
+        },
+        {
+          "$ref": "#/definitions/GigaL2GRETunnelConfigInfo"
+        },
+        {
+          "$ref": "#/definitions/GigaVXLANTunnelConfigInfo"
+        }
+      ]
+    },
+    "GigaL2GRETunnelConfigInfo": {
+      "id": "#/definitions/GigaL2GRETunnelConfigInfo",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "tunnelAlias",
+        "l2greId"
+      ],
+      "properties": {
+        "tunnelAlias": {
+          "type": "string",
+          "description": "Encapsulation/Decapsulation Tunnel Alias"
+        },
+        "l2greId": {
+          "type": "long",
+          "description": "L2GRE ID"
+        },
+        "dstIpAddress": {
+          "type": "String",
+          "description": "Destination IP IPV4 Address"
+        }
+      }
+    },
+    "GigaVXLANTunnelConfigInfo": {
+      "id": "#/definitions/GigaVXLANTunnelConfigInfo",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "tunnelAlias",
+        "vxlanId"
+      ],
+      "properties": {
+        "tunnelAlias": {
+          "type": "string",
+          "description": "Encapsulation/Decapsulation Tunnel Alias"
+        },
+        "vxlanId": {
+          "type": "long",
+          "description": "L2GRE ID"
+        },
+        "dstIpAddress": {
+          "type": "String",
+          "description": "Destination IP IPV4 Address"
+        },
+        "srcPort": {
+          "type": "String",
+          "description": "Source Port"
+        },
+        "dstPort": {
+          "type": "String",
+          "description": "Destination Port"
+        }
+      }
+    },
+    "GigaCircuitTunnelConfigInfo": {
+      "id": "#/definitions/GigaCircuitTunnelConfigInfo",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "tunnelAlias"
+      ],
+      "properties": {
+        "tunnelAlias": {
+          "type": "string",
+          "description": "Encapsulation/Decapsulation Tunnel Alias"
+        },
+        "circuitId": {
+          "type": "integer",
+          "description": "Circuit ID"
+        }
+      }
+    },
+    "GigaTunnelIpInterfaceInfo": {
+      "id": "#/definitions/GigaTunnelIpInterfaceInfo",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "srcIpAddress",
+        "srcInterfaceAlias"
+      ],
+      "properties": {
+        "srcIpAddress": {
+          "type": "String",
+          "description": "IP Address"
+        },
+        "srcIpMask": {
+          "type": "String",
+          "description": "IP Mask"
+        },
+        "srcGateway": {
+          "type": "String",
+          "description": "Gateway"
+        },
+        "srcHwAddress": {
+          "type": "String",
+          "description": "Hardware Address"
+        },
+        "ipType": {
+          "type": "String",
+          "description": "IP Type(IPV4/IPV6)"
+        },
+        "srcInterfaceAlias": {
+          "type": "String",
+          "description": "Source Interface Alias"
+        }
+      }
+    },
+    "GigaTunnelMapInfo": {
+      "id": "#/definitions/GigaTunnelMapInfo",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "srcIpAddress",
+        "srcInterfaceAlias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Map Alias. Participating in Tunnel encapsulation/decapsulation"
+        },
+        "srcPorts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Source Ports used in Regular Maps"
+        },
+        "dstPorts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Destination Ports used in Regular Maps"
+        }
+      }
+    },
+    "GigaTunnelLogicalGroupSpec": {
+      "id": "#/definitions/GigaTunnelLogicalGroupSpec",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "tunnelLogicalGroups"
+      ],
+      "properties": {
+        "tunnelLogicalGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaTunnelLogicalGroup"
+          }
+        }
+      }
+    },
+    "GigaTunnelLogicalGroupSpecResults": {
+      "id": "#/definitions/GigaTunnelLogicalGroupSpecResults",
+      "type": "object",
+      "since": "FM 6.1",
+      "properties": {
+        "results": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Result of Tunnel Logical Group activate/deactivate operation"
+        },
+        "success": {
+          "type": "integer",
+          "description": "Number of Tunnnel Logical Groups activated/deactivated successfully",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "failure": {
+          "type": "integer",
+          "description": "Number of Tunnnel Logical Groups activated/deactivated successfully",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "total": {
+          "type": "integer",
+          "description": "Number of Tunnnel Logical Groups activated/deactivated successfully",
+          "minimum": 0,
+          "readOnly": true
+        }
+      }
+    },
+    "GigaTunnelLogicalGroupStatsSpec": {
+      "id": "#/definitions/GigaTunnelLogicalGroupStatsSpec",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": true,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "String",
+          "description": "Tunnel Logical Group Alias"
+        },
+        "octetsTx": {
+          "type": "long",
+          "description": "Encapsulation end Octets Tx"
+        },
+        "packetsTx": {
+          "type": "long",
+          "description": "Encapsulation end Packets Tx"
+        },
+        "octetsRx": {
+          "type": "long",
+          "description": "Decapsulation end Octets Tx"
+        },
+        "packetsRx": {
+          "type": "long",
+          "description": "Decapsulation end Packets Tx"
+        },
+        "lastSuccessfulAttemptTime": {
+          "type": "String",
+          "description": "Last Stats Polled Timestamp UTC Format"
+        },
+        "processedTrafficPercentage": {
+          "type": "long",
+          "description": "Amount of Traffic Processed based on Encap Packets Tx and Decap Packets Rx"
+        },
+        "deviation": {
+          "type": "long",
+          "description": "Traffic Deviation in Percentage"
+        }
+      }
+    }
+  }
+}

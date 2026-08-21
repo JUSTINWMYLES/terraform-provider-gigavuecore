@@ -1,0 +1,138 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmUserSelectedCiphers.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM User Selected Ciphers schema",
+  "definitions": {
+    "FmCipherDetails": {
+      "id": "#/definitions/FmCipherDetails",
+      "type": "object",
+      "description": "Details of supported TLS ciphers and related parameters.",
+      "properties": {
+        "ciphers": {
+          "type": "array",
+          "description": "List of cipher suites TLS applicable to this protocol variant.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "FmCipherDetailsGroups": {
+      "id": "#/definitions/FmCipherDetailsGroups",
+      "type": "object",
+      "description": "Details of supported GROUPS",
+      "properties": {
+        "groups": {
+          "type": "array",
+          "description": "List of TLS groups (for example, elliptic curve groups).",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "FmCipherDetails2": {
+      "id": "#/definitions/FmCipherDetails2",
+      "type": "object",
+      "description": "Details of supported SSH ciphers and related parameters.",
+      "properties": {
+        "ciphers": {
+          "type": "array",
+          "description": "List of cipher suites SSH applicable to this protocol variant.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kex": {
+          "type": "array",
+          "description": "List of SSH key exchange algorithms. Used for SSH only.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "macs": {
+          "type": "array",
+          "description": "List of SSH MAC algorithms. Used for SSH only.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hostKeys": {
+          "type": "array",
+          "description": "List of SSH host key algorithms. Used for SSH only.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "FmTlsMinVersion": {
+      "id": "#/definitions/FmTlsMinVersion",
+      "type": "string",
+      "description": "Minimum TLS version selected for the mode.",
+      "enum": [
+        "tls1.2",
+        "tls1.3"
+      ]
+    },
+
+    "FmUserSelectedTlsCiphersByProtocol": {
+      "id": "#/definitions/FmUserSelectedTlsCiphersByProtocol",
+      "type": "object",
+      "description": "User-selected cipher configuration by protocol variant within a mode",
+      "additionalProperties": false,
+      "properties": {
+        "tlsMinVersion": {
+          "$ref": "#/definitions/FmTlsMinVersion"
+        },
+        "TLS1_2": {
+          "$ref": "#/definitions/FmCipherDetails"
+        },
+        "TLS1_3": {
+          "$ref": "#/definitions/FmCipherDetails"
+        },
+        "TLS_GROUP": {
+          "$ref": "#/definitions/FmCipherDetailsGroups"
+        }
+      }
+    },
+
+    "FmUserSelectedTlsCiphers": {
+      "id": "#/definitions/FmUserSelectedTlsCiphers",
+      "type": "object",
+      "description": "User-selected cipher configuration by security mode (e.g. classic, FIPS, crypto). Each property key is a mode name and its value is the per-protocol configuration.",
+      "properties": {
+        "classic": {
+          "$ref": "#/definitions/FmUserSelectedTlsCiphersByProtocol"
+        },
+        "FIPS": {
+          "$ref": "#/definitions/FmUserSelectedTlsCiphersByProtocol"
+        },
+        "crypto": {
+          "$ref": "#/definitions/FmUserSelectedTlsCiphersByProtocol"
+        }
+      }
+    },
+
+    "FmUserSelectedSshCiphers": {
+      "id": "#/definitions/FmUserSelectedSshCiphers",
+      "type": "object",
+      "description": "User-selected cipher configuration by protocol variant.",
+      "additionalProperties": false,
+      "properties": {
+        "server": {
+          "$ref": "#/definitions/FmCipherDetails2"
+        },
+        "client": {
+          "$ref": "#/definitions/FmCipherDetails2"
+        }
+      }
+    }
+  }
+}

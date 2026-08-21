@@ -1,0 +1,2448 @@
+{
+  "id": "http://gigamon.com/schemas-fm/apps.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Configuration schema",
+  "definitions": {
+    "NetflowExporter": {
+      "id": "#/definitions/NetflowExporter",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Exporter definition",
+      "required": [
+        "alias",
+        "destination",
+        "transport"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "nfVersion": {
+          "type": "string",
+          "enum": [
+            "v5",
+            "v9",
+            "ipfix",
+            "23"
+          ],
+          "default": "v9",
+          "description": "export format versions. '23' is applicable only with format 'cef' and 'v5', 'v9' and 'ipfix' is valid only with format 'netflow'"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "netflow",
+            "cef"
+          ],
+          "default": "netflow",
+          "description": "export formats 'v9', 'v5' and 'ipfix' applicable only with 'netflow' and '23' is applicable only if format is 'cef'"
+        },
+        "destination": {
+          "$ref": "#/definitions/NetflowExporterDestination"
+        },
+        "transport": {
+          "$ref": "#/definitions/NetflowExporterTransport"
+        },
+        "filter": {
+          "$ref": "#/definitions/NetflowExporterFilter"
+        },
+        "snmp": {
+          "$ref": "#/definitions/NetflowExporterSnmp",
+          "since": "H 4.5"
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 255
+        },
+        "dscp": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 63,
+          "default": 0
+        },
+        "templateRefresh": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 216000,
+          "default": 1800
+        },
+        "tunneledPort": {
+          "deprecated": true,
+          "type": "string",
+          "minLength": 1,
+          "description": "alias of a Tunneled Port to use with this Exporter. Replaced by /ip/interfaces in GigaVUE-OS 5.5.00"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "NetflowExporterDestination": {
+      "id": "#/definitions/NetflowExporterDestination",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Exporter Destination definition",
+      "required": [
+        "address"
+      ],
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "ipVer": {
+          "type": "string",
+          "enum": [
+            "v4",
+            "v6"
+          ],
+          "default": "v4"
+        }
+      }
+    },
+    "NetflowExporterTransport": {
+      "id": "#/definitions/NetflowExporterTransport",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Exporter Transport definition",
+      "required": [
+        "port"
+      ],
+      "properties": {
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "default: 514, when format is CEF and version 23"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "udp"
+          ],
+          "default": "udp"
+        }
+      }
+    },
+    "NetflowExporterFilter": {
+      "id": "#/definitions/NetflowExporterFilter",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "rules"
+      ],
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetflowExporterFilterRules"
+          }
+        }
+      }
+    },
+    "NetflowExporterSnmp": {
+      "id": "#/definitions/NetflowExporterSnmp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Allow SNMP packets on the tunnel port"
+        }
+      }
+    },
+    "NetflowExporterFilterRules": {
+      "id": "#/definitions/NetflowExporterFilterRules",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Exporter Filter Rules Container. Private class",
+      "properties": {
+        "passRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetflowExporterFilterRule"
+          }
+        }
+      }
+    },
+    "NetflowExporterFilterRule": {
+      "id": "#/definitions/NetflowExporterFilterRule",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Filtering Rule Definition",
+      "required": [
+        "ruleId"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1
+        },
+        "matches": {
+          "description": "Set of rule's matching elements. Within a rule, matching elements of the the same type MAY be used more than once, However, their matching positions MUST be unique",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "map.json#/definitions/RuleElementVlan"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementSrcMacAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementDstMacAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4SrcAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4DstAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Tos"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Dscp"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Protocol"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp6SrcAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp6DstAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp6FlowLabel"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp6Dscp"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementL4SrcPort"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementL4DstPort"
+              },
+              {
+                "$ref": "#/definitions/RuleElementInput"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "RuleElementInput": {
+      "id": "#/definitions/RuleElementInput",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Private class",
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "input"
+          ]
+        },
+        "pos": {
+          "type": "integer",
+          "format": "byte",
+          "minimum": 0,
+          "maximum": 6,
+          "default": 0,
+          "description": "Only applicable in a context of GsRule. Value of 0 represents 'any' position"
+        },
+        "value": {
+          "type": "string"
+        },
+        "valueMax": {
+          "type": "string",
+          "description": "If present, value must be greater than 'value'"
+        }
+      }
+    },
+    "NetflowRecord": {
+      "id": "#/definitions/NetflowRecord",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Record definition",
+      "required": [
+        "alias",
+        "match"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "nfVersion": {
+          "type": "string",
+          "enum": [
+            "v5",
+            "v9",
+            "ipfix"
+          ],
+          "default": "v9",
+          "description": "v5 is readOnly"
+        },
+        "match": {
+          "$ref": "#/definitions/NetflowRecordMatchSpec"
+        },
+        "collect": {
+          "description": "deprecated. Use 'collects' instead",
+          "$ref": "#/definitions/NetflowRecordCollectSpec"
+        },
+        "collects": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/NetflowRecordPhyIntf"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordIntfNeighbor"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordSslCert"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordSslCertName"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordMultipleCollect"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordSize"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordPenUrl"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordPenUserAgent"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordPenHttpHost"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordIpv6MaskLen"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordIpv4MaskLen"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordTcpFlags"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordPenDnsRdata"
+              },
+              {
+                "$ref": "#/definitions/NetflowRecordCollect"
+              }
+            ]
+          }
+        },
+        "exportBlankPen": {
+          "type": "boolean",
+          "default": false,
+          "description": "if true and there is a mix of private elements and non-private elements and the private elements are blank, export the record"
+        },
+        "samplingRate": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16000,
+          "default": 1,
+          "description": "Packet interval window size. Valid values: 1-16000 (in packets); Associated monitor must 'multi-rate' sampling mode set; 0 is disabled"
+        },
+        "exporters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "NetflowRecordMatchSpec": {
+      "id": "#/definitions/NetflowRecordMatchSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Record Match spec",
+      "required": [
+        "matchFields"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "matchFields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "phyIntfIn",
+              "vlan",
+              "macSrc",
+              "macDst",
+              "ipv4Version",
+              "ipv4HeaderLen",
+              "ipv4Tos",
+              "ipv4TotalLen",
+              "ipv4FragId",
+              "ipv4FragFlags",
+              "ipv4FragOffset",
+              "ipv4Ttl",
+              "ipv4Protocol",
+              "ipv4Options",
+              "ipv4Dscp",
+              "ipv4Precedence",
+              "ipv4AddrSrc",
+              "ipv4AddrDst",
+              "ipv4SectionHeaderSize",
+              "ipv4SectionPayloadSize",
+              "ipv6Version",
+              "ipv6TrafficClass",
+              "ipv6FlowLabel",
+              "ipv6NextHeader",
+              "ipv6HopLimit",
+              "ipv6HeaderLen",
+              "ipv6PayloadLen",
+              "ipv6TotalLen",
+              "ipv6TotalLenMin",
+              "ipv6TotalLenMax",
+              "ipv6ExtensionMap",
+              "ipv6FragId",
+              "ipv6FragFlags",
+              "ipv6FragOffset",
+              "ipv6Protocol",
+              "ipv6Dscp",
+              "ipv6Precedence",
+              "ipv6AddrSrc",
+              "ipv6AddrDst",
+              "ipv6SectionHeaderSize",
+              "ipv6SectionPayloadSize",
+              "portSrc",
+              "portDst",
+              "icmpIpv4Code",
+              "icmpIpv4Type",
+              "icmpIpv6Code",
+              "icmpIpv6Type",
+              "udpPortSrc",
+              "udpPortDst",
+              "udpPayloadLen",
+              "tcpPortSrc",
+              "tcpPortDst",
+              "tcpSeqNumber",
+              "tcpAckNumber",
+              "tcpWindow",
+              "tcpUrgentPtr",
+              "tcpHeaderLen",
+              "tcpFlags"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "phyIntfInWidth": {
+          "type": "string",
+          "enum": [
+            "2",
+            "4"
+          ],
+          "default": "2",
+          "description": "Only valid when 'phyIntfIn' is selected"
+        },
+        "ipv4AddrSrcMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "default": 32,
+          "description": "Only valid when 'ipv4AddrSrc' is selected. Defaults to 32, in which case it matches full address"
+        },
+        "ipv4AddrDstMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "default": 32,
+          "description": "Only valid when 'ipv4AddrDst' is selected. defaults to 32, in which case it matches full address"
+        },
+        "ipv4SectionHeaderSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Number of bytes of raw data starting at the IPv4 header, to use as a key field. Only valid and required when ipv4SectionHeaderSize' is selected"
+        },
+        "ipv4SectionPayloadSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Number of bytes of raw data starting at the IPv4 payload, to use as a key field. Only valid and required when 'ipv4SectionPayloadSize' is selected"
+        },
+        "ipv6AddrSrcMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "default": 128,
+          "description": "Only valid when 'ipv6AddrSrc' is selected. Defaults to 128, in which case it matches full address"
+        },
+        "ipv6AddrDstMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "default": 128,
+          "description": "Only valid when 'ipv6AddrDst' is selected. defaults to 128, in which case it matches full address"
+        },
+        "ipv6SectionHeaderSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Only valid and required when 'ipv6SectionHeaderSize' is selected"
+        },
+        "ipv6SectionPayloadSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Only valid and required when 'ipv6SectionPayloadSize' is selected"
+        },
+        "tcpFlags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "cwr",
+              "ece",
+              "urg",
+              "ack",
+              "psh",
+              "rst",
+              "syn",
+              "fin"
+            ]
+          },
+          "uniqueItems": true,
+          "description": "Represents a bit mask. Only valid and required when 'tcpFlags' is selected"
+        }
+      }
+    },
+    "NetflowRecordCollectSpec": {
+      "id": "#/definitions/NetflowRecordCollectSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Record Collect spec",
+      "required": [
+        "collectFields"
+      ],
+      "properties": {
+        "collectFields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "counterBytes",
+              "counterBytesLong",
+              "counterPackets",
+              "counterPacketsLong",
+              "flowEndReason",
+              "tsSysUptimeFirst",
+              "tsSysUptimeLast",
+              "tsFlowEndMseconds",
+              "tsFlowEndSeconds",
+              "tsFlowEndUseconds",
+              "tsFlowStartMseconds",
+              "tsFlowStartSeconds",
+              "tsFlowStartUseconds",
+              "phyIntfIn",
+              "phyIntfOut",
+              "intfNeighbor",
+              "vlan",
+              "macSrc",
+              "macDst",
+              "ipv4Version",
+              "ipv4HeaderLen",
+              "ipv4Tos",
+              "ipv4TotalLen",
+              "ipv4TotalLenMin",
+              "ipv4TotalLenMax",
+              "ipv4FragId",
+              "ipv4FragFlags",
+              "ipv4FragOffset",
+              "ipv4Ttl",
+              "ipv4Protocol",
+              "ipv4Options",
+              "ipv4Dscp",
+              "ipv4Precedence",
+              "ipv4AddrSrc",
+              "ipv4AddrDst",
+              "ipv4SectionHeaderSize",
+              "ipv4SectionPayloadSize",
+              "ipv6Version",
+              "ipv6TrafficClass",
+              "ipv6FlowLabel",
+              "ipv6NextHeader",
+              "ipv6HopLimit",
+              "ipv6HopLimitMin",
+              "ipv6HopLimitMax",
+              "ipv6HeaderLen",
+              "ipv6PayloadLen",
+              "ipv6TotalLen",
+              "ipv6TotalLenMin",
+              "ipv6TotalLenMax",
+              "ipv6ExtensionMap",
+              "ipv6FragId",
+              "ipv6FragFlags",
+              "ipv6FragOffset",
+              "ipv6Protocol",
+              "ipv6Dscp",
+              "ipv6Precedence",
+              "ipv6AddrSrc",
+              "ipv6AddrDst",
+              "ipv6SectionHeaderSize",
+              "ipv6SectionPayloadSize",
+              "portSrc",
+              "portDst",
+              "icmpIpv4Code",
+              "icmpIpv4Type",
+              "icmpIpv6Code",
+              "icmpIpv6Type",
+              "udpPortSrc",
+              "udpPortDst",
+              "udpPayloadLen",
+              "tcpPortSrc",
+              "tcpPortDst",
+              "tcpSeqNumber",
+              "tcpAckNumber",
+              "tcpWindow",
+              "tcpUrgentPtr",
+              "tcpHeaderLen",
+              "tcpFlags",
+              "penGigamonUrl",
+              "penGigamonUserAgent",
+              "penHttpResponseCode",
+              "penHttpMethod",
+              "penHttpVersion",
+              "penHttpHost",
+              "penDnsIdentifier",
+              "penDnsOpCode",
+              "penDnsResponseCode",
+              "penDnsQueryName",
+              "penDnsResponseName",
+              "penDnsResponseTtl",
+              "penDnsResponseIpv4Addr",
+              "penDnsResponseIpv4AddrText",
+              "penDnsResponseIpv6Addr",
+              "penDnsResponseIpv6AddrText",
+              "penDnsResponseClass",
+              "penDnsResponseClassText",
+              "penDnsResponseRdLength",
+              "penDnsResponseRdata",
+              "penDnsAuthorityName",
+              "penDnsAuthorityType",
+              "penDnsAuthorityTypeText",
+              "penDnsAuthorityClass",
+              "penDnsAuthorityClassText",
+              "penDnsAuthorityTtl",
+              "penDnsAuthorityRdLength",
+              "penDnsAuthorityRdata",
+              "penDnsAdditionalName",
+              "penDnsAdditionalType",
+              "penDnsAdditionalTypeText",
+              "penDnsAdditionalClass",
+              "penDnsAdditionalClassText",
+              "penDnsAdditionalTtl",
+              "penDnsAdditionalRdLength",
+              "penDnsAdditionalRdata",
+              "penDnsAnCount",
+              "penDnsArCount",
+              "penDnsBits",
+              "penDnsNsCount",
+              "penDnsQdCount",
+              "penDnsQueryType",
+              "penDnsQueryTypeText",
+              "penDnsQueryClass",
+              "penDnsQueryClassText",
+              "penDnsResponseType",
+              "penDnsResponseTypeText",
+              "penSslCertificateIssuerCommonName",
+              "penSslCertificateSubjectCommonName",
+              "penSslCertificateIssuer",
+              "penSslCertificateSubject",
+              "penSslCertificateValidNotBefore",
+              "penSslCertificateValidNotBeforeText",
+              "penSslCertificateValidNotAfter",
+              "penSslCertificateValidNotAfterText",
+              "penSslCertificateSerialNumber",
+              "penSslCertificateSerialNumberText",
+              "penSslCertificateSignatureAlogrithm",
+              "penSslCertificateSignatureAlgorithmText",
+              "penSslCertificateSubjectAlgorithm",
+              "penSslCertificateSubjectAlgorithmText",
+              "penSslCertificateSubjectKeySize",
+              "penSslCertificateSubjectAltName",
+              "penSslServerNameIndication",
+              "penSslServerVersion",
+              "penSslServerVersionText",
+              "penSslServerCipher",
+              "penSslServerCipherText",
+              "penSslServerCompressionMethod",
+              "penSslServerSessionId",
+              "exporterIpv4Addr",
+              "exporterIpv6Addr"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "phyIntfInWidth": {
+          "type": "string",
+          "enum": [
+            "2",
+            "4"
+          ],
+          "default": "2",
+          "description": "Only valid when 'phyIntfIn' is selected"
+        },
+        "phyIntfOutWidth": {
+          "type": "string",
+          "enum": [
+            "2",
+            "4"
+          ],
+          "default": "2",
+          "description": "Only valid when 'phyIntfOut' is selected"
+        },
+        "intfNeighborWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "Only valid when 'intfNeighbor' is selected. Used for representing input interface name with width"
+        },
+        "ipv4AddrSrcMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "default": 32,
+          "description": "Only valid when 'ipv4AddrSrc' is selected. Defaults to 32, in which case it matches full address"
+        },
+        "ipv4AddrDstMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "default": 32,
+          "description": "Only valid when 'ipv4AddrDst' is selected. defaults to 32, in which case it matches full address"
+        },
+        "ipv4SectionHeaderSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Number of bytes of raw data starting at the IPv4 header, to use as a key field. Only valid and required when ipv4SectionHeaderSize' is selected"
+        },
+        "ipv4SectionPayloadSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Number of bytes of raw data starting at the IPv4 payload, to use as a key field. Only valid and required when 'ipv4SectionPayloadSize' is selected"
+        },
+        "ipv6AddrSrcMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "default": 128,
+          "description": "Only valid when 'ipv6AddrSrc' is selected. Defaults to 128, in which case it matches full address"
+        },
+        "ipv6AddrDstMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "default": 128,
+          "description": "Only valid when 'ipv6AddrDst' is selected. defaults to 128, in which case it matches full address"
+        },
+        "ipv6SectionHeaderSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Only valid and required when 'ipv6SectionHeaderSize' is selected"
+        },
+        "ipv6SectionPayloadSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Only valid and required when 'ipv6SectionPayloadSize' is selected"
+        },
+        "tcpFlags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "cwr",
+              "ece",
+              "urg",
+              "ack",
+              "psh",
+              "rst",
+              "syn",
+              "fin"
+            ]
+          },
+          "uniqueItems": true,
+          "description": "Represents a bit mask. Only valid and required when 'tcpFlags' is selected"
+        },
+        "penGigamonUrlSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 250,
+          "description": "Only valid when 'penGigamonUrl' is selected"
+        },
+        "penGigamonUserAgentWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 250,
+          "description": "Only valid when 'penGigamonUserAgent' is selected"
+        },
+        "penHttpHostWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 250,
+          "description": "Only valid when 'penHttpHost' is selected"
+        },
+        "penSslCertificateIssuerWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 250,
+          "description": "Only valid when 'penSslCertificateIssuer' is selected"
+        },
+        "penSslCertificateSubjectWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 250,
+          "description": "Only valid when 'penSslCertificateSubject' is selected"
+        },
+        "penSslServerNameIndicationWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 64,
+          "description": "Only valid when 'penSslServerNameIndication' is selected"
+        },
+        "penSslCertificateSubjectAltNameWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 64,
+          "description": "Only valid when 'penSslCertificateSubjectAltName' is selected"
+        },
+        "penSslCertificateIssuerCommonNameWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 64,
+          "description": "Only valid when 'penSslCertificateIssuerCommonName' is selected"
+        },
+        "penSslCertificateSubjectCommonNameWidth": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 64,
+          "description": "Only valid when 'penSslCertificateSubjectCommonName' is selected"
+        }
+      }
+    },
+    "NetflowRecordCollect": {
+      "id": "#/definitions/NetflowRecordCollect",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "counterBytes",
+            "counterBytesLong",
+            "counterPackets",
+            "counterPacketsLong",
+            "flowEndReason",
+            "icmpIpv4Code",
+            "icmpIpv4Type",
+            "icmpIpv6Code",
+            "icmpIpv6Type",
+            "ipv4Dscp",
+            "ipv4FragFlags",
+            "ipv4FragId",
+            "ipv4FragOffset",
+            "ipv4HeaderLen",
+            "ipv4Options",
+            "ipv4Precedence",
+            "ipv4Protocol",
+            "ipv4Tos",
+            "ipv4TotalLen",
+            "ipv4TotalLenMax",
+            "ipv4TotalLenMin",
+            "ipv4Ttl",
+            "ipv4Version",
+            "ipv6Dscp",
+            "ipv6ExtensionMap",
+            "ipv6FlowLabel",
+            "ipv6FragFlags",
+            "ipv6FragId",
+            "ipv6FragOffset",
+            "ipv6HeaderLen",
+            "ipv6HopLimit",
+            "ipv6HopLimitMax",
+            "ipv6HopLimitMin",
+            "ipv6NextHeader",
+            "ipv6PayloadLen",
+            "ipv6Precedence",
+            "ipv6Protocol",
+            "ipv6TotalLen",
+            "ipv6TotalLenMax",
+            "ipv6TotalLenMin",
+            "ipv6TrafficClass",
+            "ipv6Version",
+            "macDst",
+            "macSrc",
+            "penDnsAnCount",
+            "penDnsArCount",
+            "penDnsBits",
+            "penDnsIdentifier",
+            "penDnsNsCount",
+            "penDnsOpCode",
+            "penDnsQdCount",
+            "penDnsResponseCode",
+            "penHttpResponseCode",
+            "penHttpMethod",
+            "penHttpVersion",
+            "penSslCertificateSerialNumber",
+            "penSslCertificateSerialNumberText",
+            "penSslCertificateSignatureAlogrithm",
+            "penSslCertificateSignatureAlgorithmText",
+            "penSslCertificateSubjectAlgorithm",
+            "penSslCertificateSubjectAlgorithmText",
+            "penSslCertificateSubjectKeySize",
+            "penSslCertificateValidNotAfter",
+            "penSslCertificateValidNotAfterText",
+            "penSslCertificateValidNotBefore",
+            "penSslCertificateValidNotBeforeText",
+            "penSslServerCipher",
+            "penSslServerCipherText",
+            "penSslServerCompressionMethod",
+            "penSslServerSessionId",
+            "penSslServerVersion",
+            "penSslServerVersionText",
+            "portDst",
+            "portSrc",
+            "tcpAckNumber",
+            "tcpHeaderLen",
+            "tcpPortDst",
+            "tcpPortSrc",
+            "tcpSeqNumber",
+            "tcpUrgentPtr",
+            "tcpWindow",
+            "tsFlowEndMseconds",
+            "tsFlowEndSeconds",
+            "tsFlowEndUseconds",
+            "tsFlowStartMseconds",
+            "tsFlowStartSeconds",
+            "tsFlowStartUseconds",
+            "tsSysUptimeFirst",
+            "tsSysUptimeLast",
+            "udpPayloadLen",
+            "udpPortDst",
+            "udpPortSrc",
+            "vlan"
+          ]
+        }
+      }
+    },
+    "NetflowRecordMultipleCollect": {
+      "id": "#/definitions/NetflowRecordMultipleCollect",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "penDnsQueryName",
+            "penDnsQueryType",
+            "penDnsQueryTypeText",
+            "penDnsQueryClass",
+            "penDnsQueryClassText",
+            "penDnsResponseName",
+            "penDnsResponseTtl",
+            "penDnsResponseIpv4Addr",
+            "penDnsResponseIpv4AddrText",
+            "penDnsResponseIpv6Addr",
+            "penDnsResponseIpv6AddrText",
+            "penDnsResponseType",
+            "penDnsResponseTypeText",
+            "penDnsResponseClass",
+            "penDnsResponseClassText",
+            "penDnsResponseRdLength",
+            "penDnsAuthorityName",
+            "penDnsAuthorityType",
+            "penDnsAuthorityTypeText",
+            "penDnsAuthorityClass",
+            "penDnsAuthorityClassText",
+            "penDnsAuthorityTtl",
+            "penDnsAuthorityRdLength",
+            "penDnsAdditionalName",
+            "penDnsAdditionalType",
+            "penDnsAdditionalTypeText",
+            "penDnsAdditionalClass",
+            "penDnsAdditionalClassText",
+            "penDnsAdditionalTtl",
+            "penDnsAdditionalRdLength"
+          ]
+        },
+        "numberOfCollects": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 1,
+          "description": "number of DNS answers to collect"
+        }
+      }
+    },
+    "NetflowRecordPenDnsRdata": {
+      "id": "#/definitions/NetflowRecordPenDnsRdata",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "penDnsAdditionalRdata",
+            "penDnsAuthorityRdata",
+            "penDnsResponseRdata"
+          ]
+        },
+        "numberOfCollects": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 1,
+          "description": "number of DNS answers to collect"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "default": 64
+        }
+      }
+    },
+    "NetflowRecordIpv4MaskLen": {
+      "id": "#/definitions/NetflowRecordIpv4MaskLen",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "ipv4AddrSrc",
+            "ipv4AddrDst"
+          ]
+        },
+        "maskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "default": 32,
+          "description": "defaults to 32, in which case it matches full address"
+        }
+      }
+    },
+    "NetflowRecordIpv6MaskLen": {
+      "id": "#/definitions/NetflowRecordIpv6MaskLen",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "ipv6AddrSrc",
+            "ipv6AddrDst"
+          ]
+        },
+        "maskLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "default": 128,
+          "description": "defaults to 128, in which case it matches full address"
+        }
+      }
+    },
+    "NetflowRecordSize": {
+      "id": "#/definitions/NetflowRecordSize",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField",
+        "size"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "ipv4SectionPayloadSize",
+            "ipv4SectionHeaderSize",
+            "ipv6SectionHeaderSize",
+            "ipv6SectionPayloadSize"
+          ]
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128
+        }
+      }
+    },
+    "NetflowRecordPenUrl": {
+      "id": "#/definitions/NetflowRecordPenUrl",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "penGigamonUrl"
+          ]
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 250
+        }
+      }
+    },
+    "NetflowRecordPenUserAgent": {
+      "id": "#/definitions/NetflowRecordPenUserAgent",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "penGigamonUserAgent"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 250
+        }
+      }
+    },
+    "NetflowRecordPenHttpHost": {
+      "id": "#/definitions/NetflowRecordPenHttpHost",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "penHttpHost"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 250
+        }
+      }
+    },
+    "NetflowRecordSslCertName": {
+      "id": "#/definitions/NetflowRecordSslCertName",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "penSslCertificateSubjectAltName",
+            "penSslCertificateIssuerCommonName",
+            "penSslCertificateSubjectCommonName",
+            "penSslServerNameIndication"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 64
+        }
+      }
+    },
+    "NetflowRecordSslCert": {
+      "id": "#/definitions/NetflowRecordSslCert",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "penSslCertificateIssuer",
+            "penSslCertificateSubject"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 250
+        }
+      }
+    },
+    "NetflowRecordIntfNeighbor": {
+      "id": "#/definitions/NetflowRecordIntfNeighbor",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "intfNeighbor"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "Used for representing input interface name with width"
+        }
+      }
+    },
+    "NetflowRecordPhyIntf": {
+      "id": "#/definitions/NetflowRecordPhyIntf",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "phyIntfIn",
+            "phyIntfOut"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            2,
+            4
+          ],
+          "default": 2
+        }
+      }
+    },
+    "NetflowRecordTcpFlags": {
+      "id": "#/definitions/NetflowRecordTcpFlags",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "required": [
+        "collectField",
+        "flags"
+      ],
+      "properties": {
+        "collectField": {
+          "type": "string",
+          "enum": [
+            "tcpFlags"
+          ]
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "cwr",
+              "ece",
+              "urg",
+              "ack",
+              "psh",
+              "rst",
+              "syn",
+              "fin"
+            ]
+          },
+          "uniqueItems": true,
+          "description": "valid values are 'cwr', 'ece', 'urg', 'ack', 'psh', 'rst', 'syn', 'fin'"
+        }
+      }
+    },
+    "NetflowMonitor": {
+      "id": "#/definitions/NetflowMonitor",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Monitor definition",
+      "required": [
+        "alias",
+        "cache"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "uniqueItems": true,
+          "description": "Aliases of referenced Netflow Records defined on the GsGroup. Up to 5 records."
+        },
+        "cache": {
+          "$ref": "#/definitions/NetflowMonitorCacheSpec"
+        },
+        "samplingSpace": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16000,
+          "default": 0,
+          "description": "DEPRECATED: use 'sampling'"
+        },
+        "sampling": {
+          "$ref": "#/definitions/NetflowMonitorSampling"
+        },
+        "sslPortRestrictions": {
+          "$ref": "#/definitions/NetflowMonitorSslPortRestrictions"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "NetflowMonitorCacheSpec": {
+      "id": "#/definitions/NetflowMonitorCacheSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Monitor Cache",
+      "required": [
+        "exportTriggers"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "normal"
+          ],
+          "default": "normal"
+        },
+        "exportTriggers": {
+          "$ref": "#/definitions/NetflowMonitorCacheExportTriggers"
+        }
+      }
+    },
+    "NetflowMonitorCacheExportTriggers": {
+      "id": "#/definitions/NetflowMonitorCacheExportTriggers",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Monitor Cache Export Triggers",
+      "properties": {
+        "timeoutActive": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 604800,
+          "default": 1800,
+          "description": "in seconds. max value is 7 days. default is 30 min"
+        },
+        "timeoutInactive": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 604800,
+          "default": 15,
+          "description": "in seconds. max value is 7 days. default is 15 sec"
+        },
+        "event": {
+          "type": "string",
+          "enum": [
+            "txnEnd",
+            "none"
+          ],
+          "default": "txnEnd"
+        }
+      }
+    },
+    "NetflowMonitorSslPortRestrictions": {
+      "id": "#/definitions/NetflowMonitorSslPortRestrictions",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Port restrictions for Netflow/SSL sessions",
+      "properties": {
+        "sslPorts": {
+          "type": "string",
+          "enum": [
+            "all",
+            "wellKnownPorts",
+            "ports"
+          ],
+          "default": "all",
+          "description": "Ports whose packets will be sent to the SSL module. 'all' ports; 'wellKnownPorts' is [993, 995, 465, 636, 563, 443]; or 'ports' - specify upto 10 ports"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0,
+            "maximum": 65535
+          },
+          "maxItems": 10,
+          "description": "The list of TCP ports whose packets will be sent to the SSL module. Not valid if sslPort is 'all'. if 'wellKnownPorts' is selected for 'sslPorts' ports will be [993, 995, 465, 636, 563, 443]"
+        }
+      }
+    },
+    "NetflowMonitorSampling": {
+      "id": "#/definitions/NetflowMonitorSampling",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "monitor sampling",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "multi-rate",
+            "no-sampling",
+            "single-rate"
+          ],
+          "default": "no-sampling"
+        },
+        "singleSamplingRate": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 16000,
+          "default": 10,
+          "description": "Packet interval window size. Valid values: 10-16000 (in packets)"
+        }
+      }
+    },
+    "SslDecryptionKeyStoreState": {
+      "id": "#/definitions/SslDecryptionKeyStoreState",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SSL Decryption Key Store Lock state",
+      "required": [
+        "passwordSet",
+        "locked"
+      ],
+      "properties": {
+        "passwordSet": {
+          "type": "boolean",
+          "description": "indicates whether SSL Decryption Key Store password is set"
+        },
+        "locked": {
+          "type": "boolean",
+          "description": "indicates whether SSL Decryption Key Store is unlocked"
+        }
+      }
+    },
+    "SslDecryptionKey": {
+      "id": "#/definitions/SslDecryptionKey",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SSL Decryption Key definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "unique alias for SSL Decryption Key"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "SslDecryptionEndpoint": {
+      "id": "#/definitions/SslDecryptionEndpoint",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SSL Decryption Endpoint definition",
+      "required": [
+        "alias",
+        "address",
+        "port"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the Endpoint"
+        },
+        "address": {
+          "type": "string",
+          "description": "IPv4 address of the SSL endpoint (server)"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 0,
+          "description": "Optional port of the SSL endpoint (server). Value of 0 indicates any port"
+        }
+      }
+    },
+    "SslDecryptionKeyMapping": {
+      "id": "#/definitions/SslDecryptionKeyMapping",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SSL Decryption Endpoint-to-Key association",
+      "required": [
+        "key"
+      ],
+      "properties": {
+        "endpoint": {
+          "$ref": "#/definitions/SslDecryptionEndpoint",
+          "description": "SSL Decryption Endpoint"
+        },
+        "key": {
+          "$ref": "#/definitions/SslDecryptionKey",
+          "description": "referenced Key associated with this endpoint"
+        }
+      }
+    },
+    "SslDecryptionKeyMap": {
+      "id": "#/definitions/SslDecryptionKeyMap",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Collection of SSL Endpoints with associated Decryption Keys",
+      "required": [
+        "alias",
+        "mappings"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias of this mappings collection"
+        },
+        "mappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SslDecryptionKeyMapping"
+          },
+          "description": "list of SSL Endpoints with corresponding Decryption Keys"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "SslDecryptionKeyMappingConfigSpec": {
+      "id": "#/definitions/SslDecryptionKeyMappingConfigSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SSL Decryption Endpoint-alias-to-Key-alias association",
+      "required": [
+        "keyAlias",
+        "endpointAlias"
+      ],
+      "properties": {
+        "endpointAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias of referenced SSL Endpoint"
+        },
+        "keyAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias of referenced Decryption Key associated with this endpoint"
+        }
+      }
+    },
+    "SslDecryptionKeyMapConfigSpec": {
+      "id": "#/definitions/SslDecryptionKeyMapConfigSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Aliased collection of SSL-Endpoint-to-Decryption-Key mappings",
+      "required": [
+        "alias",
+        "mappings"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias of this mappings collection"
+        },
+        "mappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SslDecryptionKeyMappingConfigSpec"
+          },
+          "description": "list of SSL Endpoints with corresponding Decryption Keys"
+        }
+      }
+    },
+    "SslDecryptionKeyUnlockSpec": {
+      "id": "#/definitions/SslDecryptionKeyUnlockSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SSL Decryption Key unlock request",
+      "required": [
+        "ksPassword"
+      ],
+      "properties": {
+        "ksPassword": {
+          "type": "string",
+          "description": "Only valid for 'set' operations"
+        }
+      }
+    },
+    "SslDecryptionPwdResetSpec": {
+      "id": "#/definitions/SslDecryptionPwdResetSpec",
+      "description": "SSL Decryption Password reset request",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ksPassword"
+      ],
+      "properties": {
+        "ksPassword": {
+          "type": "string",
+          "description": "Only valid for 'set' operations"
+        }
+      }
+    },
+    "SessionAwareApfProfile": {
+      "id": "#/definitions/SessionAwareApfProfile",
+      "description": "Session-Aware APF",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "sessionFields"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "sessionFields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SessionAwareApfField"
+          },
+          "minItems": 1,
+          "maxItems": 20,
+          "uniqueItems": true,
+          "description": "A sessionField cannot contain overlapping session attribute, position pairs (e.g. ipv4-5tuple pos 1 and ipv4-src pos 1 is not allowed). Max number of session fields is 20"
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 10,
+          "maximum": 120,
+          "default": 15,
+          "description": "in seconds"
+        },
+        "bidi": {
+          "type": "boolean",
+          "default": true,
+          "description": "include reverse traffic for the selected sessionFields. Not applicable for 'mplsLabel', 'gtpuTeid', 'vlanId'"
+        },
+        "buffering": {
+          "$ref": "#/definitions/SessionAwareApfBuffering",
+          "description": "SAPF Buffering configuration",
+          "since": "H 4.4"
+        },
+        "packetCount": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 0,
+          "description": "For each session, forward this number of packets. Valid range is 2-100; 0 disables packetCount."
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "SessionAwareApfBuffering": {
+      "id": "#/definitions/SessionAwareApfBuffering",
+      "description": "Session-Aware APF Buffereing settings",
+      "since": "H 4.4",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "since": "H 4.4"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "tcp",
+            "udp",
+            "tcpUdp"
+          ],
+          "default": "tcp",
+          "description": "When buffering is enabled, changing protocol requires reboot before new value takes effect.",
+          "since": "H 4.4"
+        },
+        "bufferCountBeforeMatch": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 3,
+          "maximum": 20,
+          "default": 3,
+          "description": "Maximum number of packets BSAPF will buffer per session before APF match",
+          "since": "H 4.4"
+        }
+      }
+    },
+    "SessionAwareApfField": {
+      "id": "#/definitions/SessionAwareApfField",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "pos": {
+          "type": "integer",
+          "format": "byte",
+          "minimum": 1,
+          "maximum": 2,
+          "default": 1,
+          "description": "Value of 1 also an alias for 'outer'. Value of 2 also an alias for 'inner'. Not applicable for 'gtpuTeid'. For 'fiveTuple' 'outer' is not supported"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "ipv4Addr",
+            "ipv4AddrSrc",
+            "ipv4AddrDst",
+            "ipv4Protocol",
+            "ipv6Addr",
+            "ipv6AddrSrc",
+            "ipv6AddrDst",
+            "ipv6Protocol",
+            "port",
+            "portSrc",
+            "portDst",
+            "ipv4FiveTuple",
+            "ipv6FiveTuple",
+            "vlanId",
+            "mplsLabel",
+            "gtpuTeid",
+            "fiveTuple"
+          ]
+        }
+      }
+    },
+    "GtpWhitelist": {
+      "id": "#/definitions/GtpWhitelist",
+      "description": "GTP Whitelist",
+      "since": "H 4.4",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "imsiCount": {
+          "type": "integer",
+          "description": "Number of IMSI entries in gtp-whitelist",
+          "readonly": true,
+          "since": "H 4.8"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "GtpWhitelistEntry": {
+      "id": "#/definitions/GtpWhitelistEntry",
+      "description": "GTP Whitelist Entry",
+      "since": "H 4.4",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "imsi": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[0-9]{14,15}$"
+        },
+        "ran": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([0-9]{3}[.][0-9]{1,3}[.]([0][x])?[A-Fa-f0-9]{4,10})$",
+          "since": "H 5.10",
+          "description": "nci value should prefix 0x"
+        },
+        "activeSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "description": "Number of active sessions"
+        }
+      }
+    },
+    "GtpWhitelistEntries": {
+      "id": "#/definitions/GtpWhitelistEntries",
+      "description": "GTP Whitelist Entry List",
+      "since": "H 4.4",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entries"
+      ],
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpWhitelistEntry"
+          }
+        }
+      }
+    },
+    "GtpWhitelistUrlSpec": {
+      "id": "#/definitions/GtpWhitelistUrlSpec",
+      "description": "GTP Whitelist URL Specification",
+      "since": "H 4.5",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "whitelistAlias",
+        "url"
+      ],
+      "properties": {
+        "whitelistAlias": {
+          "type": "string",
+          "description": "alias of the target GTP Whitelist"
+        },
+        "url": {
+          "type": "string",
+          "description": "URL of the Whitelist file. format: protocol://[username[:password]]@hostname[:port]/path/filename"
+        },
+        "usage": {
+          "type": "string",
+          "enum": [
+            "add",
+            "delete"
+          ],
+          "default": "add",
+          "description": "When 'delete' is specified, the uploaded list is treated as a delete request and all the entries in the list should be removed from the existing whitelist identified by the 'alias' parameter"
+        }
+      }
+    },
+    "DiameterWhitelist": {
+      "id": "#/definitions/DiameterWhitelist",
+      "description": "Diameter Whitelist",
+      "since": "H 5.5",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "userNameCount": {
+          "type": "integer",
+          "description": "Number of username entries in diameter-whitelist",
+          "readOnly": true
+        }
+      }
+    },
+    "DiameterWhitelistEntry": {
+      "id": "#/definitions/DiameterWhitelistEntry",
+      "description": "Diameter Whitelist Entry",
+      "since": "H 5.5",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "userName": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[0-9]{14,15}$"
+        },
+        "activeSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "description": "Number of active sessions"
+        }
+      }
+    },
+    "DiameterWhitelistEntries": {
+      "id": "#/definitions/DiameterWhitelistEntries",
+      "description": "Diameter Whitelist Entry List",
+      "since": "H 5.5",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entries"
+      ],
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DiameterWhitelistEntry"
+          }
+        }
+      }
+    },
+    "DiameterWhitelistRemoteSpec": {
+      "id": "#/definitions/DiameterWhitelistRemoteSpec",
+      "description": "Diameter Whitelist Remote Specification",
+      "since": "H 5.5",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "whitelistAlias",
+        "remote"
+      ],
+      "properties": {
+        "whitelistAlias": {
+          "type": "string",
+          "description": "alias of the target Diameter Whitelist"
+        },
+        "remote": {
+          "$ref": "../schemas-common/common.json#/definitions/RemoteFileSpec",
+          "description": "Remote location of diameter whitelist file, only HTTP and SCP protocol supported"
+        },
+        "usage": {
+          "type": "string",
+          "enum": [
+            "add",
+            "delete"
+          ],
+          "default": "add",
+          "description": "When 'delete' is specified, the uploaded list is treated as a delete request and all the entries in the list should be removed from the existing whitelist identified by the 'alias' parameter"
+        }
+      }
+    },
+    "NetflowExporterQueryResponse": {
+      "id": "#/definitions/NetflowExporterQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "nfExporter"
+      ],
+      "properties": {
+        "nfExporter": {
+          "$ref": "#/definitions/NetflowExporter"
+        }
+      }
+    },
+    "NetflowExportersQueryResponse": {
+      "id": "#/definitions/NetflowExportersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "nfExporters"
+      ],
+      "properties": {
+        "nfExporters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetflowExporter"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "NetflowRecordQueryResponse": {
+      "id": "#/definitions/NetflowRecordQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "nfRecord"
+      ],
+      "properties": {
+        "nfRecord": {
+          "$ref": "#/definitions/NetflowRecord"
+        }
+      }
+    },
+    "NetflowRecordsQueryResponse": {
+      "id": "#/definitions/NetflowRecordsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "nfRecords"
+      ],
+      "properties": {
+        "nfRecords": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetflowRecord"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "NetflowMonitorQueryResponse": {
+      "id": "#/definitions/NetflowMonitorQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "nfMonitor"
+      ],
+      "properties": {
+        "nfMonitor": {
+          "$ref": "#/definitions/NetflowMonitor"
+        }
+      }
+    },
+    "NetflowMonitorsQueryResponse": {
+      "id": "#/definitions/NetflowMonitorsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "nfMonitors"
+      ],
+      "properties": {
+        "nfMonitors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetflowMonitor"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SslDecryptionEndpointQueryResponse": {
+      "id": "#/definitions/SslDecryptionEndpointQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "endpoint"
+      ],
+      "properties": {
+        "endpoint": {
+          "$ref": "#/definitions/SslDecryptionEndpoint"
+        }
+      }
+    },
+    "SslDecryptionEndpointsQueryResponse": {
+      "id": "#/definitions/SslDecryptionEndpointsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "endpoints"
+      ],
+      "properties": {
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SslDecryptionEndpoint"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SslDecryptionKeyMapQueryResponse": {
+      "id": "#/definitions/SslDecryptionKeyMapQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "keyMap"
+      ],
+      "properties": {
+        "keyMap": {
+          "$ref": "#/definitions/SslDecryptionKeyMap"
+        }
+      }
+    },
+    "SslDecryptionKeyMapsQueryResponse": {
+      "id": "#/definitions/SslDecryptionKeyMapsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "keyMaps"
+      ],
+      "properties": {
+        "keyMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SslDecryptionKeyMap"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SessionAwareApfProfileQueryResponse": {
+      "id": "#/definitions/SessionAwareApfProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "saApfProfile"
+      ],
+      "properties": {
+        "saApfProfile": {
+          "$ref": "#/definitions/SessionAwareApfProfile"
+        }
+      }
+    },
+    "SessionAwareApfProfilesQueryResponse": {
+      "id": "#/definitions/SessionAwareApfProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "saApfProfiles"
+      ],
+      "properties": {
+        "saApfProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SessionAwareApfProfile"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GtpWhitelistsQueryResponse": {
+      "id": "#/definitions/GtpWhitelistsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gtpWhitelists"
+      ],
+      "properties": {
+        "gtpWhitelists": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpWhitelist"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SipWhitelist": {
+      "id": "#/definitions/SipWhitelist",
+      "description": "SIP Whitelist",
+      "since": "H 5.2",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Sip Whitelist alias"
+        },
+        "callerIdCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of caller-id entries in sip-whitelist",
+          "readOnly": true
+        }
+      }
+    },
+    "SipWhitelistIdRange": {
+      "type": "object",
+      "since": "H 5.7",
+      "description": "range of values from value to valueMax",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "valueMax"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[a-zA-Z0-9@#$*-_.!~()&=+,;?/]{1,64}$"
+        },
+        "valueMax": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[a-zA-Z0-9@#$*-_.!~()&=+,;?/]{1,64}$"
+        }
+      }
+    },
+    "SipWhitelistIpAddress": {
+      "type": "object",
+      "since": "H 5.7",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "ipv4 or ipv6",
+          "example": "198.51.100.42"
+        }
+      }
+    },
+    "SipWhitelistEntryQueryResponse": {
+      "id": "#/definitions/SipWhitelistEntryQueryResponse",
+      "description": "SIP Whitelist Entry",
+      "since": "H 5.2",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sipWhitelistEntry": {
+          "$ref": "#/definitions/SipWhitelistEntry"
+        }
+      }
+    },
+    "SipWhitelistEntry": {
+      "id": "#/definitions/SipWhitelistEntry",
+      "description": "SIP Whitelist Entry",
+      "since": "H 5.2",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "maxProperties": 1,
+      "properties": {
+        "callerId": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[a-zA-Z0-9@#$*-_.!~()&=+,;?/]{1,64}$",
+          "description": "sip caller id"
+        },
+        "idRange": {
+          "$ref": "#/definitions/SipWhitelistIdRange"
+        },
+        "ipAddress": {
+          "$ref": "#/definitions/SipWhitelistIpAddress"
+        },
+        "activeSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "description": "Number of active sessions",
+          "readOnly": true
+        }
+      }
+    },
+    "SipWhitelistEntries": {
+      "id": "#/definitions/SipWhitelistEntries",
+      "description": "SIP Whitelist Entry List",
+      "since": "H 5.2",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entries"
+      ],
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SipWhitelistEntry"
+          }
+        }
+      }
+    },
+    "SipWhitelistRemoteSpec": {
+      "id": "#/definitions/SipWhitelistRemoteSpec",
+      "description": "SIP Whitelist Remote Specification",
+      "since": "H 5.2",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "whitelistAlias",
+        "remote"
+      ],
+      "properties": {
+        "whitelistAlias": {
+          "type": "string",
+          "description": "alias of the target SIP Whitelist"
+        },
+        "remote": {
+          "$ref": "../schemas-common/common.json#/definitions/RemoteFileSpec",
+          "description": "Remote location of sip whitelist file, only HTTP and SCP protocol supported"
+        },
+        "usage": {
+          "type": "string",
+          "enum": [
+            "add",
+            "delete"
+          ],
+          "default": "add",
+          "description": "When 'delete' is specified, the uploaded list is treated as a delete request and all the entries in the list should be removed from the existing whitelist identified by the 'alias' parameter"
+        }
+      }
+    },
+    "SipWhitelistsQueryResponse": {
+      "id": "#/definitions/SipWhitelistsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "required": [
+        "sipWhitelists"
+      ],
+      "properties": {
+        "sipWhitelists": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SipWhitelist"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "DiameterWhitelistsQueryResponse": {
+      "id": "#/definitions/DiameterWhitelistsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.5",
+      "required": [
+        "diameterWhitelists"
+      ],
+      "properties": {
+        "diameterWhitelists": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DiameterWhitelist"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

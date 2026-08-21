@@ -1,0 +1,227 @@
+{
+  "id": "http://gigamon.com/schemas-fm/trafficFlow.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon traffic flow schema",
+  "definitions": {
+    "TrafficFlow": {
+      "id": "#/definitions/TrafficFlow",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "deploymentType",
+        "sourcesAndRules",
+        "flows"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "unique map alias"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "enable/disable map, applicable only to first level maps"
+        },
+        "deploymentType": {
+          "type": "string",
+          "enum": [
+            "REGULAR",
+            "FIRST_LEVEL",
+            "TRANSIT_LEVEL",
+            "SECOND_LEVEL",
+            "INLINE",
+            "INLINE_FIRST_LEVEL",
+            "INLINE_SECOND_LEVEL",
+            "INTENT"
+          ],
+          "description": "'regular' maps are from network/hybrid ports to tool/hybrid/gigastream; 'inline' maps are from inline ports to inline/tool/hybrid/gigastream; 'firstLevel' are from network/hybrid ports to vPorts/tool/hybrid/gigastream; 'secondLevel' maps are from vPorts to tool/hybrid/gigastream; 'inlineFirstLevel is from inline network to vport; 'inlineSecondLevel' is from vport to inline tool; 'transitLevel' is from vport to vport"
+        },
+        "priorityType": {
+          "type": "string",
+          "enum": [
+            "LOWEST",
+            "HIGHEST"
+          ],
+          "description": "Define the map priority to be LOWEST or HIGHEST. Default priority is LOWEST."
+        },
+        "sourcesAndRules": {
+          "type": "array",
+          "items": {
+            "$ref": "sourcesAndRules.json#/definitions/sourcesAndRules",
+            "description": "Detailed definition of this sources And Rules"
+          }
+        },
+        "flows": {
+          "type": "array",
+          "items": {
+            "$ref": "flows.json#/definitions/flows/Flow",
+            "description": "Detailed definition of this flows"
+          }
+        },
+        "hasDraft": {
+          "type": "boolean",
+          "default": false,
+          "description": ""
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "TrafficFlow-get": {
+      "id": "#/definitions/TrafficFlow-get",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "deploymentType",
+        "sourcesAndRules",
+        "flows"
+      ],
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "unique id"
+        },
+        "alias": {
+          "type": "string",
+          "description": "unique map alias"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "enable/disable map, applicable only to first level maps"
+        },
+        "deploymentType": {
+          "type": "string",
+          "enum": [
+            "REGULAR",
+            "FIRST_LEVEL",
+            "TRANSIT_LEVEL",
+            "SECOND_LEVEL",
+            "INLINE",
+            "INLINE_FIRST_LEVEL",
+            "INLINE_SECOND_LEVEL",
+            "INTENT"
+          ],
+          "description": "'regular' maps are from network/hybrid ports to tool/hybrid/gigastream; 'inline' maps are from inline ports to inline/tool/hybrid/gigastream; 'firstLevel' are from network/hybrid ports to vPorts/tool/hybrid/gigastream; 'secondLevel' maps are from vPorts to tool/hybrid/gigastream; 'inlineFirstLevel is from inline network to vport; 'inlineSecondLevel' is from vport to inline tool; 'transitLevel' is from vport to vport"
+        },
+        "sourcesAndRules": {
+          "type": "array",
+          "items": {
+            "$ref": "sourcesAndRules.json#/definitions/sourcesAndRules-get",
+            "description": "Detailed definition of this sources And Rules"
+          }
+        },
+        "flows": {
+          "type": "array",
+          "items": {
+            "$ref": "flows.json#/definitions/flows-get/Flow",
+            "description": "Detailed definition of this flows"
+          }
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "created by of the traffic flow",
+          "readonly": true
+        },
+        "createdTime": {
+          "type": "number",
+          "description": "created name of the traffic flow",
+          "readonly": true
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "updated by of the traffic flow",
+          "readonly": true
+        },
+        "updatedTime": {
+          "type": "number",
+          "description": "updated time of the traffic flow",
+          "readonly": true
+        },
+        "deployedBy": {
+          "type": "string",
+          "description": "deployed by of the traffic flow",
+          "readonly": true
+        },
+        "deployedTime": {
+          "type": "number",
+          "description": "deployed name of the traffic flow",
+          "readonly": true
+        },
+        "hasDraft": {
+          "type": "boolean",
+          "default": false,
+          "description": "",
+          "readonly": true
+        },
+        "configStatus": {
+          "type": "string",
+          "description": "Configuration status of this Traffic flow.",
+          "readonly": true
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "In case of configuration failure, this message provides details about the possible cause of the failure."
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "TrafficFlowsSingleQueryResponse": {
+      "id": "#/definitions/TrafficFlowsSingleQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "trafficFlow"
+      ],
+      "properties": {
+        "trafficFlow": {
+          "$ref": "#/definitions/TrafficFlow-get"
+        }
+      }
+    },
+    "TrafficFlowsListQueryResponse": {
+      "id": "#/definitions/TrafficFlowsListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "trafficFlows"
+      ],
+      "properties": {
+        "trafficFlows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TrafficFlow-get"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

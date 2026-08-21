@@ -1,0 +1,1609 @@
+{
+  "id": "http://gigamon.com/schemas-fm/portConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Port Configuration schema",
+  "definitions": {
+    "PortConfig": {
+      "id": "#/definitions/PortConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon Device Port Configuration",
+      "required": [
+        "portId"
+      ],
+      "properties": {
+        "portId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "device port id"
+        },
+        "licensed": {
+          "type": "boolean",
+          "default": true,
+          "readonly": true,
+          "description": "for TA series indicates whether a port is licensed. Defaults to 'true'"
+        },
+        "neighborDiscovery": {
+          "type": "string",
+          "enum": [
+            "none",
+            "all",
+            "lldp",
+            "cdp"
+          ],
+          "default": "none",
+          "description": "Configures port neighbor discovery options"
+        },
+        "alarmThresholds": {
+          "$ref": "#/definitions/PortAlarmThresholds",
+          "description": "Only applicable for HC2 nodes"
+        },
+        "accessRoles": {
+          "$ref": "#/definitions/PortAccessRoles"
+        },
+        "lock": {
+          "$ref": "#/definitions/PortLock"
+        },
+        "share": {
+          "$ref": "#/definitions/PortShare"
+        },
+        "timestamp": {
+          "$ref": "#/definitions/PortTimestamp",
+          "description": "only applicable for GigaPORT-X12-TS ports"
+        },
+        "ingressVlanTag": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4000,
+          "description": "Ingress port VLAN tag, with valid numbers between 2 and 4000 that is added to a packet. Setting the value to 0 disables VLAN tagging. The port must be a network port"
+        },
+        "tagProtocolId": {
+          "type": "string",
+          "enum": [
+            "0x8100",
+            "0x9100",
+            "0x88a8"
+          ],
+          "default": "0x8100",
+          "description": "When Ingress port VLAN tag is added , this protocol Id will be added which egress out the traffic of tool port "
+        },
+        "taptx": {
+          "type": "string",
+          "enum": [
+            "active",
+            "passive"
+          ],
+          "description": "Opens or closes the copper tap port relay. Active closes the port relay. Passive opens the port relay"
+        },
+        "gdp": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable/disable GDP packets on port"
+        },
+        "l2greId": {
+          "type": "integer",
+          "since": "H 5.8",
+          "minimum": 1,
+          "maximum": 4294967295,
+          "description": "Value of 0 disables the l2greId"
+        },
+        "vxlanId": {
+          "type": "integer",
+          "since": "H 5.8",
+          "minimum": 1,
+          "maximum": 16777215,
+          "description": "Value of 0 disables the vxlanId"
+        },
+        "headerStrip": {
+          "type": "string",
+          "description": "protocol type",
+          "enum": [
+            "none",
+            "mpls-l3",
+            "vxlan",
+            "mpls",
+            "mpls-advanced"
+
+          ],
+          "default": "none"
+        },
+        "mplsAdvanced": {
+          "$ref": "#/definitions/MplsAdvanced",
+          "description": "Mpls Advanced configuration"
+        },
+        "fec": {
+          "type": "string",
+          "description": "enable/disable forward error correction",
+          "enum": [
+            "cl91",
+            "cl74",
+            "off",
+            "default_val",
+            "cl108",
+            "cl91_kp4"
+          ]
+        },
+        "ptp": {
+          "$ref": "#/definitions/PortPtp"
+        }
+      }
+    },
+    "MplsAdvanced": {
+      "id": "#/definitions/MplsAdvanced",
+      "type": "object",
+      "additionalProperties": false,
+
+      "description": "Select a combination of Mpls-Advanced options",
+      "since": "H 6.9",
+
+      "properties": {
+        "mplsAdvancedOpt": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/MplsAdvancedOpt" },
+          "description": "List of Mpls-Advanced Options"
+        }
+      }
+    },
+    "MplsAdvancedOpt": {
+      "id": "#/definitions/MplsAdvancedOpt",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "advOpt": {
+          "type": "string",
+          "enum": [
+            "ip4-wo-options",
+            "ip4-options",
+            "ipv6",
+            "l2-wo-cw-ach",
+            "l2-cw-ach",
+            "all" ],
+          "description": "Mpls-Advanced Options"
+        }
+      }
+    },
+    "PortAlarmThresholds": {
+      "id": "#/definitions/PortAlarmThresholds",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Port Alarm Thresholds definitions",
+      "properties": {
+        "alarmThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 0,
+          "description": "in percent's. Alarm is reported every time threshold is crossed. The threshold must be exceeded for at least six consecutive seconds. Value of 0 disables the threshold"
+        },
+        "alarmThresholdLow": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 0,
+          "since": "H 4.4",
+          "description": "in percents. Alarm is reported every time this low threshold is crossed. It must be under this threshold for at least six consecutive seconds. Value of 0 disables the threshold"
+        },
+        "alarmBufferThresholdRx": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 0,
+          "description": "in percent's. Alarm is reported every time threshold is crossed. Value of 0 disables the threshold"
+        },
+        "alarmBufferThresholdTx": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 0,
+          "description": "in percent's. Alarm is reported every time threshold is crossed. Value of 0 disables the threshold"
+        }
+      }
+    },
+    "PortAccessRoles": {
+      "id": "#/definitions/PortAccessRoles",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Port Access RBAC definitions",
+      "properties": {
+        "level1": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "list of roles with 'Level 1' access privileges. Level 1 - Read-only access. Can view port configuration and statistics"
+        },
+        "level2": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "list of roles with 'Level 2' access privileges. Level 2 - Level 1 plus the capability to configure port-lock, lock-share, and all traffic objects except port-pair"
+        },
+        "level3": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "list of roles with 'Level 3' access privileges. Level 3 - Level 2 plus the capability to configure port params (such as administrative status of the port, speed, duplex, and auto-negotiation), as well as port-pair"
+        },
+        "level4": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "list of roles with 'Level 4' access privileges. Level 4 - Level 3 plus the capability to change the port type"
+        }
+      }
+    },
+    "PortLock": {
+      "id": "#/definitions/PortLock",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Port Locking definitions",
+      "required": [
+        "lockingUser"
+      ],
+      "properties": {
+        "lockingUser": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User account name this lock belongs to. Lock is used to restrict use of the port by only the specified user account. Users with Default/Operator privileges can only lock ports to which their account has been granted access under their own user account name only. Administrators can lock any port in the system for any existing user account name"
+        },
+        "sharedWith": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Used to share a locked port with other user accounts. Users with Default/Operator privileges can only share a lock if the port is locked under their account name. Administrators can lock a port for another user account"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional lock description string"
+        }
+      }
+    },
+    "PortShare": {
+      "id": "#/definitions/PortShare",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Port Sharing definitions",
+      "properties": {
+        "toolShareRoles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Only applicable to tool ports. Used to designate a tool port as available for tool-to-tool pass-alls (tool-mirrors) with the specified roles"
+        }
+      }
+    },
+    "PortTimestamp": {
+      "id": "#/definitions/PortTimestamp",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Timestamping definitions for GigaPORT-X12-TS ports",
+      "properties": {
+        "appendIngress": {
+          "type": "boolean",
+          "default": false,
+          "description": "Used to add a timestamp to ingress packets. Applicable to GigaPORT-X12-TS card ports x1..x12 when configured as network ports"
+        },
+        "stripEgress": {
+          "type": "boolean",
+          "default": false,
+          "description": "Used to strip timestamps from egress packets. Use this argument to strip timestamps from egress packets. Important: this option should only be enabled to packets with time stamps appended. This function will strip the last 14 bytes of each packet regardless of whether a timestamp has been added. Applicable to GigaPORT-X12-TS card ports x9..x12 when configured as tool ports"
+        },
+        "sourceId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "description": "Used to specify a custom source-id to be included in the timestamp appended by the GigaPORT-X12-TS. Applicable to GigaPORT-X12-TS card ports x1..x12 when configured as network ports. The timestamp always includes a source-id field. If this custom value is not explicitly specified, the GigaPORT-X12-TS generates one automatically using the following formula: (<box-id> * 2048) + (<slot-id> * 256) + <port-number>"
+        }
+      }
+    },
+    "PortGroup": {
+      "id": "#/definitions/PortGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "PortGroup definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Port Group alias. Uniquely identifies a PortGroup within a cluster"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "gigaPortId"
+          }
+        },
+        "gigastreams": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Gigastream aliases"
+        },
+        "tunnelLbEndpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunnelEndpointWt"
+          },
+          "description": "Tunnel Endpoint id with weight"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "smartLb": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable or disable GigaSMART load balancing"
+        },
+        "portWeights": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int8",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "description": "load balancing weights for the ports in the port list. If included, the list size must match the size of the 'ports' list"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "TunnelEndpointWt": {
+      "id": "#/definitions/TunnelEndpointWt",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tunnelEndpoint"
+      ],
+      "properties": {
+        "tunnelEndpoint": {
+          "type": "string",
+          "description": "tunnel endpoint id"
+        },
+        "weight": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "tunnel endpoint weight"
+        }
+      }
+    },
+    "Gigastream": {
+      "id": "#/definitions/Gigastream",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigastream definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "gigastream alias. Uniquely identifies a gigastream within a cluster"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of the ports to combine into a gigastream"
+        },
+        "hashWeights": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minimum": 0,
+          "maximum": 256,
+          "since": "H 5.6",
+          "description": "hashWeights for 'ports'.If included, the list size must match the size of the 'ports' list"
+        },
+        "dropWeight": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 256,
+          "since": "H 5.6",
+          "description": "relative weight for dropping the traffic"
+        },
+        "varianceThreshold": {
+          "type": "string",
+          "since": "H 6.0",
+          "description": "Variance threshold percentage"
+        },
+        "thresholdLevel" : {
+          "type": "string",
+          "since": "H 6.0",
+          "description": "Threshold level",
+          "enum": [
+            "Global-Level",
+            "Type-Disabled",
+            "Type-Level",
+            "Per-GS-Level",
+            "Per-GS-Disabled"
+          ]
+        },
+        "comment": {
+          "type": "string"
+        },
+        "hashType": {
+          "type": "string",
+          "enum": [
+            "advanced"
+          ],
+          "default": "advanced"
+        },
+        "hashSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 256,
+          "since": "H 4.8",
+          "description": "Hash bucket size"
+        },
+        "hashToolPort": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HashToolPort"
+          },
+          "description": "Hash bucket id to tool port mapping"
+        },
+        "failoverStatus": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "readonly": true,
+          "since": "H 4.8",
+          "description": "Failover Status"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "HashToolPort": {
+      "id": "#/definitions/HashToolPort",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Tool Port to Hash bucket id mapping",
+      "since": "H 4.8",
+      "required": [
+        "hashBucketIds",
+        "toolPorts"
+      ],
+      "properties": {
+        "hashBucketIds": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "hash bucket id or range"
+        },
+        "toolPorts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "tool port(s) mapped to hashBucketIds"
+        }
+      }
+    },
+    "PortPair": {
+      "id": "#/definitions/PortPair",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "PortPair definition",
+      "required": [
+        "alias",
+        "port1",
+        "port2"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Port Pair alias. Uniquely identifies a PortPair within a cluster"
+        },
+        "port1": {
+          "type": "string",
+          "format": "gigaPortId"
+        },
+        "port2": {
+          "type": "string",
+          "format": "gigaPortId"
+        },
+        "lfpEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "configMismatch": {
+          "type": "boolean",
+          "default": false,
+          "readonly": true,
+          "description": "Indicates speed/duplex of port1 and port2 are different"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "StackLink": {
+      "id": "#/definitions/StackLink",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "StackLink definition",
+      "required": [
+        "alias",
+        "type",
+        "endpoint1",
+        "endpoint2"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Port Pair alias. Uniquely identifies a StackLink within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "gigastream",
+            "port"
+          ],
+          "description": "specifies whether this is a gigastream-based or port-based stack link"
+        },
+        "endpoint1": {
+          "type": "string",
+          "format": "gigaPortId",
+          "description": "for 'gigastream' type, this is the gigastream alias of node1. for 'port' type, this is the port id on node1"
+        },
+        "endpoint2": {
+          "type": "string",
+          "format": "gigaPortId",
+          "description": "for 'gigastream' type, this is the gigastream alias of node2. for 'port' type, this is the port id on node2"
+        },
+        "portList1": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "only applicable for type 'gigastream'. port-list corresponding to endpoint1"
+        },
+        "portList2": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "only applicable for type 'gigastream'. port-list corresponding to endpoint2"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "TunneledPort": {
+      "id": "#/definitions/TunneledPort",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "TunneledPort definition",
+      "required": [
+        "portId",
+        "ipAddress",
+        "ipMask",
+        "gateway",
+        "mtu",
+        "gsGroup"
+      ],
+      "properties": {
+        "portId": {
+          "type": "string",
+          "format": "gigaPortId",
+          "description": "Tunneled Port Id"
+        },
+        "ipType": {
+          "type": "string",
+          "enum": [
+            "IPv4",
+            "IPv6"
+          ],
+          "readonly": true
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "Tunneled Port IP Address. IPv4 or IPv6."
+        },
+        "ipMask": {
+          "type": "string",
+          "description": "Tunneled Port IP Netmask (netmask or cidr notation). IPv4 or IPv6"
+        },
+        "gateway": {
+          "type": "string",
+          "description": "Tunneled Port Gateway. IPv4 or IPv6."
+        },
+        "mtu": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1280,
+          "maximum": 9600
+        },
+        "gsGroup": {
+          "type": "string",
+          "description": "Alias of referenced managing GsGroup"
+        },
+        "arpResolved": {
+          "type": "boolean",
+          "readonly": true,
+          "description": "only applicable for IPv4"
+        },
+        "gwStatus": {
+          "type": "string",
+          "readonly": true,
+          "enum": [
+            "Reachable",
+            "Unreachable",
+            "na"
+          ],
+          "description": "only applicable for IPv6 tool ports; na = gwStatus not applicable for this port"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        },
+        "macAddress": {
+          "type": "string",
+          "readonly": true
+        },
+        "agingTime": {
+          "type": "string",
+          "readonly": true
+        }
+      }
+    },
+    "ToolPortMirror": {
+      "id": "#/definitions/ToolPortMirror",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "alias",
+        "srcPorts",
+        "dstPorts"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "unique tool port mirror alias"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "srcPorts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of the 'from' tool ports"
+        },
+        "dstPorts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of the 'to' tool ports"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "CardGigastreamAdvHash": {
+      "id": "#/definitions/CardGigastreamAdvHash",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Device Card Gigastream Advanced Hash definition",
+      "required": [
+        "slot",
+        "type"
+      ],
+      "properties": {
+        "slot": {
+          "type": "string",
+          "description": "device card slotId for the gigastream"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "all",
+            "default",
+            "none",
+            "fields"
+          ]
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "ethertype",
+              "macsrc",
+              "macdst",
+              "ipdst",
+              "ipsrc",
+              "ip6src",
+              "ip6dst",
+              "ip6nextHeader",
+              "protocol",
+              "portsrc",
+              "portdst",
+              "port6src",
+              "port6dst",
+              "mpls",
+              "gtpteid",
+              "ingressport"
+            ]
+          },
+          "description": "Required when 'type' == 'fields'. 'gtpteid' requires fields (portsrc and portdst) or (port6src and port6dst)"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "ToolPortFilter": {
+      "id": "#/definitions/ToolPortFilter",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "toolPort",
+        "rules"
+      ],
+      "properties": {
+        "toolPort": {
+          "type": "string"
+        },
+        "rules": {
+          "$ref": "#/definitions/ToolPortFilterRules"
+        }
+      }
+    },
+    "ToolPortFilterRules": {
+      "id": "#/definitions/ToolPortFilterRules",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tool Port Filter Rules Container. Private class",
+      "properties": {
+        "passRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ToolPortFilterRule"
+          },
+          "uniqueItems": true
+        },
+        "dropRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ToolPortFilterRule"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "ToolPortFilterRule": {
+      "id": "#/definitions/ToolPortFilterRule",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tool Port Filter Rule Definition",
+      "required": [
+        "ruleId",
+        "matches"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1
+        },
+        "comment": {
+          "type": "string"
+        },
+        "matches": {
+          "description": "Set of rule's matching elements. Within a rule, matching elements of the the same type MUST NOT be repeated. The 'position' property of each matching element is not relevant for this rule type as only the outer headers are matched",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "map.json#/definitions/RuleElementEtherType"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementVlan"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementSrcMacAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementDstMacAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIpVer"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4SrcAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4DstAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Tos"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Dscp"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Frag"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Protocol"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Ttl"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp6SrcAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp6DstAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementTcpCtl"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementL4SrcPort"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementL4DstPort"
+              }
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "properties_bak": {
+        "comment": {
+          "type": "string"
+        },
+        "bidi": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "PortFilter": {
+      "id": "#/definitions/PortFilter",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "port",
+        "rules"
+      ],
+      "properties": {
+        "port": {
+          "type": "string"
+        },
+        "rules": {
+          "$ref": "#/definitions/PortFilterRules"
+        }
+      }
+    },
+    "PortFilterRules": {
+      "id": "#/definitions/PortFilterRules",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Port Filter Rules Container. Private class",
+      "properties": {
+        "passRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortFilterRule"
+          },
+          "uniqueItems": true
+        },
+        "dropRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortFilterRule"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "PortFilterRule": {
+      "id": "#/definitions/PortFilterRule",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Port Filter Rule Definition",
+      "required": [
+        "ruleId",
+        "matches"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1
+        },
+        "comment": {
+          "type": "string"
+        },
+        "matches": {
+          "description": "Set of rule's matching elements. Within a rule, matching elements of the the same type MUST NOT be repeated. The 'position' property of each matching element is not relevant for this rule type as only the outer headers are matched",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "map.json#/definitions/RuleElementEtherType"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementVlan"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementSrcMacAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementDstMacAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIpVer"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4SrcAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4DstAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Tos"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Dscp"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Frag"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Protocol"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp4Ttl"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp6SrcAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementIp6DstAddress"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementTcpCtl"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementL4SrcPort"
+              },
+              {
+                "$ref": "map.json#/definitions/RuleElementL4DstPort"
+              }
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "PortFilterQueryResponse": {
+      "id": "#/definitions/PortFilterQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "portFilter"
+      ],
+      "properties": {
+        "portFilter": {
+          "$ref": "#/definitions/PortFilter"
+        }
+      }
+    },
+    "PortFiltersQueryResponse": {
+      "id": "#/definitions/PortFiltersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "portFilters"
+      ],
+      "properties": {
+        "portFilters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortFilter"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "PortConfigQueryResponse": {
+      "id": "#/definitions/PortConfigQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "portConfig"
+      ],
+      "properties": {
+        "portConfig": {
+          "$ref": "#/definitions/PortConfig"
+        }
+      }
+    },
+    "PortConfigsQueryResponse": {
+      "id": "#/definitions/PortConfigsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "portConfigs"
+      ],
+      "properties": {
+        "portConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortConfig"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "PortGroupQueryResponse": {
+      "id": "#/definitions/PortGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "portGroup"
+      ],
+      "properties": {
+        "portGroup": {
+          "$ref": "#/definitions/PortGroup"
+        }
+      }
+    },
+    "PortGroupsQueryResponse": {
+      "id": "#/definitions/PortGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "portGroups"
+      ],
+      "properties": {
+        "portGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortGroup"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GigastreamQueryResponse": {
+      "id": "#/definitions/GigastreamQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigastream"
+      ],
+      "properties": {
+        "gigastream": {
+          "$ref": "#/definitions/Gigastream"
+        }
+      }
+    },
+    "GigastreamsQueryResponse": {
+      "id": "#/definitions/GigastreamsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigastreams"
+      ],
+      "properties": {
+        "gigastreams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Gigastream"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "PortPairQueryResponse": {
+      "id": "#/definitions/PortPairQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "portPair"
+      ],
+      "properties": {
+        "portPair": {
+          "$ref": "#/definitions/PortPair"
+        }
+      }
+    },
+    "PortPairsQueryResponse": {
+      "id": "#/definitions/PortPairsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "portPairs"
+      ],
+      "properties": {
+        "portPairs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortPair"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "StackLinkQueryResponse": {
+      "id": "#/definitions/StackLinkQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "stackLink"
+      ],
+      "properties": {
+        "stackLink": {
+          "$ref": "#/definitions/StackLink"
+        }
+      }
+    },
+    "StackLinksQueryResponse": {
+      "id": "#/definitions/StackLinksQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "stackLinks"
+      ],
+      "properties": {
+        "stackLinks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StackLink"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "TunneledPortQueryResponse": {
+      "id": "#/definitions/TunneledPortQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "tunneledPort"
+      ],
+      "properties": {
+        "tunneledPort": {
+          "$ref": "#/definitions/TunneledPort"
+        }
+      }
+    },
+    "TunneledPortsQueryResponse": {
+      "id": "#/definitions/TunneledPortsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "tunneledPorts"
+      ],
+      "properties": {
+        "tunneledPorts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunneledPort"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "ToolPortFilterQueryResponse": {
+      "id": "#/definitions/ToolPortFilterQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "toolPortFilter"
+      ],
+      "properties": {
+        "toolPortFilter": {
+          "$ref": "#/definitions/ToolPortFilter"
+        }
+      }
+    },
+    "ToolPortFiltersQueryResponse": {
+      "id": "#/definitions/ToolPortFiltersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "toolPortFilters"
+      ],
+      "properties": {
+        "toolPortFilters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ToolPortFilter"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "ToolPortMirrorQueryResponse": {
+      "id": "#/definitions/ToolPortMirrorQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "toolPortMirror"
+      ],
+      "properties": {
+        "toolPortMirror": {
+          "$ref": "#/definitions/ToolPortMirror"
+        }
+      }
+    },
+    "ToolPortMirrorsQueryResponse": {
+      "id": "#/definitions/ToolPortMirrorsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "toolPortMirrors"
+      ],
+      "properties": {
+        "toolPortMirrors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ToolPortMirror"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "TunnelLbEndpointsQueryResponse": {
+      "id": "#/definitions/TunnelLbEndpointsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tunnelLbEndpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunnelLbEndpoint"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "TunnelLbEndpointQueryResponse": {
+      "id": "#/definitions/TunnelLbEndpointQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tunnelLbEndpoint"
+      ],
+      "properties": {
+        "tunnelLbEndpoint": {
+          "$ref": "#/definitions/TunnelLbEndpoint"
+        }
+      }
+    },
+    "TunnelLbEndpoint": {
+      "id": "#/definitions/TunnelLbEndpoint",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "teId"
+      ],
+      "properties": {
+        "teId": {
+          "type": "string",
+          "minLength": 3,
+          "description": "tunnel endpoint alias, format: teN , where 1 <= N <= 128"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "tunnel endpoint alias"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "tunnel endpoint remote ip address. IPv4 or IPv6"
+        }
+      }
+    },
+    "PortPtp": {
+      "description": "Port PTP configurations",
+      "properties": {
+        "enable": {
+          "description": "Enable PTP on the port",
+          "type": "boolean"
+        },
+        "localPriority": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 255
+        },
+        "role": {
+          "deprecated": true,
+          "type": "string",
+          "enum": [
+            "standard",
+            "master",
+            "slave"
+          ],
+          "description": "deprecated: use roleAlias"
+        },
+        "roleAlias": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "source",
+            "receiver"
+          ]
+        },
+        "announceInterval": {
+          "description": "Configures the interval between PTP announce messages on an interface.\nThe range for the PTP announcement interval is from -2 to 4 log seconds.\nFor the domain 0 as well as domain 24 to 43 the interval limit will be of -3 to 4",
+          "type": "integer"
+        },
+        "delayRequestInterval": {
+          "description": "Configures the minimum interval allowed between PTP delay messages when the port is in the source state.\nThe range is from log(-7) to log(5) seconds, where log(-1) = 1 frame per second.\nFor the domain 0 the interval limit is -4 to 5 and for the range of domain 24 to 43 the interval limit will be of -7 to 4.",
+          "type": "integer"
+        },
+        "syncInterval": {
+          "description": "Configures the interval between PTP synchronization messages on an interface.\nThe range is from log(-7) to log(1) seconds.\nFor domain 0 the interval limit is -4 to 1 and for the range of domain 24 to 43 the interval limit will be of -7 to 4. ",
+          "type": "integer"
+        },
+        "timestamp": {
+          "$ref": "#/definitions/PortPtpTimestamp"
+        },
+        "vlan": {
+          "description": "configures vlan on the PTP configured port",
+          "type": "integer",
+          "minimum": 4080,
+          "maximum": 4089
+        }
+      },
+      "type": "object"
+    },
+    "PortPtpTimestamp": {
+      "description": "Port PTP timestamp configurations",
+      "properties": {
+        "egress": {
+          "$ref": "#/definitions/PortPtpTimestampDirConfig",
+          "description": "Tx (Egress) settings"
+        },
+        "ingress": {
+          "$ref": "#/definitions/PortPtpTimestampDirConfig",
+          "description": "Rx (Ingress) settings"
+        }
+      },
+      "type": "object"
+    },
+    "PortPtpTimestampDirConfig": {
+      "properties": {
+        "insert": {
+          "default": false,
+          "description": "When set, will insert timestamp for packets on the port",
+          "type": "boolean"
+        },
+        "sourceId": {
+          "description": "Source identifier of Packet Time Stamp record header",
+          "minimum": 0,
+          "maximum": 65535,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "PortFilterStats": {
+      "id": "#/definitions/PortFilterStats",
+      "type": "object",
+      "description": "Egress Port Filter counters",
+      "since": "FM 5.10",
+      "properties": {
+        "port": {
+          "type": "string"
+        },
+        "rules": {
+          "$ref": "#/definitions/PortFilterStatsRuleType"
+        }
+      }
+    },
+    "PortFilterStatsRuleType": {
+      "id": "#/definitions/PortFilterStatsRuleType",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Port Filter Rules Container",
+      "properties": {
+        "passRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortFilterStatsRule"
+          }
+        },
+        "dropRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortFilterStatsRule"
+          }
+        }
+      }
+    },
+    "PortFilterStatsRule": {
+      "id": "#/definitions/PortFilterStatsRule",
+      "type": "object",
+      "description": "Egress Port Filter counters for each rule",
+      "properties": {
+        "ruleId": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1
+        },
+        "pkts": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true
+        },
+        "bytes": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortFilterStatsFilterTypes"
+          },
+          "description": "list of the filters configured for rule"
+        }
+      }
+    },
+    "PortFilterStatsFilterTypes": {
+      "id": "#/definitions/PortFilterStatsFilterTypes",
+      "type": "object",
+      "description": "Egress Port Filter counters for each filter attribute",
+      "properties": {
+        "filterType": {
+          "type": "string"
+        },
+        "filterValue": {
+          "type": "string"
+        }
+      }
+    },
+    "PortFilterStatsQueryResponse": {
+      "id": "#/definitions/PortFilterStatsQueryResponse",
+      "type": "object",
+      "description": "Egress Port Filter Stats",
+      "since": "FM 5.10",
+      "properties": {
+        "sysUpTime": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "readOnly": true,
+          "description": "Device sysUpTime. The time (in hundredths of a second) since the network management portion of the system was last re-initialized"
+        },
+        "portFilterStats": {
+          "$ref": "#/definitions/PortFilterStats"
+        }
+      }
+    }
+  }
+}

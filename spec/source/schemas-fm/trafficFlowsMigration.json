@@ -1,0 +1,283 @@
+{
+  "id": "http://gigamon.com/schemas-fm/MigrationSchemas",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Swagger-compatible JSON Schema definitions for migration and rollback payloads and responses.",
+  "definitions": {
+    "MigratePayload": {
+      "id": "#/definitions/MigratePayload",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "clusterIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "migrationAlias": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MigrationResponse": {
+      "id": "#/definitions/MigrationResponse",
+      "type": "object",
+      "properties": {
+        "migrationAlias": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "RollbackPayload": {
+      "id": "#/definitions/RollbackPayload",
+      "type": "object",
+      "properties": {
+        "trafficFlows": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "RollbackResponse": {
+      "id": "#/definitions/RollbackResponse",
+      "type": "object",
+      "properties": {
+        "trafficFlows": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ResultFilterCriteria": {
+      "id": "#/definitions/ResultFilterCriteria",
+      "title": "ResultFilterCriteria",
+      "type": "object",
+      "description": "Criteria for filtering migration results.",
+      "properties": {
+        "migrationAlias": {
+          "type": "string"
+        },
+        "mapType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "isDryRun": {
+          "type": "boolean"
+        },
+        "isAllMaps": {
+          "type": "boolean"
+        },
+        "mapAlias": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "AppIntelMigrationPayload": {
+      "id": "#/definitions/AppIntelMigrationPayload",
+      "type": "object",
+      "properties": {
+        "migrationAlias": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "AppIntelMigrationResponse": {
+      "id": "#/definitions/AppIntelMigrationResponse",
+      "type": "object",
+      "properties": {
+        "migrationAlias": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MapMigrationResult": {
+      "id": "#/definitions/MapMigrationResult",
+      "type": "object",
+      "properties": {
+        "migrationAlias": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mapType": {
+          "type": "string"
+        },
+        "isAllMaps": {
+          "type": "boolean"
+        },
+        "dryRun": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "NOT_STARTED",
+            "STARTED",
+            "SKIPPED",
+            "IN_PROGRESS",
+            "COMPLETED",
+            "FAILURE"
+          ]
+        },
+        "totalMaps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalSuccess": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalFailed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalSkipped": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalDuplicates": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "totalPortAliasMismatches": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "duplicateMaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "totalTimeToComplete": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 0
+        },
+        "startTime": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 0
+        },
+        "endTime": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 0
+        },
+        "avgTimePerMap": {
+          "type": "number",
+          "minimum": 0
+        },
+        "triggeredBy": {
+          "type": "string"
+        },
+        "failureReason": {
+          "type": "string"
+        },
+        "migratedMaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "clustersWithNoMaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failedMapsAndReasons": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "failedClusterAndReasons": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "skippedMigration": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "aliasMismatched": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "clusterIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "MapMigrationResultSingleQueryResponse": {
+      "id": "#/definitions/MapMigrationResultSingleQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mapMigrationResult": {
+          "$ref": "#/definitions/MapMigrationResult"
+        }
+      }
+    },
+    "MapMigrationResultListQueryResponse": {
+      "id": "#/definitions/MapMigrationResultListQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mapMigrationResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapMigrationResult"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

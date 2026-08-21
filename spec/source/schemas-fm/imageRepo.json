@@ -1,0 +1,108 @@
+{
+  "id": "http://gigamon.com/schemas-fm/imageRepo.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Port Configuration schema",
+  "definitions": {
+    "ImageRepoImagesQueryResponse": {
+      "id": "#/definitions/ImageRepoImagesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ImageRepoImagesQueryResponse"
+      ],
+      "properties": {
+        "ImageRepoImagesQueryResponse": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImageRepoImages"
+          },
+          "description": "list of the image files"
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "ImageRepoImages": {
+      "id": "#/definitions/ImageRepoImages",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Image File",
+      "required": [
+        "fileName",
+        "version"
+      ],
+      "properties": {
+        "fileName": {
+          "type": "string",
+          "readonly": true,
+          "description": "Image filename"
+        },
+        "version": {
+          "type": "string",
+          "readonly": true,
+          "description": "Image version"
+        },
+        "date": {
+          "type": "string",
+          "readonly": true,
+          "description": "Image build date"
+        },
+        "buildId": {
+          "type": "string",
+          "readonly": true,
+          "description": "Image build id"
+        },
+        "size": {
+          "type": "string",
+          "readonly": true,
+          "description": "Image build size"
+        },
+        "model": {
+          "type": "string",
+          "readonly": true,
+          "description": "Image model"
+        }
+      }
+    },
+    "ImageServerRepoVersionBaseQueryResponse": {
+      "id": "#/definitions/ImageServerRepoVersionBaseQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "imageRepoImagesByVersion"
+      ],
+      "properties": {
+        "imageRepoImagesByVersion": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImagesByVersion"
+          },
+          "description": "System Image File by version"
+        }
+      }
+    },
+    "ImagesByVersion": {
+      "id": "#/definitions/ImagesByVersion",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Image Files by version",
+      "required": [
+        "version"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "readonly": true,
+          "description": "Image version"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImageRepoImages"
+          }
+        }
+      }
+    }
+  }
+}

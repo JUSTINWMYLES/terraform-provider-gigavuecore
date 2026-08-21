@@ -1,0 +1,196 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmTemplateSslConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Templates schema",
+  "definitions": {
+    "fmTemplateHierarchicalConfigsQueryResponse": {
+      "id": "#/definitions/fmTemplateHierarchicalConfigsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fmTemplateHierarchicalConfigs"
+      ],
+      "properties": {
+        "fmTemplateHierarchicalConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/fmTemplateHierarchicalConfigSpec"
+          },
+          "description": "All FM Template  Configurations"
+        }
+      }
+    },
+    "fmTemplateHierarchicalConfigSpec": {
+      "id": "#/definitions/fmTemplateHierarchicalConfigSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "FM Template Configuration of a ConfigType",
+      "properties": {
+        "configType": {
+          "enum": [
+            "SSL_CERTIFICATE_TEMPLATE"
+          ],
+          "type": "string",
+          "description": "Configuration Type of the FM template"
+        },
+        "configLevel": {
+          "enum": [
+            "GLOBAL",
+            "SITE",
+            "CLUSTER"
+          ],
+          "type": "string",
+          "description": "Scope of the applied FM template"
+        },
+        "configLevelValue": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "deviceSslCertificateConfigs": {
+              "type": "array",
+              "description": "Available when ConfigType is SSL_CERTIFICATE_TEMPLATE",
+              "items": {
+                "$ref": "#/definitions/sslCertificateConfig"
+              }
+            }
+          }
+        },
+        "updateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "templateName": {
+          "type": "string",
+          "example": "SSL_CERTIFICATE_TEMPLATE"
+        },
+        "refCount": {
+          "type": "integer"
+        },
+        "modifiable": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "sslCertificateConfig": {
+      "id": "#/definitions/sslCertificateConfig",
+      "type": "object",
+      "required": [
+        "uploadSpec",
+        "trustedCA",
+        "operationType"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "uploadSpec": {
+          "$ref": "#/definitions/sslCertificateUploadSpec"
+        },
+        "trustedCA": {
+          "$ref": "#/definitions/sslCertificateTrustedCASpec"
+        },
+        "subject": {
+          "type": "string",
+          "readOnly": true,
+          "description": "subject name of the certificate"
+        },
+        "issuer": {
+          "type": "string",
+          "readOnly": true,
+          "description": "issuer details of the certificate"
+        },
+        "notAfter": {
+          "description": "date and time when certificate stops being valid ([rfc3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14))",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "notBefore": {
+          "description": "date and time when certificate starts being valid ([rfc3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14))",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "signatureAlgorithm": {
+          "example": "sha1WithRSAEncryption",
+          "readOnly": true,
+          "type": "string"
+        },
+        "operationType": {
+          "example": "add",
+          "enum": [
+            "add",
+            "delete"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "sslCertificateUploadSpecInfo": {
+      "id": "#/definitions/sslCertificateUploadSpecInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name of the certificate"
+        },
+        "comment": {
+          "type": "string",
+          "description": "a short description of the certificate"
+        },
+        "passphrase": {
+          "type": "string",
+          "description": "used to decrypt pkcs12 and private keys"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "privateKey",
+            "certificate",
+            "pkcs12"
+          ],
+          "description": "type of the certificate"
+        }
+      }
+    },
+    "sslCertificateUploadSpec": {
+      "id": "#/definitions/sslCertificateUploadSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/sslCertificateUploadSpecInfo",
+          "description": "Certificate info"
+        },
+        "pem": {
+          "type": "string",
+          "description": "contents of the certificate in pem format"
+        }
+      }
+    },
+    "sslCertificateTrustedCASpec": {
+      "id": "#/definitions/sslCertificateTrustedCASpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name of the certificate"
+        }
+      }
+    }
+  }
+}

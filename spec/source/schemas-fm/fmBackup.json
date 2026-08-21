@@ -1,0 +1,189 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmBackup.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Backup schema",
+  "definitions": {
+    "FmBackupArchiveServer": {
+      "id": "#/definitions/FmBackupArchiveServer",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "FM Backup Archive Server definition",
+      "required": [
+        "alias",
+        "address",
+        "remoteBasePath",
+        "type",
+        "userName"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "archive server unique alias"
+        },
+        "address": {
+          "type": "string",
+          "minLength": 1,
+          "format": "inetAddress"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "scp",
+            "sftp"
+          ]
+        },
+        "userName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "username to use for server login."
+        },
+        "userPwd": {
+          "type": "string",
+          "description": "user password to use for server login."
+        },
+        "remoteBasePath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "remote file staging location where FM copies/lists the archived file(s)"
+        }
+      }
+    },
+    "FmBackupArchiveFile": {
+      "id": "#/definitions/FmBackupArchiveFile",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Archive File information",
+      "required": [
+        "filePath"
+      ],
+      "properties": {
+        "filePath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path of the file"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0,
+          "readonly": true,
+          "description": "size of the file"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "version of the archive file"
+        },
+        "lastModified": {
+          "type": "string",
+          "format": "date-time",
+          "readonly": true,
+          "description": "last modified time of the file"
+        }
+      }
+    },
+    "FmBackupSpec": {
+      "id": "#/definitions/FmBackupSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "FM state Backup spec",
+      "required": [
+        "archiveServer"
+      ],
+      "properties": {
+        "archiveServer": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias of the target Archive Server"
+        }
+      }
+    },
+    "FmRestoreSpec": {
+      "id": "#/definitions/FmRestoreSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "FM state Restore spec",
+      "required": [
+        "archiveServer",
+        "filePath"
+      ],
+      "properties": {
+        "archiveServer": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias of the target Archive Server"
+        },
+        "filePath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path of the file"
+        }
+      }
+    },
+    "FmBackupArchiveServerQueryResponse": {
+      "id": "#/definitions/FmBackupArchiveServerQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "fmBackupArchiveServer"
+      ],
+      "properties": {
+        "fmBackupArchiveServer": {
+          "$ref": "#/definitions/FmBackupArchiveServer"
+        }
+      }
+    },
+    "FmBackupArchiveServersQueryResponse": {
+      "id": "#/definitions/FmBackupArchiveServerQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "fmBackupArchiveServers"
+      ],
+      "properties": {
+        "fmBackupArchiveServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmBackupArchiveServer"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "FmBackupArchiveFileQueryResponse": {
+      "id": "#/definitions/FmBackupArchiveFileQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "fmBackupArchiveFile"
+      ],
+      "properties": {
+        "fmBackupArchiveFile": {
+          "$ref": "#/definitions/FmBackupArchiveFile"
+        }
+      }
+    },
+    "FmBackupArchiveFilesQueryResponse": {
+      "id": "#/definitions/FmBackupArchiveFilesQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "fmBackupArchiveFiles"
+      ],
+      "properties": {
+        "fmBackupArchiveFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmBackupArchiveFile"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "id": "http://gigamon.com/schemas-fm/sourcesAndRules.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon source and rules schema",
+  "definitions": {
+    "sourcesAndRules": {
+      "id": "#/definitions/sourcesAndRules",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "sources",
+        "rules",
+        "ruleType"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "unique sourcesAndRules alias"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "trafficEndpoint.json#/definitions/trafficEndpoint-update",
+            "description": "Detailed definition of this sources"
+          }
+        },
+        "rules": {
+          "$ref": "map.json#/definitions/MapRules",
+          "description": "This field is only valid for 'regular/byRule', 'inline/byRule' and 'firstLevel/byRule' map types"
+        },
+        "ruleType": {
+          "type": "string",
+          "enum": [
+            "byRule",
+            "passAll",
+            "collector"
+          ],
+          "default": "byRule",
+          "description": "'byRule' is applicable to all map types; 'collector' is applicable to 'regular', 'inline' maps; 'passAll' is applicable to 'regular' and 'inline' maps"
+        },
+        "rewrite": {
+          "$ref": "map.json#/definitions/MacRewrite",
+          "description": "This field is only valid for 'regular/byRule', 'collector' map types"
+        },
+        "ipRewrite": {
+          "$ref": "map.json#/definitions/IpRewrite",
+          "description": "This field is only valid for 'regular/byRule', 'collector' map types"
+        },
+        "vlanTag": {
+          "$ref": "map.json#/definitions/MapVlanManipulationTag",
+          "description": "This field is only valid for 'regular/byRule', 'collector' map types"
+        },
+        "ruleMatching": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "blacklist"
+          ],
+          "default": "normal",
+          "description": "If set to 'blacklist', packet are passed when no 'drop' rules are matched. This field is only valid for 'regular/byRule' map types. (maps into 'no-rule-match' CLI command)"
+        },
+        "inlineTrafficType": {
+          "type": "string",
+          "enum": [
+            "symmetric",
+            "asymmetric"
+          ],
+          "description": "Only applicable for 'inline/passAll' map types, in which case defaults to 'symmetric'. For 'asymmetric' maps, 'srcPort' must be of type 'inline-net'"
+        },
+        "inlineTrafficPath": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "bypass",
+            "oneArm",
+            "natPat"
+          ],
+          "description": "Only applicable for 'inline' map types, in which case defaults to 'normal'. When set to 'bypass', the 'dstPorts' must be empty"
+        },
+        "trafficType": {
+          "type": "string",
+          "enum": [
+            "control",
+            "user"
+          ],
+          "since": "H 4.5",
+          "description": "Only applicable for 'firstLevel/byRule' map types, in which case defaults to 'user'"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "sourcesAndRules-get": {
+      "id": "#/definitions/sourcesAndRules-get",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "sources",
+        "rules",
+        "ruleType"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "unique sourcesAndRules alias"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "trafficEndpoint.json#/definitions/trafficEndpoint-get",
+            "description": "Detailed definition of this sources"
+          }
+        },
+        "rules": {
+          "$ref": "map.json#/definitions/MapRules",
+          "description": "This field is only valid for 'regular/byRule', 'inline/byRule' and 'firstLevel/byRule' map types"
+        },
+        "ruleType": {
+          "type": "string",
+          "enum": [
+            "byRule",
+            "passAll",
+            "collector"
+          ],
+          "default": "byRule",
+          "description": "'byRule' is applicable to all map types; 'collector' is applicable to 'regular', 'inline' maps; 'passAll' is applicable to 'regular' and 'inline' maps"
+        },
+        "rewrite": {
+          "$ref": "map.json#/definitions/MacRewrite",
+          "description": "This field is only valid for 'regular/byRule', 'collector' map types"
+        },
+        "ipRewrite": {
+          "$ref": "map.json#/definitions/IpRewrite",
+          "description": "This field is only valid for 'regular/byRule', 'collector' map types"
+        },
+        "vlanTag": {
+          "$ref": "map.json#/definitions/MapVlanManipulationTag",
+          "description": "This field is only valid for 'regular/byRule', 'collector' map types"
+        },
+        "ruleMatching": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "blacklist"
+          ],
+          "default": "normal",
+          "description": "If set to 'blacklist', packet are passed when no 'drop' rules are matched. This field is only valid for 'regular/byRule' map types. (maps into 'no-rule-match' CLI command)"
+        },
+        "inlineTrafficType": {
+          "type": "string",
+          "enum": [
+            "symmetric",
+            "asymmetric"
+          ],
+          "description": "Only applicable for 'inline/passAll' map types, in which case defaults to 'symmetric'. For 'asymmetric' maps, 'srcPort' must be of type 'inline-net'"
+        },
+        "inlineTrafficPath": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "bypass",
+            "oneArm",
+            "natPat"
+          ],
+          "description": "Only applicable for 'inline' map types, in which case defaults to 'normal'. When set to 'bypass', the 'dstPorts' must be empty"
+        },
+        "trafficType": {
+          "type": "string",
+          "enum": [
+            "control",
+            "user"
+          ],
+          "since": "H 4.5",
+          "description": "Only applicable for 'firstLevel/byRule' map types, in which case defaults to 'user'"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        }
+      }
+    }
+  }
+}

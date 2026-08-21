@@ -1,0 +1,472 @@
+{
+  "id": "http://gigamon.com/schemas-fm/alertPolicy.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM AlertPolicy Schema",
+  "definitions": {
+    "AlertPolicyListQueryResponse" : {
+      "id": "#/definitions/AlertPolicyListQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alertPolicies"
+      ],
+      "properties": {
+        "alertPolicies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AlertPolicy"
+          },
+          "description": "All Alert Policy Configurations"
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "AlertPolicySingleQueryResponse": {
+      "id": "/#/definitions/AlertPolicySingleQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "alertPolicy"
+      ],
+      "properties": {
+        "alertPolicy": {
+          "$ref": "#/definitions/AlertPolicy"
+        }
+      }
+    },
+    "AlertPolicy" : {
+      "id": "#/definitions/AlertPolicy",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyName",
+        "metric",
+        "resourceSourceType",
+        "resources",
+        "condition",
+        "clearCondition"
+      ],
+      "properties": {
+        "policyName": {
+          "type": "string",
+          "description": "Name of the alert policy, like an alias"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the alert policy"
+        },
+        "resourceType": {
+          "type": "string",
+          "enum": [
+            "tunnelMonitoring"
+          ],
+          "description": "Type of the resource, only tunnelMonitoring is supported in 6.1"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "TUNNEL_TRAFFIC_MONITORING"
+          ],
+          "description": "Metric name for which the alert policy is created"
+        },
+        "resources": {
+          "description": "Resources associated to alert policy. Based on source type, the resources structure varies",
+          "oneOf": [
+            {
+              "$ref" : "#/definitions/AlertPolicyResourceEntities"
+            },
+            {
+              "$ref" : "#/definitions/AlertPolicyTagEntities"
+            }
+          ]
+        },
+        "condition": {
+          "$ref": "#/definitions/AlertCondition",
+          "description": "Alert condition definition"
+        },
+        "clearCondition": {
+          "$ref": "#/definitions/AlertClearCondition",
+          "description": "Alert clear condition definition"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Status of the alert policy"
+        }
+      }
+    },
+    "AlertInterval" : {
+      "id": "#/definitions/AlertInterval",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "duration",
+        "unit"
+      ],
+      "properties": {
+        "duration": {
+          "type": "integer",
+          "description": "Averaging time duration"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "MINUTES",
+            "HOURS"
+          ],
+          "default": "MINUTES",
+          "description": "Unit of duration"
+        }
+      }
+    },
+    "AlertThreshold" : {
+      "id": "#/definitions/AlertThreshold",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "threshold",
+        "severity"
+      ],
+      "properties": {
+        "threshold": {
+          "type": "number",
+          "description": "Threshold percentage value"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "Info",
+            "Minor",
+            "Warn",
+            "Major",
+            "Critical"
+          ],
+          "default": "Minor",
+          "description": "Severity of the alert"
+        }
+      }
+    },
+    "AlertCondition" : {
+      "id": "#/definitions/AlertCondition",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interval",
+        "thresholds"
+      ],
+      "properties": {
+        "interval": {
+            "$ref" : "#/definitions/AlertInterval",
+            "description": "Alert interval config"
+        },
+        "thresholds": {
+          "type": "array",
+          "items": {
+            "$ref" : "#/definitions/AlertThreshold"
+          },
+          "description": "Alert threshold definitions"
+        }
+      }
+    },
+    "AlertClearCondition" : {
+      "id": "#/definitions/AlertClearCondition",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "interval"
+      ],
+      "properties": {
+        "type": {
+          "type" : "string",
+          "enum": [
+            "TIME_BASED",
+            "THRESHOLD_BASED"
+          ],
+          "description": "Alert clear type"
+        },
+        "interval": {
+          "$ref" : "#/definitions/AlertInterval",
+          "description": "Alert clear interval config"
+        },
+        "threshold": {
+          "$ref" : "#/definitions/AlertThreshold",
+          "description": "Alert clear threshold definition"
+        }
+      }
+    },
+    "AlertPolicyTagEntities" : {
+      "id" : "#/definitions/AlertPolicyTagEntities",
+      "type" : "object",
+      "required": [
+        "sourceType",
+        "tagConfigs"
+      ],
+      "properties": {
+        "sourceType" : {
+          "type": "string",
+          "enum": ["RESOURCE_ENTITY", "TAG_ENTITY"],
+          "description": "This is a discriminator property to identify the sourceType of the resources structure. This type represents the tagging based. So the value is TAG_ENTITY"
+        },
+        "tagConfigs": {
+          "type": "array",
+          "items": {
+            "$ref" : "#/definitions/TagResourceConfig"
+          },
+          "description": "Collection of  tag configs"
+        }
+      }
+    },
+    "TagResourceConfig" : {
+      "id" : "#/definitions/TagResourceConfig",
+      "type" : "object",
+      "additionalProperties": false,
+      "required": [
+        "tagKey",
+        "tagValues"
+      ],
+      "properties": {
+        "tagKey" : {
+          "type": "string",
+          "description": "Tag key"
+        },
+        "tagValues": {
+          "type" : "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Collection of tag values"
+        },
+        "condition" : {
+          "type": "string",
+          "enum": [
+            "ANY",
+            "ALL"
+          ],
+          "description": "How the tag values to be compared. When any one of the tag values needs to be matched with the resource ANY can be used. ALL means the resource must contain all the tags values",
+          "default": "ANY"
+        }
+      }
+    },
+    "AlertPolicyResourceEntities" : {
+      "id" : "#/definitions/AlertPolicyResourceEntities",
+      "type" : "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceType",
+        "resourceEntities"
+      ],
+      "properties": {
+        "sourceType" : {
+          "type": "string",
+          "enum": ["RESOURCE_ENTITY", "TAG_ENTITY"],
+          "description": "This is a discriminator property to identify the sourceType of the resources structure.This type represents the alias or resourceId based. So the value is RESOURCE_ENTITY"
+        },
+        "resourceEntities": {
+          "type": "array",
+          "items": {
+            "$ref" : "#/definitions/ResourceEntity"
+          },
+          "description": "Collection of resource entities"
+        }
+      }
+    },
+    "ResourceEntity" : {
+      "id" : "#/definitions/ResourceEntity",
+      "type" : "object",
+      "additionalProperties": false,
+      "required": [
+        "resourceIds"
+      ],
+      "properties": {
+        "resourceIds": {
+          "type": "array",
+          "items": {
+            "type" : "string"
+          },
+          "description": "Collection of resource entities"
+        },
+        "parentResourceId": {
+          "type": "string",
+          "description": "Parent resourceId"
+        }
+      }
+    },
+    "ResourceEntityListQueryResponse" : {
+      "id": "#/definitions/ResourceEntityListQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resources"
+      ],
+      "properties": {
+        "resources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ResourceEntity"
+          },
+          "description": "List of resources of given resource type"
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "AlertPolicyUpdateSpec" : {
+      "id": "#/definitions/AlertPolicyUpdateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyName",
+        "metric",
+        "resourceSourceType",
+        "resources",
+        "condition",
+        "clearCondition",
+        "enabled"
+      ],
+      "properties": {
+        "policyName": {
+          "type": "string",
+          "description": "Name of the alert policy, like an alias"
+        },
+        "newPolicyName": {
+          "type": "string",
+          "description": "New name for the alert policy, for changing the alert policy name this property needs to be provided"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the alert policy"
+        },
+        "resourceType": {
+          "type": "string",
+          "enum": [
+            "tunnelMonitoring"
+          ],
+          "description": "Type of the resource, only tunnelMonitoring is supported in 6.3"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "TUNNEL_TRAFFIC_MONITORING"
+          ],
+          "description": "Metric name for which the alert policy is created"
+        },
+        "resources": {
+          "description": "Resources associated to alert policy. Based on source type, the resources structure varies",
+          "oneOf": [
+            {
+              "$ref" : "#/definitions/AlertPolicyResourceEntities"
+            },
+            {
+              "$ref" : "#/definitions/AlertPolicyTagEntities"
+            }
+          ]
+        },
+        "condition": {
+          "$ref": "#/definitions/AlertCondition",
+          "description": "Alert condition definition"
+        },
+        "clearCondition": {
+          "$ref": "#/definitions/AlertClearCondition",
+          "description": "Alert clear condition definition"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Status of the alert policy"
+        }
+      }
+    },
+    "AlertPoliciesUpdateSpec": {
+      "id": "#/definitions/AlertPoliciesUpdateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policies"
+      ],
+      "properties": {
+        "policies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AlertPolicyUpdateSpec"
+          },
+          "description": "List of alert policies to be updated"
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "AlertPolicyUpdateResult": {
+      "id": "#/definitions/AlertPolicyUpdateResult",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyName",
+        "message"
+      ],
+      "properties": {
+        "policyName": {
+          "type": "string",
+          "description": "Name of the alert policy"
+        },
+        "message": {
+          "type": "string",
+          "description": "Update result"
+        }
+      }
+    },
+    "AlertPoliciesUpdateResult": {
+      "id": "#/definitions/AlertPoliciesUpdateResult",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "processed",
+        "failed"
+      ],
+      "properties": {
+        "processed": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AlertPolicyUpdateResult"
+          },
+          "description": "Successfully updated policies"
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AlertPolicyUpdateResult"
+          },
+          "description": "Policies for which the update is failed"
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Status of the update operation, it is true when all polices are updated"
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "AlertPoliciesDeleteSpec": {
+      "id": "#/definitions/AlertPoliciesDeleteSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyNames"
+      ],
+      "properties": {
+        "policyNames": {
+          "type" : "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of alert policies that needs to be deleted"
+        }
+      }
+    }
+  }
+}

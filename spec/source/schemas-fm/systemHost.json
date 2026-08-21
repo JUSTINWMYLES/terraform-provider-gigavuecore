@@ -1,0 +1,56 @@
+{
+  "id": "http://gigamon.com/schemas-fm/systemHost.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon System Host schema",
+  "definitions": {
+    "SystemHostName": {
+      "id": "#/definitions/SystemHostName",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System HostName schema",
+      "properties": {
+        "hostname": {
+          "type": "string",
+          "description": "hostname of system"
+        },
+        "hostnameWithDHCP": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable to use host name with DHCP client request"
+        },
+        "alternateHostnameWithDHCP": {
+          "type": "string",
+          "description": "indicates alternate host name with DHCP client request"
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Gigamon cluster Id"
+        }
+      }
+    },
+    "SystemHostBanners": {
+      "id": "#/definitions/SystemHostBanners",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System HostBanner schema",
+      "properties": {
+        "motd": {
+          "type": "string",
+          "description": "Message Of The Day"
+        },
+        "loginMsg": {
+          "type": "string",
+          "description": "Login Message"
+        },
+        "failedLoginAttempts": {
+          "type": "string",
+          "description": "failed LoginAttempts"
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Gigamon cluster Id"
+        }
+      }
+    }
+  }
+}

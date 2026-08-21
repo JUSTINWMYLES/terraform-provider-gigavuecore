@@ -1,0 +1,265 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsTunnelApplication.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Tunnel Application schema",
+  "definitions": {
+    "AppsTunnelSpec": {
+      "id": "#/definitions/AppsTunnelSpec",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "tunnelType": {
+          "type": "string",
+          "default": "tls-pcapng"
+        },
+        "trafficDir": {
+          "type": "string",
+          "enum": [
+            "IN",
+            "OUT"
+          ],
+          "description": "IN for Decap , OUT for Encap"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "gsgroup": {
+          "type": "string"
+        },
+        "ipInterfaceIn": {
+          "type": "string",
+          "description": "ipInterface for Decap source"
+        },
+        "ipInterfaceOut": {
+          "type": "string",
+          "description": "ipInterface for Encap destination"
+        },
+        "dscp": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 63
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 255
+        },
+        "localKeyAlias": {
+          "type": "string"
+        },
+        "remoteKeyAlias": {
+           "type": "string"
+        },
+        "tcpProfile": {
+          "type": "object",
+          "$ref": "#/definitions/AppsTcpProfilesSpec"
+        },
+        "sslProfile": {
+          "type": "object",
+          "$ref": "#/definitions/AppsSslProfilesSpec"
+        },
+        "sslProfileAlias": {
+          "type": "string"
+        },
+        "tcpProfileAlias": {
+          "type": "string"
+        },
+        "encap": {
+          "type": "object",
+          "$ref": "#/definitions/AppsTunnelEncapSpec"
+        },
+        "decap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsTunnelDecapSpec"
+          }
+        },
+        "configStatus": {
+          "type": "string"
+        },
+        "configStatusReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AppsTunnelEncapSpec": {
+      "id": "#/definitions/AppsTunnelEncapSpec",
+      "type": "object",
+      "properties": {
+        "sourcePort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "source port for encap traffic , it would be on the same cluster as GsEngine"
+        },
+        "exportConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsTunnelExporterConfig"
+          }
+        },
+        "exporterGroupAlias": {
+          "type": "string"
+        },
+        "gsopAlias": {
+          "type": "string"
+        },
+        "mapAlias": {
+          "type": "string"
+        },
+        "rules": {
+          "type": "object",
+          "$ref": "map.json#/definitions/MapRules"
+        },
+        "additonalgsops": {
+          "$ref": "smart.json#/definitions/GigasmartApps"
+        }
+      }
+    },
+    "AppsTunnelDecapSpec": {
+      "id": "#/definitions/AppsTunnelDecapSpec",
+      "type": "object",
+      "properties": {
+        "applicationPorts": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "destinationPort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tools connected to the cluster"
+        },
+        "listenerAlias": {
+          "type": "string"
+        },
+        "gsopAlias": {
+          "type": "string"
+        },
+        "mapAlias": {
+          "type": "string"
+        },
+        "rules": {
+          "$ref": "map.json#/definitions/MapRules"
+        },
+        "additonalgsops": {
+          "$ref": "smart.json#/definitions/GigasmartApps"
+        }
+      }
+    },
+    "AppsTcpProfilesSpec": {
+      "id": "#/definitions/AppsTcpProfilesSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "keepAliveTimer": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 7200,
+          "default": 7200
+        },
+        "selectiveAck": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "default": "enable"
+        },
+        "synRetries": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 6,
+          "default": 3
+        }
+      }
+    },
+    "AppsSslProfilesSpec": {
+      "id": "#/definitions/AppsSslProfilesSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mtls": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ]
+        },
+        "cipher": {
+          "type": "string",
+          "default": "TLS_AES_128_GCM_SHA256"
+        },
+        "version": {
+          "type": "string",
+          "default": "TLS1.3"
+        }
+      }
+    },
+    "AppsTunnelExporterConfig": {
+      "id": "#/definitions/AppsTunnelExporterConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "remoteIp": {
+          "type": "string"
+        },
+        "remoteApplicationPort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sourceApplicationPort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "exporterAlias": {
+          "type": "string"
+        }
+      }
+    },
+    "AppsTunnelApplicationsQueryResponse": {
+      "id": "#/definitions/AppsTunnelApplicationsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tunnelApps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsTunnelSpec"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "AppsTunnelApplicationQueryResponse": {
+      "id": "#/definitions/AppsTunnelApplicationQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tunnelApplication": {
+          "type": "object",
+          "$ref": "#/definitions/AppsTunnelSpec"
+        }
+      }
+    }
+  }
+}

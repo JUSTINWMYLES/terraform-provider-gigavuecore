@@ -1,0 +1,86 @@
+{
+  "id": "http://gigamon.com/schemas-fm/flexInlineNetworkGroups.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FlexInline Network Groups schema",
+  "definitions": {
+    "GigaFlexInlineNetworkGroupListQueryResponse": {
+      "id": "#/definitions/GigaFlexInlineNetworkGroupListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigaFlexInlineNetworkGroups"
+      ],
+      "properties": {
+        "gigaFlexInlineNetworkGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineNetworkGroup"
+          }
+        }
+      }
+    },
+    "GigaFlexInlineNetworkGroupSingleQueryResponse": {
+      "id": "#/definitions/GigaFlexInlineNetworkGroupSingleQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigaFlexInlineNetworkGroup"
+      ],
+      "properties": {
+        "gigaFlexInlineNetworkGroup": {
+          "$ref": "#/definitions/GigaFlexInlineNetworkGroup"
+        }
+      }
+    },
+    "GigaFlexInlineNetworkGroup": {
+      "id": "#/definitions/GigaFlexInlineNetworkGroup",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the network group"
+        },
+        "clusterId": {
+          "id": "#/definitions/clusterId",
+          "type": "string"
+        },
+        "members": {
+          "id": "#/definitions/members",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineNetworkMetaData"
+          },
+          "description": "Array holding inline network group members"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "InlineNetworkMetaData": {
+      "id": "#/definitions/InlineNetworkMetaData",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the inline network"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "IN",
+            "IN_LAG",
+            "FM_ING"
+          ],
+          "description": "Type of inline construct"
+        }
+      }
+    }
+  }
+}

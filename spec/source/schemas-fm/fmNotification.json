@@ -1,0 +1,485 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmNotification.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Notification Configuration schema",
+  "definitions": {
+    "EmailServer": {
+      "id": "#/definitions/EmailServer",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "emailHost": {
+          "type": "string",
+          "description": "Address of the SMTP Server"
+        },
+        "userName": {
+          "type": "string",
+          "description": "Username for the SMTP Server"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password for the SMTP Server"
+        },
+        "from": {
+          "type": "string",
+          "default": "no-reply@gigavue-fm",
+          "description": "From address for the email"
+        },
+        "enableSmtpAuth": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/Disable SMTP Authentication"
+        },
+        "port": {
+          "type": "integer",
+          "default": 587,
+          "description": "SMTP Server Port"
+        }
+      }
+    },
+    "PermittedAddressesGetResponse": {
+      "id": "#/definitions/PermittedAddressesGetResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowListAddresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermittedAddresses"
+          }
+        }
+      }
+    },
+    "PermittedAddresses": {
+      "id": "#/definitions/PermittedAddresses",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "address",
+        "alias",
+        "addressType"
+      ],
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "Permitted address"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Alias for the address"
+        },
+        "addressType": {
+          "type": "string",
+          "enum": [
+            "domain",
+            "email"
+          ],
+          "description": "Address type"
+        },
+        "subscribedEvents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of events subscribed by the address"
+        }
+      }
+    },
+    "ExternalTrapReceiverGetResponse": {
+      "id": "#/definitions/ExternalTrapReceiverGetResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "externalTrapReceivers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExternalTrapReceiver"
+          }
+        }
+      }
+    },
+    "ExternalTrapReceiver": {
+      "id": "#/definitions/ExternalTrapReceiver",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "ipAddress",
+        "snmpVersion"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the External Trap Receiver"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "IP Address of the External Trap Receiver"
+        },
+        "snmpRetries": {
+          "type": "integer",
+          "default": 0,
+          "description": "Number of retries"
+        },
+        "snmpTimeout": {
+          "type": "integer",
+          "default": 1000,
+          "description": "Timeout (in milliseconds)"
+        },
+        "snmpPort": {
+          "type": "integer",
+          "default": 162,
+          "description": "Destination port number"
+        },
+        "snmpVersion": {
+          "type": "string",
+          "enum": [
+            "v2c",
+            "v3"
+          ],
+          "description": "SNMP Version"
+        },
+        "securityLevel": {
+          "type": "string",
+          "enum": [
+            "noAuthNoPriv",
+            "authNoPriv",
+            "authPriv"
+          ],
+          "description": "Security Level"
+        },
+        "userName": {
+          "type": "string",
+          "description": "Username"
+        },
+        "authProtocol": {
+          "type": "string",
+          "enum": [
+            "SHA",
+            "MD5"
+          ],
+          "description": "Authentication Protocol"
+        },
+        "authPassword": {
+          "type": "string",
+          "description": "Authentication Password"
+        },
+        "privProtocol": {
+          "type": "string",
+          "enum": [
+            "DES",
+            "AES128",
+            "noPriv"
+          ],
+          "description": "Private Protocol"
+        },
+        "privPassword": {
+          "type": "string",
+          "description": "Private Password"
+        },
+        "community": {
+          "type": "string",
+          "description": "Community name for the transaction with the remote system"
+        }
+      }
+    },
+    "EventNotificationConfigurationQueryResponse": {
+      "id": "#/definitions/EventNotificationConfigurationQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instantRateLimit": {
+          "type": "integer",
+          "description": "Maximum number of instant emails that can be sent per minute"
+        },
+        "eventNotifTasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EventNotification"
+          }
+        }
+      }
+    },
+    "EventNotification": {
+      "id": "#/definitions/EventNotification",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "taskName",
+        "type",
+        "eventDetails"
+      ],
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "description": "ID of the notification task"
+        },
+        "taskName": {
+          "type": "string",
+          "description": "Name of the task"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "instant",
+            "batch",
+            "trap"
+          ],
+          "description": "Type of the event notification task"
+        },
+        "comment": {
+          "type": "string",
+          "description": "Comments"
+        },
+        "emailSubjectPrefix": {
+          "type": "string",
+          "description": "Subject of the notification email"
+        },
+        "allowAttachment": {
+          "type": "boolean",
+          "description": "Allow attachment in notification email"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Status of the notification task"
+        },
+        "attachmentLimit": {
+          "type": "integer",
+          "maximum": 5000,
+          "description": "Maximum number of events to be included in the attachment"
+        },
+        "timeInterval": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1440,
+          "description": "Time interval between two batch emails"
+        },
+        "recurringSchedule": {
+          "type": "string",
+          "description": "Cron expression"
+        },
+        "instantRateLimit": {
+          "type": "integer",
+          "maximum": 20,
+          "description": "Maximum number of instant emails that can be sent per minute"
+        },
+        "timeLeft": {
+          "type": "string",
+          "description": "Time left for the next batch task to execute"
+        },
+        "templateDetails": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of templates used"
+        },
+        "eventDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EventDetails"
+          },
+          "description": "Event Details"
+        },
+        "recipients": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of email recipients"
+        },
+        "externalTrapReceivers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of External Trap Receiver aliases"
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tags",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        },
+        "severity": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Clear",
+              "Info",
+              "Minor",
+              "Warn",
+              "Major",
+              "Critical"
+            ]
+          },
+          "description": "Event Severities"
+        },
+        "sendMailIfEmpty": {
+          "type": "boolean",
+          "description": "Send email if no events are generated within time interval"
+        }
+      }
+    },
+    "EventDetails": {
+      "id": "#/definitions/EventDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "eventType": {
+          "type": "string",
+          "description": "Event Type"
+        },
+        "name": {
+          "type": "string",
+          "description": "Event Name"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Event Display Name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Event Description"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Event Scope"
+        },
+        "subType": {
+          "type": "string",
+          "description": "Event Subtype"
+        },
+        "severity": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Clear",
+              "Info",
+              "Minor",
+              "Warn",
+              "Major",
+              "Critical"
+            ]
+          },
+          "description": "Event Severity"
+        },
+        "severityType": {
+          "type": "string",
+          "enum": [
+            "critical",
+            "major",
+            "minor",
+            "warn",
+            "info",
+            "majorAndAbove",
+            "warnAndAbove",
+            "minorAndAbove",
+            "allLevels"
+          ],
+          "description": "Event Severity Type"
+        }
+      }
+    },
+    "GetEventNotificationTemplate": {
+      "id": "#/definitions/GetEventNotificationTemplate",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "templates": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "templateName": {
+                "type": "string"
+              },
+              "templateType": {
+                "type": "string",
+                "enum": [
+                  "email",
+                  "trap"
+                ],
+                "description": "Template Type"
+              },
+              "eventDetails": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/EventDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetEventNotificationCategory": {
+      "id": "#/definitions/GetEventNotificationCategory",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "eventScopes": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "scope": {
+                "type": "string",
+                "description": "Event Scope"
+              },
+              "name": {
+                "type": "string",
+                "description": "Scope Name"
+              },
+              "subTypes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/EventSubtype"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "EventSubtype": {
+      "id": "#/definitions/EventSubtype",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subType": {
+          "type": "string",
+          "description": "Event Subtype"
+        },
+        "name": {
+          "type": "string",
+          "description": "Subtype Name"
+        },
+        "eventTypes": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "eventType": {
+                "type": "string",
+                "description": "Event Type"
+              },
+              "name": {
+                "type": "string",
+                "description": "Event Name"
+              },
+              "displayName": {
+                "type": "string",
+                "description": "Event Display Name"
+              },
+              "description": {
+                "type": "string",
+                "description": "Event Description"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

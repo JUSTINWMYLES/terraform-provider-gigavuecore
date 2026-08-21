@@ -1,0 +1,68 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmNotificationTargetConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Notification Target Configuration schema",
+  "definitions": {
+    "FmNotificationTargetConfig": {
+      "id": "#/definitions/FmNotificationTargetConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Fm Notification Target Config",
+      "required": [
+        "interfaceType"
+      ],
+      "properties": {
+        "interfaceType": {
+          "type": "string",
+          "enum": [
+            "management",
+            "data"
+          ],
+          "readonly": true,
+          "description": "Notification target interface type"
+        },
+        "targetAddress": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Configure FM's DNS name or static IP address to receive the management or data traffic from the node. The configured address is used by FM to register itself as a notification target on the node"
+        },
+        "interfaceName": {
+          "type": "string",
+          "description": "Name of any one of the available network interface names on the FM. If this is chosen, FM registers itself as a notification target on the node with Ipv6 address if both FM and the node have Ipv6 address otherwise Ipv4 address is used. If targetAddress is configured then interfaceName has no effect."
+        }
+      }
+    },
+    "FmNotificationTargetConfigsQueryResponse": {
+      "id": "#/definitions/FmNotificationTargetConfigsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fmNotificationTargetConfigs"
+      ],
+      "properties": {
+        "fmNotificationTargetConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmNotificationTargetConfig"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "FmNotificationTargetConfigQueryResponse": {
+      "id": "#/definitions/FmNotificationTargetConfigQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fmNotificationTargetConfig"
+      ],
+      "properties": {
+        "fmNotificationTargetConfig": {
+          "$ref": "#/definitions/FmNotificationTargetConfig"
+        }
+      }
+    }
+  }
+}

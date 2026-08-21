@@ -1,0 +1,232 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemSysdump.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device Sysdump schema",
+  "definitions": {
+    "SysdumpFilesQueryResponse": {
+      "id": "#/definitions/SysdumpFilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sysdumpFiles"
+      ],
+      "description": "Available Sysdump Files",
+      "properties": {
+        "sysdumpFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SysdumpFilesPerBox"
+          },
+          "readOnly": true,
+          "description": "List of available sysdump files"
+        }
+      }
+    },
+    "SysdumpFilesPerBox": {
+      "id": "#/definitions/SysdumpFilesPerBox",
+      "type": "object",
+      "required": [
+        "sysdumpFilesPerBox",
+        "boxId",
+        "hostnameSysdumpStatus"
+      ],
+      "description": "Available Sysdump Files",
+      "properties": {
+        "boxId": {
+          "type": "string",
+          "description": "The chassis Box ID value"
+        },
+        "hostnameSysdumpStatus": {
+          "type": "string",
+          "description": "The hostname of device for which sysdump generation status is sent"
+        },
+        "sysdumpFilesPerBox": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SysdumpFile"
+          },
+          "readonly": true,
+          "description": "List of available sysdump files"
+        }
+      }
+    },
+    "SysdumpFile": {
+      "id": "#/definitions/SysdumpFile",
+      "type": "object",
+      "required": [
+        "filename",
+        "timestamp",
+        "size"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "File creation date and time in ISO 8601 format"
+        },
+        "size": {
+          "type": "integer",
+          "description": "Size of file in bytes"
+        }
+      }
+    },
+    "SystemDiag": {
+      "id": "#/definitions/SystemDiag",
+      "type": "object",
+      "required": [
+        "diag"
+      ],
+      "properties": {
+        "diag": {
+          "type": "string"
+        }
+      }
+    },
+    "SystemDiagPsuDetails": {
+      "id": "#/definitions/SystemDiagPsuDetails",
+      "type": "object",
+      "properties": {
+        "systemPsuDiagDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SystemDiagPsuDetail"
+          },
+          "readonly": true,
+          "description": "System Diag PSU Information"
+        }
+      }
+    },
+    "SystemDiagPsuDetail": {
+      "id": "#/definitions/SystemDiagPsuDetail",
+      "type": "object",
+      "properties": {
+        "slotId": {
+          "type": "string",
+          "description": "Power Module Slot ID"
+        },
+        "hardwareType": {
+          "type": "string",
+          "description": "Hardware Type"
+        },
+        "productCode": {
+          "type": "string",
+          "description": "Product Code"
+        },
+        "serialNumber": {
+          "type": "string",
+          "description": "Serial Number"
+        },
+        "hardwareRevision": {
+          "type": "string",
+          "description": "Hardware Revision"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "on",
+            "off",
+            "fault",
+            "absent"
+          ],
+          "description": "Current PSU Status"
+        },
+        "capacity": {
+          "type": "string",
+          "description": "Capacity (in Watts)"
+        },
+        "acOrDc": {
+          "type": "string",
+          "enum": [
+            "AC",
+            "DC",
+            "NA"
+          ],
+          "description": "AC or DC. NA stands for Not Available"
+        },
+        "inputVoltage": {
+          "type": "string",
+          "description": "Input Voltage (in Volts)"
+        },
+        "outputVoltage": {
+          "type": "string",
+          "description": "Output Voltage (in Volts)"
+        },
+        "inputCurrent": {
+          "type": "string",
+          "description": "Input Current (in Ampere)"
+        },
+        "outputCurrent": {
+          "type": "string",
+          "description": "Output Current (in Ampere)"
+        },
+        "inputPower": {
+          "type": "string",
+          "description": " Input Power (in Watts)"
+        },
+        "outputPower": {
+          "type": "string",
+          "description": " Output Power (in Watts)"
+        },
+        "temperature1": {
+          "type": "string",
+          "description": " Inlet Temperature (in Celsius)"
+        },
+        "temperature2": {
+          "type": "string",
+          "description": " Heat Sink Temperature (in Celsius)"
+        },
+        "temperature3": {
+          "type": "string",
+          "description": " Temperature (in Celsius)"
+        },
+        "psuFanSpeed": {
+          "type": "string",
+          "description": " PSU Fan Speed (RPM)"
+        },
+        "minPermitInputVoltage": {
+          "type": "string",
+          "description": "Minimum Input Voltage (in Volts)"
+        },
+        "maxPermitInputVoltage": {
+          "type": "string",
+          "description": "Maximum Input Voltage (in Volts)"
+        },
+        "busyFault": {
+          "type": "string",
+          "description": "PSU Busy Fault"
+        },
+        "offFault": {
+          "type": "string",
+          "description": "PSU Off Fault"
+        },
+        "outputOverVoltageFault": {
+          "type": "string",
+          "description": "Output Over Voltage Fault"
+        },
+        "outputOverCurrentFault": {
+          "type": "string",
+          "description": "Output Over Current Fault"
+        },
+        "inputUnderVoltageFault": {
+          "type": "string",
+          "description": "Input Under Voltage Fault"
+        },
+        "inputOverVoltageFault": {
+          "type": "string",
+          "description": "Input Over Voltage Fault"
+        },
+        "temperatureFault": {
+          "type": "string",
+          "description": "Temperature Fault"
+        },
+        "communicationFault": {
+          "type": "string",
+          "description": "Communication, Logic and Memory Fault"
+        }
+      }
+    }
+  }
+}

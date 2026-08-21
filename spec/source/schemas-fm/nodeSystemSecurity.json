@@ -1,0 +1,58 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemSecurity.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device System Security Policy Configuration schema",
+  "definitions": {
+    "SystemSecurityConfig": {
+      "id": "#/definitions/SystemSecurityConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Security Policy Configuration",
+      "properties": {
+        "secureCrypto": {
+          "type": "boolean",
+          "default": false,
+          "description": "Secure crypto mode. Value takes effect after reload"
+        },
+        "secureCryptoEnforced": {
+          "type": "boolean",
+          "readonly": true,
+          "description": "Secure crypto mode enforced"
+        },
+        "fipsEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable/disable fips mode(pending fips mode), system reload is necessary to activate fips mode"
+        },
+        "fipsModeState": {
+          "type": "boolean",
+          "readonly": true,
+          "default": false,
+          "description": "current fips mode"
+        },
+        "securePasswords": {
+          "type": "boolean",
+          "default": false,
+          "description": "Secure passwords mode"
+        },
+        "minPasswordLen": {
+          "type": "integer",
+          "minimum": 8,
+          "maximum": 30,
+          "defaultValue": 15
+        },
+        "allowBlankPassword": {
+          "type": "boolean",
+          "default": true,
+          "since": "H 5.1"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    }
+  }
+}

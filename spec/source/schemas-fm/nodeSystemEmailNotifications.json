@@ -1,0 +1,103 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemEmailNotifications.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device Email Notifications",
+  "definitions": {
+    "EmailNotifConfigSpec": {
+      "id": "#/definitions/EmailNotifConfigSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Email Notifications",
+      "properties": {
+        "notifySet": {
+          "type": "string",
+          "enum": [
+            "all",
+            "none",
+            "select"
+          ],
+          "default": "none",
+          "description": "when set to 'none', effectively disables email notifications from the node"
+        },
+        "notifyEvents": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "when 'notifySet' is 'select', this represents the subset of notification event types activated for dispatch",
+          "items": {
+            "type": "string",
+            "enum": [
+              "secondflashboot",
+              "gigasmartcputemp",
+              "configsave",
+              "cputemp",
+              "cpuutilhigh",
+              "cpuutilok",
+              "diskiohigh",
+              "diskiook",
+              "diskspacelow",
+              "diskspaceok",
+              "exhausttemp",
+              "firmwarechange",
+              "interfacedown",
+              "interfaceup",
+              "linkspeedstatuschange",
+              "livenessfailure",
+              "memusagehigh",
+              "memusageok",
+              "modulechange",
+              "netusagehigh",
+              "netusageok",
+              "operationmode",
+              "opticstemp",
+              "paginghigh",
+              "pagingok",
+              "powerchange",
+              "processcrash",
+              "processexit",
+              "rxtxerror",
+              "switchcputemp",
+              "systemreset",
+              "unexpectedclusterjoin",
+              "unexpectedclusterleave",
+              "unexpectedclustersize",
+              "unexpectedshutdown",
+              "userauthfail",
+              "userlogin",
+              "userlogout",
+              "watchdogreset",
+              "policytrigger",
+              "eporttemp",
+              "sublicensereminder",
+              "ibstatechange",
+              "lowportutilization",
+              "portutilization",
+              "fanchange",
+              "packetdrop",
+              "gspacketdrop",
+              "gdpupdate",
+              "ipgatewaystatus",
+              "clusterrolechange",
+              "clusternodejoin",
+              "clusternodeleave",
+              "clusternodejoinfailure",
+              "throttlereport",
+              "gsIsslResourceUtilization",
+              "vportStatusChange",
+              "batterypresence",
+              "batterychargelevel",
+              "batterybetcomplete",
+              "batterytemperature",
+              "gsportlowutilz",
+              "gsportutilz",
+              "sfpincompatible",
+              "powersourcechange",
+              "sfppowerchange",
+              "sysdumpstatus"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

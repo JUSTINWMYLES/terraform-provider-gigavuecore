@@ -1,0 +1,159 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemSSHCiphers.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device SSH Cipher Management",
+  "definitions": {
+    "NodeSystemSSHConfigs": {
+      "id": "#/definitions/NodeSystemSSHConfigs",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System SSH Cipher",
+      "required": [
+        "default",
+        "clientCiphers",
+        "serverCiphers",
+        "clientKex",
+        "serverKex",
+        "clientMacs",
+        "serverMacs",
+        "clientHostkey",
+        "serverHostkey"
+      ],
+      "properties": {
+        "clientCiphers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "default",
+              "aes128_cbc",
+              "aes128_ctr",
+              "aes128_gcm",
+              "aes192_ctr",
+              "aes256_cbc",
+              "aes256_ctr",
+              "aes256_gcm"
+            ]
+          }
+        },
+        "serverCiphers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "default",
+              "aes128_cbc",
+              "aes128_ctr",
+              "aes128_gcm",
+              "aes192_ctr",
+              "aes256_cbc",
+              "aes256_ctr",
+              "aes256_gcm"
+            ]
+          }
+          },
+          "clientKex": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "default",
+                "ecdh_sha2_nistp256",
+                "ecdh_sha2_nistp384",
+                "ecdh_sha2_nistp521",
+                "diffie_hellman_group14_sha256"
+              ]
+            }
+          },
+          "serverKex": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "default",
+                "ecdh_sha2_nistp256",
+                "ecdh_sha2_nistp384",
+                "ecdh_sha2_nistp521",
+                "diffie_hellman_group14_sha256"
+              ]
+            }
+          },
+          "clientMacs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "default",
+                "hmac_sha2_512",
+                "hmac_sha2_256"
+              ]
+            }
+          },
+          "serverMacs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "default",
+                "hmac_sha2_512",
+                "hmac_sha2_256"
+              ]
+            }
+          },
+          "clientHostkey": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "default",
+                "ecdsa_sha2_nistp256",
+                "ecdsa_sha2_nistp384",
+                "ecdsa_sha2_nistp521",
+                "rsa_sha2_512",
+                "rsa_sha2_256"
+              ]
+            }
+          },
+          "serverHostkey": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "default",
+                "ecdsa_sha2_nistp256",
+                "ecdsa_sha2_nistp384",
+                "ecdsa_sha2_nistp521",
+                "rsa_sha2_512",
+                "rsa_sha2_256"
+              ]
+            }
+          }
+        }
+      },
+    "NodeSystemSupportedConfigs": {
+      "id": "#/definitions/NodeSystemSupportedConfigs",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System SSH Cipher",
+      "required": [
+        "crypto",
+        "fips",
+        "classic"
+        ],
+      "properties": {
+        "crypto": {
+          "type": "string",
+          "$ref": "#/definitions/NodeSystemSSHConfigs"
+        },
+        "fips": {
+          "type": "string",
+          "$ref": "#/definitions/NodeSystemSSHConfigs"
+        },
+        "classic": {
+          "type": "string",
+          "$ref": "#/definitions/NodeSystemSSHConfigs"
+        }
+      }
+    }
+  }
+}

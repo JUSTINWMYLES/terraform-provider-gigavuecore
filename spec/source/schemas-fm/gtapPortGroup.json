@@ -1,0 +1,73 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gtapPortGroup.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "GTAP port group schema",
+  "definitions": {
+    "GtapPortGroupQueryResponse": {
+      "id": "#/definitions/GtapPortQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gtapPortGroup"
+      ],
+      "properties": {
+        "gtapPortGroup": {
+          "$ref": "#/definitions/GtapPortGroup"
+        }
+      }
+    },
+    "GtapPortGroupsQueryResponse": {
+      "id": "#/definitions/GtapPortGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gtapPortGroups"
+      ],
+      "properties": {
+        "gtapPortGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtapPortGroup"
+          }
+        }
+      }
+    },
+    "GtapPortGroup": {
+      "id": "#/definitions/GtapPortGroup",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Gtap Device Port Group",
+      "required": [
+        "portGroupId"
+      ],
+      "properties": {
+        "portGroupId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Port group Id"
+        },
+        "sfp": {
+          "$ref": "#/definitions/GtapPortGroupSfp",
+          "readOnly": true
+        }
+      }
+    },
+    "GtapPortGroupSfp": {
+      "id": "#/definitions/GtapPortGroupSfp",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Port group SFP compatible details",
+      "properties": {
+        "inCompatible": {
+          "type": "boolean",
+          "default": false,
+          "description": "SFP incompatible true/false"
+        },
+        "inCompatibleReason": {
+          "type": "string",
+          "description": "Port group SFP incompatible reason"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "id": "http://gigamon.com/schemas-fm/system-web.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon System Web Management",
+  "definitions": {
+    "SystemWebConfig": {
+      "id": "#/definitions/SystemWebConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Web Config",
+      "required": [
+        "httpPort",
+        "httpsPort",
+        "enableHttps",
+        "sessionRenewal",
+        "sessionTimeout",
+        "autoLogoutTimeout"
+      ],
+      "properties": {
+        "httpPort": {
+          "type": "integer",
+          "format": "uint8",
+          "default": 80,
+          "description": "Http Port Number"
+        },
+        "httpsPort": {
+          "type": "integer",
+          "format": "uint8",
+          "default": 443,
+          "description": "Https Port Number"
+        },
+        "enableHttps": {
+          "type": "boolean",
+          "default": true,
+          "description": "enableHttps "
+        },
+        "sessionRenewal": {
+          "type": "integer",
+          "default": 1800,
+          "description": "Session renewal in seconds"
+        },
+        "sessionTimeout": {
+          "type": "integer",
+          "default": 9000,
+          "description": "Session renewal in seconds"
+        },
+        "autoLogoutTimeout": {
+          "type": "integer",
+          "default": 900,
+          "description": "Auto Logout Timeout in seconds"
+        },
+        "serverSslMinVersion": {
+          "type": "string",
+          "enum": [
+            "tls1",
+            "tls1.1",
+            "tls1.2"
+          ],
+          "description": "SSL/TLS minimum version supported"
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "cluster name"
+        }
+      }
+    },
+    "SystemWebProxy": {
+      "id": "#/definitions/SystemWebProxy",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Web Proxy",
+      "required": [
+        "proxyAddress",
+        "proxyPort",
+        "authType",
+        "username",
+        "password"
+      ],
+      "properties": {
+        "proxyAddress": {
+          "type": "string",
+          "default": "0.0.0.0",
+          "description": "Proxy address"
+        },
+        "proxyPort": {
+          "type": "integer",
+          "format": "uint8",
+          "default": 1080,
+          "description": "Proxy port"
+        },
+        "authType": {
+          "type": "string",
+          "enum": [
+            "none",
+            "basic"
+          ],
+          "description": "Auth type"
+        },
+        "username": {
+          "type": "string",
+          "description": "Proxy Username"
+        },
+        "password": {
+          "type": "string",
+          "description": "Proxy Password"
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "cluster name"
+        }
+      }
+    }
+  }
+}

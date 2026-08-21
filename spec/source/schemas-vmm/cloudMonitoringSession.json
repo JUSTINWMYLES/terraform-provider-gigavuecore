@@ -1,0 +1,4542 @@
+{
+  "id": "http://gigamon.com/schemas-vmm/cloudMonitoringSession.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Monitoring Session schema",
+  "definitions": {
+    "MonitoringSession": {
+      "id": "#/definitions/MonitoringSession",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Monitoring session",
+      "since": "v5.10",
+      "required": [
+        "connIds"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Monitoring session alias"
+        },
+        "id": {
+          "type": "string",
+          "description": "Monitoring session id"
+        },
+        "description": {
+          "type": "string",
+          "description": "monitoring session description"
+        },
+        "creationTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "monitoring session creation time"
+        },
+        "connIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of connection Id which has the monitoring session"
+        },
+        "uctVFilteringEnabled": {
+          "type": "boolean",
+          "description":"indicates prefiltering enabled or not."
+
+        },
+        "uctVTrafficPolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "GvTapTrafficPolicies.json#/definitions/UctVTrafficPolicy"
+          }
+        },
+        "uctVPrecryptionTrafficPolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "gvTapPrecryption.json#/definitions/UctVPrecryptionTrafficPolicy"
+          }
+        },
+        "uctVMirrorTrafficEnabled": {
+          "type": "boolean",
+          "description": "indicates mirror traffic is enabled or not for uctv deployments"
+        },
+        "secureTunnelOnMirrorEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description" : "Indicated Secure Tunnel on Mirror Enabled"
+        },
+        "secureTunnelOnPrecryptionEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicated Secure Tunnel on Precryption Enabled"
+        },
+        "distributeTraffic": {
+          "type": "boolean",
+          "default": true,
+          "description": "Indicates Traffic Distribution enabled or not"
+        },
+        "monitoringDomainId": {
+          "type": "string",
+          "description": "Monitoring domain Id"
+        },
+        "platform": {
+          "type": "string",
+          "enum": [
+            "vmware"
+          ],
+          "description": "Platform - one of [vmware]"
+        },
+        "inclusionMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "flowMaps.json#/definitions/VmMap"
+          }
+        },
+        "exclusionMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "flowMaps.json#/definitions/VmMap"
+          }
+        },
+        "trafficMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "flowMaps.json#/definitions/VmTrafficMap"
+          }
+        },
+        "applications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Application"
+          }
+        },
+        "tunnels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunnelSpec"
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "vseriesNodeIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of V Series Node Ids. The monitoring session will be deployed in the V Series Nodes that are specified."
+		},
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        },
+        "deployStatus": {
+          "type": "string",
+          "enum": [
+            "notDeployed",
+            "deploying",
+            "undeploying",
+            "deploymentSuccess",
+            "deploymentFailure",
+            "deploymentPartialSuccess",
+            "deploymentBlocked",
+            "undeploymentFailure",
+            "undeploymentBlocked",
+            "undeploymentPartialSuccess"
+          ],
+          "description": "Overall deployment status of the monitoring session (same semantics as MonitoringSessionStatus.status)"
+        },
+        "deployValidationErrorMsg": {
+          "type": "string",
+          "description": "Validation error message from the last deploy attempt. null if never deployed, NO_ERROR if validation passed. Only applicable for AUTO deployment mode."
+        }
+      }
+    },
+    "SimpleMonitoringSession": {
+      "id": "#/definitions/SimpleMonitoringSession",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Monitoring session for post and patch",
+      "since": "v5.10",
+      "properties": {
+        "connIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of connection Id which has the monitoring session"
+        },
+        "id": {
+          "type": "string",
+          "description": "Monitoring session id"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Monitoring session alias"
+        },
+        "description": {
+          "type": "string",
+          "description": "monitoring session description"
+        },
+        "secureTunnelOnMirrorEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description" : "Indicated Secure Tunnel on Mirror Enabled"
+        },
+        "secureTunnelOnPrecryptionEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicated Secure Tunnel on Precryption Enabled"
+        },
+        "distributeTraffic": {
+          "type": "boolean",
+          "default": true,
+          "description": "Indicates Traffic Distribution enabled or not"
+        },
+        "uctVFilteringEnabled": {
+          "type": "boolean",
+          "description": "indicates prefiltering enabled or not"
+        },
+        "uctVTrafficPolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "GvTapTrafficPolicies.json#/definitions/UctVTrafficPolicy"
+          }
+        },
+        "uctVPrecryptionTrafficPolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "gvTapPrecryption.json#/definitions/UctVPrecryptionTrafficPolicy"
+          }
+        },
+        "uctVMirrorTrafficEnabled": {
+          "type": "boolean",
+          "description": "indicates mirror traffic is enabled or not for uctv deployments"
+        }
+      }
+    },
+    "SplitMonitoringSessions": {
+      "id": "#/definitions/SplitMonitoringSessions",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Monitoring sessions after split",
+      "since": "v5.5",
+      "properties": {
+        "monitoringSessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SimpleMonitoringSession"
+          },
+          "description": "List of connection Id which has the monitoring session"
+        }
+      }
+    },
+    "Application": {
+      "id": "#/definitions/Application",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Application",
+      "since": "v5.10",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/ApplicationSlicing"
+        },
+        {
+          "$ref": "#/definitions/ApplicationMasking"
+        },
+        {
+          "$ref": "#/definitions/ApplicationDedup"
+        },
+        {
+          "$ref": "#/definitions/ApplicationLoadBalancing"
+        },
+        {
+          "$ref": "#/definitions/ApplicationPcapng"
+        },
+        {
+          "$ref": "#/definitions/ApplicationDssl"
+        },
+        {
+          "$ref": "#/definitions/ApplicationGeneve"
+        },
+        {
+          "$ref": "#/definitions/ApplicationOgw"
+        },
+        {
+          "$ref": "#/definitions/ApplicationHeaderStripping"
+        },
+        {
+          "$ref": "#/definitions/ApplicationSBI5G"
+        },
+        {
+          "$ref": "#/definitions/ApplicationGvhttp2"
+        },
+        {
+          "$ref": "#/definitions/ApplicationCloud5g"
+        },
+        {
+          "$ref": "#/definitions/ApplicationUctI"
+        },
+        {
+          "$ref": "#/definitions/ApplicationEvp5g"
+        }
+      ]
+    },
+    "ApplicationSlicing": {
+      "id": "#/definitions/ApplicationSlicing",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Slicing Application",
+      "since": "v5.10",
+      "required": [
+        "alias",
+        "name"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "slicing"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "description": {
+          "type": "string",
+          "description": "A description for the application"
+        },
+        "id": {
+          "type": "string",
+          "description": "application id"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "none",
+            "ipv4",
+            "ipv6",
+            "udp",
+            "tcp",
+            "ftp-data",
+            "https",
+            "ssh",
+            "gtp",
+            "gtp-ipv4",
+            "gtp-udp",
+            "gtp-tcp"
+          ],
+          "description": "Slicing protocol"
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 4,
+          "maximum": 9000,
+          "description": "Min offset is 64 for 'none'; 4 for protocol-referenced offsets"
+        },
+        "enhanced": {
+          "type": "string",
+          "description": "Enhanced-slicing apps name. Not supported in V Series"
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "ApplicationMasking": {
+      "id": "#/definitions/ApplicationMasking",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Masking Application",
+      "since": "v5.10",
+      "required": [
+        "alias",
+        "name"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "masking"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "description": {
+          "type": "string",
+          "description": "A description for the application"
+        },
+        "id": {
+          "type": "string",
+          "description": "application id"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "none",
+            "ipv4",
+            "ipv6",
+            "udp",
+            "tcp",
+            "ftp-data",
+            "https",
+            "ssh",
+            "gtp",
+            "gtp-ipv4",
+            "gtp-udp",
+            "gtp-tcp",
+            "sip"
+          ],
+          "description": "Masking protocol"
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 9000,
+          "description": "Min offset is 0 for 'none'; 1 for protocol-referenced offsets, not applicable for protocol 'sip'. Valid and required otherwise."
+        },
+        "pattern": {
+          "type": "string",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,2}$",
+          "description": "1-byte hex mask, not applicable for protocol 'sip'. Valid and required otherwise."
+        },
+        "length": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 9600,
+          "description": "Not applicable for protocol 'sip'. Valid and required otherwise"
+        },
+        "contentType": {
+          "type": "string",
+          "enum": [
+            "message_cpim"
+          ],
+          "description": "Content type that will trigger masking, only valid and required for protocol sip"
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "ApplicationDedup": {
+      "id": "#/definitions/ApplicationDedup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Dedup Application",
+      "since": "v5.10",
+      "required": [
+        "alias",
+        "name"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "dedup"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "description": {
+          "type": "string",
+          "description": "A description for the application"
+        },
+        "id": {
+          "type": "string",
+          "description": "application id"
+       },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "ApplicationLoadBalancing": {
+      "id": "#/definitions/ApplicationLoadBalancing",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Load Balancing Application",
+      "since": "v5.11",
+      "required": [
+        "alias",
+        "name",
+        "stateless",
+        "lbg"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "slicing"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "description": {
+          "type": "string",
+          "description": "A description for the application"
+        },
+        "id": {
+          "type": "string",
+          "description": "application id"
+        },
+        "stateless": {
+          "$ref": "#/definitions/LoadBalancingStatelessConfig",
+          "description": "Stateless Configuration for load balancing application"
+        },
+        "lbg": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LoadBalancingGroup"
+          },
+          "description": "List of load balancing groups"
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "LoadBalancingStatelessConfig": {
+      "id": "#/definitions/LBStatelessConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Stateless Configuration for Load Balancing Application",
+      "required": [
+        "hashFields"
+      ],
+      "properties": {
+        "hashFields": {
+          "type": "string",
+          "enum": [
+            "ipOnly",
+            "ipAndPort",
+            "fiveTuple",
+            "gtpuTeid",
+            "greFlowid"
+          ],
+          "description": "Load Balancing HashFields"
+        },
+        "fieldLocation": {
+          "type": "string",
+          "enum": [
+            "inner",
+            "outer"
+          ],
+          "default": "outer",
+          "description": "Load Balancing field location. Not applicable for hash field type [gtpuTeid], required otherwise."
+        }
+      }
+    },
+    "LoadBalancingGroup": {
+      "id": "#/definitions/LBGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Load Balancing Group",
+      "required": [
+        "aepId"
+      ],
+      "properties": {
+        "aepId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 2,
+          "maximum": 65,
+          "description": "AEP Id of endpoint"
+        },
+        "weight": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Weight for load balancing group. Weights of all load balancing groups must add up to 100"
+        }
+      }
+    },
+    "ApplicationPcapng": {
+      "id": "#/definitions/ApplicationPcapng",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Pcapng Application",
+      "since": "v5.12",
+      "required": [
+        "alias",
+        "name"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "pcapng"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "description": {
+          "type": "string",
+          "description": "A description for the application"
+        },
+        "appMode": {
+          "type": "string",
+          "default": "secondary",
+          "enum": [
+            "primary", "secondary"
+          ],
+          "description": "Hierarchy of application to be configured"
+        },
+        "domainClassification": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/Disable the traffic classification by Ericsson Domain id"
+        },
+        "flowTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 360,
+          "maximum": 1860,
+          "default": 660,
+          "description": "Traffic Flow Timeout based on unique traffic flow ID in GRE Key in seconds"
+        },
+        "domainTable": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/domainTable"
+          }
+        },
+        "id": {
+          "type": "string",
+          "description": "application id"
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "domainTable": {
+      "id": "#/definitions/domainTable",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Domain ID to VLAN ID mapping table",
+      "properties": {
+        "domainName": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 128,
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Domain Name specification to be mapped to vlan id. Example: pc-mm/pc-sm/ccsm-5gc/ccsm-cnhss/ccrc-nrf/nrfagent-nrf/ccrc-nssf/ccpc-pcf/ccpc-provisioning/ccdm-udr-5g/ccdm-provisioning/ccdm-udr-legacy/cces-nef/cces-ees/cces-apigm/sc-bsf/sc-scp/sc-sepp/others/unclassified"
+        },
+        "vlanID": {
+          "type": "integer",
+          "description": "VLAN ID to be mapped for proper traffic",
+          "minimum": 1,
+          "maximum": 4094
+        },
+        "failedSBITransactionVlanID": {
+          "type": "integer",
+          "description": "VLAN ID to be mapped for failed SBI transactions",
+          "minimum": 1,
+          "maximum": 4094
+        }
+      }
+    },
+    "ApplicationDssl": {
+      "id": "#/definitions/ApplicationDssl",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "DSSL Application",
+      "since": "v5.13.01",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "dssl"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "inPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 0,
+          "description": "Port number of 0 represents 'any' port"
+        },
+        "outPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 0,
+          "description": "Port number of 0 represents 'auto' port"
+        },
+        "keymapAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Key Map alias"
+       },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "ApplicationGeneve": {
+      "id": "#/definitions/ApplicationGeneve",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Geneve Application",
+      "since": "v5.14",
+      "required": [
+        "alias",
+        "name"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "geneve"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "description": {
+          "type": "string",
+          "description": "A description for the application"
+        },
+        "id": {
+          "type": "string",
+          "description": "application id"
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "ApplicationOgw": {
+      "id": "#/definitions/ApplicationOgw",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Ogw Application",
+      "since": "v6.0",
+      "required": [],
+      "properties": {
+        "Ingestor": {
+          "$ref": "#/definitions/IngestorConf"
+        },
+        "exporter": {
+          "$ref": "#/definitions/ExporterConf"
+        },
+        "attrEnrichment": {
+          "$ref": "#/definitions/EnrichmentConf"
+        }
+      }
+    },
+    "EnrichmentConf":{
+      "id": "#/definitions/EnrichmentConf",
+      "description": "Attribute enrichment Conf",
+      "type": "array",
+      "items": {
+            "$ref": "#/definitions/SettingConfObj"
+          }
+    },
+    "SettingConfObj":{
+      "id": "#/definitions/SettingConfObj",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9&'+_=|-]+$",
+          "description": "Alias should be unique. Name should not have special characters, valid characters are A-Z, a-z, 0-9, '&', '_', '=', '|'"
+        },
+        "type":{
+          "type": "string",
+          "description": "Type of config",
+          "enum": [
+            "mobility",
+            "other"
+          ]
+        },
+        "enable":{
+          "type": "boolean"
+        },
+        "attributes":{
+          "type": "array",
+          "description": "List of Attributes to export as part of the enrichment",
+          "items": {
+            "type": "string"
+          }
+        },
+        "settings":{
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "IngestorConf": {
+      "id": "#/definitions/IngestorConf",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Ingestor Conf",
+      "required": [],
+      "properties": {
+        "ingestor": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "port": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ami",
+                  "gtpc",
+                  "gtpc_hier"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "ExporterConf": {
+      "id": "#/definitions/ExporterConf",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Exporter Conf",
+      "required": [],
+      "properties": {
+        "cloudUpload": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CloudUploadConf"
+          }
+        },
+        "kafka": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KafkaConf"
+          }
+        },
+        "debug": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CloudUploadConf": {
+      "id": "#/definitions/CloudUploadConf",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Cloud Upload Conf",
+      "required": [],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9&'+_=|-]+$",
+          "description": "Alias should be unique. Name should not have special characters, valid characters are A-Z, a-z, 0-9, '&', '_', '=', '|'"
+        },
+        "enable": {
+          "type": "boolean"
+        },
+        "endpoint": {
+          "type": "string",
+          "pattern": "^(https|http)://[a-zA-Z0-9-_/.&?{}+=]+$",
+          "description": "Endpoint URL"
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        },
+        "zip": {
+          "type": "boolean"
+        },
+        "interval": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 1800,
+          "default": 30,
+          "description": "In seconds. Typical value is more than or equal to AMI export timeout. If it is less, just a no-op in that interval."
+        },
+        "writers": {
+          "type": "string",
+          "minimum": 1,
+          "maximum": 20,
+          "default": 4,
+          "description": "Number of parallel writers. Based on the ingest traffic, users might need to increase if there are lot of entries to upload."
+        },
+        "retries": {
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 10,
+          "default": 4,
+          "description": "Number of times app tries to export entries to Cloud Tool/Kafka Bus. If tool is down, this dictates how many times we try before backing off with status message indicating the failure. Users intervention is needed once retry count is done."
+        },
+        "maxEntries": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 5000,
+          "default": 1000,
+          "description": "Number of entries per upload. Default would be tuned for best upload performance"
+        },
+        "selfHealTimerWindow": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1800,
+          "default": 0,
+          "description": "timer window in seconds"
+        },
+        "httpClientUploadTimeout": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 120,
+          "default": 10,
+          "description": "Timeout in seconds to wait for tool/server to reply back to AMX"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "ami",
+            "ami_enriched",
+            "gtpc"
+          ]
+        }
+      }
+    },
+    "KafkaConf": {
+      "id": "#/definitions/KafkaConf",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Kafka Conf",
+      "required": [],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9&'+_=|-]+$",
+          "description": "Alias should be unique. Name should not have special characters, valid characters are A-Z, a-z, 0-9, '&', '_', '=', '|'"
+        },
+        "enable": {
+          "type": "boolean"
+        },
+        "brokers": {
+          "type": "array",
+          "pattern": "[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]+|[0-9a-zA-Z\\.]{0,}[a-zA-Z]+:[0-9]+",
+          "items": {
+            "type": "string"
+          },
+          "description": "IP address information"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        },
+        "zip": {
+          "type": "boolean"
+        },
+        "interval": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 1800,
+          "default": 30,
+          "description": "In seconds. Typical value is more than or equal to AMI export timeout. If it is less, just a no-op in that interval."
+        },
+        "writers": {
+          "type": "string",
+          "minimum": 1,
+          "maximum": 20,
+          "default": 4,
+          "description": "Number of parallel writers. Based on the ingest traffic, users might need to increase if there are lot of entries to upload."
+        },
+        "retries": {
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 10,
+          "default": 4,
+          "description": "Number of times app tries to export entries to Cloud Tool/Kafka Bus. If tool is down, this dictates how many times we try before backing off with status message indicating the failure. Users intervention is needed once retry count is done."
+        },
+        "maxEntries": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 5000,
+          "default": 1000,
+          "description": "Number of entries per upload. Default would be tuned for best upload performance"
+        },
+        "selfHealTimerWindow": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1800,
+          "default": 0,
+          "description": "timer window in seconds"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "ami",
+            "ami_enriched",
+            "gtpc"
+          ]
+        }
+      }
+    },
+    "ApplicationHeaderStripping": {
+      "id": "#/definitions/HeaderStripping",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "HeaderStripping Application",
+      "since": "v6.1",
+      "required": [
+        "alias",
+        "name",
+        "protocol"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "header stripping"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "gtp",
+            "isl",
+            "mpls",
+            "mplsPlusVlan",
+            "vlan",
+            "vntag",
+            "vxlan",
+            "fm6000Ts",
+            "erspan",
+            "generic",
+            "geneve"
+          ],
+          "description": "Header Stripping protocol"
+        },
+        "templateName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Custom Port Template Name. Applicable only for protocol geneve"
+        },
+        "vxlan": {
+          "$ref": "#/definitions/vxlan"
+        },"geneve": {
+          "$ref": "#/definitions/geneve"
+        },"vlan": {
+          "$ref": "#/definitions/vlan"
+        },"fm6000Ts": {
+          "$ref": "#/definitions/fm6000Ts"
+        },"erspan": {
+          "$ref": "#/definitions/erspan"
+        },"generic": {
+          "$ref": "#/definitions/generic"
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "vxlan":{
+      "id": "#/definitions/vxlan",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "applicable only if protocol is 'vxlan'",
+      "required": ["vxlanId"],
+      "properties": {
+        "vxlanId": {
+          "type": "integer",
+          "minLength": 0,
+          "maxLength": 16777215,
+          "default": 0,
+          "description": "24-bit value. Only valid when protocol is 'vxlan'. Specifies the vxlan id to remove. Value of '0' will remove all vxlan ids"
+        }
+      }
+    },
+    "geneve":{
+      "id": "#/definitions/geneve",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "applicable only if protocol is 'geneve'",
+      "properties": {
+        "customHeader": {
+          "$ref": "#/definitions/customHeader"
+        }
+      }
+    },
+    "customHeader":{
+      "id": "#/definitions/customHeader",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Only valid when protocol is 'geneve'. Specifies the target geneve header to remove.",
+      "required": ["protocol", "header", "l4DstPort"],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "description": ""
+        },
+        "header": {
+          "type": "string",
+          "description": ""
+        },
+        "l4DstPort": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "default": 6081,
+          "minimum": 1025,
+          "maximum": 65535,
+          "description": ""
+        }
+      }
+    },
+    "vlan": {
+      "id": "#/definitions/vlan",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "applicable only if protocol is 'vlan'",
+      "required": ["vlanHeader"],
+      "properties": {
+        "vlanHeader": {
+          "type": "string",
+          "default": "outer",
+          "enum": [
+            "all","outer"
+          ],
+          "description": "Only valid when protocol is 'vlan'. Specifies the target vlan header to remove. Defaults to 'outer'"
+        }
+      }
+    },
+    "fm6000Ts": {
+      "id": "#/definitions/fm6000Ts",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "applicable only if protocol is 'fm6000Ts'",
+      "required": ["timestampFormat"],
+      "properties": {
+        "timestampFormat": {
+          "type": "string",
+          "enum": [
+            "none "
+          ],
+          "description": "Timestamp format. Only valid and required for 'fm6000Ts'"
+        }
+      }
+    },
+    "erspan": {
+      "id": "#/definitions/erspan",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "applicable only if protocol is 'erspan'",
+      "required": ["erspanFlowId"],
+      "properties": {
+        "erspanFlowId": {
+          "type": "integer",
+          "minLength": 0,
+          "maxLength": 1023,
+          "since": "H4.7",
+          "description": "only applicable for 'erspan', specifies the flow id to remove. Value of 0 will remove all flow ids"
+        }
+      }
+    },
+    "generic": {
+      "id": "#/definitions/generic",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "applicable only if protocol is 'generic'",
+      "required": ["ah1","offset","ah2"],
+      "properties": {
+        "ah1": {
+          "type": "string",
+          "enum": [
+            "none","eth","vlan","mpls","ipv4","ipv6"
+          ],
+          "description": "only valid and required for 'generic'. First anchor header, from which the header to be removed is occurred."
+        },
+        "offset": {
+          "type": "string",
+          "enum": [
+            "start","end","offsetRange "
+          ],
+          "description": "only valid and required for 'generic'.'start': remove from start of ah1, 'end': remove from end of ah1 or any other offset in the range of length of ah1, 'offsetRangeValue' is required if offset is 'offsetRange'."
+        },
+        "offsetRangeValue": {
+          "type": "integer",
+          "minLength": 0,
+          "maxLength": 1500,
+          "description": "only valid and required when offset is 'offsetRange', integer within range of size of header"
+        },
+        "headerCount": {
+          "type": "integer",
+          "minLength": 1,
+          "maxLength": 32,
+          "description": "only valid for 'generic'. Number of headers to be removed."
+        },
+        "customLen": {
+          "type": "integer",
+          "minLength": 1,
+          "maxLength": 1500,
+          "description": "only valid for 'generic'. length of unknown header."
+        },
+        "ah2": {
+          "type": "string",
+          "enum": [
+            "none","eth","vlan","mpls","ipv4","ipv6","tcp","udp","any"
+          ],
+          "description": "only valid and required for 'generic'. next anchor header."
+        }
+      }
+    },
+    "ApplicationSBI5G": {
+      "id": "#/definitions/SBI5G",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "5G-SBI Application",
+      "since": "v6.1",
+      "required": [
+        "alias",
+        "name",
+        "type"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "sbi5g"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "ericssonVTap",
+            "SCPviaGCB"
+          ],
+          "description": "sbi5g types"
+        },
+        "http2SynthesizeIndexedHeaders": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable to use static indexing of HTTP2 synthesized headers"
+        },
+        "http2SynthesizeCompressedHeaders": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable to use compressed HTTP2 synthesized headers"
+        },
+        "transactionLog": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable to log transactions into csv file"
+        },
+        "transactionLogFileInterval": {
+          "type": "integer",
+          "default": 60,
+          "minimum": 5,
+          "maximum": 60,
+          "description": "Indicates the time after which transactions will be logged in new file, units=minutes. Range: 5-60"
+        },
+        "http2SynthesizeToolMtuPacketSize": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 9200,
+          "description": "Indicates the Egress Size MTU size. Range: 1200-9200 and value 0"
+        },
+        "statsLog": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable to log flow stats into csv file. Default:true"
+        },
+        "logFolderSize": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 40960,
+          "description": "Indicates the total size of log directory; old log files will be automatically deleted when size reaches the configured MB, unit=MB. Configure this field as per the VM form factor. Default: 0, if 0 is configured then files will be stored as per the total available space in the target file system. Range: 50-40960 or 0"
+        },
+        "logFolderLoc": {
+          "type": "string",
+          "default": "/var/log",
+          "description": "Configure to store csv files inside sbi_5g subdirectory. Eg.: If user config logFolderLoc as /home/user/log, then app will start storing the csv files in /home/user/log/sbi_5g/. Default: /var/log, so app will store the csv files in /var/log/sbi_5g/ by default"
+        },
+        "ericssonVTap": {
+          "$ref": "#/definitions/ericssonVTap"
+        },"SCPviaGCB": {
+          "$ref": "#/definitions/SCPviaGCB"
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "ericssonVTap": {
+      "id": "#/definitions/ericssonVTap",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "applicable only if type is 'ericssonVTap'",
+      "required": [
+        "mode",
+        "eevtapVersion",
+        "numTCPFlows",
+        "tcpFlowTimeout",
+        "numStreamsPerFlow",
+        "http2RequestTimeout",
+        "http2ResponseTimeout"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "default": "L7json",
+          "enum": [
+            "L7json","L7native"
+          ],
+          "description": "only valid and required for type 'ericssonVTap'"
+        },
+        "eevtapVersion": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 2,
+          "description": "eevtap version"
+        },
+        "numTCPFlows": {
+          "type": "integer",
+          "default": 256,
+          "minimum": 128,
+          "maximum": 16384,
+          "description": "Number of concurrent TCP flows"
+        },
+        "tcpFlowTimeout": {
+          "type": "integer",
+          "default": 1800,
+          "minimum": 0,
+          "maximum": 7200,
+          "description": "Number of seconds to age out TCP flow"
+        },
+        "numStreamsPerFlow": {
+          "type": "integer",
+          "default": 8192,
+          "minimum": 1,
+          "maximum": 122880,
+          "description": "Number of Streams supported by 5GSBI Application"
+        },
+        "http2RequestTimeout": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 300,
+          "description": "number of seconds after HTTP2 Request has been received before TCP Flow is considered timed out by SBI5G Application"
+        },
+        "http2ResponseTimeout": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 300,
+          "description": "number of seconds after HTTP2 Response has been received before TCP Flow is considered timed out by SBI5G Application"
+        },
+        "failedSBITransactionDomainTag": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/Disable the traffic classification for failed SBI Transactions"
+        },
+        "destinationIP": {
+          "type": "string",
+          "default": "SCP",
+          "enum": [
+            "SCP","destinationNF"
+          ],
+          "description": "Specifies Destination IP in synthesized packets to be sent for Ericsson vTAP traffic"
+        },
+        "NFInstanceTable": {
+          "type": "array",
+          "properties": {
+            "instanceID": {
+              "type": "string",
+              "description": "NFInstance name/instance id"
+            },
+            "ipAddress": {
+              "type": "string",
+              "description": " ipv4/v6 address"
+            }
+          }
+        },
+        "fqdnTable": {
+          "type": "array",
+          "properties": {
+            "fqdnID": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z0-9.-]+$",
+              "description": "FQDN ID"
+            },
+            "ipAddress": {
+              "type": "string",
+              "description": "Ingress IP Address"
+            },
+            "nfType": {
+              "type": "string",
+              "enum": [
+                "AMF",
+                "AUSF",
+                "BSF",
+                "CHF",
+                "DD",
+                "NRF",
+                "NSSF",
+                "PCF",
+                "SCP",
+                "SEPP",
+                "SMF",
+                "SMSF",
+                "UDM",
+                "UDR",
+                "UPF",
+                "5G_EIR",
+                "SLF",
+                "NEF"
+              ],
+              "description": "Specifies the Network Function Type "
+            }
+          }
+        }
+      }
+    },
+    "SCPviaGCB": {
+      "id": "#/definitions/SCPviaGCB",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "applicable only if type is 'SCPviaGCB'",
+      "required": [
+        "mode",
+        "numSCPFlows",
+        "scpRequestTimeout",
+        "scpResponseTimeout",
+        "nokiaUse3gppTargetApiRoot"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "default": "Auto DetectSCP",
+          "enum": [
+            "Auto DetectSCP","NokiaSCP", "OracleSCP"
+          ],
+          "description": "only valid and required for type 'SCPviaGCB'"
+        },
+        "numSCPFlows": {
+          "type": "integer",
+          "default": 2000,
+          "minimum": 128,
+          "maximum": 16000,
+          "description": "number of SCP Flows supported by SBI5G Application"
+        },
+        "scpRequestTimeout": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 300,
+          "description": "request timeout range"
+        },
+        "scpResponseTimeout": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 300,
+          "description": "response timeout range"
+        },
+        "nokiaUse3gppTargetApiRoot": {
+          "type": "integer",
+          "default": 1,
+          "description": "when detecting Producer IP/FQDN, treat the 3gpp Target API Root to be predictive of the Producer IP if value is non-zero. default 1"
+        },
+        "FQDNTable": {
+          "type": "array",
+          "properties": {
+            "produceID": {
+              "type": "string",
+              "description": "FQDN name/instance id"
+            },
+            "ipAddress": {
+              "type": "string",
+              "description": " ipv4/v6 address"
+            }
+          }
+        }
+      }
+    },
+    "ApplicationSslDecrypt": {
+      "id": "#/definitions/ApplicationSslDecrypt",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Ssl Decryption Application",
+      "since": "v5.10",
+      "required": [
+        "alias",
+        "name",
+        "keyMap"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "sslDecrypt"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "description": {
+          "type": "string",
+          "description": "A description for the application"
+        },
+        "id": {
+          "type": "string",
+          "description": "application id"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/Disable SSL Decryption"
+        },
+        "keyMap": {
+          "$ref": "#/definitions/SslDecryptionKeyMapConfigSpec"
+        },
+        "sessionTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 3600,
+          "default": 300,
+          "description": "In seconds"
+        },
+        "pendingSessionTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 120,
+          "default": 60,
+          "description": "In seconds"
+        },
+        "tcpSynTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 20,
+          "maximum": 600,
+          "default": 20,
+          "description": "In seconds"
+        },
+        "decryptFailAction": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "passTool"
+          ],
+          "default": "drop",
+          "description": "Decrypt fail action, either drop or passTool."
+        },
+        "keyCacheTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 86400,
+          "default": 10800,
+          "description": "In seconds"
+        },
+        "ticketCacheTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 86400,
+          "default": 10800,
+          "description": "In seconds"
+        },
+        "hsmTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 2,
+          "maximum": 5000,
+          "default": 50,
+          "description": "In milliseconds"
+        },
+        "hsmPkcs11": {
+          "$ref": "#/definitions/GsGroupParamsSslDecryptHsmPkcs11"
+        },
+        "nonSslTraffic":{
+          "type": "string",
+          "default": "drop",
+          "enum": [
+            "drop",
+            "pass"
+          ]
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "SslDecryptionKeyMapConfigSpec": {
+      "id": "#/definitions/SslDecryptionKeyMapConfigSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Aliased collection of SSL-Endpoint-to-Decryption-Key mappings",
+      "required": [
+        "alias",
+        "mappings"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias of mappings collection"
+        },
+        "mappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SslDecryptionKeyMappingConfigSpec"
+          },
+          "description": "List of SSL Endpoints with corresponding Decryption Keys"
+        }
+      }
+    },
+    "SslDecryptionKeyMappingConfigSpec": {
+      "id": "#/definitions/SslDecryptionKeyMappingConfigSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SSL Decryption Endpoint-alias-to-Key-alias association",
+      "required": [
+        "endpointAlias",
+        "keyAlias"
+      ],
+      "properties": {
+        "endpointAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias of referenced SSL Endpoint"
+        },
+        "keyAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias of referenced Decryption Key associated with this endpoint"
+        }
+      }
+    },
+    "GsGroupParamsSslDecryptHsmPkcs11": {
+      "id": "#/definitions/GsGroupParamsSslDecryptHsmPkcs11",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GsGroup Ssl Decrypt Hsm Pkcs11 Parameters",
+      "properties": {
+        "debugLevel": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 11,
+          "default": 0,
+          "description": "hsm pkcs11 debug level"
+        },
+        "dynamicObject": {
+          "type": "boolean",
+          "default": true,
+          "description": "hsm pkcs11 dynamic object"
+        },
+        "loadSharing": {
+          "type": "boolean",
+          "default": true,
+          "description": "hsm pkcs11 load sharing"
+        }
+      }
+    },
+    "ApplicationGvhttp2": {
+      "id": "#/definitions/ApplicationGvhttp2",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GVHTTP2 Application",
+      "since": "v6.7",
+      "required": [
+        "alias",
+        "name",
+        "http2ListeningIpaddress",
+        "http2ListeningPort",
+        "mode",
+        "txTunnel"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "gvhttp2"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "http2ListeningIpaddress": {
+          "type": "string",
+          "description": "Specifies the Ip Address to listen for Gvhttp2 server."
+        },
+        "http2ListeningPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Specifies the HTTP2 Port to listen"
+        },
+        "tls": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "default": "disable",
+          "description": "Specifies the SSL/TLS is enable/disable."
+        },
+        "maxConcurrentStream": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 100,
+          "description": "Specifies the maximum number of the Concurrent Streams in one HTTP/2 session."
+        },
+        "workerThread": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 16,
+          "default": 4,
+          "description": "Specifies the number of worker threads."
+        },
+        "mode":{
+          "type": "string",
+          "default": "casa",
+          "enum": [
+            "nokia",
+            "oracle",
+            "casa",
+            "nokiaHEP3Transaction",
+            "nokiaHEP3Stream"
+          ],
+          "description": "Specifies the mode."
+        },
+        "txTunnel": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Gvhttp2TxTunnel"
+          }
+        },
+        "locationPrivateKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "description": "Specifies the location on Private Key file."
+        },
+        "locationCertificate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "description": "Specifies the location on Certificate file."
+        },
+        "logFolderLoc": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "default": "/var/log",
+          "description": "Specifies the PATH where logfiles will be store."
+        },
+        "logLevel": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 31,
+          "default": 6,
+          "description": "Specifies the log level. Example : Bit 0 = Enables Writing PCAP Files of all VXLAN traffic being sent/Bit 1 = Enables Writing CSV Files of flow statistics/Bit 2 = Enables Info/Error Logging/Bit 3 = Enables Detailed Logging/Bit 4 = Enables Full Parsing Logging."
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "ApplicationEvp5g": {
+      "id": "#/definitions/ApplicationEvp5g",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "EVP5G Application",
+      "since": "v6.13",
+      "required": [
+        "alias",
+        "name",
+        "rxTunnel",
+        "txTunnel"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "timeServerConfig": {
+          "type": "object",
+          "required": [
+            "primaryServer"
+          ],
+          "properties": {
+            "primaryServer": {
+              "type": "string",
+              "description": "Specifies the Primary Server for Time Synchronisation"
+            },
+            "secondaryServer": {
+              "type": "string",
+              "description": "Specifies the Primary Server for Time Synchronisation"
+            }
+          }
+        },
+        "rxTunnel": {
+          "$ref": "#/definitions/rxTunnel5gEvp"
+        },
+        "txTunnel": {
+            "$ref": "#/definitions/txTunnel5gEvp"
+        },
+        "packetOrderingConfig": {
+          "type": "object",
+          "properties": {
+            "pktOrderingEnable": {
+              "type": "boolean",
+              "default": true,
+              "description": "Enable packet ordering feature"
+            },
+            "numEgressFlows": {
+              "type": "integer",
+              "minimum": 32,
+              "maximum": 16384,
+              "default": 512,
+              "description": "Specifies the number of vTap Egress flows."
+            },
+            "egressFlowTimeoutValue": {
+              "type": "integer",
+              "minimum": 360,
+              "maximum": 1860,
+              "default": 660,
+              "title": "egressFlowTimeoutValue",
+              "description": "Specifies the egress flow timeout value (in seconds)."
+            },
+            "numBuckets": {
+              "type": "integer",
+              "minimum": 10,
+              "maximum": 200,
+              "default": 50,
+              "description": "Specifies the number of buckets to be ready to receive the packets."
+            },
+            "pktsPerBucket": {
+              "type": "integer",
+              "minimum": 10000,
+              "maximum": 100000,
+              "default": 20000,
+              "description": "Specifies the number of packets per bucket."
+            },
+            "bucketInterval": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5,
+              "default": 1,
+              "description": "Specifies the time interval for the bucket (in milliSeconds)."
+            },
+            "pktRxOutSideBucketInterval": {
+              "type": "string",
+              "enum": [
+                "forward",
+                "discard"
+              ],
+              "default": "forward",
+              "description": "Specifies the action for which the packets are not within the time interval."
+            }
+          }
+        },
+        "diagnosticOptions": {
+          "type": "object",
+          "properties": {
+            "pctDisable": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535,
+              "default": 0,
+              "description": "Specifies the payload content type with bitmap, for which the packet ordering needs bypass. Example : 32 = 0010 0000 - Bit 5 is selected."
+            },
+            "txDisable": {
+              "type": "boolean",
+              "default": "false",
+              "description": "Specifies the transmit enable/disable"
+            }
+          }
+        },
+        "logging": {
+          "type": "object",
+          "properties": {
+            "packetCaptureLogLevel": {
+              "type": "string",
+              "enum": [
+                "all",
+                "receive",
+                "transmit",
+                "none"
+              ]
+            },
+            "csvLoggingLevel": {
+              "type": "string",
+              "enum": [
+                "enable",
+                "disable"
+              ]
+            },
+            "msgLogLevel": {
+              "type": "string",
+              "enum": [
+                "none",
+                "fatal",
+                "error",
+                "info",
+                "detail",
+                "full-parse"
+              ],
+              "default": "error"
+            }
+          }
+        }
+      }
+    },
+    "Gvhttp2TxTunnel": {
+      "id": "#/definitions/Gvhttp2TxTunnel",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Specific the Tx Tunnel Configuration.",
+      "required": [
+        "txType",
+        "txSrcIpaddress",
+        "txSrcPort",
+        "txDstIpaddress",
+        "txDstPort",
+        "txVniId"
+      ],
+      "properties": {
+        "txType":{
+          "type": "string",
+          "default": "vxlan",
+          "enum": [
+            "vxlan",
+            "tcp"
+          ],
+          "description": "Specifies the Tunnel type. TCP Tunnel type is applicable only for Nokia HEP3 modes."
+        },
+        "txSrcIpaddress": {
+          "type": "string",
+          "description": "Specifies the Source IP Address to use for sending packet."
+        },
+        "txSrcPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65335,
+          "description": "Specifies the Source Port to bind for sending Packet."
+        },
+        "txDstIpaddress": {
+          "type": "string",
+          "description": "Specifies the Destination IP Address where packets will be sent."
+        },
+        "txDstPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Specifies the Destination Port where packets will be sent."
+        },
+        "txVniId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "default": 0,
+          "maximum": 16777215,
+          "description": "Specifies the VNI to use for the VXLAN traffic. VNI ID is a mandatory field when the VXLAN Tunnel type is selected."
+        },
+        "txThread": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "default": 4,
+          "maximum": 200,
+          "description": "Specifies the number of TX Threads to used for processing (Range: 1-16, default: 4). Only for NokiaHep3 mode (nokiaHEP3Transaction/ nokiaHEP3Stream) the field is used to Specify the number of Egress TCP Connections (Range: 1-200, default: 4)."
+        }
+      }
+    },
+    "ApplicationCloud5g": {
+      "id": "#/definitions/ApplicationCloud5g",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "5G-Cloud Application",
+      "since": "v6.7",
+      "required": [
+        "alias",
+        "name",
+        "mode",
+        "rxTunnel",
+        "txTunnel"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "cloud5g"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "mode":{
+          "type": "string",
+          "default": "casaVtap",
+          "enum": [
+            "casaVtap",
+            "oracleSCP",
+            "nokiaSCPInbound",
+            "nokiaSCPIn-Outbound",
+            "ericssonSCPIn-Outbound",
+            "ericssonSCPOutbound",
+            "SBINF",
+            "nokiaHEP3Inbound",
+            "nokiaHEP3In-Outbound",
+            "nokiaHEP3IMS"
+          ],
+          "description": "Specifies the mode."
+        },
+        "rxTunnel": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Cloud5gRxTunnel"
+          }
+        },
+        "txTunnel": {
+          "$ref": "#/definitions/Cloud5gTxTunnel"
+        },
+        "hep3Config": {
+          "$ref": "#/definitions/Cloud5gHep3Config"
+        },
+        "scpConfig": {
+          "$ref": "#/definitions/Cloud5gScpConfig"
+        },
+        "toolMtu": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1400,
+          "maximum": 8800,
+          "default": 8800,
+          "description": "Specifies the tool port MTU."
+        },
+        "logFolderLoc": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024 ,
+          "default": "/var/log",
+          "description": "Specifies the PATH where logfiles will be store."
+        },
+        "tunnelLogLevel": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 2,
+          "description": "Specifies the Log Level. Example: NONE - 0, FATAL - 1, ERROR - 2, INFO - 3, DETAIL - 4, FULL-PARSE - 5."
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "Cloud5gRxTunnel": {
+      "id": "#/definitions/Cloud5gRxTunnel",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Specific the Rx Tunnel Configuration.",
+      "required": [
+        "rxType",
+        "listenIpaddress",
+        "listenPort",
+        "fromPort"
+      ],
+      "properties": {
+        "rxType":{
+          "type": "string",
+          "enum": [
+            "vxlan",
+            "tcp"
+          ],
+          "description": "Specifies the Tunnel type."
+        },
+        "listenIpaddress": {
+          "type": "string",
+          "description": "Specifies the Tunnel Source IP Address to receive Packet."
+        },
+        "listenPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Specifies the Tunnel Destination Port to bind to receive Packet."
+        },
+        "fromPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Specifies the Tunnel Source Port from where the Packet send."
+        },
+        "rxThread": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "default": 1,
+          "maximum": 16,
+          "description": "Specifies the number of RX Threads to used for processing."
+        },
+        "rxVNIId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "default": 0,
+          "maximum": 16777215,
+          "description": "Specifies the VNI to use for the VXLAN traffic."
+        }
+      }
+    },
+    "Cloud5gTxTunnel": {
+      "id": "#/definitions/Cloud5gTxTunnel",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Specific the Tx Tunnel Configuration.",
+      "required": [
+        "txType",
+        "txRemoteIpaddress",
+        "txDstPort",
+        "txSrcIpaddress",
+        "txSrcPort"
+      ],
+      "properties": {
+        "txType":{
+          "type": "string",
+          "default": "udpgre",
+          "enum": [
+            "udpgre",
+            "l2gre",
+            "vxlan"
+          ],
+          "description": "Specifies the Tunnel type."
+        },
+        "txRemoteIpaddress": {
+          "type": "string",
+          "description": "Specifies the Remote IP Address where Packet will be send."
+        },
+        "txDstPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Specifies the Destination Port where packets will be sent."
+        },
+        "txSrcIpaddress": {
+          "type": "string",
+          "description": "Specifies the Source IP Address to use for sending packet."
+        },
+        "txSrcPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Specifies the Source Port to bind for sending Packet."
+        },
+        "txVNIId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 16777215,
+          "description": "Specifies the VNI to use for the VXLAN traffic. Valid only when TxTunnel-Txtype is VXLAN."
+        },
+        "l2greKey": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 4294967295,
+          "description": "Specifies the l2gre key. Applies only when TxTunnel-Txtype is L2gre."
+        }
+      }
+    },
+    "rxTunnel5gEvp": {
+      "id": "#/definitions/rxTunnel5gEvp",
+      "type": "object",
+      "required": [
+        "listenIpaddress"
+      ],
+      "properties": {
+        "listenIpaddress": {
+          "type": "string",
+          "description": "Specifies the Tunnel local listen IP Address to receive Packet."
+        },
+        "listenPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "default": 4754,
+          "description": "Specifies the Tunnel local listen Port to bind to receive Packet."
+        },
+        "rxThread": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16,
+          "default": 8,
+          "description": "Specifies the number of RX Threads used for processing"
+        },
+        "dtls": {
+          "type": "string",
+          "enum": ["enable", "disable"],
+          "default": "disable",
+          "description": "Enable or disable DTLS"
+        },
+        "privateKeyPath": {
+          "type": "string",
+          "example": "/usr/lib/vseries-web/api/crypto/private/cloud5g/pvt_key"
+        },
+        "certFilePath": {
+          "type": "string",
+          "example": "/usr/lib/vseries-web/api/crypto/private/cloud5g/cloud5G.crt"
+        },
+        "dtlsKeyAlias": {
+          "type": "string",
+          "description": "Specify the SSL Key alias to transfer Private key and Certificate to Node"
+        }
+      }
+    },
+    "txTunnel5gEvp": {
+      "id": "#/definitions/txTunnel5gEvp",
+      "type": "object",
+      "required": [
+        "txSrcIpaddress",
+        "txRemoteIpaddress"
+      ],
+      "properties": {
+        "txSrcIpaddress": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "string"
+          },
+          "description": "Specifies the source IP address(es) to be used for sending packets. A maximum of 8 unique IP addresses can be configured."
+        },
+        "txRemoteIpaddress": {
+          "type": "string",
+          "description": "Specifies the Remote IP Address where Packet will be send."
+        },
+        "txSrcPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Specifies the Tunnel Source Port to bind for sending Packet."
+        },
+        "txDstPort": {
+          "type": "integer",
+          "default": 4754,
+          "description": "Specifies the Tunnel Destination Port where Packet will be send."
+        },
+        "txThread": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8,
+          "default": 4,
+          "description": "Specifies the number of TX Threads used to process egress flow connections."
+        }
+      }
+    },
+    "Cloud5gHep3Config": {
+      "id": "#/definitions/Cloud5gHep3Config",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Specific the Hep3Config Configuration",
+      "properties": {
+        "numIngressTCPconn": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 128,
+          "default": 1024,
+          "maximum": 2048,
+          "description": "Number of Incoming TCP connections"
+        },
+        "numEgressTCPFlows": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1024,
+          "default": 4096,
+          "maximum": 16000000,
+          "description": "Number of TCP flows maintained in-memory for the synthesizing segments. For Extra Large VM(total mem >=32GB), max value is 16000000. For lesser form factor VM, max value is 16384"
+        },
+        "ingressTCPTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "default": 60,
+          "maximum": 1800,
+          "description": "Flow Timeout value for the Incoming TCP connections"
+        },
+        "egressTCPFlowsTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "default": 900,
+          "maximum": 7200,
+          "description": "Flow Timeout value for the Outgoing TCP connections"
+        },
+        "numEgressSCTPFlows": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 128,
+          "default": 1024,
+          "maximum": 2000000,
+          "description": "Number of SCTP Flows maintained in-memory for the synthesizing segments"
+        },
+        "egressSCTPFlowTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "default": 900,
+          "maximum": 7200,
+          "description": "Flow Timeout value for Mirrored SCTP content for Egress. Unit=sec"
+        },
+        "numReceiveThread": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "default": 8,
+          "maximum": 128,
+          "description": "Number of worker threads for processing the Incoming TCP connections"
+        },
+        "mtls": {
+          "type": "string",
+          "default": "disable",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "description": "Specifies the mTLS connection is enable/disable"
+        },
+        "hep3Timestamp": {
+          "type": "boolean",
+          "default": true,
+          "description": "The Captured PCAP will use HEP3 timestamp while it gets stored"
+        },
+        "recvTimestamp": {
+          "type": "boolean",
+          "default": false,
+          "description": "The Captured PCAP will use Received timestamp while it gets stored"
+        },
+        "privateKeyPath": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 2048,
+          "description": "Specify the absolute path location of Private Key file"
+        },
+        "certFilePath": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 2048,
+          "description": "Specify the absolute path location of Certificate file"
+        },
+        "mtlsKeyAlias": {
+          "type": "string",
+          "description": "Specify the SSL Key alias to transfer Private key and Certificate to Node"
+        },
+        "serviceMapTable": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/serviceMapTable"
+          }
+        }
+      }
+    },
+    "serviceMapTable": {
+      "id": "#/definitions/serviceMapTable",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "HEP3 Service Map Table Configuration.",
+      "properties": {
+        "srcIP": {
+          "type": "string",
+          "description": "Source IPv4/IPv6 address for which packets will be port‑mapped"
+        },
+        "dstIP": {
+          "type": "string",
+          "description": "Destination IPv4/IPv6 address for which packets will be port‑mapped"
+        },
+        "srcPort": {
+          "type": "string",
+          "description": "Source port to match for port mapping"
+        },
+        "dstPort": {
+          "type": "string",
+          "description": "Destination port to match for port mapping"
+        },
+        "protocolFamily": {
+          "type": "string",
+          "enum": [
+            "ipv4",
+            "ipv6"
+          ],
+          "description": "Specifies whether the rule applies to ipv4 or ipv6 traffic for port mapping"
+        },
+        "transportProtocol": {
+          "type": "string",
+          "enum": [
+            "udp",
+            "tcp"
+          ],
+          "description": "Specifies whether the rule applies to udp or tcp traffic for port mapping"
+        },
+        "applicationProtocol": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Specifies Application protocol id for which port mapping rules apply"
+        },
+        "interfaceName": {
+          "type": "integer",
+          "description": "Specifies Interfaces identifier/name from which VTAP exports the message"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "in",
+            "out",
+            "any"
+          ],
+          "description": "Specifies the direction of data flow"
+        },
+        "sipMessageType": {
+          "type": "string",
+          "enum": [
+            "request",
+            "response",
+            "any"
+          ],
+          "description": "Specifies SIP message direction for matching request/response"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "portmap",
+            "discard",
+            "ignore"
+          ],
+          "description": "Specifies the rule operation to handle matching messages"
+        },
+        "srcPortMap": {
+          "type": "string",
+          "description": "Specifies port to be written in synthesized response packet"
+        },
+        "dstPortMap": {
+          "type": "string",
+          "description": "Specifies port to be written in synthesized request packet"
+        }
+      }
+    },
+    "Cloud5gScpConfig": {
+      "id": "#/definitions/Cloud5gScpConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Specific the ScpConfig Configuration.",
+      "required": [
+        "tcpServerPorts"
+      ],
+      "properties": {
+        "numTCPFlows": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 128,
+          "default": 1024,
+          "maximum": 2048,
+          "description": "Number of Concurrent TCP Flows"
+        },
+        "numTransactionFlows": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 128,
+          "default": 2048,
+          "maximum": 5500,
+          "description": "Number of Transaction Flows"
+        },
+        "tcpFlowTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "default": 900,
+          "maximum": 7200,
+          "description": "Flow Timeout"
+        },
+        "scpTransactionTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "default": 10,
+          "maximum": 300,
+          "description": "Transaction timeout"
+        },
+        "minTcpFlowClientPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1023,
+          "default": 32768,
+          "maximum": 65535,
+          "description": "Minimum value to be used for TCP Client Port"
+        },
+        "maxTcpFlowClientPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1023,
+          "default": 36863,
+          "maximum": 65535,
+          "description": "Maximum value to be used for TCP Client Port"
+        },
+        "numSCPProcessingThreads": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "default": 8,
+          "maximum": 16,
+          "description": "Number of worker threads for Processing Inout Packet"
+        },
+        "numTCPFlowCLientPortPerThread": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 100,
+          "default": 1000,
+          "maximum": 8000,
+          "description": "Number of TCP Client port for each Worker thread"
+        },
+        "tcpServerPorts": {
+          "type": "string",
+          "description": "Applicable for Ericsson SCP Modes. Servers ports which are being listened. Multiple TCP server ports can be added separated by comma, can be any of the given format: 200,212 or 204-208"
+        },
+        "http2MonitoredFlows": {
+          "$ref": "#/definitions/http2MonitoredFlows"
+        },
+        "tcpMonitoredFlows": {
+          "$ref": "#/definitions/tcpMonitoredFlows"
+        },
+        "headerIndex": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates Header Indexing Flag"
+        },
+        "headerCompressionCode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates Header Huffman Code Flag"
+        },
+        "nrfDiscoveryEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Indicates NRF Discovery Enabled Flag"
+        },
+        "addGigamonHeader": {
+          "type": "boolean",
+          "default": true,
+          "description": "Indicates Add Gigamon Header Flag"
+        },
+        "nokiaInboundUse3gppTargetApiRoot": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates Add Gigamon Header Flag"
+        },
+        "nokiaInboundReplaceAuthority": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates Add Gigamon Header Flag"
+        },
+        "packetCaptureLogLevel":{
+          "type": "string",
+          "enum": [
+            "all",
+            "receive",
+            "transmit",
+            "none"
+          ],
+          "description": "Specifies the Packet Capture Log level."
+        },
+        "csvLoggingLogLevel":{
+          "type": "string",
+          "enum": [
+            "all",
+            "flow ",
+            "message",
+            "transaction",
+            "none"
+          ],
+          "description": "Specifies the CSV Logging Log level."
+        },
+        "fqdnTable": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/fqdnTable"
+          }
+        },
+        "nfInstanceTable": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/nfInstanceTable"
+          }
+        },
+        "uaTable": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/uaTable"
+          }
+        }
+      }
+    },
+    "http2MonitoredFlows": {
+      "id": "#/definitions/http2MonitoredFlows",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "HTTP2 Monitored Flows",
+      "properties": {
+        "numMonitoredStreamFlows": {
+          "type": "integer",
+          "minimum": 1024,
+          "default": 1024,
+          "maximum": 16384,
+          "description": "Number of HTTP2 Monitored Flows"
+        },
+        "http2RequestTimeout": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 15,
+          "maximum": 300,
+          "description": "HTTP2 Request Timeout"
+        },
+        "http2ResponseTimeout": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 2,
+          "maximum": 300,
+          "description": "HTTP2 Response Timeout"
+        }
+      }
+    },
+    "tcpMonitoredFlows": {
+      "id": "#/definitions/tcpMonitoredFlows",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "TCP Monitored Flows",
+      "properties": {
+        "numMonitoredTCPFlows": {
+          "type": "integer",
+          "minimum": 1024,
+          "default": 2048,
+          "maximum": 32768,
+          "description": "Number of TCP Monitored Flows"
+        },
+        "tcpFlowTimeout": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 60,
+          "maximum": 7200,
+          "description": "TCP Flow Timeout"
+        },
+        "tcpFlowReassemblyTimeout": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 500,
+          "maximum": 7200,
+          "description": "TCP Flow Reassembly Timeout"
+        }
+      }
+    },
+    "fqdnTable": {
+      "id": "#/definitions/fqdnTable",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Specific the FQDN Table Configuration.",
+      "required": [
+        "fqdnID",
+        "ingressIPAddress1"
+      ],
+      "properties": {
+        "fqdnID": {
+          "type": "string",
+          "description": "FQDN name/id"
+        },
+        "ingressIPAddress1": {
+          "type": "string",
+          "description": " ipv4/v6 address1"
+        },
+        "ingressIPAddress2": {
+          "type": "string",
+          "description": " ipv4/v6 address2"
+        },
+        "ingressPort": {
+          "type": "integer",
+          "description": " Ingress Port"
+        },
+        "egressIPAddress": {
+          "type": "string",
+          "description": " ipv4/v6 address"
+        },
+        "nfType": {
+          "type": "string",
+          "enum": [
+            "AMF",
+            "AUSF",
+            "BSF",
+            "CHF",
+            "DD",
+            "NRF",
+            "NSSF",
+            "PCF",
+            "SCP",
+            "SEPP",
+            "SMF",
+            "SMSF",
+            "UDM",
+            "UDR",
+            "UPF",
+            "5G_EIR",
+            "SLF"
+          ],
+          "description": " Specifies the nfType "
+        },
+        "nfLocation": {
+          "type": "string",
+          "description": " Network function Location"
+        },
+        "imsIPAddress": {
+          "type": "string",
+          "description": "IMS Node IP Address"
+        },
+        "imsInterfaceName": {
+          "type": "string",
+          "description": "IMS Interface Identifier. Multiple space separated Identifiers can be specified. Example: 313 314 315"
+        },
+        "imsMask": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Mask for IPV6 IMS address"
+        },
+        "imsType": {
+          "type": "string",
+          "description": "IMS Interface Type. Example: sbc"
+        }
+      }
+    },
+    "nfInstanceTable": {
+      "id": "#/definitions/nfInstanceTable",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Specific the NfInstance Table Configuration.",
+      "required": [
+        "nfID",
+        "ingressIPAddress1"
+      ],
+      "properties": {
+        "nfID": {
+          "type": "string",
+          "description": "Nf name/instance id"
+        },
+        "ingressIPAddress1": {
+          "type": "string",
+          "description": " ipv4/v6 address1"
+        },
+        "ingressIPAddress2": {
+          "type": "string",
+          "description": " ipv4/v6 address2"
+        },
+        "ingressPort": {
+          "type": "integer",
+          "description": " Ingress Port"
+        },
+        "egressIPAddress": {
+          "type": "string",
+          "description": " ipv4/v6 address"
+        },
+        "nfType": {
+          "type": "string",
+          "enum": [
+            "AMF",
+            "AUSF",
+            "BSF",
+            "CHF",
+            "DD",
+            "NRF",
+            "NSSF",
+            "PCF",
+            "SCP",
+            "SEPP",
+            "SMF",
+            "SMSF",
+            "UDM",
+            "UDR",
+            "UPF",
+            "5G_EIR",
+            "SLF"
+          ],
+          "description": " Specifies the nfType "
+        },
+        "nfLocation": {
+          "type": "string",
+          "description": " Network function Location"
+        }
+      }
+    },
+    "uaTable": {
+      "id": "#/definitions/uaTable",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Specific the UA Table Configuration.",
+      "required": [
+        "useragentID",
+        "ingressIPAddress"
+      ],
+      "properties": {
+        "useragentID": {
+          "type": "string",
+          "description": "UA name/id"
+        },
+        "ingressIPAddress": {
+          "type": "string",
+          "description": " ipv4/v6 address1"
+        },
+        "nfType": {
+          "type": "string",
+          "enum": [
+            "AMF",
+            "AUSF",
+            "BSF",
+            "CHF",
+            "DD",
+            "NRF",
+            "NSSF",
+            "PCF",
+            "SCP",
+            "SEPP",
+            "SMF",
+            "SMSF",
+            "UDM",
+            "UDR",
+            "UPF",
+            "5G_EIR",
+            "SLF"
+          ],
+          "description": " Specifies the nfType "
+        },
+        "nfLocation": {
+          "type": "string",
+          "description": " Network function Location"
+        }
+      }
+    },
+    "ApplicationUctI": {
+      "id": "#/definitions/ApplicationUctI",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "UCT-I Application",
+      "since": "v6.10",
+      "required": [
+        "alias",
+        "name",
+        "tunnel"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User provided application alias"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "ucti"
+          ],
+          "description": "Application name is the name the application is registered with"
+        },
+        "tunnel":{
+          "type": "string",
+          "enum": [
+            "vxlan",
+            "geneve"
+          ],
+          "description": "Specifies the tunnel."
+        },
+        "geneve": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UctIGeneve"
+          }
+        },
+        "vxlan": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UctIVxlan"
+          }
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "UctIGeneve": {
+      "id": "#/definitions/UctIGeneve",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "UCT-I Geneve Tunnel",
+      "required": [
+        "dport"
+      ],
+      "properties": {
+        "dport": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Geneve DPort : 6081/4789/<custom-port>."
+        }
+      }
+    },
+    "UctIVxlan": {
+      "id": "#/definitions/UctIVxlan",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "UCT-I Vxlan Tunnel",
+      "required": [
+        "internalPort",
+        "internalVni",
+        "externalPort",
+        "externalVni"
+      ],
+      "properties": {
+        "internalPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Internal vxlan tunnel port"
+        },
+        "internalVni": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 16777215,
+          "description": "Internal vxlan tunnel vni"
+        },
+        "externalPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "External vxlan tunnel port"
+        },
+        "externalVni": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 16777215,
+          "description": "External vxlan tunnel vni"
+        }
+      }
+    },
+    "EndPoint": {
+      "id": "#/definitions/EndPoint",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "EndPoint",
+      "since": "v5.10",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "map, application or tunnel id. It's required in composition way"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "map",
+            "application",
+            "tunnel",
+            "raw"
+          ],
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "EndPoint type"
+        },
+        "aepId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 64,
+          "description": "AepId is only applicable for object type map or aep. It is required if it's a map"
+        }
+      }
+    },
+    "LinkTransformation": {
+      "id": "#/definitions/LinkTransformation",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Link Transformation",
+      "since": "v5.2",
+      "properties": {
+        "srcMacAddr": {
+          "type": "string",
+          "description": "set ethernet source mac address"
+        },
+        "dstMacAddr": {
+          "type": "string",
+          "description": "set ethernet destination mac address"
+        },
+        "vlanId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4094,
+          "description": "set vlan id. vlan tag will be added if absent. 1<=vlanId<=4094"
+        },
+        "vlanPcp": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7,
+          "description": "set vlan priority. vlan tag will be added if absent. 0<=vlanPcp<=7"
+        },
+        "vlanStrip": {
+          "type": "boolean",
+          "description": "strip vlan tag. cannot be specified if vlanId or vlanPcp is present"
+        },
+        "ipv4SrcAddr": {
+          "type": "string",
+          "description": "set IPv4 source address"
+        },
+        "ipv4DstAddr": {
+          "type": "string",
+          "description": "set IPv4 destination address"
+        },
+        "ipTos": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "set IPv4 DSCP bits. this has to be a multiple of 4. 0<=ipTos<=255"
+        },
+        "srcPort": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "set TCP/UDP/SCTP source port. 0<=srcPort<=65535"
+        },
+        "dstPort": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "set TCP/UDP/SCTP destination port. 0<=dstPort<=65535"
+        },
+        "tunnelId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295,
+          "description": "set tunnel id. 0<=tunnelId<=4,294,967,295 for GRE and 0<=tunnelId<=16,777,215 for VXLAN"
+        }
+      }
+    },
+    "Link": {
+      "id": "#/definitions/Link",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Link",
+      "since": "v3.5",
+      "required": [
+        "source",
+        "dest"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Link alias"
+        },
+        "id": {
+          "type": "string",
+          "description": "Link id"
+        },
+        "source": {
+          "$ref": "#/definitions/EndPoint"
+        },
+        "dest": {
+          "$ref": "#/definitions/EndPoint"
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "EntityPositions": {
+      "id": "#/definitions/EntityPositions",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "positions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "monitoring session id"
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EntityPosition"
+          },
+          "description": "A list of entity position"
+        }
+      }
+    },
+    "EntityPosition": {
+      "id": "#/definitions/EntityPosition",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "x",
+        "y"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "entity id"
+        },
+        "x": {
+          "type": "integer",
+          "description": "X coordinate of the entity"
+        },
+        "y": {
+          "type": "integer",
+          "description": "Y coordinate of the entity"
+        }
+      }
+    },
+    "BatchRequest": {
+      "id": "#/definitions/BatchRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "requests": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/MapRequest"
+              },
+              {
+                "$ref": "#/definitions/LinkRequest"
+              },
+              {
+                "$ref": "#/definitions/TunnelRequest"
+              },
+              {
+                "$ref": "#/definitions/RawRequest"
+              },
+              {
+                "$ref": "#/definitions/ApplicationRequest"
+              }
+            ]
+          },
+          "description": "A list of request"
+        }
+      }
+    },
+    "MapRequest": {
+      "id": "#/definitions/MapRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entityType",
+        "operation",
+        "map"
+      ],
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "inclusionMap",
+            "exclusionMap",
+            "trafficMap"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "referenceId": {
+          "type": "string"
+        },
+        "map": {
+          "$ref": "flowMaps.json#/definitions/VmMap",
+          "description": "Only map id or alias is required for 'delete' operation"
+        }
+      }
+    },
+    "ApplicationRequest": {
+      "id": "#/definitions/ApplicationRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entityType",
+        "operation",
+        "application"
+      ],
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "application"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "referenceId": {
+          "type": "string"
+        },
+        "application": {
+          "$ref": "#/definitions/Application",
+          "description": "Only application id or alias is required for 'delete' operation"
+        }
+      }
+    },
+    "TunnelRequest": {
+      "id": "#/definitions/TunnelRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entityType",
+        "operation",
+        "tunnel"
+      ],
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "tunnel"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "referenceId": {
+          "type": "string"
+        },
+        "tunnel": {
+          "$ref": "#/definitions/TunnelSpec",
+          "description": "Only tunnel id and type are required for 'delete' operation"
+        }
+      }
+    },
+    "TunnelSpec": {
+      "id": "#/definitions/TunnelSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "V Series 2.0 Tunnel specification",
+      "since": "v5.10",
+      "required": [
+        "type",
+        "alias"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "l2gre",
+            "vxlan",
+            "erspan",
+            "udpgre"
+          ],
+          "description": "Tunnel type"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Tunnel spec id, auto generated when tunnel spec is created"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel spec alias, user defined"
+        },
+        "description": {
+          "type": "string",
+          "description": "Additional information about Tunnel Spec"
+        },
+        "trafficDirection": {
+          "type": "string",
+          "enum": [
+            "in",
+            "out"
+          ],
+          "description": "Tunnel traffic direction. 'in' for traffic coming into FM, 'out' for traffic going out of FM."
+        },
+        "ipVersion": {
+          "type": "string",
+          "enum": [
+            "IPV4",
+            "IPV6"
+          ],
+          "description": "Ip Version of tunnel. Required if traffic direction is 'in' and remoteIP is not specified."
+        },
+        "remoteIP": {
+          "type": "string",
+          "description": "Tunnel remote IP address."
+        },
+        "remoteAddress": {
+          "type": "string",
+          "description": "Tunnel remote IP or FQDN address. FQDN only applicable if traffic direction is 'out'"
+        },
+        "mtu": {
+          "type": "integer",
+          "minimum": 1280,
+          "maximum": 9600,
+          "description": "MTU in bytes. Only applicable if traffic direction is 'out'"
+        },
+        "ttl": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 255,
+          "description": "Time to Live. Only applicable if traffic direction is 'out'"
+        },
+        "dscp": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 63,
+          "description": "Tunnel dscp. Only applicable if traffic direction is 'out'"
+        },
+        "prec": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7,
+          "description": "IP Precedence. Only applicable if traffic direction is 'out'"
+        },
+        "flowLabel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048575,
+          "description": "Flowlabel for IPv6 based tunnels. Only applicable if traffic direction is 'out'"
+        },
+        "dataSubnetId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Node Data Subnet Id. The V Series Node interface in the specfied subnet will be used as the tunnel interface."
+        },
+        "key": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967295,
+          "description": "L2Gre Key only applicable for L2Gre Tunnels and Udpgre key applicable for Udpgre Tunnels"
+        },
+        "vni": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777215,
+          "description": "VxLan Network Identifier only applicable for Vxlan Tunnels"
+        },
+        "sPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Source L4 port is only applicable for Vxlan Tunnels and Udpgre Tunnels"
+        },
+        "dPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Destination L4 port is only applicable for Vxlan Tunnels and Udpgre Tunnels.Udpgre Tunnels can take either 4754 or 4755 as input"
+        },
+        "flowId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1023,
+          "description": "ERSPAN flow id is only applicable for ERSPAN Tunnels"
+        },
+        "multiTunnel": {
+          "type": "boolean",
+          "default": false,
+          "description": "Flag to create Multiple VXLAN Tunnels"
+        },
+        "numTunnels": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16,
+          "default": 8,
+          "description": "Number of Tunnels to be created"
+        },
+        "vlanTagging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/Disable the VLAN tagging"
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "RawRequest": {
+      "id": "#/definitions/RawRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entityType",
+        "operation",
+        "raw"
+      ],
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "raw"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "referenceId": {
+          "type": "string"
+        },
+        "raw": {
+          "$ref": "#/definitions/RawSpec",
+          "description": "Only raw endpoint id and type are required for 'delete' operation"
+        }
+      }
+    },
+    "RawSpec": {
+      "id": "#/definitions/RawSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "LinkRequest": {
+      "id": "#/definitions/LinkRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entityType",
+        "operation",
+        "link"
+      ],
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "link"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "referenceId": {
+          "type": "string"
+        },
+        "link": {
+          "$ref": "#/definitions/Link",
+          "description": "Only link id or alias is required for 'delete' operation. Only link transformations can be updated using 'update' operation. Link update for modifying source or destination is not allowed"
+        }
+      }
+    },
+    "BatchResponse": {
+      "id": "#/definitions/BatchResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "responses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OperationResponse"
+          }
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      }
+    },
+    "OperationResponse": {
+      "id": "#/definitions/OperationResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entityType",
+        "operation",
+        "id"
+      ],
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "inclusionMap",
+            "exclusionMap",
+            "trafficMap",
+            "application",
+            "tunnel",
+            "link"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "Entity id"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Entity alias"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "failure",
+            "success"
+          ]
+        },
+        "error": {
+          "$ref": "#/definitions/Error"
+        }
+      }
+    },
+    "Error": {
+      "id": "#/definitions/Error",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "description": "error description"
+        },
+        "code": {
+          "type": "integer",
+          "description": "error code"
+        }
+      }
+    },
+    "DeploymentIds": {
+      "id": "#/definitions/DeploymentIds",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "connIds"
+      ],
+      "properties": {
+        "connIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of connection Ids"
+        },
+        "vseriesNodeIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of V Series Node Ids that monitoring session will be deployed in"
+        }
+      }
+    },
+    "MonitoringSessionQueryResponse": {
+      "id": "#/definitions/MonitoringSessionQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "monitoringSession"
+      ],
+      "properties": {
+        "monitoringSession": {
+          "$ref": "#/definitions/MonitoringSession"
+        }
+      }
+    },
+    "MonitoringSessionsQueryResponse": {
+      "id": "#/definitions/MonitoringSessionsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "monitoringSessions"
+      ],
+      "properties": {
+        "monitoringSessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MonitoringSession"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "DeploymentSuccessReport": {
+      "id": "#/definitions/DeploymentSuccessReport",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "IP Address"
+        }
+      }
+    },
+    "DeploymentFailureReport": {
+      "id": "#/definitions/DeploymentFailureReport",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Id"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "IP Address"
+        },
+        "failureMsg": {
+          "type": "string",
+          "description": "Failure Message"
+        }
+      }
+    },
+    "MonitoringSessionUnlicensedReport": {
+      "id": "#/definitions/MonitoringSessionUnlicensedReport",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "instanceId",
+        "instanceName",
+        "nicIds"
+      ],
+      "properties": {
+        "instanceId": {
+          "type": "string",
+          "description": "Id of the instance"
+        },
+        "instanceName": {
+          "type": "string",
+          "description": "Name of the instance"
+        },
+        "nicIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Ids of the vNics"
+        }
+      }
+    },
+    "MonitoringSessionStatusByConnection": {
+      "id": "#/definitions/MonitoringSessionStatusByConnection",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Monitoring session status for a connection",
+      "since": "v3.5",
+      "required": [
+        "connId",
+        "alias",
+        "deploymentStatus"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Monitoring session alias"
+        },
+        "deploymentStartTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "monitoring session deployment start time in ISO 8601 format"
+        },
+        "deploymentEndTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "monitoring session deployment end time in ISO 8601 format"
+        },
+        "connId": {
+          "type": "string",
+          "description": "Connection Id"
+        },
+        "connAlias": {
+          "type": "string",
+          "description": "Connection Alias"
+        },
+        "platform": {
+          "type": "string",
+          "enum": [
+            "aws",
+            "openStack"
+          ],
+          "description": "Platform - one of [aws, openStack]"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "deploy",
+            "undeploy"
+          ],
+          "description": "monitoring session deployment operation. One of ['deploy', 'undeploy']"
+        },
+        "deploymentStatus": {
+          "type": "string",
+          "enum": [
+            "notDeployed",
+            "deploying",
+            "undeploying",
+            "deploymentSuccess",
+            "deploymentFailure",
+            "deploymentPartialSuccess",
+            "deploymentBlocked",
+            "undeploymentFailure",
+            "undeploymentBlocked",
+            "undeploymentPartialSuccess"
+          ],
+          "description": "Status of the monitoring session deployment"
+        },
+        "numTargetsDeployedSuccess": {
+          "type": "integer",
+          "description": "Number of targets where monitoring session deployment succeeded"
+        },
+        "numTargetsDeployedFailure": {
+          "type": "integer",
+          "description": "Number of targets where monitoring session deployment failed"
+        },
+        "numVseriesDeployedSuccess": {
+          "type": "integer",
+          "description": "Number of V Series nodes where monitoring session deployment succeeded"
+        },
+        "numVseriesDeployedFailure": {
+          "type": "integer",
+          "description": "Number of V Series nodes where monitoring session deployment failed"
+        },
+        "numTargetsUndeployedSuccess": {
+          "type": "integer",
+          "description": "Number of targets where monitoring session undeployment succeeded"
+        },
+        "numTargetsUndeployedFailure": {
+          "type": "integer",
+          "description": "Number of targets where monitoring session undeployment failed"
+        },
+        "numVseriesUndeployedSuccess": {
+          "type": "integer",
+          "description": "Number of V Series nodes where monitoring session undeployment succeeded"
+        },
+        "numVseriesUndeployedFailure": {
+          "type": "integer",
+          "description": "Number of V Series nodes where monitoring session undeployment failed"
+        },
+        "numberOfHealthyVSeriesMonitoringSessions":{
+          "type": "integer",
+          "description": "Number of V Series nodes where monitoring session is healthy"
+        },
+        "totalVseriesMonitoringSessions":{
+          "type": "integer",
+          "description": "Number of V Series nodes where monitoring session is deployed"
+        },
+        "numberOfHealthyTargetMonitoringSessions":{
+          "type": "integer",
+          "description": "Number of targets where monitoring session is healthy"
+        },
+        "totalTargetMonitoringSessions":{
+          "type": "integer",
+          "description": "Number of targets where monitoring session is deployed"
+        },
+        "targetsDeployedSuccess": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeploymentSuccessReport"
+          },
+          "description": "Details of the targets where deployment succeeded"
+        },
+        "targetsDeployedFailure": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeploymentFailureReport"
+          },
+          "description": "Details of the targets where deployment failed"
+        },
+        "vseriesDeployedSuccess": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeploymentSuccessReport"
+          },
+          "description": "Details of the V Series nodes where deployment succeeded"
+        },
+        "vseriesDeployedFailure": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeploymentFailureReport"
+          },
+          "description": "Details of the V Series nodes where deployment failed"
+        },
+        "targetsUndeployedSuccess": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeploymentSuccessReport"
+          },
+          "description": "Details of the targets where undeployment succeeded"
+        },
+        "targetsUndeployedFailure": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeploymentFailureReport"
+          },
+          "description": "Details of the targets where undeployment failed"
+        },
+        "vseriesUndeployedSuccess": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeploymentSuccessReport"
+          },
+          "description": "Details of the V Series nodes where undeployment succeeded"
+        },
+        "vseriesUndeployedFailure": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeploymentFailureReport"
+          },
+          "description": "Details of the V Series nodes where undeployment failed"
+        },
+        "targetsAndNodesSynced": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeploymentSuccessReport"
+          },
+          "description": "Details of the targets and fabric nodes affected due to background synchronization process"
+        },
+        "numOfUnlicensedNics": {
+          "type": "integer",
+          "description": "Number of Unlicensed vNics"
+        },
+        "numOfUnlicensedTargets": {
+          "type": "integer",
+          "description": "Number of Unlicensed targets"
+        },
+        "monSessionUnlicensedNics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MonitoringSessionUnlicensedReport"
+          },
+          "description": "Details of the unlicensed vNics for this monitoring session"
+        },
+        "failureMessages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Any failure messages apart from individual target and node failures"
+        }
+      }
+    },
+    "ConnIds": {
+      "id": "#/definitions/ConnIds",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "connIds"
+      ],
+      "properties": {
+        "connIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of connection Id"
+        }
+      }
+    },
+    "MonitoringSessionStatus": {
+      "id": "#/definitions/MonitoringSessionStatus",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Overall monitoring session status",
+      "since": "v3.5",
+      "required": [
+        "alias",
+        "monitoringSessionId",
+        "status"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Monitoring session alias"
+        },
+        "monitoringSessionId": {
+          "type": "string",
+          "description": "Monitoring session id"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "notDeployed",
+            "deploying",
+            "undeploying",
+            "deploymentSuccess",
+            "deploymentFailure",
+            "deploymentPartialSuccess",
+            "deploymentBlocked",
+            "undeploymentFailure",
+            "undeploymentBlocked",
+            "undeploymentPartialSuccess"
+          ],
+          "description": "Status of the monitoring session deployment"
+        },
+        "monitoringSessionStatusByConnection": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MonitoringSessionStatusByConnection"
+          },
+          "description": "Monitoring session status for a connection"
+        }
+      }
+    },
+    "MonitoringSessionStatusQueryResponse": {
+      "id": "#/definitions/MonitoringSessionQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "monitoringSessionStatus"
+      ],
+      "properties": {
+        "monitoringSessionStatus": {
+          "$ref": "#/definitions/MonitoringSessionStatus"
+        }
+      }
+    },
+    "MonitoringSessionsStatusQueryResponse": {
+      "id": "#/definitions/MonitoringSessionsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "monitoringSessionsStatus"
+      ],
+      "properties": {
+        "monitoringSessionsStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MonitoringSessionStatus"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "MonitoringSessionMaxUpdateBatchSizeQueryResponse": {
+      "id": "#/definitions/MonitoringSessionMaxUpdateBatchSizeQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "maxUpdateBatchSize"
+      ],
+      "properties": {
+        "maxUpdateBatchSize": {
+          "type": "integer",
+          "readOnly": true,
+          "description": "Maximum batch size for monitoring session updates"
+        }
+      }
+    },
+    "MonitoringSessionGvTap": {
+      "id": "#/definitions/MonitoringSessionGvTap",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Monitoring session [marked for deprecation]",
+      "since": "v5.10",
+      "required": [
+        "connIds"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Monitoring session alias"
+        },
+        "id": {
+          "type": "string",
+          "description": "Monitoring session id"
+        },
+        "description": {
+          "type": "string",
+          "description": "monitoring session description"
+        },
+        "creationTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "monitoring session creation time"
+        },
+        "connIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of connection Id which has the monitoring session"
+        },
+        "gvTapFilteringEnabled": {
+          "type": "boolean",
+          "description":"indicates prefiltering enabled or not."
+
+        },
+        "gvTapTrafficPolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "GvTapTrafficPolicies.json#/definitions/UctVTrafficPolicy"
+          }
+        },
+        "gvTapPrecryptionTrafficPolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "gvTapPrecryption.json#/definitions/UctVPrecryptionTrafficPolicy"
+          }
+        },
+        "gvTapMirrorTrafficEnabled": {
+          "type": "boolean",
+          "description": "indicates mirror traffic is enabled or not for gvtap deployments"
+        },
+        "secureTunnelOnMirrorEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description" : "Indicated Secure Tunnel on Mirror Enabled"
+        },
+        "secureTunnelOnPrecryptionEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicated Secure Tunnel on Precryption Enabled"
+        },
+        "distributeTraffic": {
+          "type": "boolean",
+          "default": true,
+          "description": "Indicates Traffic Distribution enabled or not"
+        },
+        "monitoringDomainId": {
+          "type": "string",
+          "description": "Monitoring domain Id"
+        },
+        "platform": {
+          "type": "string",
+          "enum": [
+            "vmware"
+          ],
+          "description": "Platform - one of [vmware]"
+        },
+        "inclusionMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "flowMaps.json#/definitions/VmMap"
+          }
+        },
+        "exclusionMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "flowMaps.json#/definitions/VmMap"
+          }
+        },
+        "trafficMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "flowMaps.json#/definitions/VmTrafficMap"
+          }
+        },
+        "applications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Application"
+          }
+        },
+        "tunnels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunnelSpec"
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "vseriesNodeIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of V Series Node Ids. The monitoring session will be deployed in the V Series Nodes that are specified."
+        },
+        "healthState": {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "common.json#/definitions/EntityTrafficHealthStateReasons"
+        },
+        "status": {
+          "$ref": "common.json#/definitions/EntityOverallHealthStatus"
+        }
+      }
+    },
+    "SimpleMonitoringSessionGvTap": {
+      "id": "#/definitions/SimpleMonitoringSessionGvTap",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Monitoring session for post and patch [marked for deprecation]",
+      "since": "v5.10",
+      "properties": {
+        "connIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of connection Id which has the monitoring session"
+        },
+        "id": {
+          "type": "string",
+          "description": "Monitoring session id"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Monitoring session alias"
+        },
+        "description": {
+          "type": "string",
+          "description": "monitoring session description"
+        },
+        "secureTunnelOnMirrorEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description" : "Indicated Secure Tunnel on Mirror Enabled"
+        },
+        "secureTunnelOnPrecryptionEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicated Secure Tunnel on Precryption Enabled"
+        },
+        "distributeTraffic": {
+          "type": "boolean",
+          "default": true,
+          "description": "Indicates Traffic Distribution enabled or not"
+        },
+        "gvTapFilteringEnabled": {
+          "type": "boolean",
+          "description": "indicates prefiltering enabled or not"
+        },
+        "gvTapTrafficPolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "GvTapTrafficPolicies.json#/definitions/UctVTrafficPolicy"
+          }
+        },
+        "gvTapPrecryptionTrafficPolicy": {
+          "type": "array",
+          "items": {
+            "$ref": "gvTapPrecryption.json#/definitions/UctVPrecryptionTrafficPolicy"
+          }
+        },
+        "gvtapMirrorTrafficEnabled": {
+          "type": "boolean",
+          "description": "indicates mirror traffic is enabled or not for gvtap deployments"
+        }
+      }
+    },
+    "SplitMonitoringSessionsGvTap": {
+      "id": "#/definitions/SplitMonitoringSessionsGvTap",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Monitoring sessions after split",
+      "since": "v5.5",
+      "properties": {
+        "monitoringSessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SimpleMonitoringSessionGvTap"
+          },
+          "description": "List of connection Id which has the monitoring session"
+        }
+      }
+    },
+    "MonitoringSessionGvTapQueryResponse": {
+      "id": "#/definitions/MonitoringSessionGvTapQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "monitoringSession"
+      ],
+      "properties": {
+        "monitoringSession": {
+          "$ref": "#/definitions/MonitoringSessionGvTap"
+        }
+      }
+    },
+    "MonitoringSessionsGvTapQueryResponse": {
+      "id": "#/definitions/MonitoringSessionsGvTapQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "monitoringSessions"
+      ],
+      "properties": {
+        "monitoringSessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MonitoringSessionGvTap"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "MonitoringSessionTunnelEndpointStateChangeRequest": {
+      "id": "#/definitions/MonitoringSessionTunnelEndpointStateChangeRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "remoteIpAddresses",
+        "adminState"
+      ],
+      "properties": {
+        "remoteIpAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "IP Address of tools that need to be enabled/disabled"
+        },
+        "adminState": {
+          "enum": ["enabled" , "disabled"],
+          "type": "string",
+          "description": "Desired state of tunnel endpoints. one of ['enabled', 'disabled']"
+        }
+      }
+    },
+    "MonitoringSessionTunnelEndpointStateChangeSimpleRequest": {
+      "id": "#/definitions/MonitoringSessionTunnelEndpointStateChangeSimpleRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "adminState"
+      ],
+      "properties": {
+        "adminState": {
+          "enum": ["enabled" , "disabled"],
+          "type": "string",
+          "description": "Desired state of tunnel endpoints. one of ['enabled', 'disabled']"
+        }
+      }
+    }
+  }
+}

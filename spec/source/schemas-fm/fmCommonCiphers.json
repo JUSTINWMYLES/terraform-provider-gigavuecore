@@ -1,0 +1,46 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmCommonCiphers.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM TLS Common Ciphers schema",
+  "definitions": {
+    "FmCommonTlsCiphersByProtocol": {
+      "id": "#/definitions/FmCommonTlsCiphersByProtocol",
+      "type": "object",
+      "description": "Intersection of supported TLS ciphers by protocol variant within a single device mode.",
+      "additionalProperties": false,
+      "properties": {
+        "TLS1_2": {
+          "type": "array",
+          "description": "Common TLS 1.2 cipher suite names for this mode.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "TLS1_3": {
+          "type": "array",
+          "description": "Common TLS 1.3 cipher suite names for this mode.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "FmCommonTlsCiphers": {
+      "id": "#/definitions/FmCommonTlsCiphers",
+      "type": "object",
+      "description": "Common (intersection) TLS ciphers grouped by device mode.",
+      "properties": {
+        "classic": {
+          "$ref": "#/definitions/FmCommonTlsCiphersByProtocol"
+        },
+        "FIPS": {
+          "$ref": "#/definitions/FmCommonTlsCiphersByProtocol"
+        },
+        "crypto": {
+          "$ref": "#/definitions/FmCommonTlsCiphersByProtocol"
+        }
+      }
+    }
+  }
+}

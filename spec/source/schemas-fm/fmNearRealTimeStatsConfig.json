@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://gigamon.com/schemas-fm/fmNearRealTimeStatsConfig.json",
+  "description": "Schema for FMNearRealTimeCachedStatistics and its response wrappers.",
+  "definitions": {
+    "FMNearRealTimeCachedStatistics": {
+      "id": "#/definitions/FMNearRealTimeCachedStatistics",
+      "type": "object",
+      "properties": {
+        "componentType": {
+          "type": "string",
+          "enum": [
+            "PORT",
+            "MAP",
+            "GS_GROUP",
+            "VPORT",
+            "GSOP",
+            "METADTA_EXPORTER",
+            "METDATA_CACHE",
+            "SAPF",
+            "IP_INTERFACE",
+            "FABRIC_MAP",
+            "EXPORTER",
+            "LISTENER",
+            "FLOW_FILTERING",
+            "INLINE_NETWORK",
+            "INLINE_TOOL",
+            "INLINE_TOOL_GROUP",
+            "INLINE_NETWORK_LAG",
+            "ICAP_SERVER",
+            "ICAP_SESSION_SUMMARY",
+            "IP_INTERFACE_PORT",
+            "EXPORTER_SESSION",
+            "LISTENER_SESSION",
+            "L2GRE_CIRCUIT_TUNNEL",
+            "VXLAN_CIRCUIT_TUNNEL",
+            "PGLB"
+          ]
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "string"
+        },
+        "nrtAlias": {
+          "type": "string"
+        },
+        "statsData": {
+          "type": "object"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        },
+        "trafficHealthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "FMNearRealTimeCachedStatisticsListQueryResponse": {
+      "id": "#/definitions/FMNearRealTimeCachedStatisticsListQueryResponse",
+      "type": "object",
+      "properties": {
+        "fmNearRealTimeCachedStatisticsList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FMNearRealTimeCachedStatistics"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FMNearRealTimeCachedStatisticsSingleQueryResponse": {
+      "id": "#/definitions/FMNearRealTimeCachedStatisticsSingleQueryResponse",
+      "type": "object",
+      "properties": {
+        "fmNearRealTimeCachedStatistics": {
+          "$ref": "#/definitions/FMNearRealTimeCachedStatistics"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FMNearRealTimeStatisticsConfigResult": {
+      "id": "#/definitions/FMNearRealTimeStatisticsConfigResult",
+      "type": "object",
+      "properties": {
+        "failedConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NRTComponentConfigResult"
+          }
+        }
+      }
+    },
+    "NRTComponentConfigResult": {
+      "id": "#/definitions/NRTComponentConfigResult",
+      "type": "object",
+      "properties": {
+      }
+    }
+  }
+}

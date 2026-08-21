@@ -1,0 +1,854 @@
+{
+  "id": "http://gigamon.com/schemas-fm/clusterConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Cluster Configuration schema",
+  "definitions": {
+    "ClusterParams": {
+      "id": "#/definitions/ClusterParams",
+      "type": "object",
+      "description": "provides clustering parameters",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "cluster id"
+        },
+        "sharedSecret": {
+          "type": "string",
+          "description": "shared-secret used for message authentication, length 16 to 64"
+        },
+        "clusterVip": {
+          "type": "string",
+          "description": "cluster leader virtual ip address"
+        },
+        "clusterVipMaskLen": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32,
+          "description": "cluster leader virtual ip mask length, valid and required when 'clusterVip' is specified"
+        },
+        "stackingMode": {
+          "type": "string",
+          "description": "stacking mode"
+        },
+        "ipProtocol": {
+          "type": "string",
+          "enum": [
+            "ipv4",
+            "ipv6"
+          ],
+          "description": "Supported since 6.2"
+        }
+      }
+    },
+    "MasterDiscovery": {
+      "deprecated": true,
+      "id": "#/definitions/MasterDiscovery",
+      "type": "object",
+      "description": "provides master discovery information. (deprecated: use leaderDiscovery)",
+      "properties": {
+        "autoDiscovery": {
+          "type": "boolean",
+          "default": true,
+          "description": "Cluster auto-discovery. Nodes with auto-discovery disabled cannot become master"
+        },
+        "primaryIp": {
+          "type": "string",
+          "description": "Master primary ip address. Only valid if 'autoDiscovery' is disabled"
+        },
+        "secondaryIp": {
+          "type": "string",
+          "description": "Master secondary ip address. Only valid if 'autoDiscovery' is disabled"
+        },
+        "primaryPort": {
+          "type": "integer",
+          "default": 60102,
+          "maximum": 65535,
+          "description": "Master primary port. Only valid if 'autoDiscovery' is disabled"
+        },
+        "secondaryPort": {
+          "type": "integer",
+          "default": 60102,
+          "maximum": 65535,
+          "description": "Master secondary port. Only valid if 'autoDiscovery' is disabled"
+        },
+        "staticDiscoveryTimeout": {
+          "type": "integer",
+          "default": 15,
+          "minimum": 10,
+          "maximum": 120,
+          "description": "Set the cluster master connection timeout in seconds. Maps to CLI 'connectTimeout'. Controls how long 'primaryIp' should be tried before trying to connect to 'secondaryIp' and vice versa. Only valid if 'autoDiscovery' is disabled"
+        },
+        "clusterFormationTimeout": {
+          "type": "integer",
+          "default": 180,
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "maximum expected time for cluster startup in seconds"
+        }
+      }
+    },
+    "LeaderDiscovery": {
+      "id": "#/definitions/LeaderDiscovery",
+      "type": "object",
+      "description": "provides leader discovery information",
+      "properties": {
+        "autoDiscovery": {
+          "type": "boolean",
+          "default": true,
+          "description": "Cluster auto-discovery. Nodes with auto-discovery disabled cannot become leader"
+        },
+        "primaryIp": {
+          "type": "string",
+          "description": "Leader primary ip address. Only valid if 'autoDiscovery' is disabled"
+        },
+        "secondaryIp": {
+          "type": "string",
+          "description": "Leader secondary ip address. Only valid if 'autoDiscovery' is disabled"
+        },
+        "primaryPort": {
+          "type": "integer",
+          "default": 60102,
+          "maximum": 65535,
+          "description": "Leader primary port. Only valid if 'autoDiscovery' is disabled"
+        },
+        "secondaryPort": {
+          "type": "integer",
+          "default": 60102,
+          "maximum": 65535,
+          "description": "Leader secondary port. Only valid if 'autoDiscovery' is disabled"
+        },
+        "staticDiscoveryTimeout": {
+          "type": "integer",
+          "default": 15,
+          "minimum": 10,
+          "maximum": 120,
+          "description": "Set the cluster leader connection timeout in seconds. Maps to CLI 'connectTimeout'. Controls how long 'primaryIp' should be tried before trying to connect to 'secondaryIp' and vice versa. Only valid if 'autoDiscovery' is disabled"
+        },
+        "clusterFormationTimeout": {
+          "type": "integer",
+          "default": 180,
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "maximum expected time for cluster startup in seconds"
+        }
+      }
+    },
+    "ClusterMembers": {
+      "id": "#/definitions/ClusterMembers",
+      "type": "object",
+      "description": "Retrieves the cluster members",
+      "properties": {
+        "boxId": {
+          "type": "integer",
+          "description": "box id of the cluster member"
+        },
+        "clusterNodeId": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "cluster node id"
+        },
+        "mgmtAddress": {
+          "type": "string",
+          "description": "device management address"
+        },
+        "hostId": {
+          "type": "string",
+          "description": "host id"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "host name of the member"
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "cluster name"
+        },
+        "serialNumber": {
+          "type": "string",
+          "description": "unique serial number for node chassis"
+        },
+        "nodeClusterRole": {
+          "deprecated": true,
+          "type": "string",
+          "enum": [
+            "standalone",
+            "master",
+            "standby",
+            "normal",
+            "unknown"
+          ],
+          "default": "standalone",
+          "description": "standalone: not a member of any cluster; master: cluster master; standby: stand-by master; normal: non-master member; unknown: error, cannot find master. (deprecated: use nodeClusterRoleAlias)"
+        },
+        "nodeClusterRoleAlias": {
+          "type": "string",
+          "enum": [
+            "standalone",
+            "leader",
+            "standby",
+            "normal",
+            "unknown"
+          ],
+          "default": "standalone",
+          "description": "standalone: not a member of any cluster; leader: cluster leader; standby: stand-by leader; normal: non-leader member; unknown: error, cannot find leader"
+        },
+        "nodeClusterState": {
+          "type": "string",
+          "enum": [
+            "init",
+            "searching",
+            "online",
+            "creating",
+            "waiting",
+            "joining",
+            "leaving",
+            "joinSync",
+            "failed",
+            "removed",
+            "regroup",
+            "unknown"
+          ],
+          "description": "Operational status of the cluster member"
+        },
+        "operStatus": {
+          "type": "string",
+          "enum": [
+            "operational",
+            "safe",
+            "limited"
+          ],
+          "description": "'operational': fully configurable; 'safe': no configuration possible; 'limited': limited configuration possible"
+        },
+        "model": {
+          "type": "string",
+          "description": "Device model"
+        },
+        "clusterIntf": {
+          "type": "string",
+          "description": "cluster service interface"
+        },
+        "vipIntf": {
+          "type": "string",
+          "description": "cluster master interface"
+        },
+        "masterPreference": {
+          "deprecated": true,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "master election preference rank. (deprecated: use leaderPreference)"
+        },
+        "leaderPreference": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "leader election preference rank"
+        },
+        "masterDiscovery": {
+          "$ref": "#/definitions/MasterDiscovery"
+        },
+        "leaderDiscovery": {
+          "$ref": "#/definitions/LeaderDiscovery"
+        },
+        "bootTime": {
+          "type": "string",
+          "description": "the time node booted up. In ISO-8601 date format 'yyyy-MM-dd'T'HH:mm:ssZ'"
+        },
+        "ccSyncStatus": {
+          "type": "string",
+          "description": "CC1/CC2 dynamic sync status"
+        },
+        "swVersion": {
+          "type": "string",
+          "description": "Device software version"
+        },
+        "swBuildNumber": {
+          "type": "string",
+          "description": "Device software build number"
+        },
+        "internalAddress": {
+          "type": "string",
+          "description": "node internal address"
+        },
+        "internalPort": {
+          "type": "integer",
+          "description": "node internal port"
+        },
+        "externalAddress": {
+          "type": "string",
+          "description": "node external address"
+        },
+        "recvHbFrom": {
+          "type": "integer",
+          "description": "node id from which heartbeats received"
+        },
+        "sendHbTo": {
+          "type": "integer",
+          "description": "node id to which heartbeats sent"
+        },
+        "globalNodeId": {
+          "type": "string",
+          "description": "global node id"
+        }
+      }
+    },
+    "ClusterConfigState": {
+      "id": "#/definitions/ClusterConfigState",
+      "type": "object",
+      "description": "Retrieve cluster config and state details",
+      "since": "FM 5.2",
+      "properties": {
+        "clusterEnabled": {
+          "type": "boolean",
+          "description": "cluster enable or disable"
+        },
+        "clusterParams": {
+          "$ref": "#/definitions/ClusterParams"
+        },
+        "localClusterRole": {
+          "deprecated": true,
+          "type": "string",
+          "enum": [
+            "standalone",
+            "master",
+            "standby",
+            "normal",
+            "unknown"
+          ],
+          "default": "standalone",
+          "description": "standalone: not a member of any cluster; master: cluster master; standby: stand-by master; normal: non-master member; unknown: error, cannot find master. (deprecated: use localClusterRoleAlias)"
+        },
+        "localClusterRoleAlias": {
+          "type": "string",
+          "enum": [
+            "standalone",
+            "leader",
+            "standby",
+            "normal",
+            "unknown"
+          ],
+          "default": "standalone",
+          "description": "standalone: not a member of any cluster; leader: cluster leader; standby: stand-by leader; normal: non-leader member; unknown: error, cannot find leader"
+        },
+        "localclusterState": {
+          "type": "string",
+          "enum": [
+            "init",
+            "searching",
+            "online",
+            "creating",
+            "waiting",
+            "joining",
+            "leaving",
+            "joinSync",
+            "failed",
+            "removed",
+            "regroup",
+            "unknown"
+          ],
+          "description": "operational status of the cluster member"
+        },
+        "masterAddress": {
+          "deprecated": true,
+          "type": "string",
+          "description": "cluster master management address. (deprecated: use leaderAddress)"
+        },
+        "leaderAddress": {
+          "type": "string",
+          "description": "cluster leader management address"
+        },
+        "clusterMembers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterMembers"
+          }
+        },
+        "clusterMasterBoxId": {
+          "deprecated": true,
+          "type": "integer",
+          "description": "cluster master box id. (deprecated: use clusterLeaderBoxId)"
+        },
+        "clusterLeaderBoxId": {
+          "type": "integer",
+          "description": "cluster leader box id"
+        },
+        "globalClusterId": {
+          "type": "string",
+          "description": "global cluster id"
+        }
+      }
+    },
+    "ClusterMemberSpec": {
+      "id": "#/definitions/ClusterMemberSpec",
+      "type": "object",
+      "since": "FM 5.2",
+      "properties": {
+        "mgmtAddress": {
+          "type": "string",
+          "description": "Management Address"
+        },
+        "boxId": {
+          "type": "integer",
+          "description": "box id of the cluster member"
+        },
+        "masterPreference": {
+          "deprecated": true,
+          "type": "integer",
+          "description": "cluster master preference. Larger value means more preferred, set 1-9 to exclude mastership. (deprecated: use leaderPreference)"
+        },
+        "leaderPreference": {
+          "type": "integer",
+          "description": "cluster leader preference. Larger value means more preferred, set 1-9 to exclude leadership"
+        },
+        "clusterIntf": {
+          "type": "string",
+          "description": "cluster service interface"
+        },
+        "vipIntf": {
+          "type": "string",
+          "description": "cluster master interface"
+        },
+        "clusterPort": {
+          "type": "integer",
+          "description": "cluster service port"
+        },
+        "masterDiscovery": {
+          "$ref": "#/definitions/MasterDiscovery"
+        },
+        "leaderDiscovery": {
+          "$ref": "#/definitions/LeaderDiscovery"
+        }
+      }
+    },
+    "ClusterMembersBulkSpec": {
+      "id": "#/definitions/ClusterMembersBulkSpec",
+      "type": "object",
+      "description": "if bulk is true, then more than one members can be added to the cluster otherwise only one member can be added",
+      "since": "FM 5.2",
+      "properties": {
+        "clusterMemberSpecs": {
+          "$ref": "#/definitions/ClusterMemberSpecs"
+        }
+      }
+    },
+    "ClusterMemberSpecs": {
+      "id": "#/definitions/ClusterMemberSpecs",
+      "type": "array",
+      "minLength": 1,
+      "maxLength": 64,
+      "items": {
+        "$ref": "#/definitions/ClusterMemberSpec"
+      }
+    },
+    "EditClusterMemberSpecs": {
+      "id": "#/definitions/EditClusterMemberSpecs",
+      "type": "object",
+      "since": "FM 5.2",
+      "properties": {
+        "masterPreference": {
+          "deprecated": true,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "master election preference rank, 1 to 9 to exclude mastership. (deprecated: use leaderPreference)"
+        },
+        "leaderPreference": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "leader election preference rank, 1 to 9 to exclude leadership"
+        }
+      }
+    },
+    "CreateClusterConfigSpec": {
+      "id": "#/definitions/CreateClusterConfigSpec",
+      "type": "object",
+      "since": "FM 5.2",
+      "properties": {
+        "clusterType": {
+          "type": "string",
+          "description": "Type of the cluster eg. oob. It cannot be null"
+        },
+        "clusterParams": {
+          "$ref": "#/definitions/ClusterParams"
+        },
+        "clusterMemberSpecs": {
+          "$ref": "#/definitions/ClusterMemberSpecs"
+        },
+        "seedNodeMgmtAddress": {
+          "type": "string",
+          "description": "seed node management address"
+        }
+      }
+    },
+    "ClusterConfigSwitchIPprotocolSpec": {
+      "id": "#/definitions/ClusterConfigSwitchIPprotocolSpec",
+      "type": "object",
+      "since": "FM 6.2",
+      "properties": {
+        "clusterVIP": {
+          "type": "string",
+          "description": "Cluster VIP"
+        },
+        "clusterVipMaskLen": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 64,
+          "description": "cluster leader virtual ip mask length, valid and required when 'clusterVip' is specified"
+        },
+        "clusterPrimaryIp": {
+          "type": "string",
+          "description": "Cluster primary IP"
+        },
+        "clusterSecondaryIp": {
+          "type": "string",
+          "description": "Cluster secondary ip"
+        },
+        "ipProtocol": {
+          "type": "string",
+          "enum": [
+            "ipv4",
+            "ipv6"
+          ],
+          "description": "ip protocol"
+        }
+      }
+    },
+    "ClusterNodesRebootSpec": {
+      "id": "#/definitions/ClusterNodesRebootSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.1",
+      "properties": {
+        "clusterIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "ids of clusters to reboot. Every node in these clusters will be rebooted"
+        },
+        "nodeIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "ids of individual nodes to reboot"
+        },
+        "skipNotReachableDevices": {
+          "type": "boolean",
+          "description": "indicates whether not-reachable nodes(if any) should be skipped and continue with reboot operation"
+        }
+      }
+    },
+    "ClusterNodesRebootResult": {
+      "id": "#/definitions/ClusterNodesRebootResult",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.1",
+      "required": [
+        "results"
+      ],
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterNodeRebootResult"
+          },
+          "description": "lists image files to be applied to the node"
+        }
+      }
+    },
+    "ClusterNodeRebootResult": {
+      "id": "#/definitions/ClusterNodeRebootResult",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.1",
+      "required": [
+        "nodeId",
+        "outcome"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "id of the target device"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "success",
+            "unreachable",
+            "responseTimeout"
+          ],
+          "description": "result of the device image upgrade operation. 'unreachable' - unable to send 'reboot' command; 'responseTimeout' - timed out waiting for device to respond after reboot"
+        },
+        "description": {
+          "type": "string",
+          "description": "descriptive message of the operation outcome"
+        }
+      }
+    },
+    "ClusterNodesImageUpgradeSpec": {
+      "id": "#/definitions/ClusterNodesImageUpgradeSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.1",
+      "required": [
+        "clusterIds",
+        "imageServer",
+        "imageFileSpecs",
+        "reboot"
+      ],
+      "properties": {
+        "imageServer": {
+          "type": "string",
+          "minLength": 1,
+          "description": "alias of an image file server. has to reference one of the existing image file server profiles"
+        },
+        "clusterIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "ids of clusters to upgrade image for. Every node in these clusters is upgraded"
+        },
+        "nodeIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "ids of individual nodes to upgrade image for"
+        },
+        "imageFileSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterNodeImageUpgradeFileSpec"
+          },
+          "description": "lists image files to use"
+        },
+        "reboot": {
+          "type": "boolean",
+          "description": "indicates whether nodes should reboot after image upgrade"
+        },
+        "skipNotReachableDevices": {
+          "type": "boolean",
+          "description": "indicates whether not-reachable nodes(if any) should be skipped and continue with image upgrade"
+        }
+      }
+    },
+    "ClusterNodeImageUpgradeFileSpec": {
+      "id": "#/definitions/ClusterNodeImageUpgradeFileSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.1",
+      "required": [
+        "filePath",
+        "deviceModel"
+      ],
+      "properties": {
+        "filePath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "image file path on the image server"
+        },
+        "deviceModel": {
+          "$ref": "../schemas-common/common.json#/definitions/GigaDeviceModel",
+          "description": "target device model to apply this image applies for"
+        },
+        "fileType": {
+          "type": "string",
+          "enum": [
+            "image",
+            "web",
+            "gigasmart"
+          ],
+          "default": "image",
+          "description": "image file type. 'web' and 'gigasmart' are only applicable for G-series devices"
+        },
+        "updateUboot": {
+          "type": "boolean",
+          "default": false,
+          "description": "only applicable for H-series nodes. indicates whether the uboot is to be upgraded as part of the image upgrade"
+        },
+        "targetSlot": {
+          "type": "string",
+          "enum": [
+            "2",
+            "3"
+          ],
+          "description": "only applicable for 'gigasmart' images for 2404 G-series devices. Indicates the target GS card to upgrade"
+        }
+      }
+    },
+    "ClusterNodesImageUpgradeResult": {
+      "id": "#/definitions/ClusterNodesImageUpgradeResult",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.1",
+      "required": [
+        "results"
+      ],
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterNodeImageUpgradeResult"
+          },
+          "description": "by-divide breakdown of image upgrade results"
+        }
+      }
+    },
+    "ClusterNodeImageUpgradeResult": {
+      "id": "#/definitions/ClusterNodeImageUpgradeResult",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.1",
+      "required": [
+        "nodeId",
+        "outcome"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "id of the target device"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "success",
+            "failed",
+            "interrupted"
+          ],
+          "description": "result of the device image upgrade operation"
+        },
+        "description": {
+          "type": "string",
+          "description": "descriptive message of the operation outcome"
+        }
+      }
+    },
+    "NodeBootSpec": {
+      "id": "#/definitions/NodeBootSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node Boot Spec definition",
+      "since": "FM 3.1",
+      "properties": {
+        "bootManagerPwd": {
+          "type": "string",
+          "description": "Password for access to the boot manager. The boot manager is available during system startup when connected over the Console port"
+        },
+        "fallbackRebootEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "When this option is enabled, the H Series node will fall back and boot the other image if the selected image does not load correctly"
+        },
+        "bootImage": {
+          "type": "string",
+          "enum": [
+            "p1",
+            "p2",
+            "next"
+          ],
+          "default": "next",
+          "description": "Specifies the image to load the next time the system is booted. Can be either one of the two available partitions by number or the next image available after the previously booted one"
+        }
+      }
+    },
+    "GigaGsUpgradeClusterSpec": {
+      "id": "#/definitions/GigaGsUpgradeClusterSpec",
+      "type": "object",
+      "since": "FM 5.10",
+      "required": [
+        "clusterId",
+        "imageFileSpec"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "clusterId"
+        },
+        "imageFileSpec": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsUpgradeImageFileSpec"
+          },
+          "description": "list of upgrade spec for the cluster"
+        }
+      }
+    },
+    "GsUpgradeImageFileSpec": {
+      "id": "#/definitions/GsUpgradeImageFileSpec",
+      "type": "object",
+      "since": "FM 5.10",
+      "required": [
+        "productCode",
+        "filePath"
+      ],
+      "properties": {
+        "productCode": {
+          "type": "string",
+          "minLength": 1,
+          "description": "product code of gs card to be upgraded"
+        },
+        "filePath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "path of the image file"
+        },
+        "boxId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "boxId of the gs card to be upgraded"
+        },
+        "targetSlots": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 0
+          },
+          "description": "slotIds of the box to be to upgraded"
+        }
+      }
+    },
+    "ClusterGigasmartImageUpgradeSpec": {
+      "id": "#/definitions/ClusterGigasmartImageUpgradeSpec",
+      "type": "object",
+      "since": "FM 5.10",
+      "required": [
+        "imageServer",
+        "taskName",
+        "clusterSpecs"
+      ],
+      "properties": {
+        "imageServer": {
+          "type": "string",
+          "minLength": 1,
+          "description": "alias of an image file server. it has to reference one of the existing image file server profiles"
+        },
+        "taskName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "user provided task name for the image upgrade"
+        },
+        "clusterSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaGsUpgradeClusterSpec"
+          },
+          "description": "Cluster wise gs image spec"
+        },
+        "skipNotReachableDevices": {
+          "type": "boolean",
+          "description": "indicates whether the selected GigaSMART cards which belong to not-reachable nodes(if any) should be skipped and continue with image upgrade"
+        }
+      }
+    }
+  }
+}

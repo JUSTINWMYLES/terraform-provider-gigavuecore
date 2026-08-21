@@ -1,0 +1,87 @@
+{
+  "id": "http://gigamon.com/schemas-vmm/cloudMonitoringSessionEndpointInfo.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Monitoring Session Endpoint Info schema",
+  "definitions": {
+    "MonitoringSessionEndpointIfaceMappings": {
+      "id": "#/definitions/MonitoringSessionEndpointIfaceMappings",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Monitoring Session Endpoint Info",
+      "since": "v5.13.01",
+      "required": [
+        "monitoringSessionId",
+        "vseriesEndpointIfaceMappings"
+      ],
+      "properties": {
+        "monitoringSessionId": {
+          "type": "string"
+        },
+        "vseriesEndpointIfaceMappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VSeriesEndpointIfaceMappings"
+          }
+        }
+      }
+    },
+    "VSeriesEndpointIfaceMappings": {
+      "id": "#/definitions/VSeriesEndpointIfaceMappings",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Monitoring Session Endpoint Mappings",
+      "since": "v5.13.01",
+      "required": [
+        "vseriesNodeIds",
+        "endpointIfaceMappings"
+      ],
+      "properties": {
+        "vseriesNodeIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of V Series Node Ids"
+        },
+        "endpointIfaceMappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EndpointIfaceMapping"
+          }
+        }
+      }
+    },
+    "EndpointIfaceMapping": {
+      "id": "#/definitions/EndpointIfaceMapping",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Monitoring Session Endpoint Iface Mapping",
+      "since": "v5.13.01",
+      "required": [
+        "endpointId",
+        "iface"
+      ],
+      "properties": {
+        "endpointId": {
+          "type": "string"
+        },
+        "iface": {
+          "type": "string"
+        }
+      }
+    },
+    "MonitoringSessionEndpointIfaceMappingsQueryResponse": {
+      "id": "#/definitions/MonitoringSessionEndpointIfaceMappingsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "monitoringSessionEndpointIfaceMappings"
+      ],
+      "properties": {
+        "monitoringSessionEndpointIfaceMappings": {
+          "$ref": "#/definitions/MonitoringSessionEndpointIfaceMappings"
+        }
+      }
+    }
+  }
+}

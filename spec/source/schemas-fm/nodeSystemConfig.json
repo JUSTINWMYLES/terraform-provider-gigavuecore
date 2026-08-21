@@ -1,0 +1,107 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device System Config Schema",
+  "definitions": {
+    "NodeSystemConfigFile": {
+      "id": "#/definitions/NodeSystemConfigFile",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Node Config file",
+      "required": [
+        "filename"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "File name"
+        },
+        "active": {
+          "type": "boolean",
+          "default": false,
+          "readonly": true,
+          "description": "Is config active"
+        },
+        "modified": {
+          "type": "boolean",
+          "default": false,
+          "readonly": true,
+          "description": "Has unsaved config changes. True: need to save."
+        }
+      }
+    },
+    "ConfigFileSpec": {
+      "id": "#/definitions/ConfigFileSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "source"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "scp",
+            "sftp",
+            "ftp",
+            "tftp",
+            "http",
+            "https"
+          ]
+        },
+        "source": {
+          "$ref": "#/definitions/Source"
+        }
+      }
+    },
+    "Source": {
+      "id": "#/definitions/Source",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 4.7",
+      "required": [
+        "hostname",
+        "path"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "user name to use for server login"
+        },
+        "password": {
+          "type": "string",
+          "description": "password to use for server login"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "server address"
+        },
+        "path": {
+          "type": "string",
+          "description": "configuration file path on server"
+        }
+      }
+    },
+    "NodeSystemConfigFilesQueryResponse": {
+      "id": "#/definitions/NodeSystemConfigFilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "files"
+      ],
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeSystemConfigFile"
+          },
+          "description": "list of the config files"
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

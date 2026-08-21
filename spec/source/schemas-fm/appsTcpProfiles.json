@@ -1,0 +1,71 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsTcpProfiles.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Tcp Profiles schema",
+  "definitions": {
+    "AppsTcpProfilesSpec": {
+      "id": "#/definitions/AppsTcpProfilesSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "keepAliveTimer": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 7200,
+          "default": 7200
+        },
+        "selectiveAck": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "default": "enable"
+        },
+        "synRetries": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 6,
+          "default": 3
+        }
+      }
+    },
+    "AppsTcpProfilesQueryResponse": {
+      "id": "#/definitions/AppsTcpProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsTcpProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsTcpProfilesSpec"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "AppsTcpProfileQueryResponse": {
+      "id": "#/definitions/AppsTcpProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsTcpProfile": {
+          "type": "object",
+          "$ref": "#/definitions/AppsTcpProfilesSpec"
+        }
+      }
+    }
+  }
+}
+
+    

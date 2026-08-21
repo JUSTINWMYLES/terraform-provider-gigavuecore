@@ -1,0 +1,382 @@
+{
+  "id": "http://gigamon.com/schemas-fm/crypto.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "CaListCertificateAddRequest": {
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "CaListQueryResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "caList": {
+          "items": {
+            "$ref": "#/definitions/CertificateDetails"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "CertificateDetails": {
+      "additionalProperties": false,
+      "description": "detailed information about the certificate",
+      "properties": {
+        "comment": {
+          "readOnly": true,
+          "type": "string"
+        },
+        "defaultCert": {
+          "description": "If true, this certificate is the default server identity",
+          "readOnly": true,
+          "type": "boolean"
+        },
+        "issuer": {
+          "$ref": "#/definitions/CertificateDetailsSubject"
+        },
+        "name": {
+          "readOnly": true,
+          "type": "string"
+        },
+        "pem": {
+          "readOnly": true,
+          "type": "string"
+        },
+        "privateKey": {
+          "readOnly": true,
+          "type": "boolean"
+        },
+        "serialNumber": {
+          "description": "lower-case hexadecimal serial number not prefixed with '0x'",
+          "example": "54c51368b14a444076ce31044bbba468",
+          "readOnly": true,
+          "type": "string"
+        },
+        "sha1Fingerprint": {
+          "example": "03f6c06600dfc0d7a504e7dfdfd2c2b9c361f2f8",
+          "readOnly": true,
+          "type": "string"
+        },
+        "signatureAlgorithm": {
+          "example": "sha1WithRSAEncryption",
+          "readOnly": true,
+          "type": "string"
+        },
+        "subject": {
+          "$ref": "#/definitions/CertificateDetailsSubject"
+        },
+        "subjectPublicKeyAlgorithm": {
+          "example": "rsaEncryption",
+          "readOnly": true,
+          "type": "string"
+        },
+        "subjectPublicKeyLength": {
+          "example": 2048,
+          "format": "int32",
+          "readOnly": true,
+          "type": "integer"
+        },
+        "validity": {
+          "$ref": "#/definitions/CertificateDetailsValidity"
+        },
+        "version": {
+          "example": "3",
+          "readOnly": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CertificateDetailsSubject": {
+      "additionalProperties": false,
+      "properties": {
+        "commonName": {
+          "description": "issuer and subject common name (e.g. a domain name)",
+          "example": "gigamon.com",
+          "readOnly": true,
+          "type": "string"
+        },
+        "country": {
+          "description": "two-alphanumeric-character country code",
+          "example": "US",
+          "readOnly": true,
+          "type": "string"
+        },
+        "email": {
+          "example": "admin@gigamon.com",
+          "readOnly": true,
+          "type": "string"
+        },
+        "locality": {
+          "example": "Santa Clara",
+          "readOnly": true,
+          "type": "string"
+        },
+        "orgName": {
+          "example": "Gigamon Inc.",
+          "readOnly": true,
+          "type": "string"
+        },
+        "orgUnit": {
+          "example": "Gigamon Network Visibility Systems",
+          "readOnly": true,
+          "type": "string"
+        },
+        "state": {
+          "description": "state or provence name",
+          "example": "California",
+          "readOnly": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CertificateDetailsValidity": {
+      "additionalProperties": false,
+      "properties": {
+        "notAfter": {
+          "description": "date and time when certificate stops being valid ([rfc3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14))",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        },
+        "notBefore": {
+          "description": "date and time when certificate starts being valid ([rfc3339](https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14))",
+          "format": "date-time",
+          "readOnly": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CertificateEntry": {
+      "additionalProperties": false,
+      "description": "The certificate to be added to the system along with information about the certificate",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/CertificateInfo"
+        },
+        "pem": {
+          "description": "contents of the certificate in pem format",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pem"
+      ],
+      "type": "object"
+    },
+    "CertificateFetchRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/CertificateInfo"
+        },
+        "remoteServer": {
+          "$ref": "../schemas-common/common.json#/definitions/RemoteFileSpec"
+        }
+      },
+      "required": [
+        "info",
+        "remoteServer"
+      ],
+      "type": "object"
+    },
+    "CertificateGenerateRequest": {
+      "properties": {
+        "comment": {
+          "description": "free-text comment about the certificate",
+          "minLength": 1,
+          "type": "string"
+        },
+        "commonName": {
+          "description": "issuer and subject common name (e.g. a domain name)",
+          "minLength": 1,
+          "type": "string"
+        },
+        "country": {
+          "description": "two-alphanumeric-character country code",
+          "example": "US",
+          "pattern": "^[A-Z]{2}$",
+          "type": "string"
+        },
+        "days": {
+          "description": "number of days the certificate should be valid",
+          "example": 360,
+          "format": "int32",
+          "maximum": 7300,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "email": {
+          "example": "admin@gigamon.com",
+          "format": "email",
+          "type": "string"
+        },
+        "keysize": {
+          "description": "size of the private key in bits",
+          "enum": [
+            1024,
+            2048,
+            4096
+          ],
+          "example": 2048,
+          "format": "int32",
+          "type": "integer"
+        },
+        "locality": {
+          "example": "Santa Clara",
+          "minLength": 1,
+          "type": "string"
+        },
+        "name": {
+          "description": "certificate name",
+          "minLength": 1,
+          "type": "string"
+        },
+        "orgName": {
+          "example": "Gigamon Inc.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "orgUnit": {
+          "example": "Gigamon Network Visibility Systems",
+          "type": "string"
+        },
+        "serial": {
+          "description": "lower-case hexadecimal serial number not prefixed with '0x'",
+          "example": "5420ec2eb57663419ff437ff6e1a085d",
+          "pattern": "^[a-f0-9]+$",
+          "type": "string"
+        },
+        "state": {
+          "description": "state or provence name",
+          "example": "California",
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "CertificateInfo": {
+      "additionalProperties": false,
+      "description": "metadata used to describe and access the certificate",
+      "properties": {
+        "comment": {
+          "description": "a short description of the certificate",
+          "type": "string"
+        },
+        "name": {
+          "description": "name of the certificate",
+          "type": "string"
+        },
+        "passphrase": {
+          "description": "used to decrypt pkcs12 and private keys",
+          "format": "password",
+          "type": "string",
+          "writeOnly": true
+        },
+        "type": {
+          "enum": [
+            "privateKey",
+            "certificate",
+            "pkcs12"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "type": "object"
+    },
+    "CertificateMetaEntryUpdateSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "defaultCert": {
+          "default": false,
+          "description": "If true, this certificate will be the default server identity",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "change the name of the certificate to newName",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CertificateQueryResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "certificate": {
+          "$ref": "#/definitions/CertificateDetails"
+        }
+      },
+      "type": "object"
+    },
+    "CertificateRegenerateRequest": {
+      "properties": {
+        "days": {
+          "description": "number of days the certificate should be valid",
+          "example": 360,
+          "format": "int32",
+          "maximum": 7300,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "CertificatesQueryResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "certificates": {
+          "items": {
+            "$ref": "#/definitions/CertificateDetails"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SystemWebHttpsCert": {
+      "additionalProperties": false,
+      "properties": {
+        "defaultCert": {
+          "default": false,
+          "description": "if true, use the default-cert for HTTPS connections",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "name of the certificate to use for HTTPS connections; Only valid if defaultCert is false",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SystemWebQueryResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "httpsCertName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

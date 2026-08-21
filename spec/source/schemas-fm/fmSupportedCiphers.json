@@ -1,0 +1,176 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmSupportedCiphers.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Supported Ciphers schema",
+  "definitions": {
+    "FmCipherDetails": {
+      "id": "#/definitions/FmCipherDetails",
+      "type": "object",
+      "description": "Details of supported TLS ciphers and related parameters.",
+      "properties": {
+        "ciphers": {
+          "type": "array",
+          "description": "List of TLS cipher suites applicable to this protocol variant.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "FmCipherDetailsGroups": {
+      "id": "#/definitions/FmCipherDetails",
+      "type": "object",
+      "description": "Details of supported GROUPS",
+      "properties": {
+        "groups": {
+          "type": "array",
+          "description": "List of TLS groups (for example, elliptic curve groups).",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "FmCipherDetails2": {
+      "id": "#/definitions/FmCipherDetails",
+      "type": "object",
+      "description": "Details of supported SSH ciphers and related parameters.",
+      "properties": {
+        "ciphers": {
+          "type": "array",
+          "description": "List of cipher suites SSH applicable to this protocol variant.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kex": {
+          "type": "array",
+          "description": "List of SSH key exchange algorithms. Used for SSH only.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "macs": {
+          "type": "array",
+          "description": "List of SSH MAC algorithms. Used for SSH only.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hostKeys": {
+          "type": "array",
+          "description": "List of SSH host key algorithms. Used for SSH only.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "FmSupportedTlsCiphers": {
+      "id": "#/definitions/FmSupportedTlsCiphers",
+      "type": "object",
+      "description": "Supported cipher configuration for a given FM cipher mode.",
+      "additionalProperties": false,
+      "properties": {
+        "cipherConfigurations": {
+          "type": "object",
+          "description": "Configuration variants by protocol type (TLS) and protocol variant.",
+          "additionalProperties": false,
+          "properties": {
+            "TLS": {
+              "type": "object",
+              "description": "TLS cipher configurations grouped by mode and TLS protocol version.",
+              "additionalProperties": false,
+              "properties": {
+                "classic": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "TLS1_2": {
+                      "$ref": "#/definitions/FmCipherDetails"
+                    },
+                    "TLS1_3": {
+                      "$ref": "#/definitions/FmCipherDetails"
+                    },
+                    "TLS_GROUPS": {
+                      "$ref": "#/definitions/FmCipherDetailsGroups"
+                    }
+                  }
+                },
+                "crypto": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "TLS1_2": {
+                      "$ref": "#/definitions/FmCipherDetails"
+                    },
+                    "TLS1_3": {
+                      "$ref": "#/definitions/FmCipherDetails"
+                    },
+                    "TLS_GROUPS": {
+                      "$ref": "#/definitions/FmCipherDetailsGroups"
+                    }
+                  }
+                },
+                "fips": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "TLS1_2": {
+                      "$ref": "#/definitions/FmCipherDetails"
+                    },
+                    "TLS1_3": {
+                      "$ref": "#/definitions/FmCipherDetails"
+                    },
+                    "TLS_GROUPS": {
+                      "$ref": "#/definitions/FmCipherDetailsGroups"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "FmSupportedSshCiphers": {
+      "id": "#/definitions/FmSupportedSshCiphers",
+      "type": "object",
+      "description": "Supported cipher configuration for a given FM cipher mode.",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "FM cipher mode this configuration is applicable to (for example, CLASSIC, CRYPTO, FIPS)."
+        },
+        "cipherConfigurations": {
+          "type": "object",
+          "description": "Configuration variants by protocol type (SSH) and protocol variant.",
+          "additionalProperties": false,
+          "properties": {
+            "SSH": {
+              "type": "object",
+              "description": "SSH cipher configurations for server and client.",
+              "additionalProperties": false,
+              "properties": {
+                "server": {
+                  "$ref": "#/definitions/FmCipherDetails2"
+                },
+                "client": {
+                  "$ref": "#/definitions/FmCipherDetails2"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

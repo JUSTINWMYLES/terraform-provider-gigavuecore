@@ -1,0 +1,92 @@
+{
+  "id": "http://gigamon.com/schemas-fm/roles.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Role Management schema",
+  "definitions": {
+    "Role": {
+      "id": "#/definitions/Role",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "scope"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "name"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 8,
+          "description": "description"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RoleScope"
+          }
+        }
+      }
+    },
+    "RoleScope": {
+      "id": "#/definitions/Role",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "actions"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "all",
+              "read",
+              "write"
+            ]
+          }
+        },
+        "hierarchy": {
+          "type": "boolean",
+          "default": "true"
+        }
+      }
+    },
+    "RoleQueryResponse": {
+      "id": "#/definitions/RolesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role"
+      ],
+      "properties": {
+        "role": {
+          "$ref": "#/definitions/Role"
+        }
+      }
+    },
+    "RolesQueryResponse": {
+      "id": "#/definitions/RolesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Role"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

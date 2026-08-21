@@ -1,0 +1,100 @@
+{
+  "id": "http://gigamon.com/schemas-vmm/gvTapPrecryption.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Schema for UCT-V Precryption Traffic Policies",
+  "definitions": {
+    "UctVPrecryptionTrafficPolicy": {
+      "id": "#/definitions/UctVPrecryptionTrafficPolicy",
+      "type": "object",
+      "description": "UCT-V Precryption Traffic Policy",
+      "since": "FM 6.2",
+      "required": [
+        "name",
+        "rules"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique name of this traffic policy. It can be between 1 and 32 characters long and may contain only alpha numeric characters, underscores and dashes.",
+          "readOnly": true
+        },
+        "rules": {
+          "description": "Rules defined for this traffic policy. At least one rule has to be specified and a maximum of 16 rules could be specified.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UctVPrecryptionTrafficPolicyRule"
+          }
+        }
+      }
+    },
+    "UctVPrecryptionTrafficPolicyRule": {
+      "id": "#/definitions/UctVPrecryptionTrafficPolicyRule",
+      "type": "object",
+      "required": [
+        "ruleName",
+        "direction",
+        "action",
+        "priority",
+        "filters"
+      ],
+      "properties": {
+        "ruleName": {
+          "type": "string",
+          "description": "Name of the Precryption traffic policy rule. It can be between 1 and 20 characters long and may contain only alpha numeric characters, underscores and dashes."
+        },
+        "direction": {
+          "type": "string",
+          "description": "Direction associated with the rule.",
+          "enum": [
+            "bidi"
+          ]
+        },
+        "action": {
+          "type": "string",
+          "description": "Action associated with the rule.",
+          "enum": [
+            "pass"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "format": "int32",
+          "default": 1,
+          "description": "Priority of the rule is 1, Cannot be null."
+        },
+        "filters": {
+          "type": "array",
+          "description": "Currently it is a pass-all Rule, no filter is applicable",
+          "items": {
+            "type": "string"
+          },
+          "example": []
+        }
+      }
+    },
+    "GvTapPrecryptionTrafficPolicy": {
+      "id": "#/definitions/GvTapPrecryptionTrafficPolicy",
+      "type": "object",
+      "description": "G-vTAP Precryption Traffic Policy",
+      "since": "FM 6.2",
+      "required": [
+        "name",
+        "rules"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique name of this traffic policy. It can be between 1 and 32 characters long and may contain only alpha numeric characters, underscores and dashes.",
+          "readOnly": true
+        },
+        "rules": {
+          "description": "Rules defined for this traffic policy. At least one rule has to be specified and a maximum of 16 rules could be specified.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UctVPrecryptionTrafficPolicyRule"
+          }
+        }
+      }
+    }
+  }
+}

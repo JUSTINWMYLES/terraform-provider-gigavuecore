@@ -1,0 +1,76 @@
+{
+  "id": "http://gigamon.com/schemas-fm/imageServer.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Image File Server schema",
+  "definitions": {
+    "ImageFileServer": {
+      "id": "#/definitions/ImageFileServer",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Image File Server definition",
+      "required": [
+        "alias",
+        "address",
+        "type"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "unique alias for this image server"
+        },
+        "address": {
+          "type": "string",
+          "format": "inetAddress"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "scp",
+            "tftp"
+          ]
+        },
+        "username": {
+          "type": "string",
+          "description": "username to use for server login. not applicable for 'tftp'"
+        },
+        "userPwd": {
+          "type": "string",
+          "description": "user password to use for server login. not applicable for 'tftp'"
+        }
+      }
+    },
+    "ImageFileServerQueryResponse": {
+      "id": "#/definitions/ImageFileServerQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "imageServer"
+      ],
+      "properties": {
+        "imageServer": {
+          "$ref": "#/definitions/ImageFileServer"
+        }
+      }
+    },
+    "ImageFileServersQueryResponse": {
+      "id": "#/definitions/ImageFileServersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "imageServers"
+      ],
+      "properties": {
+        "imageServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ImageFileServer"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

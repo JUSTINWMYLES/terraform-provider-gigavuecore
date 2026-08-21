@@ -1,0 +1,170 @@
+{
+  "id": "http://gigamon.com/schemas-fm/ipInterface.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "IP Interface Configuration schema",
+  "definitions": {
+    "IpInterface": {
+      "id": "#/definitions/IpInterface",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ip interface name"
+        },
+        "attach": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "network ports ,tool ports or circuit ports"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "ipv4/ipv6 address"
+        },
+        "ipType": {
+          "type": "string",
+          "enum": [
+            "IPv4",
+            "IPv6"
+          ],
+          "readOnly": true
+        },
+        "ipMask": {
+          "type": "string",
+          "description": "ipAddress netmask required with ipAddress"
+        },
+        "gateway": {
+          "type": "string",
+          "description": "gateway ipv4 or ipv6 address"
+        },
+        "mtu": {
+          "type": "integer",
+          "format": "int32",
+          "default": 1500,
+          "minimum": 1500,
+          "maximum": 9400
+        },
+        "hwAddress": {
+          "type": "string",
+          "readonly": true
+        },
+        "gsGroups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Gs Groups associated with the IP Interface"
+        },
+        "netflowExporters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Netflow Exporters associated with the IP Interface"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "IpDestinationStatus": {
+      "id": "#/definitions/IpDestinationStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destination": {
+          "type": "string",
+          "description": "IP Destination"
+        },
+        "interfaceAlias": {
+          "type": "string",
+          "description": "Interface Alias"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "unknown"
+          ],
+          "description": "Status"
+        },
+        "teId": {
+          "type": "string",
+          "description": "Te-ID"
+        },
+        "gsGroup": {
+          "type": "string",
+          "description": "Associated GsGroup"
+        }
+      }
+    },
+    "IpDestinationStatusQueryResponse": {
+      "id": "#/definitions/IpDestinationStatusQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ipDestinationStatus": {
+          "$ref": "#/definitions/IpDestinationStatus"
+        }
+      }
+    },
+    "IpDestinationStatusesQueryResponse": {
+      "id": "#/definitions/IpDestinationStatusesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ipInterfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IpDestinationStatus"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "IpInterfaceQueryResponse": {
+      "id": "#/definitions/IpInterfaceQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ipInterface"
+      ],
+      "properties": {
+        "ipInterface": {
+          "$ref": "#/definitions/IpInterface"
+        }
+      }
+    },
+    "IpInterfacesQueryResponse": {
+      "id": "#/definitions/IpInterfaceQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ipInterfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IpInterface"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

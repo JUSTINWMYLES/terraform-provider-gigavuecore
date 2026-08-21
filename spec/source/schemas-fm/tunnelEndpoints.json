@@ -1,0 +1,136 @@
+{
+  "id": "http://gigamon.com/schemas-fm/tunnelEndpoints.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "GigaSMART Configuration schema",
+  "definitions": {
+    "TunnelEndpoint": {
+      "id": "#/definitions/TunnelEndpoint",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GigaSMART Tunnel Endpoint",
+      "required": [
+        "tunnelEndpoint"
+      ],
+      "properties": {
+        "tunnelEndpoint": {
+          "$ref": "#/definitions/TunnelEndpointIpConfig",
+          "readonly": true,
+          "description": "Tunnel Endpoint configuration"
+        },
+        "tunneledPort": {
+          "$ref": "#/definitions/TunnelEndpointPort",
+          "readonly": true,
+          "description": "Tunnel Endpoint servicing port"
+        }
+      }
+    },
+    "TunnelEndpointIpConfig": {
+      "id": "#/definitions/TunnelEndpointIpConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tunnel Endpoint configuration",
+      "required": [
+        "type",
+        "address"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gmip",
+            "erspan",
+            "l2gre"
+          ],
+          "readonly": true
+        },
+        "address": {
+          "type": "string",
+          "readonly": true,
+          "description": "Tunnel Endpoint IP Address on the TunneledPort"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "readonly": true,
+          "description": "Tunnel Endpoint Port on the TunneledPort. Only applicable and required for 'gmip' type"
+        },
+        "srcPort": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "readonly": true,
+          "description": "Tunnel Source Port (the port on the remote/client side). Only applicable and required for 'gmip' type"
+        },
+        "greKey": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295,
+          "description": "only applicable for 'l2gre' type",
+          "readonly": true
+        }
+      }
+    },
+    "TunnelEndpointPort": {
+      "id": "#/definitions/TunnelEndpointPort",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tunnel Endpoint's servicing Tunneled Port information",
+      "required": [
+        "portId",
+        "deviceModel",
+        "deviceId",
+        "clusterId",
+        "deviceBoxId"
+      ],
+      "properties": {
+        "portId": {
+          "type": "string",
+          "readonly": true,
+          "description": "Tunneled port ID on a Gigamon Chassis"
+        },
+        "deviceModel": {
+          "type": "string",
+          "readonly": true,
+          "description": "model of the device hosting the tunneled port"
+        },
+        "deviceId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "ID of the device the tunneled port is a member of"
+        },
+        "clusterId": {
+          "type": "string",
+          "readonly": true,
+          "description": "ID of a cluster the tunneled port is a member of"
+        },
+        "deviceBoxId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "BoxId of the device the tunneled port is a member of"
+        }
+      }
+    },
+    "TunnelEndpointsQueryResponse": {
+      "id": "#/definitions/TunnelEndpointsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "tunnelEndpoints"
+      ],
+      "properties": {
+        "tunnelEndpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunnelEndpoint"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

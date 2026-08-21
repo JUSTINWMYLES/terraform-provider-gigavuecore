@@ -1,0 +1,636 @@
+{
+  "id": "/http://gigamon.com/schemas-fm/flexInline.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FlexInline schema",
+  "definitions": {
+    "GigaFlexInlineSolutionMetaDataListQueryResponse": {
+      "id": "#/definitions/GigaFlexInlineSolutionMetaDataListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "flexInlineSolutions"
+      ],
+      "properties": {
+        "flexInlineSolutions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineSolutionMetaData"
+          }
+        }
+      }
+    },
+    "GigaFlexInlineSolutionMetaDataSingleQueryResponse": {
+      "id": "/#/definitions/GigaFlexInlineSolutionMetaDataSingleQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "flexInlineSolution"
+      ],
+      "properties": {
+        "flexInlineSolution": {
+          "$ref": "#/definitions/GigaFlexInlineSolutionMetaData"
+        }
+      }
+    },
+    "GigaFlexInlineSolutionMetaData": {
+      "id": "#/definitions/GigaFlexInlineSolutionMetaData",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "targetTrafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "bypassWithMonitoring",
+            "toInlineTool"
+          ],
+          "description": "Inline network target traffic path"
+        },
+        "clusterConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineSourceConfig"
+          },
+          "description": "FlexInline solution source details"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "OPEN",
+            "SUCCESS",
+            "FAILED",
+            "INPROGRESS",
+            "DELETED",
+            "ABANDONED"
+          ],
+          "readOnly": true
+        },
+        "configStatusReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "resilientConfig": {
+          "$ref": "#/definitions/ResilientTrafficConfig"
+        }
+      }
+    },
+    "GigaFlexInlineConfigMetaDataListQueryResponse": {
+      "id": "#/definitions/GigaFlexInlineConfigMetaDataListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "flexInlineConfigs"
+      ],
+      "properties": {
+        "flexInlineConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineConfigMetaData"
+          }
+        }
+      }
+    },
+    "GigaFlexInlineConfigMetaDataSingleQueryResponse": {
+      "id": "#/definitions/GigaFlexInlineConfigMetaDataSingleQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "flexInlineConfig"
+      ],
+      "properties": {
+        "flexInlineConfig": {
+          "$ref": "#/definitions/GigaFlexInlineConfigMetaData"
+        }
+      }
+    },
+    "GigaFlexInlineConfigMetaData": {
+      "id": "#/definitions/GigaFlexInlineConfigMetaData",
+      "type": "object",
+      "properties": {
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "configType": {
+          "type": "string",
+          "enum": [
+            "FLEXINLINE_MAP",
+            "INLINE_NETWORK",
+            "INLINE_NETWORK_LAG"
+          ],
+          "description": "Type of the configuration object"
+        },
+        "configData": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "inline.json#/definitions/InlineNetwork"
+              },
+              {
+                "$ref": "#/definitions/GigaFlexInlineMap"
+              }
+            ]
+          },
+          "description": "Data holding configuration details"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "OPEN",
+            "SUCCESS",
+            "FAILED",
+            "INPROGRESS",
+            "DELETED",
+            "ABANDONED"
+          ],
+          "readOnly": true,
+          "description": "Status of the created config object"
+        },
+        "configStatusReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "GigaFlexInlineOpResult": {
+      "id": "#/definitions/GigaFlexInlineOpResult",
+      "type": "object",
+      "properties": {
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "processResults": {
+          "type": "string",
+          "enum": [
+            "PREPROCESSOR",
+            "SPLIT_SERVICE",
+            "DEPLOYMENT_SERVICE"
+          ],
+          "additionalProperties": {
+            "$ref": "#/definitions/GigaConfigOpResult"
+          }
+        },
+        "configOpStatus": {
+          "type": "string",
+          "enum": [
+            "SUCCESS",
+            "PARTIAL_SUCCESS",
+            "FAILED",
+            "PENDING",
+            "INCOMPLETE_DELETION",
+            "DAMAGED"
+          ],
+          "description": "Holds the result of each step"
+        }
+      }
+    },
+    "GigaFlexInlineDeploymentMetaDataListQueryResponse": {
+      "id": "#/definitions/GigaFlexInlineDeploymentMetaDataListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "flexInlineDeployStatus"
+      ],
+      "properties": {
+        "flexInlineDeployStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineDeploymentMetaData"
+          }
+        }
+      }
+    },
+    "GigaFlexInlineDeploymentMetaData": {
+      "id": "#/definitions/GigaFlexInlineDeploymentMetaData",
+      "type": "object",
+      "properties": {
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "configType": {
+          "type": "string",
+          "enum": [
+            "FLEXINLINE_MAP",
+            "INLINE_NETWORK",
+            "INLINE_NETWORK_LAG"
+          ],
+          "description": "Type of the configuration object"
+        },
+        "configAlias": {
+          "type": "string",
+          "description": "Alias of the corresponding config object"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "operationType": {
+          "type": "string",
+          "enum": [
+            "CREATE",
+            "UPDATE",
+            "REPLACE",
+            "DELETE"
+          ],
+          "description": "Operation performed on the config object"
+        },
+        "deploymentStatus": {
+          "type": "string",
+          "enum": [
+            "OPEN",
+            "SUCCESS",
+            "FAILED",
+            "DELETED_IN_DEVICE"
+          ],
+          "description": "Deployment status of the object"
+        },
+        "deploymentStatusReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "configData": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "map.json#/definitions/Map"
+              },
+              {
+                "$ref": "inline.json#/definitions/InlineNetwork"
+              },
+              {
+                "$ref": "#/definitions/GigaFlexInlineMap"
+              }
+            ]
+          },
+          "description": "Data holding configuration details"
+        }
+      }
+    },
+    "GigaFlexInlineVlanConfigListQueryResponse": {
+      "id": "#/definitions/GigaFlexInlineVlanConfigListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "mapVlanConfigs"
+      ],
+      "properties": {
+        "mapVlanConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineVlanConfig"
+          }
+        }
+      }
+    },
+    "GigaFlexInlineVlanConfig": {
+      "id": "#/definitions/GigaFlexInlineVlanConfig",
+      "type": "object",
+      "properties": {
+        "mapAlias": {
+          "type": "string",
+          "description": "Alias of the map"
+        },
+        "vlanConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FlexInlineVlanMapperConfig"
+          },
+          "description": "Array holding vlan ids"
+        },
+        "inlineNetworkAlias": {
+          "type": "string",
+          "description": "Alias of the inline network"
+        }
+      }
+    },
+    "GigaFlexInlineSourceConfig": {
+      "id": "#/definitions/GigaFlexInlineSourceConfig",
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/definitions/GigaFlexInlineSource",
+          "description": "Object holding flexInline source details"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "ibPathway": {
+          "type": "string",
+          "description": "Inter-broker pathway to guide traffic from one node to other"
+        },
+        "exportCriteria": {
+          "$ref": "#/definitions/TrafficSplittingConfig"
+        },
+        "exportType": {
+          "type": "string",
+          "enum": [
+            "ipBased",
+            "portBased"
+          ]
+        }
+      }
+    },
+    "GigaFlexInlineSource": {
+      "id": "#/definitions/GigaFlexInlineSource",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the source"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "IN",
+            "IN_LAG",
+            "FM_ING"
+          ],
+          "description": "Source type"
+        }
+      }
+    },
+    "ResilientTrafficConfig": {
+      "id": "#/definitions/ResilientTrafficConfig",
+      "type": "object",
+      "properties": {
+        "sideA": {
+          "type": "string",
+          "enum": [
+            "source",
+            "destination"
+          ],
+          "description": "Side A of the resilient map"
+        },
+        "sideB": {
+          "type": "string",
+          "enum": [
+            "source",
+            "destination"
+          ],
+          "description": "Side B of the resilient map"
+        }
+      }
+    },
+    "GigaConfigOpResult": {
+      "id": "#/definitions/GigaConfigOpResult",
+      "type": "object",
+      "properties": {
+        "configOpStatus": {
+          "type": "string",
+          "enum": [
+            "SUCCESS",
+            "PARTIAL_SUCCESS",
+            "FAILED",
+            "PENDING",
+            "INCOMPLETE_DELETION",
+            "DAMAGED"
+          ],
+          "description": "Status of the config operation"
+        },
+        "errorMsg": {
+          "type": "string"
+        }
+      }
+    },
+    "FlexInlineVlanMapperConfig": {
+      "id": "#/definitions/FlexInlineVlanMapperConfig",
+      "type": "object",
+      "properties": {
+        "networkAlias": {
+          "type": "string",
+          "description": "Alias of the network source"
+        },
+        "flexInlineVlanId": {
+          "type": "integer",
+          "description": "Network side vlan id"
+        },
+        "flexInlineTagVlanId": {
+          "type": "integer",
+          "description": "Tool side vlan id"
+        },
+        "tagProtocolId": {
+          "type": "string",
+          "enum": [
+            "0x8100",
+            "0x9100",
+            "0x88a8"
+          ],
+          "default": "0x8100",
+          "description": "When tool VLAN tag is added , this protocol Id will be added which egress out the traffic"
+        },
+        "flexInlineTagType": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "vlan"
+          ],
+          "description": "type of vlan id, auto (or) vlan"
+        }
+      }
+    },
+    "GigaFlexInlineMap": {
+      "id": "#/definitions/GigaFlexInlineMap",
+      "type": "object",
+      "properties": {
+        "mapConfig": {
+          "$ref": "map.json#/definitions/Map",
+          "description": "Map configuration to create a flex map"
+        },
+        "singleTag": {
+          "type": "boolean",
+          "default": false,
+          "description": "is single tag enabled for the map"
+        },
+        "byPassOtherTraffic": {
+          "type": "boolean",
+          "default": false
+        },
+        "childMapAliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        },
+        "resilient": {
+          "type": "boolean",
+          "default": false,
+          "description": "is RIA enabled for the solution"
+        },
+        "trafficConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineTrafficConfig"
+          },
+          "description": "Arrays holding traffic configuration details"
+        }
+      }
+    },
+    "GigaFlexInlineTrafficConfig": {
+      "id": "#/definitions/GigaFlexInlineTrafficConfig",
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": "string"
+        },
+        "vlanMapConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FlexInlineVlanMapperConfig"
+          },
+          "description": "Array holding vlan configuration details"
+        },
+        "flexInline": {
+          "$ref": "map.json#/definitions/MapFlexInline"
+        }
+      }
+    },
+    "TrafficSplittingConfig": {
+      "id": "#/definitions/TrafficSplittingConfig",
+      "type": "object",
+      "description": "Based on this criteria and source on which this criteria is defined, traffic is guided to the other node",
+      "properties": {
+        "lsb": {
+          "type": "integer"
+        }
+      }
+    },
+    "FMNearRealTimeStatisticsConfigResult": {
+      "id": "#/definitions/FMNearRealTimeStatisticsConfigResult",
+      "type": "object",
+      "properties": {
+        "failedConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NRTComponentConfigResult"
+          }
+        }
+      }
+    },
+    "NRTComponentConfigResult": {
+      "id": "#/definitions/NRTComponentConfigResult",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "FMNearRealTimeCachedStatisticsListQueryResponse": {
+      "id": "#/definitions/FMNearRealTimeCachedStatisticsListQueryResponse",
+      "type": "object",
+      "properties": {
+        "fmNearRealTimeCachedStatisticsList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FMNearRealTimeCachedStatistics"
+          }
+        }
+      }
+    },
+    "FMNearRealTimeCachedStatistics": {
+      "id": "#/definitions/FMNearRealTimeCachedStatistics",
+      "type": "object",
+      "properties": {
+        "componentType": {
+          "type": "string",
+          "enum": [
+            "INLINE_NETWORK",
+            "INLINE_TOOL_GROUP",
+            "INLINE_NETWORK_LAG",
+            "PORT",
+            "GS_GROUP"
+          ]
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "string"
+        },
+        "nrtAlias": {
+          "type": "string"
+        },
+        "statsData": {
+          "$ref": "inline.json#/definitions/GigaFlexInlineNRTStats"
+        }
+      }
+    },
+    "GigaFlexInlineSolutionMetaDataSpec": {
+      "id": "#/definitions/GigaFlexInlineSolutionMetaDataSpec",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "targetTrafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "bypassWithMonitoring",
+            "toInlineTool"
+          ],
+          "description": "Inline network target traffic path"
+        },
+        "clusterConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineSourceConfig"
+          },
+          "description": "FlexInline solution source details"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "OPEN",
+            "SUCCESS",
+            "FAILED",
+            "INPROGRESS",
+            "DELETED",
+            "ABANDONED"
+          ],
+          "readOnly": true
+        },
+        "configStatusReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        },
+        "resilientConfig": {
+          "$ref": "#/definitions/ResilientTrafficConfig"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "id": "http://gigamon.com/schemas-fm/aliasMetadata.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Alias Metadata Definitions",
+  "definitions": {
+    "GigaAliasesMetadataRequestSpec": {
+      "id": "#/definitions/GigaAliasesMetadataRequestSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Aliases Metadata Request Spec",
+      "required": [
+        "specs"
+      ],
+      "properties": {
+        "specs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaAliasMetadataRequestSpec"
+          }
+        }
+      }
+    },
+    "GigaAliasMetadataRequestSpec": {
+      "id": "#/definitions/GigaAliasMetadataRequestSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Alias Metadata Request Spec for a Cluster",
+      "required": [
+        "clusterId",
+        "type",
+        "resourceIds"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "port",
+            "portGroup",
+            "gigaStream",
+            "portPair",
+            "tpMirror",
+            "vport",
+            "ibPathway",
+            "inlineNetwork",
+            "inlineNetLag",
+            "inlineNetworkGroup",
+            "inlineTool",
+            "inlineToolGroup",
+            "inlineSerialToolGroup",
+            "gsop",
+            "ipInterface",
+            "gsGroup",
+            "circuitTunnel",
+            "fabricPortGroup"
+          ]
+        },
+        "resourceIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GigaAliasesMetaData": {
+      "id": "#/definitions/GigaAliasesMetaData",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Aliases Metadata Domain Class",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "string",
+          "description": "The alias/portId of the component sent in the payload request"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "port",
+            "portGroup",
+            "gigaStream",
+            "portPair",
+            "tpMirror",
+            "vport",
+            "ibPathway",
+            "inlineNetwork",
+            "inlineNetLag",
+            "inlineNetworkGroup",
+            "inlineTool",
+            "inlineToolGroup",
+            "inlineSerialToolGroup",
+            "gsop",
+            "ipInterface",
+            "gsGroup",
+            "circuitTunnel",
+            "fabricPortGroup"
+          ]
+        },
+        "ports": {
+          "type": "array",
+          "description": "The participating port's detail of the component",
+          "items": {
+            "$ref": "#/definitions/Ports"
+          }
+        },
+        "members": {
+          "type": "array",
+          "description": "The alias metadata info of the sub components, example PortGroup having GigaStream. The metadata of GigaStream goes in here",
+          "items": {
+            "$ref": "#/definitions/GigaAliasesMetaData"
+          }
+        },
+        "healthState": {
+          "type": "string"
+        },
+        "trafficHealthState": {
+          "type": "string"
+        },
+        "healthStateReasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsObjectHealthStateReason"
+          }
+        },
+        "trafficHealthStateReasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsObjectHealthStateReason"
+          }
+        }
+      }
+    },
+    "Ports": {
+      "id": "#/definitions/Ports",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Member of GigaAliasesMetaData to contain the port details of the component",
+      "properties": {
+        "portId": {
+          "type": "string"
+        },
+        "portAlias": {
+          "type": "string"
+        },
+        "portType": {
+          "type": "string"
+        },
+        "healthState": {
+          "type": "string"
+        },
+        "trafficHealthState": {
+          "type": "string"
+        }
+      }
+    },
+    "GigaAliasesMetaDataListQueryResponse": {
+      "id": "#/definitions/GigaAliasesMetaDataListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "aliases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaAliasesMetaData"
+          }
+        }
+      }
+    },
+    "CmsObjectHealthStateReason": {
+      "id": "#/definitions/CmsObjectHealthStateReason",
+      "description": "Contains the health state severity and message",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "severity": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

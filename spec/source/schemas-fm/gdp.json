@@ -1,0 +1,146 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gdp.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "GDP Node Report",
+  "since": "H 5.2",
+  "definitions": {
+    "GdpNodeReport": {
+      "id": "#/definitions/GdpNodeReport",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "localChassisId"
+      ],
+      "properties": {
+        "localChassisId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ChassisId of the reporting local node"
+        },
+        "gdpNeighbors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GdpNodeNeighbor"
+          },
+          "description": "list of discovered GDP neighbors discovered on local ports"
+        }
+      }
+    },
+    "GdpNodeNeighbor": {
+      "id": "#/definitions/GdpNodeNeighbor",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "localPortId",
+        "remoteChassisId",
+        "remotePortId"
+      ],
+      "properties": {
+        "localPortId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "PortId of the local port reporting the GDP Neighbor"
+        },
+        "localPortType": {
+          "type": "string",
+          "enum": [
+            "network",
+            "tool",
+            "stack",
+            "hybrid"
+          ],
+          "description": "Port type of the local port reporting the GDP Neighbor"
+        },
+        "remoteChassisId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ChassisId of the attached GDP neighbor node"
+        },
+        "remotePortId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "PortId of the remote port on the attached GDP neighbor node"
+        },
+        "remotePortType": {
+          "type": "string",
+          "enum": [
+            "network",
+            "tool",
+            "stack",
+            "hybrid"
+          ],
+          "description": "Port type of the remote port on the attached GDP neighbor node"
+        },
+        "mgmtAddress": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Management Address of the GDP neighbor node"
+        },
+        "hostname": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Hostname of the GDP neighbor node"
+        },
+        "serialNumber": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Serial Number of the GDP neighbor node"
+        },
+        "productType": {
+          "type": "string",
+          "enum": [
+            "HD8",
+            "HD4",
+            "HC3",
+            "HC2",
+            "HC1",
+            "HB1",
+            "TA100",
+            "TA100S",
+            "TA40",
+            "TA40S",
+            "TA10",
+            "TA10A",
+            "TA10S",
+            "TA1",
+            "TACS",
+            "TACX",
+            "OS",
+            "TA200",
+            "TA200S"
+          ],
+          "description": "Product type of the GDP neighbor node"
+        }
+      }
+    },
+    "GdpNodeReportQueryResponse": {
+      "id": "#/definitions/GdpNodeReportQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gdpNodeReport"
+      ],
+      "properties": {
+        "gdpNodeReport": {
+          "$ref": "#/definitions/GdpNodeReport"
+        }
+      }
+    },
+    "GdpNodeReportsQueryResponse": {
+      "id": "#/definitions/GdpNodeReportsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gdpNodeReports"
+      ],
+      "properties": {
+        "gdpNodeReports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GdpNodeReport"
+          }
+        }
+      }
+    }
+  }
+}

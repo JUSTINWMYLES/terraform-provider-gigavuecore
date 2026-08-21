@@ -1,0 +1,940 @@
+{
+  "id": "http://gigamon.com/schemas-fm/intentPolicy.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Intent Policy schema",
+
+  "oneOf": [],
+
+  "definitions": {
+    "Policy": {
+      "id": "#/definitions/Policy",
+      "type": "object",
+      "additionalProperties": false,
+
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "policy name"
+        },
+        "policyId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "generated unique policy ID"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "deployed": {
+          "type": "boolean",
+          "description": "policy is deployed or not"
+        },
+        "priority": {
+          "type": "boolean",
+          "description": ""
+        },
+        "srcPortsInfo": {
+          "$ref": "#/definitions/SrcPortsInfo"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PolicyRule"
+          }
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        },
+        "policyTimestamp": {
+          "type": "string",
+          "description": ""
+        },
+        "srcPortTimestamp": {
+          "type": "string",
+          "description": ""
+        },
+        "destPortTimestamp": {
+          "type": "string",
+          "description": ""
+        },
+        "deploymentPercent": {
+          "type": "string",
+          "description": "policy deployment percentage"
+        },
+        "deploymentError": {
+          "type": "string",
+          "description": "policy deployment error message"
+        }
+      }
+    },
+    "PolicyList": {
+      "properties": {
+        "Policies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Policy"
+          }
+        }
+      }
+    },
+    "YamlPolicyList": {
+      "properties": {
+        "YamlPolicies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/YamlPolicy"
+          }
+        }
+      }
+    },
+    "YamlPolicy": {
+      "id": "#/definitions/YamlPolicy",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "boolean"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/YamlPolicySource"
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/YamlPolicyRule"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/YamlPolicyTag"
+          }
+        },
+        "sourceBindings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/YamlPolicySource"
+            }
+          }
+        },
+        "packetTransformationBindings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/YamlPolicyPacketTransformationApp"
+            }
+          }
+        },
+        "criteriaBindings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/YamlPolicyRuleCriteriaFilter"
+            }
+          }
+        }
+      }
+    },
+    "YamlPolicySource": {
+      "id": "#/definitions/YamlPolicySource",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "YamlPolicyTool": {
+      "id": "#/definitions/YamlPolicyTool",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "YamlPolicyRule": {
+      "id": "#/definitions/YamlPolicyRule",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "ruleName": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "highPriorityDrop": {
+          "type": "boolean"
+        },
+        "noExpansionTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/YamlPolicyTag"
+          }
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/YamlPolicyRuleCriteria"
+          }
+        },
+        "packetTransformation": {
+          "$ref": "#/definitions/YamlPolicyPacketTransformation"
+          },
+        "tools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/YamlPolicyTool"
+          }
+        }
+      }
+    },
+    "YamlPolicyPacketTransformation": {
+      "id": "#/definitions/YamlPolicyPacketTransformation",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "enginePorts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "apps": {
+          "type": "array",
+          "items": {
+            "$ref":"#/definitions/YamlPolicyPacketTransformationApp"
+          }
+        }
+      }
+    },
+    "YamlPolicyPacketTransformationApp": {
+      "id": "#/definitions/YamlPolicyPacketTransformationApp",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object"
+        }
+      }
+    },
+    "YamlPolicyRuleCriteria": {
+      "id": "#/definitions/YamlPolicyRuleCriteria",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "criteriaName": {
+          "type": "string"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/YamlPolicyRuleCriteriaFilter"
+          }
+        }
+      }
+    },
+    "YamlPolicyRuleCriteriaFilter": {
+      "id": "#/definitions/YamlPolicyRuleCriteriaFilter",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PolicyAdvancedFilterProperty"
+          }
+        }
+      }
+    },
+    "YamlPolicyTag": {
+      "id": "#/definitions/YamlPolicyTag",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "SrcPortsInfo": {
+      "id": "#/definitions/SrcPortsInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "templateIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "PolicyRule": {
+      "id": "#/definitions/PolicyRule",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "ruleId": {
+          "type": "string"
+        },
+        "ruleName": {
+          "type": "string"
+        },
+        "noExpansionTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "highPriorityDrop": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "gsOperations": {
+          "$ref": "#/definitions/PolicyGsOperation"
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PolicyRuleDestination"
+          }
+        },
+        "matches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PolicyRuleCriteria"
+          }
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+
+    "PolicyGsOperation": {
+      "id": "#/definitions/PolicyGsOperation",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "gsApps": {
+          "$ref": "smart.json#/definitions/GigasmartApps"
+        },
+        "templates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsTemplateInfo"
+          }
+        },
+        "gsGroupParams": {
+          "$ref": "smart.json#/definitions/GsGroupParams"
+        },
+        "gsEngines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    } ,
+
+    "PolicyRuleCriteria": {
+      "id": "#/definitions/PolicyRuleCriteria",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "ruleCriteriaId":  {
+          "type": "string"
+        },
+        "operationType":  {
+          "type": "string"
+        },
+        "aggregateFilters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PolicyAggregateFilter"
+          }
+        }
+      }
+    } ,
+
+    "PolicyRuleDestination": {
+      "id": "#/definitions/PolicyRuleDestination",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "alias":  {
+          "type": "string",
+          "description": "alias of destination. Either port or gigastream, in form <clusterId:portId> or <clusterId:gigastreamAlias>"
+        },
+        "viaGsop":  {
+          "type": "boolean",
+          "description": "Policy has GigaSMART operation"
+        },
+        "isDrop":  {
+          "type": "boolean",
+          "description": "destination is drop"
+        },
+        "isGigaStream": {
+          "type": "boolean",
+          "description": "destination alias is a gigastream (tool or hybrid)"
+        },
+        "isPort": {
+          "type": "boolean",
+          "description": "destination alias is a port (tool or hybrid)"
+        }
+      }
+    },
+
+    "GsTemplateInfo": {
+      "id": "#/definitions/GsTemplateInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "gsApps":  {
+          "$ref": "smart.json#/definitions/GigasmartApps"
+        },
+        "templateId":  {
+          "type": "string"
+        },
+        "gsGroupParams": {
+          "$ref": "smart.json#/definitions/GsGroupParams"
+        }
+      }
+    },
+
+    "PolicyAggregateFilter": {
+      "id": "#/definitions/PolicyAggregateFilter",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "name":  {
+          "type": "string"
+        },
+        "operationType":  {
+          "type": "string"
+        },
+        "simpleFilters": {
+          "$ref": "#/definitions/PolicySimpleFilter"
+        },
+        "templateId": {
+          "type": "string"
+        }
+      }
+    },
+
+    "PolicySimpleFilter": {
+      "id": "#/definitions/PolicySimpleFilter",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "type":  {
+          "type": "string"
+        },
+        "values":  {
+          "$ref": "#/definitions/PolicyFilterValue"
+        },
+        "advancedFilterProperties": {
+          "$ref": "#/definitions/PolicyAdvancedFilterProperty"
+        }
+      }
+    },
+
+    "PolicyFilterValue": {
+      "id": "#/definitions/PolicyFilterValue",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "value":  {
+          "type": "string"
+        },
+        "valueMax":  {
+          "type": "string"
+        },
+        "subset":  {
+          "type": "string"
+        },
+        "mask":  {
+          "type": "string"
+        },
+        "offset": {
+          "type": "string"
+        }
+      }
+    },
+
+    "PolicyAdvancedFilterProperty": {
+      "id": "#/definitions/PolicyAdvancedFilterProperty",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "key":  {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+
+    "PolicyLog": {
+      "id": "#/definitions/PolicyLog",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "policyId":  {
+          "type": "string"
+        },
+        "name":  {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+
+    "PolicyFabricMaps": {
+      "id": "#/definitions/PolicyFabricMaps",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "name":  {
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "PolicyStatus": {
+      "id": "#/definitions/PolicyStatus",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "policyId":  {
+          "type": "string"
+        },
+        "deploymentPercent":  {
+          "type": "string"
+        },
+        "deploymentError": {
+          "type": "string"
+        }
+      }
+    },
+
+    "PolicyRuleDestinationInfo": {
+      "id": "#/definitions/PolicyRuleDestinationInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "type":  {
+          "type": "string",
+          "enum": ["tool", "gigastream"]
+        },
+        "alias":  {
+          "type": "string"
+        },
+        "toolsInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PolicyToolInfo"
+          }
+        }
+      }
+
+    },
+
+    "PolicyToolInfo": {
+      "id": "#/definitions/PolicyToolInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "topoNodeId":  {
+          "type": "string"
+        },
+        "nodeAlias":  {
+          "type": "string"
+        },
+        "isUsedInDeployedPolicy":  {
+          "type": "boolean"
+        },
+        "vendor":  {
+          "type": "string"
+        },
+        "type":  {
+          "type": "string"
+        },
+        "model":  {
+          "type": "string"
+        },
+        "comment":  {
+          "type": "string"
+        },
+        "isTool":  {
+          "type": "boolean"
+
+        },
+        "maxThroughput":  {
+          "type": "number",
+          "format": "double"
+        },
+        "totalStorage":  {
+          "type": "number",
+          "format": "double"
+        },
+        "ports":  {
+          "type": "array",
+          "items": {"$ref":  "#/definitions/GigamonNodePortInfo"}
+        },
+        "compressionRatio":  {
+          "type": "number",
+          "format": "double"
+        },
+        "gigaStreams": {
+          "type": "array",
+          "items": { "$ref": "portConfig.json#/definitions/Gigastream"}
+        }
+      }
+    },
+
+    "GigamonNodePortInfo": {
+      "id": "#/definitions/GigamonNodePortInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "portId":  {
+          "type": "string"
+        },
+        "alias":  {
+          "type": "string"
+        },
+        "linkId":  {
+          "type": "string"
+        },
+        "clusterId":  {
+          "type": "string"
+        },
+        "hostname":  {
+          "type": "string"
+        },
+        "deviceIp":  {
+          "type": "string"
+        },
+        "portType": {
+          "type": "string"
+        }
+      }
+    },
+
+    "PolicyGsop": {
+      "id": "#/definitions/PolicyGsop",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "policyId":  {
+          "type": "string"
+        },
+        "ruleId":  {
+          "type": "string"
+        },
+        "gsopId":  {
+          "type": "string"
+        },
+        "gsopType":  {
+          "type": "string"
+        },
+        "gsGroup":  {
+          "type": "string"
+        },
+        "clusterId":  {
+          "type": "string"
+        },
+        "gsopAlias":  {
+          "type": "string"
+        },
+        "gsGroupParams": {
+          "$ref": "smart.json#/definitions/GsGroupParams"
+        },
+        "gsEngines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+
+    "PolicyUpdateSpec": {
+      "id": "#/definitions/PolicyUpdateSpec",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "name":  {
+          "type": "string"
+        },
+        "policyId":  {
+          "type": "string"
+        },
+        "priority":  {
+          "type": "string"
+        },
+        "comment":  {
+          "type": "string"
+        },
+        "srcPorts":  {
+          "type": "array",
+          "items": {"$ref":  "#/definitions/SrcPortUpdateInfo"}
+        },
+        "destPorts":  {
+          "type": "array",
+          "items": {"$ref":  "#/definitions/DestPortsUpdateInfo"}
+        },
+        "rulesInfo":  {
+          "type": "array",
+          "items": {"$ref":  "#/definitions/RuleUpdateInfo"}
+        },
+        "ruleCriteria":  {
+          "type": "array",
+          "items": {"$ref":  "#/definitions/RuleCriteriaUpdateInfo"}
+        },
+        "gigasmartInfo": {
+          "type": "array",
+          "items": {"$ref":  "#/definitions/GigasmartUpdateInfo"}
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+
+    "SrcPortUpdateInfo": {
+      "id": "#/definitions/SrcPortUpdateInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "portIds":  {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "templateIds":  {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "operation": {
+          "type": "string",
+          "enum": ["add", "delete", "addGsop", "deleteGsop", "update", "update_add", "update_delete"]
+        }
+      }
+    },
+
+    "DestPortsUpdateInfo": {
+      "id": "#/definitions/DestPortsUpdateInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "ruleId":  {
+          "type": "string"
+        },
+        "portIds":  {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tools":  {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PolicyRuleDestination"
+          }
+        },
+        "operation": {
+          "type": "string",
+          "enum": ["add", "delete", "addGsop", "deleteGsop", "update", "update_add", "update_delete"]
+        }
+      }
+    },
+
+    "RuleUpdateInfo": {
+      "id": "#/definitions/RuleUpdateInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "ruleId":  {
+          "type": "string"
+        },
+        "ruleName":  {
+          "type": "string"
+        },
+        "rule":  {
+          "$ref": "#/definitions/PolicyRule"
+        },
+        "operation": {
+          "type": "string",
+          "enum": ["add", "delete", "addGsop", "deleteGsop", "update", "update_add", "update_delete"]
+        }
+      }
+    },
+
+    "RuleCriteriaUpdateInfo": {
+      "id": "#/definitions/RuleCriteriaUpdateInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "ruleId":  {
+          "type": "string"
+        },
+        "ruleCriteriaId":  {
+          "type": "string"
+        },
+        "matches":  {
+          "$ref": "#/definitions/PolicyRuleCriteria"
+        },
+        "operation": {
+          "type": "string",
+          "enum": ["add", "delete", "addGsop", "deleteGsop", "update", "update_add", "update_delete"]
+        }
+      }
+    },
+
+    "GigasmartUpdateInfo": {
+      "id": "#/definitions/GigasmartUpdateInfo",
+      "type": "object",
+      "additionalProperties": false,
+
+      "properties": {
+        "ruleId": {
+          "type": "string"
+        } ,
+        "gsOperations":  {
+          "$ref": "#/definitions/PolicyGsOperation"
+        },
+        "operation": {
+          "type": "string",
+          "enum": ["add", "delete", "addGsop", "deleteGsop", "update", "update_add", "update_delete"]
+        }
+      }
+    }
+  }
+}

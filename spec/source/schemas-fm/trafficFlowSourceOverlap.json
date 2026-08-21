@@ -1,0 +1,126 @@
+{
+  "id": "http://gigamon.com/schemas-fm/GigaFabricSourceSelectorMetadata",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Schema for GigaFabricSourceSelectorMetadata representing source selection details in GigaFabric.",
+  "definitions": {
+    "GigaFabricSourceSelectorMetadata": {
+      "id": "#/definitions/GigaFabricSourceSelectorMetadata",
+      "type": "object",
+      "properties": {
+        "sourceDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFabricSourceSelectorDetails"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GigaFabricSourceSelectorDetails": {
+      "id": "#/definitions/GigaFabricSourceSelectorDetails",
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SourceComponent"
+          }
+        }
+      },
+      "required": [
+        "clusterId"
+      ],
+      "additionalProperties": false
+    },
+    "SourceComponent": {
+      "id": "#/definitions/SourceComponent",
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "PORT",
+            "PORT_GROUP",
+            "GIGASTREAM"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "SourcePortMetaData": {
+      "id": "#/definitions/SourcePortMetaData",
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "matchedSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SourceOverLapPorts"
+          }
+        }
+      },
+      "required": [
+        "clusterId",
+        "matchedSources"
+      ],
+      "additionalProperties": false
+    },
+    "SourceOverLapPorts": {
+      "id": "#/definitions/SourceOverLapPorts",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "PORT",
+            "PORT_GROUP",
+            "GIGASTREAM"
+          ]
+        },
+        "subType": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "subType",
+        "sources"
+      ],
+      "additionalProperties": false
+    },
+    "SourcePortMetaDataListQueryResponse": {
+      "id": "#/definitions/SourcePortMetaDataListQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overlapSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SourcePortMetaData"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

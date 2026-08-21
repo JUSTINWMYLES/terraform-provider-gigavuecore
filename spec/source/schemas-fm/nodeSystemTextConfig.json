@@ -1,0 +1,103 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemTextConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device System Text Config Schema",
+  "definitions": {
+    "TextConfigFilesQueryResponse": {
+      "id": "#/definitions/TextConfigFilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Text Configuration files",
+      "required": [
+        "configFiles"
+      ],
+      "properties": {
+        "configFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ConfigFile"
+          },
+          "readonly": true,
+          "description": "List of available text configuration files"
+        }
+      }
+    },
+    "ConfigFile": {
+      "id": "#/definitions/ConfigFile",
+      "type": "object",
+      "required": [
+        "filename",
+        "timestamp",
+        "size"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "File creation date and time in ISO 8601 format"
+        },
+        "size": {
+          "type": "integer",
+          "description": "Size of file in bytes"
+        }
+      }
+    },
+    "ConfigFileDestinationSpec": {
+      "id": "#/definitions/ConfigFileDestinationSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "destination"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "scp",
+            "sftp",
+            "ftp",
+            "tftp",
+            "http",
+            "https"
+          ],
+          "description": "File Source/File Destination protocol. http and https only applicable for fileSource "
+        },
+        "destination": {
+          "$ref": "#/definitions/Destination"
+        }
+      }
+    },
+    "Destination": {
+      "id": "#/definitions/Destination",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 4.7",
+      "required": [
+        "hostname",
+        "path"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "user name to use for server login"
+        },
+        "password": {
+          "type": "string",
+          "description": "password to use for server login"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "server address"
+        },
+        "path": {
+          "type": "string",
+          "description": "configuration text file path on server"
+        }
+      }
+    }
+  }
+}

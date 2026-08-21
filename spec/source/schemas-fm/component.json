@@ -1,0 +1,128 @@
+{
+  "id": "http://gigamon.com/schemas-fm/component.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon source and rules schema",
+  "definitions": {
+    "components-get": {
+      "id": "#/definitions/components-get",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "ids"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "PORT",
+            "PORT_GROUP",
+            "GIGASTREAM",
+            "VIRTUAL_PORT",
+            "NULL_PORT",
+            "IP_INTERFACE",
+            "INLINE_NETWORK",
+            "INLINE_NETWORK_LAG",
+            "INLINE_NETWORK_GROUP",
+            "INLINE_TOOL",
+            "INLINE_TOOL_GROUP",
+            "INLINE_SERIAL_TOOL_GROUP",
+            "CIRCUIT_TUNNEL",
+            "GSOP",
+            "PRIORITIZED_FLOW"
+          ]
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "description": "ids"
+          }
+        },
+        "metadataDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/metadataDetail",
+            "description": "Detailed definition of this component metadataDetails"
+          }
+        }
+      }
+    },
+    "components-update": {
+      "id": "#/definitions/components-update",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "ids"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "PORT",
+            "PORT_GROUP",
+            "GIGASTREAM",
+            "VIRTUAL_PORT",
+            "FABRIC_PORT_GROUP",
+            "NULL_PORT",
+            "IP_INTERFACE",
+            "INLINE_NETWORK",
+            "INLINE_NETWORK_LAG",
+            "INLINE_NETWORK_GROUP",
+            "INLINE_TOOL",
+            "INLINE_TOOL_GROUP",
+            "INLINE_SERIAL_TOOL_GROUP",
+            "CIRCUIT_TUNNEL",
+            "GSOP",
+            "PRIORITIZED_FLOW"
+          ]
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "description": "ids"
+          }
+        }
+      }
+    },
+    "metadataDetail": {
+      "id": "#/definitions/metadataDetail",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "portType"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "port Id"
+        },
+        "alias": {
+          "type": "string",
+          "description": "port alias"
+        },
+        "portType": {
+          "type": "string",
+          "description": "port alias"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        },
+        "trafficHealthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        }
+      }
+    }
+  }
+}

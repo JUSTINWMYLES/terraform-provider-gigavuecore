@@ -1,0 +1,24 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gigaInsightRegistrationRequest.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Insight Registration Request schema",
+  "definitions": {
+    "GigaInsightRegistrationRequest": {
+      "id": "#/definitions/gigaInsightRegistrationRequest",
+      "type": "object",
+      "description": "Gigamon Insight Node Registration Request definition",
+      "required": [
+        "ipv4Address",
+        "ipv6Address"
+      ],
+      "properties": {
+        "ipv4Address": {
+          "type": "string"
+        },
+        "ipv6Address": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

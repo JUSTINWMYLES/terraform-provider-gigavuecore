@@ -1,0 +1,124 @@
+{
+  "id": "http://gigamon.com/schemas-fm/ipInterfaceConfigs.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "IP Interface Solution Schema",
+  "definitions": {
+    "ipInterfaceSolution": {
+      "id": "#/definitions/ipInterfaceSolution",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ipInterfaceConfigs"
+      ],
+      "properties": {
+        "ipInterfaceConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ipInterfaceConfigs"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "RBAC Tags",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "ipInterfaceConfigs": {
+      "id": "#/definitions/ipInterfaceConfigs",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "clusterName",
+        "interfaces",
+        "ipAddress",
+        "ipMask",
+        "gateway",
+        "applications"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the ip interface solution"
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "clusterId"
+        },
+        "interfaces": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "network ports ,tool ports or circuit ports"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "ipv4/ipv6 address"
+        },
+        "ipMask": {
+          "type": "string",
+          "description": "ipAddress netmask required with ipAddress"
+        },
+        "gateway": {
+          "type": "string",
+          "description": "gateway ipv4 or ipv6 address"
+        },
+        "mtu": {
+          "type": "integer",
+          "format": "int32",
+          "default": 1500,
+          "minimum": 1500,
+          "maximum": 9400
+        },
+        "applications": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "CPN",
+              "UPN",
+              "CONTROL_METADATA_EXPORTER",
+              "USER_METADATA_EXPORTER"
+            ]
+          },
+          "description": "GigaSMART applications for which the ipInterface is used"
+        },
+        "managedStatus": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE"
+          ],
+          "readOnly": true,
+          "description": "managed status of the ip interface configuration. ACTIVE if the cluster is managed in this FM , else it will be marked as INACTIVE"
+        },
+        "refCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "number of control or user nodes using this ip interface configuration",
+          "readOnly": true
+        },
+        "configStatusReasons": {
+          "type": "string",
+          "readOnly": true
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "PARTIAL_SUCCESS",
+            "SUCCESS",
+            "FAILED",
+            "INCOMPLETE_DELETION",
+            "PENDING",
+            "DAMAGED"
+          ],
+          "readOnly": true
+        }
+      }
+    }
+  }
+}

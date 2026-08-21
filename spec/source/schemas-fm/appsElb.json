@@ -1,0 +1,83 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsElb.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Elb Configuration schema",
+  "definitions": {
+    "Elb": {
+      "id": "#/definitions/Elb",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "app elb alias"
+        },
+        "hashFields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ElbHashFields"
+          }
+        }
+      }
+    },
+    "ElbHashFields": {
+      "id": "#/definitions/Elb",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hashField"
+      ],
+      "properties": {
+        "hashField": {
+          "type": "string",
+          "enum": [
+            "ip",
+            "l4Port",
+            "gtpuTeid"
+          ]
+        },
+        "hashLocation": {
+          "type": "string",
+          "enum": [
+            "inner",
+            "outer"
+          ],
+          "description": "Ignored when 'hashField' == 'gtpuTeid'. required otherwise"
+        }
+      }
+    },
+    "ElbQueryResponse": {
+      "id": "#/definitions/ElbsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "elb"
+      ],
+      "properties": {
+        "elb": {
+          "$ref": "#/definitions/Elb"
+        }
+      }
+    },
+    "ElbsQueryResponse": {
+      "id": "#/definitions/ElbsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "elbs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Elb"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,479 @@
+{
+  "id": "http://gigamon.com/schemas-fm/flexInlineSslApp.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Inline SSL App schema",
+  "definitions": {
+    "GigaFlexInlineSslAppListQueryResponse": {
+      "id": "#/definitions/GigaFlexInlineSslAppListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigaFlexInlineSslApps"
+      ],
+      "properties": {
+        "gigaFlexInlineSslApps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineSslApp"
+          }
+        }
+      }
+    },
+    "GigaFlexInlineSslAppSingleQueryResponse": {
+      "id": "#/definitions/GigaFlexInlineSslAppSingleQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigaFlexInlineSslApp"
+      ],
+      "properties": {
+        "gigaFlexInlineSslApp": {
+          "$ref": "#/definitions/GigaFlexInlineSslApp"
+        }
+      }
+    },
+    "GigaFlexInlineSslApp": {
+      "id": "#/definitions/GigaFlexInlineSslApp",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the inline ssl app"
+        },
+        "clusterName": {
+          "id": "#/definitions/clusterName",
+          "type": "string"
+        },
+        "riaEnabled": {
+          "type": "string",
+          "enum": [
+            "false",
+            "true"
+          ],
+          "description": "Enable RIA to configure ssl app in two nodes which is needed for RIA SSL"
+        },
+        "riaConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineSslRiaConfigs"
+          },
+          "description": "Configs applicable if RIA is enabled in ssl app, the listed properties here will not be applicable in appIntent configs if RIA is enabled"
+        },
+        "mTLS": {
+          "type": "string",
+          "enum": [
+            "false",
+            "true"
+          ],
+          "description": "Enable mTLS to do client Authentication"
+        },
+        "appIntentConfigs": {
+          "$ref": "#/definitions/GigaFlexInlineSslAppIntentConfig"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "SUCCESS",
+            "PARTIAL_SUCCESS",
+            "FAILED",
+            "PENDING",
+            "INCOMPLETE_DELETION",
+            "DAMAGED"
+          ],
+          "description": "Configuration status of this SSL app"
+        },
+        "configStatusReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "In case of configuration failure, this message provides details about the possible cause of the failure"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "GigaFlexInlineSslAppIntentConfig": {
+      "id": "#/definitions/GigaFlexInlineSslAppIntentConfig",
+      "type": "object",
+      "properties": {
+        "gsEngines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vportConfig": {
+          "$ref": "smart.json#/definitions/Vport"
+        },
+        "sslProfileConfig": {
+          "$ref": "#/definitions/GigaFlexInlineSslProfile"
+        },
+        "whiteListConfig": {
+          "$ref": "#/definitions/GigaFlexInlineProfilesListConfig"
+        },
+        "blackListConfig": {
+          "$ref": "#/definitions/GigaFlexInlineProfilesListConfig"
+        },
+        "keyStoreConfigs": {
+          "$ref": "#/definitions/GigaFlexInlineSslKeyStoreConfigs"
+        },
+        "trustStoreConfigs": {
+          "$ref": "#/definitions/GigaFlexInlineSslTrustStoreConfigs"
+        },
+        "globalDefaultConfigs": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslConfig"
+        },
+        "networkAccessConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineNetworkAccess"
+          }
+        },
+        "vlanId": {
+          "type": "integer",
+          "description": "Vlan id for proxy maps"
+        },
+        "tagProtocolId": {
+          "type": "string",
+          "enum": [
+            "0x8100",
+            "0x9100",
+            "0x88a8"
+          ],
+          "default": "0x8100",
+          "description": "When tool VLAN tag is added , this protocol Id will be added which egress out the traffic"
+        },
+        "sslPath": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineSslPathConfigs"
+          }
+        },
+        "inlineSsl": {
+          "$ref": "smart.json#/definitions/GsGroupParamsResourceInlineSsl"
+        },
+        "gsGroupAlias": {
+          "type": "string",
+          "description": "Alias of the gs group auto created by ssl app"
+        },
+        "sslProfileAlias": {
+          "type": "string",
+          "description": "Alias of the ssl profile auto created by ssl app"
+        },
+        "vportAlias": {
+          "type": "string",
+          "description": "Alias of the vport auto created by ssl app"
+        },
+        "gsopAlias": {
+          "type": "string",
+          "description": "Alias of the gsop auto created by ssl app"
+        },
+        "gsGroupParamConfigs": {
+          "$ref": "#/definitions/GigaFlexInlineGsGroupParamConfigs"
+        },
+        "mTLSConfigs" : {
+          "$ref": "#/definitions/GigaFlexInlineMTLSConfigs"
+        }
+      }
+    },
+    "GigaFlexInlineMTLSConfigs": {
+      "id": "#/definitions/GigaFlexInlineMTLSConfigs",
+      "type": "object",
+      "properties": {
+        "trustStore": {
+          "type": "string",
+          "description": "Alias of the client trust store"
+        },
+        "primarySigning": {
+          "type": "string",
+          "description": "Alias of the key from keyStore used for primary signing for mTLS"
+        },
+        "secondarySigning": {
+          "type": "string",
+          "description": "Alias of the key from keyStore used for secondary signing for mTLS"
+        }
+      }
+    },
+    "GigaFlexInlineGsGroupParamConfigs": {
+      "id": "#/definitions/GigaFlexInlineGsGroupParamConfigs",
+      "type": "object",
+      "properties": {
+        "hsmGroup": {
+          "type": "string",
+          "description": "Alias of the hsmGroup"
+        },
+        "sessionLogging": {
+          "$ref": "smart.json#/definitions/GsGroupParamsSessionLogging"
+        }
+      }
+    },
+    "GigaFlexInlineSslRiaEnabled": {
+      "id": "#/definitions/GigaFlexInlineSslRiaEnabled",
+      "type": "object",
+      "properties": {
+        "trustStoreAppendConfigs": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslGenericEnableTrue"
+        },
+        "trustStoreReplaceConfigs": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslGenericEnableTrue"
+        }
+      }
+    },
+    "GigaFlexInlineSslRiaConfigs": {
+      "id": "#/definitions/GigaFlexInlineSslRiaConfigs",
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "id": "#/definitions/clusterName",
+          "type": "string"
+        },
+        "gsGroupAlias": {
+          "type": "string",
+          "description": "Alias of the gs group auto created by ssl app"
+        },
+        "sslProfileAlias": {
+          "type": "string",
+          "description": "Alias of the ssl profile auto created by ssl app"
+        },
+        "vportAlias": {
+          "type": "string",
+          "description": "Alias of the vport auto created by ssl app"
+        },
+        "gsopAlias": {
+          "type": "string",
+          "description": "Alias of the gsop auto created by ssl app"
+        },
+        "gsEngines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "networkAccessConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineNetworkAccess"
+          }
+        }
+      }
+    },
+    "GigaFlexInlineProfilesListConfig": {
+      "id": "#/definitions/GigaFlexInlineProfilesListConfig",
+      "type": "object",
+      "properties": {
+        "profileList": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfilesList"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "ADD",
+            "REPLACE",
+            "DELETE"
+          ]
+        }
+      }
+    },
+    "GigaFlexInlineSslProfile": {
+      "id": "#/definitions/GigaFlexInlineSslProfile",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Flexible Inline SSL Profile",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the inline SSL profile"
+        },
+        "certificate": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileCertificate",
+          "description": "SSL profile certificate configuration"
+        },
+        "clientAuth": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileCertificate",
+          "description": "SSL profile certificate configuration"
+        },
+        "decrypt": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileDecrypt",
+          "description": "SSL profile configuration on decrypt action"
+        },
+        "noDecrypt": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileNoDecrypt",
+          "description": "SSL profile configuration on no-decrypt action"
+        },
+        "nonSslTcp": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileNonSslTcp",
+          "description": "SSL profile configuration on TCP proxy action"
+        },
+        "tcp": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileTcp",
+          "description": "SSL profile configuration on TCP"
+        },
+        "highAvail": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileHa",
+          "description": "SSL profile configuration on high availability"
+        },
+        "networkGroup": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileNetworkGroup",
+          "description": "SSL Profile configuration for multiple entry in network groups"
+        },
+        "monitor": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable",
+            "inline"
+          ],
+          "default": "disable"
+        },
+        "defaultAction": {
+          "type": "string",
+          "description": "Action to take if none of the profile rules match",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ],
+          "default": "no-decrypt"
+        },
+        "tool": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileToolConfig",
+          "description": "SSL Profile configuration for Tools"
+        },
+        "startTls": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileStartTls",
+          "description": "SSL profile configuration on start TLS action"
+        },
+        "urlCache": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileUrlCache",
+          "description": "SSL profile configuration on url-cache"
+        },
+        "rules": {
+          "type": "array",
+          "description": "inline SSL profile rules",
+          "items": {
+            "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileRule"
+          }
+        },
+        "keyMap": {
+          "type": "array",
+          "items": {
+            "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileKeyMap"
+          }
+        },
+        "splitProxy": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslProfileSplitProxy",
+          "description": "SSL profile configuration for Split Proxy"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "GigaFlexInlineSslKeyStoreConfigs": {
+      "id": "#/definitions/GigaFlexInlineSslKeyStoreConfigs",
+      "type": "object",
+      "properties": {
+        "deploymentType": {
+          "type": "string",
+          "enum": [
+            "Inbound",
+            "Outbound",
+            "Hybrid"
+          ]
+        },
+        "inboundKeys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineInboundKey"
+          }
+        },
+        "outboundkeys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFlexInlineOutboundKey"
+          }
+        }
+      }
+    },
+    "GigaFlexInlineInboundKey": {
+      "id": "#/definitions/GigaFlexInlineInboundKey",
+      "type": "object",
+      "properties": {
+        "serverDomainAlias": {
+          "type": "string"
+        },
+        "keyAlias": {
+          "type": "string",
+          "description": "Key to decrypt the traffic for the associated server/domain address"
+        }
+      }
+    },
+    "GigaFlexInlineOutboundKey": {
+      "id": "#/definitions/GigaFlexInlineOutboundKey",
+      "type": "object",
+      "properties": {
+        "keyAlias": {
+          "type": "string"
+        },
+        "signingFor": {
+          "type": "string",
+          "enum": [
+            "Primary",
+            "Secondary"
+          ]
+        }
+      }
+    },
+    "GigaFlexInlineSslTrustStoreConfigs": {
+      "id": "#/definitions/GigaFlexInlineSslTrustStoreConfigs",
+      "type": "object",
+      "properties": {
+        "trustStoreAppendConfigs": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslTrustStoreCertSpec"
+        },
+        "trustStoreReplaceConfigs": {
+          "$ref": "appsInlineSsl.json#/definitions/InlineSslTrustStore"
+        }
+      }
+    },
+    "GigaFlexInlineNetworkAccess": {
+      "id": "#/definitions/GigaFlexInlineNetworkAccess",
+      "type": "object",
+      "properties": {
+        "networkAccess": {
+          "$ref": "smart.json#/definitions/GsEngineInterface"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "Add",
+            "None"
+          ],
+          "description": "Adds or deletes(None) engine interface connectivity"
+        }
+      }
+    },
+    "GigaFlexInlineSslPathConfigs": {
+      "id": "#/definitions/GigaFlexInlineSslPathConfigs",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "flexInlineMap": {
+          "$ref": "map.json#/definitions/MapFlexInline"
+        }
+      }
+    }
+  }
+}

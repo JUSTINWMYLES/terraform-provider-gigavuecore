@@ -1,0 +1,1202 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmTemplates.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Templates schema",
+  "definitions": {
+    "fmTemplateHierarchicalConfigsQueryResponse": {
+      "id": "#/definitions/fmTemplateHierarchicalConfigsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fmTemplateHierarchicalConfigs"
+      ],
+      "properties": {
+        "fmTemplateHierarchicalConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/fmTemplateHierarchicalConfigSpec"
+          },
+          "description": "All FM Template  Configurations"
+        }
+      }
+    },
+    "fmTemplateHierarchicalConfigSpec": {
+      "id": "#/definitions/fmTemplateHierarchicalConfigSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "FM Template Configuration of a ConfigType",
+      "properties": {
+        "configType": {
+          "enum": [
+            "SNMPTRAPS",
+            "METADATA_TEMPLATE",
+            "PORT_NEIGHBOR_DISCOVERY",
+            "ACME_TEMPLATE",
+            "LDAP_SERVERS_TEMPLATE",
+            "LDAP_SYSTEM_CONFIG_TEMPLATE",
+            "AAA_AUTH_CONFIG_TEMPLATE",
+            "SSL_CERTIFICATE_TEMPLATE",
+            "PORT_PACKET_THRESHOLD",
+            "GIGASTREAM_THRESHOLD",
+            "USERDEFINED_APPLICATION_TEMPLATE",
+            "SSH_CIPHERS_CONFIG",
+            "FM_SNMPV3_USER",
+            "PROXY_SERVER_PROFILE",
+            "TLS_CIPHERS_CONFIG"
+
+          ],
+          "type": "string",
+          "description": "Configuration Type of the FM template"
+        },
+        "configLevel": {
+          "enum": [
+            "GLOBAL",
+            "SITE",
+            "CLUSTER",
+            "METADATA_SOLUTION",
+            "TAG",
+            "APP_INTEL_SOLUTION"
+          ],
+          "type": "string",
+          "description": "Scope of the applied FM template"
+        },
+        "configLevelValue": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "snmpTrapEventConfigs": {
+              "type": "array",
+              "description": "Available when ConfigType is SNMPTRAPS",
+              "items": {
+                "$ref": "#/definitions/snmpTrapEventConfig"
+              }
+            },
+            "exportMetadataAppProfile": {
+              "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfile"
+            },
+            "metadataExporter": {
+              "$ref": "appsMetadata.json#/definitions/MetadataExporter"
+            },
+            "gigaPortNeighborsDiscoveryConfig": {
+              "$ref": "#/definitions/GigaPortNeighborsDiscoveryConfig"
+            },
+            "deviceSslCertificateConfigs": {
+              "type": "array",
+              "description": "Available when ConfigType is SSL_CERTIFICATE_TEMPLATE",
+              "items": {
+                "$ref": "fmTemplateSslConfig.json#/definitions/sslCertificateConfig"
+              }
+            },
+            "acmeCertificate": {
+              "type": "array",
+              "description": "Available when ConfigType is ACME_TEMPLATE",
+              "items": {
+                "$ref": "acme.json#/definitions/AcmeGlobalConfigDetails"
+              }
+            },
+            "ldapServerSystemConfig": {
+              "type": "object",
+              "description": "Available for ConfigType LDAP_SYSTEM_CONFIG_TEMPLATE",
+              "items": {
+                "$ref": "nodeSystemAaa.json#/definitions/LdapSystemConfig"
+              }
+            },
+            "ldapServers": {
+              "type": "array",
+              "description": "List of LDAP Servers. Available for ConfigType LDAP_SERVERS_TEMPLATE ChildType ldapServers",
+              "items": {
+                "$ref": "nodeSystemAaa.json#/definitions/LdapServer"
+              }
+            },
+            "aaaAuthConfig": {
+              "$ref": "aaaAuthConfig.json#/definitions/AaaAuthConfig"
+            },
+            "portPacketThresholdConfig": {
+              "$ref": "#/definitions/PortPacketThresholdConfig"
+            },
+            "gigaStreamThresholdConfig": {
+              "$ref": "#/definitions/GigaStreamThresholdConfig"
+            },
+            "gigaUserDefinedApplicationConfig": {
+              "$ref": "#/definitions/GigaUserDefinedApplicationConfig"
+            },
+            "sshCiphersConfig": {
+              "$ref": "sshCipherConfig.json#/definitions/sshCipherGlobalConfig"
+            },
+            "snmpV3UsersConfig": {
+              "$ref": "snmpV3UsersConfig.json#/definitions/snmpV3UsersConfig"
+            },
+            "proxyServerProfile": {
+              "$ref": "appsProxyServerProfiles.json#/definitions/proxyServerProfile"
+            }
+          }
+        },
+        "configResource": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "For a particular config type, there may be multiple templates with different levels. For example, cluster level the user can have more than one template and in same way in tag level there may be more than one template for each tag combination. In such cases, the configResource property can be used to contain the list of clusters associated to the template or the tag key values combination of the template. The data structure changes based on the level hence it is kept as type Object.",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/TagTemplateResourceConfig"
+            },
+            {
+              "$ref": "#/definitions/ClusterTemplateResourceConfig"
+            }
+          ]
+        },
+        "updateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "templateName": {
+          "type": "string"
+        },
+        "refCount": {
+          "type": "integer"
+        },
+        "refObject": {
+          "type": "array",
+          "$ref": "#/definitions/refObject"
+        },
+        "modifiable": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "snmpTrapEventConfig": {
+      "id": "#/definitions/snmpTrapEventConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "notifyEvent": {
+          "type": "string",
+          "readonly": true
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "PortPacketThresholdConfig": {
+      "id": "#/definitions/PortPacketThresholdConfig",
+      "type": "object",
+      "description": "Contains port threshold configs",
+      "additionalProperties": false,
+      "properties": {
+        "dropThreshold": {
+          "type": "object",
+          "description": "Drop threshold config for Rx and Tx",
+          "properties": {
+            "rx": {
+              "type": "array",
+              "description": "Threshold values for Rx packet drop",
+              "items": {
+                "type": "object",
+                "$ref": "#/definitions/GigaPortDropThreshold"
+              }
+            },
+            "tx": {
+              "type": "array",
+              "description": "Threshold values for Tx packet drop",
+              "items": {
+                "type": "object",
+                "$ref": "#/definitions/GigaPortDropThreshold"
+              }
+            }
+          }
+        },
+        "errorThreshold": {
+          "type": "object",
+          "description": "Error threshold config for Rx and Tx",
+          "properties": {
+            "rx": {
+              "type": "array",
+              "description": "Threshold values for Rx packet error",
+              "items": {
+                "type": "object",
+                "$ref": "#/definitions/GigaPortErrorThreshold"
+              }
+            },
+            "tx": {
+              "type": "array",
+              "description": "Threshold values for Tx packet error",
+              "items": {
+                "type": "object",
+                "$ref": "#/definitions/GigaPortErrorThreshold"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GigaPortDropThreshold": {
+      "id": "#/definitions/GigaPortDropThreshold",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "portType": {
+          "enum": [
+            "all",
+            "network",
+            "tool",
+            "stack",
+            "inline-net",
+            "inline-tool",
+            "hybrid",
+            "gigasmart",
+            "circuit"
+          ],
+          "type": "string",
+          "description": "Port type"
+        },
+        "percent": {
+          "type": "number",
+          "description": "Threshold value in percent of packets out of total packets in a given interval. '-1' will disable threshold feature."
+        },
+        "count": {
+          "type": "integer",
+          "description": "Threshold value in number of packets out of total packets in a given interval. '-1' will disable threshold feature."
+        }
+      }
+    },
+    "GigaPortErrorThreshold": {
+      "id": "#/definitions/GigaPortErrorThreshold",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "portType": {
+          "enum": [
+            "all",
+            "network",
+            "tool",
+            "stack",
+            "inline-net",
+            "inline-tool",
+            "hybrid",
+            "circuit"
+          ],
+          "type": "string",
+          "description": "Port type"
+        },
+        "percent": {
+          "type": "number",
+          "description": "Threshold value in percent of packets out of total packets in a given interval. '-1' will disable threshold feature."
+        },
+        "count": {
+          "type": "integer",
+          "description": "Threshold value in number of packets out of total packets in a given interval. '-1' will disable threshold feature."
+        }
+      }
+    },
+    "GigaPortNeighborsDiscoveryConfig": {
+      "id": "#/definitions/GigaPortNeighborsDiscoveryConfig",
+      "type": "object",
+      "description": "To contain the port neighbour discovery template config",
+      "additionalProperties": false,
+      "properties": {
+        "resourceConfigs": {
+          "type": "array",
+          "description": "List of config for each port type",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GigaPortTypeDiscoveryConfig"
+          }
+        }
+      }
+    },
+    "GigaStreamThresholdConfig": {
+      "id": "#/definitions/GigaStreamThresholdConfig",
+      "type": "object",
+      "description": "Gigastream threshold configs",
+      "additionalProperties": false,
+      "properties": {
+        "gigaStreamTypeThresholds": {
+          "type": "array",
+          "description": "GigaStream threshold config for port types",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/GigaStreamThreshold"
+          }
+        }
+      }
+    },
+    "GigaStreamThreshold": {
+      "id": "#/definitions/GigaStreamThreshold",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "all",
+            "tool",
+            "stack",
+            "hybrid",
+            "circuit"
+          ],
+          "type": "string",
+          "description": "Port type"
+        },
+        "varianceThreshold": {
+          "type": "number",
+          "description": "Threshold value in percentage. '-1' will disable threshold feature."
+        }
+      }
+    },
+    "GigaPortTypeDiscoveryConfig": {
+      "id": "#/definitions/GigaPortTypeDiscoveryConfig",
+      "type": "object",
+      "description": "To contain the port neighbour discovery config for a port type",
+      "additionalProperties": false,
+      "properties": {
+        "portType": {
+          "enum": [
+            "network",
+            "tool",
+            "hybrid",
+            "stack",
+            "circuit"
+          ],
+          "description": "Type of the port"
+        },
+        "gdp": {
+          "type": "boolean",
+          "default": false
+        },
+        "cdp": {
+          "type": "boolean",
+          "default": false
+        },
+        "lldp": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "TagTemplateResourceConfig": {
+      "id": "#/definitions/TagTemplateResourceConfig",
+      "type": "object",
+      "description": "To contain the list of tag combinations associated to the template",
+      "additionalProperties": false,
+      "properties": {
+        "tagConfigs": {
+          "type": "array",
+          "description": "List of tag key-value combinations",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/TagResourceConfig"
+          }
+        }
+      }
+    },
+    "TagResourceConfig": {
+      "id": "#/definitions/TagResourceConfig",
+      "type": "object",
+      "description": "Contains tag key-values data and how the tag values to be checked against DB",
+      "additionalProperties": false,
+      "properties": {
+        "tagKey": {
+          "type": "string"
+        },
+        "tagValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "condition": {
+          "enum": [
+            "ANY",
+            "ALL"
+          ],
+          "default": "ANY",
+          "description": "How the tag values to be compared against the resource. ALL means the given all tag values match with the resource. ANY means any of the tag values match with the resource"
+        }
+      }
+    },
+    "ClusterTemplateResourceConfig": {
+      "id": "#/definitions/ClusterTemplateResourceConfig",
+      "type": "object",
+      "description": "To contain the list of clusters associated to the template",
+      "additionalProperties": false,
+      "properties": {
+        "clusterIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "fmTemplateHierarchicalConfigChildEntrySpec": {
+      "id": "#/definitions/fmTemplateHierarchicalConfigChildEntrySpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "ChildType Entry for FM Template Configuration of a ConfigType ",
+      "properties": {
+        "configType": {
+          "enum": [
+            "LDAP_SERVERS_TEMPLATE",
+            "LDAP_SYSTEM_CONFIG_TEMPLATE"
+          ],
+          "type": "string",
+          "description": "Configuration Type of the FM template"
+        },
+        "childType": {
+          "enum": [
+            "ldapServers",
+            "remoteMapTable"
+          ],
+          "type": "string",
+          "description": "Child Type of the FM template Configuration"
+        },
+        "configLevel": {
+          "enum": [
+            "GLOBAL",
+            "SITE",
+            "CLUSTER",
+            "METADATA_SOLUTION"
+          ],
+          "type": "string",
+          "description": "Scope of the applied FM template"
+        },
+        "configLevelValue": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ldapServers": {
+              "type": "array",
+              "description": "List of LDAP Servers. Available for ConfigType LDAP_SERVERS_TEMPLATE ChildType ldapServers",
+              "items": {
+                "$ref": "nodeSystemAaa.json#/definitions/LdapServer"
+              }
+            },
+            "remoteMapTable": {
+              "type": "array",
+              "description": "List of LDAP User Group Mapping. Available for ConfigType LDAP_SYSTEM_CONFIG_TEMPLATE ChildType remoteMapTable",
+              "items": {
+                "$ref": "nodeSystemAaa.json#/definitions/LdapRemoteMapEntry"
+              }
+            }
+          }
+        }
+      }
+    },
+    "FMTemplateConfigExceptedClusters": {
+      "id": "#/definitions/FMTemplateConfigExceptedClusters",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "device": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DevicePortPacketThreshold"
+          }
+        }
+      }
+    },
+    "FMTemplateGSConfigExceptedClusters": {
+      "id": "#/definitions/FMTemplateGSConfigExceptedClusters",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "device": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceGigaStream"
+          }
+        }
+      }
+    },
+    "DeviceGigaStream": {
+      "id": "#/definitions/DeviceGigaStream",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "Unique ID representing this managed Gigamon device",
+          "readonly": true
+        },
+        "deviceIp": {
+          "type": "string",
+          "description": "Device management IP Address",
+          "readonly": true
+        },
+        "topoNodeId": {
+          "type": "string",
+          "description": "Unique topology node ID. Generated by FM server",
+          "readonly": true
+        },
+        "hostname": {
+          "type": "string",
+          "description": "Device configured hostname",
+          "readonly": true
+        },
+        "family": {
+          "type": "string",
+          "description": "Family",
+          "readonly": true
+        },
+        "model": {
+          "type": "string",
+          "description": "Gigamon physical device models",
+          "readonly": true
+        },
+        "boxId": {
+          "type": "string",
+          "description": "Box ID",
+          "readonly": true
+        },
+        "swVersion": {
+          "type": "string",
+          "description": "Software Version",
+          "readonly": true
+        },
+        "licensed": {
+          "type": "string",
+          "description": "Licensed",
+          "readonly": true
+        },
+        "clusterMode": {
+          "type": "string",
+          "description": "Standalone: not a member of any cluster/stack; master: cluster/stack master; standby: for H-series only; slave: non-master member of an H-series cluster or a slave in a G-series stack; vfex: visibility fabric extender of an H-Series cluster",
+          "readonly": true
+        },
+        "clusterModeAlias": {
+          "type": "string",
+          "description": "Cluster Mode Alias",
+          "readonly": true
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Unique ID of the cluster",
+          "readonly": true
+        },
+        "masterPref": {
+          "type": "integer",
+          "description": "Master election preference rank",
+          "readonly": true
+        },
+        "leaderPref": {
+          "type": "integer",
+          "description": "Leader Preference",
+          "readonly": true
+        },
+        "deviceIps": {
+          "type": "array",
+          "description": "Device Ips",
+          "readonly": true
+        },
+        "discOutcome": {
+          "type": "string",
+          "description": "Status of FM-to-device communication channel",
+          "readonly": true
+        },
+        "healthState": {
+          "type": "string",
+          "description": "'green' indicates healthy state; 'yellow' indicates warning state; 'orange' indicates error state; 'red' indicates critical state",
+          "readonly": true
+        },
+        "operStatus": {
+          "type": "string",
+          "description": "Describes device operational state. 'operational': fully configurable; 'safe': no configuration possible; 'limited': limited configuration possible. Applicable only for H-series devices",
+          "readonly": true
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tags"
+          }
+        },
+        "globalNodeId": {
+          "type": "string",
+          "description": "Global Node Id",
+          "readonly": true
+        },
+        "ubootVersion": {
+          "type": "string",
+          "description": "Uboot Version",
+          "readonly": true
+        },
+        "serialNumber": {
+          "type": "string",
+          "description": "Serial Number",
+          "readonly": true
+        },
+        "configRefreshStatistics": {
+          "type": "object",
+          "$ref": "#/definitions/ConfigRefreshStatistics",
+          "readonly": true
+        },
+        "statsCollectionCounters": {
+          "type": "object",
+          "$ref": "#/definitions/StatsCollectionCounters",
+          "readonly": true
+        },
+        "behindNat": {
+          "type": "boolean",
+          "readonly": true
+        },
+        "neighbourNodes": {
+          "type": "array",
+          "description": "Neighbour Nodes",
+          "readonly": true
+        },
+        "neighbourLinks": {
+          "type": "array",
+          "description": "Neighbour Links",
+          "readonly": true
+        },
+        "configSaveCounters": {
+          "type": "object",
+          "$ref": "#/definitions/ConfigSaveCounters",
+          "readonly": true
+        },
+        "suppressed": {
+          "type": "boolean",
+          "readonly": true
+        },
+        "alarmCount": {
+          "type": "integer",
+          "description": "Alarm Count",
+          "readonly": true
+        },
+        "thresholdConfig": {
+          "type": "object",
+          "$ref": "#/definitions/GigaStreamTypeThresholds"
+        },
+        "exceptedGS": {
+          "type": "array",
+          "description": "Expected Gigastream"
+        }
+      }
+    },
+    "DevicePortPacketThreshold": {
+      "id": "#/definitions/DevicePortPacketThreshold",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "Unique ID representing this managed Gigamon device",
+          "readonly": true
+        },
+        "deviceIp": {
+          "type": "string",
+          "description": "Device management IP Address",
+          "readonly": true
+        },
+        "topoNodeId": {
+          "type": "string",
+          "description": "Unique topology node ID. Generated by FM server",
+          "readonly": true
+        },
+        "hostname": {
+          "type": "string",
+          "description": "Device configured hostname",
+          "readonly": true
+        },
+        "family": {
+          "type": "string",
+          "description": "Family",
+          "readonly": true
+        },
+        "model": {
+          "type": "string",
+          "description": "Gigamon physical device models",
+          "readonly": true
+        },
+        "boxId": {
+          "type": "string",
+          "description": "Box ID",
+          "readonly": true
+        },
+        "swVersion": {
+          "type": "string",
+          "description": "Software Version",
+          "readonly": true
+        },
+        "licensed": {
+          "type": "string",
+          "description": "Licensed",
+          "readonly": true
+        },
+        "clusterMode": {
+          "type": "string",
+          "description": "Standalone: not a member of any cluster/stack; master: cluster/stack master; standby: for H-series only; slave: non-master member of an H-series cluster or a slave in a G-series stack; vfex: visibility fabric extender of an H-Series cluster",
+          "readonly": true
+        },
+        "clusterModeAlias": {
+          "type": "string",
+          "description": "Cluster Mode Alias",
+          "readonly": true
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Unique ID of the cluster",
+          "readonly": true
+        },
+        "masterPref": {
+          "type": "integer",
+          "description": "Master election preference rank",
+          "readonly": true
+        },
+        "leaderPref": {
+          "type": "integer",
+          "description": "Leader Preference",
+          "readonly": true
+        },
+        "deviceIps": {
+          "type": "array",
+          "description": "Device Ips",
+          "readonly": true
+        },
+        "discOutcome": {
+          "type": "string",
+          "description": "Status of FM-to-device communication channel",
+          "readonly": true
+        },
+        "healthState": {
+          "type": "string",
+          "description": "'green' indicates healthy state; 'yellow' indicates warning state; 'orange' indicates error state; 'red' indicates critical state",
+          "readonly": true
+        },
+        "operStatus": {
+          "type": "string",
+          "description": "Describes device operational state. 'operational': fully configurable; 'safe': no configuration possible; 'limited': limited configuration possible. Applicable only for H-series devices",
+          "readonly": true
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tags"
+          }
+        },
+        "globalNodeId": {
+          "type": "string",
+          "description": "Global Node Id",
+          "readonly": true
+        },
+        "ubootVersion": {
+          "type": "string",
+          "description": "Uboot Version",
+          "readonly": true
+        },
+        "serialNumber": {
+          "type": "string",
+          "description": "Serial Number",
+          "readonly": true
+        },
+        "configRefreshStatistics": {
+          "type": "object",
+          "$ref": "#/definitions/ConfigRefreshStatistics",
+          "readonly": true
+        },
+        "statsCollectionCounters": {
+          "type": "object",
+          "$ref": "#/definitions/StatsCollectionCounters",
+          "readonly": true
+        },
+        "behindNat": {
+          "type": "boolean",
+          "readonly": true
+        },
+        "neighbourNodes": {
+          "type": "array",
+          "description": "Neighbour Nodes",
+          "readonly": true
+        },
+        "neighbourLinks": {
+          "type": "array",
+          "description": "Neighbour Links",
+          "readonly": true
+        },
+        "configSaveCounters": {
+          "type": "object",
+          "$ref": "#/definitions/ConfigSaveCounters",
+          "readonly": true
+        },
+        "suppressed": {
+          "type": "boolean",
+          "readonly": true
+        },
+        "alarmCount": {
+          "type": "integer",
+          "description": "Alarm Count",
+          "readonly": true
+        },
+        "thresholdConfig": {
+          "type": "object",
+          "$ref": "#/definitions/PortPacketThresholds"
+        }
+      }
+    },
+    "Tags": {
+      "id": "#/definitions/FMTemplateGSConfigExceptedClusters",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tagKey": {
+          "type": "string",
+          "description": "Name of the Tag",
+          "readonly": true
+        },
+        "tagValue": {
+          "type": "array",
+          "description": "Tag Values",
+          "readonly": true
+        }
+      }
+    },
+    "ConfigRefreshStatistics": {
+      "id": "#/definitions/ConfigRefreshStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "totalAttempts": {
+          "type": "string",
+          "description": "Total Attempts",
+          "readonly": true
+        },
+        "successfulAttempts": {
+          "type": "string",
+          "description": "Successful Attempts",
+          "readonly": true
+        },
+        "failureAttempts": {
+          "type": "string",
+          "description": "Failure Attempts",
+          "readonly": true
+        },
+        "lastAttemptTime": {
+          "type": "string",
+          "description": "Last Attempt Time",
+          "readonly": true
+        },
+        "lastSuccessfulAttemptTime": {
+          "type": "string",
+          "description": "Last Successful Attempt Time",
+          "readonly": true
+        },
+        "lastFailureAttemptTime": {
+          "type": "string",
+          "description": "Last Failure Attempt Time",
+          "readonly": true
+        }
+      }
+    },
+    "StatsCollectionCounters": {
+      "id": "#/definitions/StatsCollectionCounters",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "totalAttempts": {
+          "type": "string",
+          "description": "Total Attempts",
+          "readonly": true
+        },
+        "successfulAttempts": {
+          "type": "string",
+          "description": "Successful Attempts",
+          "readonly": true
+        },
+        "lastAttemptTime": {
+          "type": "string",
+          "description": "Last Attempt Time",
+          "readonly": true
+        },
+        "lastSuccessfulAttemptTime": {
+          "type": "string",
+          "description": "Last Successful Attempt Time",
+          "readonly": true
+        },
+        "skipAttempts": {
+          "type": "string",
+          "description": "Skip Attempts",
+          "readonly": true
+        },
+        "lastSkipAttemptTime": {
+          "type": "string",
+          "description": "Last Skip Attempt Time",
+          "readonly": true
+        }
+      }
+    },
+    "ConfigSaveCounters": {
+      "id": "#/definitions/ConfigSaveCounters",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "totalAttempts": {
+          "type": "string",
+          "description": "Total Attempts",
+          "readonly": true
+        },
+        "succesfulAttempts": {
+          "type": "string",
+          "description": "Successful Attempts",
+          "readonly": true
+        },
+        "lastAttemptTime": {
+          "type": "string",
+          "description": "Last Attempt Time",
+          "readonly": true
+        },
+        "lastSuccessfulAttemptTime": {
+          "type": "string",
+          "description": "Last Successful Attempt Time",
+          "readonly": true
+        }
+      }
+    },
+    "GigaStreamTypeThresholds": {
+      "id": "#/definitions/GigaStreamTypeThresholds",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gigaStreamTypeThresholds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/gigaStreamTypeThresholds"
+          }
+        }
+      }
+    },
+    "gigaStreamTypeThresholds": {
+      "id": "#/definitions/gigaStreamTypeThresholds",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "GsType": {
+          "type": "string",
+          "description": "Gigastream type",
+          "readonly": true
+        },
+        "varianceThreshold": {
+          "type": "string",
+          "description": "variance Threshold",
+          "readonly": true
+        }
+      }
+    },
+    "PortPacketThresholds": {
+      "id": "#/definitions/PortPacketThresholds",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dropThreshold": {
+          "type": "object",
+          "$ref": "#/definitions/Threshold"
+        },
+        "errorThreshold": {
+          "type": "object",
+          "$ref": "#/definitions/Threshold"
+        }
+      }
+    },
+    "Threshold": {
+      "id": "#/definitions/Threshold",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rx": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RxTxThreshold"
+          }
+        },
+        "tx": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RxTxThreshold"
+          }
+        }
+      }
+    },
+    "RxTxThreshold": {
+      "id": "#/definitions/RxTxThreshold",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "portType": {
+          "type": "string",
+          "description": "Port Type",
+          "readonly": true
+        },
+        "count": {
+          "type": "string",
+          "readonly": true
+        },
+        "percent": {
+          "type": "string",
+          "readonly": true
+        }
+      }
+    },
+    "GigaUserDefinedApplicationConfig": {
+      "id": "#/definitions/GigaUserDefinedApplicationConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "pattern: ^[a-zA-Z0-9&'+_=|\\-]+$",
+          "readonly": true
+        },
+        "appId": {
+          "type": "integer",
+          "description": "minimum: 16777216\nmaximum: 16777343 \n Ranges from 2^24 to 2^24 + 127. It needs to be unique",
+          "readonly": true
+        },
+        "priority": {
+          "type": "integer",
+          "description": "minimum: 1\nmaximum: 120 \nLower the priority higher the precedence",
+          "readonly": false
+        },
+        "rules": {
+          "type": "object",
+          "$ref": "#/definitions/UserDefinedApplicationRules"
+        }
+      }
+    },
+    "UserDefinedApplicationRules": {
+      "id": "#/definitions/UserDefinedApplicationRules",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "minimum: 1\nmaximum: 8. \nRange can be 1 to 8. Generated in the order that the user defines the rule."
+        },
+        "rule": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserDefinedApplicationRule"
+          },
+          "description": ""
+        }
+      }
+    },
+    "UserDefinedApplicationRule": {
+      "id": "#/definitions/UserDefinedApplicationRule",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "protocol": {
+            "enum": [
+              "http",
+              "ssl",
+              "rtmp",
+              "tcp",
+              "udp",
+              "sip",
+              "icmp",
+              "ip",
+              "ip6"
+            ]
+          },
+          "type": "string",
+          "description": ""
+        },
+        "cts-server": {
+          "type": "string"
+        },
+        "cts-uri": {
+          "type": "string"
+        },
+        "mime_type": {
+          "type": "string"
+        },
+        "cts-user_agent": {
+          "type": "string"
+        },
+        "cts-referer": {
+          "type": "string"
+        },
+        "stc-server_agent": {
+          "type": "string"
+        },
+        "stc-location": {
+          "type": "string"
+        },
+        "cts-cookie": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "common_name": {
+          "type": "string"
+        },
+        "stc-subject_alt_name": {
+          "type": "string"
+        },
+        "cts-page_url": {
+          "type": "string"
+        },
+        "stream": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string"
+        },
+        "user_agent": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "typeval": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "dscp": {
+          "type": "string"
+        },
+        "resolv_name": {
+          "type": "string"
+        },
+        "mindata" : {
+          "type" : "integer"
+        }
+      }
+    },
+    "refObject": {
+      "id": "#/definitions/refObject",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "refObjectType": {
+          "enum": [
+            "PHYSICAL",
+            "VIRTUAL"
+          ],
+          "type": "string",
+          "description": "Type of the reference object"
+        }
+        }
+      }
+  }
+}
+
+

@@ -1,0 +1,26 @@
+{
+  "id": "http://gigamon.com/schemas-fm/deviceLocatorLed.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Device Locator Led Schema",
+  "definitions": {
+    "DeviceLocatorLedResponse": {
+      "id": "#/definitions/deviceLocatorLedResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "locatorLed"
+      ],
+      "properties": {
+        "locatorLed": {
+          "type": "string",
+          "enum": [
+            "enabled",
+            "disabled",
+            "NA"],
+          "default": "disable"
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,263 @@
+{
+  "id": "http://gigamon.com/schemas-fm/trafficFlowCopyPaste.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon traffic flow copy/paste schema",
+  "definitions": {
+    "RuleCategory": {
+      "type": "string",
+      "enum": ["SOURCE", "APPLICATION"],
+      "description": "Category of rules to copy/paste"
+    },
+    "MapSubType": {
+      "type": "string",
+      "enum": [
+        "byRule",
+        "flowFilter",
+        "flowSample",
+        "flowSampleOverlap",
+        "flowWhitelist",
+        "flowWhitelistOverlap",
+        "flowSampleSip",
+        "flowSample5g",
+        "flowSample5gOverlap",
+        "flowSampleDiameter"
+      ],
+      "description": "Type of application rule"
+    },
+    "PasteOption": {
+      "type": "string",
+      "enum": ["DETECT_DUPLICATES", "PROCEED_WITHOUT_DUPLICATES"],
+      "description": "Option for handling duplicate rules during paste operation",
+      "default": "DETECT_DUPLICATES"
+    },
+    "CopyRuleConfig": {
+      "type": "object",
+      "required": ["policyIdOrAlias", "policyUpdatedTime"],
+      "properties": {
+        "policyIdOrAlias": {
+          "type": "string",
+          "description": "Policy ID or alias from which to copy rules"
+        },
+        "policyUpdatedTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Timestamp of the policy version for optimistic locking"
+        },
+        "sourceAndRuleAlias": {
+          "type": "string",
+          "description": "Source and rule alias (required for SOURCE category)"
+        },
+        "flowAlias": {
+          "type": "string",
+          "description": "Flow alias (required for APPLICATION category)"
+        },
+        "subFlowAlias": {
+          "type": "string",
+          "description": "Sub-flow alias (required for APPLICATION category)"
+        },
+        "isAllRules": {
+          "type": "boolean",
+          "description": "Whether to copy all rules or specific rule IDs"
+        },
+        "ruleIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "Specific rule IDs to copy (if isAllRules is false)"
+        }
+      }
+    },
+    "CopyRulesRequest": {
+      "type": "object",
+      "required": ["ruleCategory", "ruleType", "configs"],
+      "properties": {
+        "ruleCategory": {
+          "$ref": "#/definitions/RuleCategory"
+        },
+        "ruleType": {
+          "$ref": "#/definitions/MapSubType"
+        },
+        "configs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CopyRuleConfig"
+          },
+          "minItems": 1,
+          "description": "List of copy configurations"
+        }
+      }
+    },
+    "PasteRuleConfig": {
+      "type": "object",
+      "required": ["policyIdOrAlias", "policyUpdatedTime"],
+      "properties": {
+        "policyIdOrAlias": {
+          "type": "string",
+          "description": "Policy ID or alias to which to paste rules"
+        },
+        "policyUpdatedTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Timestamp of the policy version for optimistic locking"
+        },
+        "sourceAndRuleAlias": {
+          "type": "string",
+          "description": "Source and rule alias (required for SOURCE category)"
+        },
+        "flowAlias": {
+          "type": "string",
+          "description": "Flow alias (required for APPLICATION category)"
+        },
+        "subFlowAlias": {
+          "type": "string",
+          "description": "Sub-flow alias (required for APPLICATION category)"
+        }
+      }
+    },
+    "PasteRulesRequest": {
+      "type": "object",
+      "required": ["ruleCategory", "ruleType", "configs"],
+      "properties": {
+        "option": {
+          "$ref": "#/definitions/PasteOption"
+        },
+        "ruleCategory": {
+          "$ref": "#/definitions/RuleCategory"
+        },
+        "ruleType": {
+          "$ref": "#/definitions/MapSubType"
+        },
+        "configs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PasteRuleConfig"
+          },
+          "minItems": 1,
+          "description": "List of paste configurations"
+        }
+      }
+    },
+    "PasteRulesResponse": {
+      "type": "object",
+      "properties": {
+        "ruleCategory": {
+          "$ref": "#/definitions/RuleCategory"
+        },
+        "hasDuplicates": {
+          "type": "boolean",
+          "description": "Whether duplicate rules were detected"
+        },
+        "duplicateSourceRules": {
+          "$ref": "sourcesAndRules.json#/definitions/GigaAfmRules",
+          "description": "Duplicate source rules (for SOURCE category)"
+        },
+        "duplicateApplicationRules": {
+          "$ref": "flows.json#/definitions/AppConfigRules",
+          "description": "Duplicate application rules (for APPLICATION category)"
+        }
+      }
+    },
+    "PasteRulesResponseQueryResponse": {
+      "id": "#/definitions/PasteRulesResponseQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "pasteRules"
+      ],
+      "properties": {
+        "pasteRules": {
+          "type": "object",
+          "$ref": "#/definitions/PasteRulesResponse"
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "CopiedRuleSetItem": {
+      "type": "object",
+      "required": ["policyAlias", "policyId"],
+      "properties": {
+        "policyAlias": {
+          "type": "string",
+          "description": "Policy alias"
+        },
+        "policyId": {
+          "type": "string",
+          "description": "Policy ID"
+        },
+        "sourceAndRuleAlias": {
+          "type": "string",
+          "description": "Source and rule alias (for SOURCE category)"
+        },
+        "sourceRules": {
+          "$ref": "sourcesAndRules.json#/definitions/GigaAfmRules",
+          "description": "Source rules (for SOURCE category)"
+        },
+        "flowAlias": {
+          "type": "string",
+          "description": "Flow alias (for APPLICATION category)"
+        },
+        "subFlowAlias": {
+          "type": "string",
+          "description": "Sub-flow alias (for APPLICATION category)"
+        },
+        "applicationRules": {
+          "$ref": "flows.json#/definitions/AppConfigRules",
+          "description": "Application rules (for APPLICATION category)"
+        }
+      }
+    },
+    "CopiedRulesRecord": {
+      "type": "object",
+      "required": ["policyId", "username", "ruleCategory", "ruleType", "createdTime", "ruleSet"],
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "description": "MongoDB document ID"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username of the user who copied the rules"
+        },
+        "ruleCategory": {
+          "$ref": "#/definitions/RuleCategory"
+        },
+        "ruleType": {
+          "$ref": "#/definitions/MapSubType"
+        },
+        "createdTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Timestamp when rules were copied"
+        },
+        "ruleSet": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CopiedRuleSetItem"
+          },
+          "description": "Set of copied rules"
+        }
+      }
+    },
+    "CopiedRulesRecordQueryResponse": {
+      "id": "#/definitions/CopiedRulesRecordQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "copiedRules"
+      ],
+      "properties": {
+        "copiedRules": {
+          "type": "object",
+          "$ref": "#/definitions/CopiedRulesRecord"
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}
+

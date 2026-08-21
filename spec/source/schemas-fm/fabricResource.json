@@ -1,0 +1,66 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fabricResource.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon schema for fabric resource allocation policy configuration",
+  "definitions": {
+    "FabricResourceConfig": {
+      "id": "#/definitions/FabricResourceConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "scope": {
+          "type": "string",
+          "description": "['GLOBAL']: Scope of resource pool. GLOBAL: only one global resource pool."
+        },
+        "mode": {
+          "type": "string",
+          "description": "['SHARE' or 'NOT_SHARE']: Resource sharing mode. SHARE: same resource can be shared by different fabric maps; NOT_SHARE: not shared. Default: NOT_SHARE."
+        },
+        "type": {
+          "type": "string",
+          "description": "['L2CIRCUIT']: Resource type."
+        }
+      }
+    },
+    "FabricResourceConfigQueryResponse": {
+      "id": "#/definitions/FabricResourceConfigQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "fabricResourceConfig"
+      ],
+      "properties": {
+        "fabricResourceConfig": {
+          "$ref": "#/definitions/FabricResourceConfig"
+        }
+      }
+    },
+    "L2CircuitResourceConfig": {
+      "id": "#/definitions/L2CircuitResourceConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "vlanIds"
+      ],
+      "properties": {
+        "vlanIds": {
+          "type": "string",
+          "description": "VLAN id ranges used for L2CIRCUIT resource type."
+        }
+      }
+    },
+    "L2CircuitResourceConfigQueryResponse": {
+      "id": "#/definitions/L2CircuitResourceConfigQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "l2CircuitResourceConfig"
+      ],
+      "properties": {
+        "l2CircuitResourceConfig": {
+          "$ref": "#/definitions/L2CircuitResourceConfig"
+        }
+      }
+    }
+  }
+}

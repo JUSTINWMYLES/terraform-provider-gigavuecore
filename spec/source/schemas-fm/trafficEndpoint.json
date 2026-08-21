@@ -1,0 +1,52 @@
+{
+  "id": "http://gigamon.com/schemas-fm/trafficEndpoint.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon source and rules schema",
+  "definitions": {
+    "trafficEndpoint-get": {
+      "id": "#/definitions/trafficEndpoint-get",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clusterId"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "component.json#/definitions/components-get",
+            "description": "Detailed definition of this component"
+          }
+        }
+      }
+    },
+    "trafficEndpoint-update": {
+      "id": "#/definitions/trafficEndpoint-update",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clusterId"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "id of the defining cluster"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "component.json#/definitions/components-update",
+            "description": "Detailed definition of this component"
+          }
+        }
+      }
+    }
+  }
+}
