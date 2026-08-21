@@ -33,6 +33,7 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           claude_args: |
             --model deepseek-v4-flash:cloud
+            --allowedTools "Bash,WebFetch,WebSearch"
         env:
           ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
           ANTHROPIC_CUSTOM_HEADERS: "Authorization: Bearer ${{ secrets.ANTHROPIC_AUTH_TOKEN }}"
