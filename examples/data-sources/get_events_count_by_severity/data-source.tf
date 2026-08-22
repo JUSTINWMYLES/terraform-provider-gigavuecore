@@ -1,0 +1,5 @@
+data "gigavuecore_get_events_count_by_severity" "example" {
+  end_time = "example"
+  group_by = "example"
+  start_time = "example"
+}

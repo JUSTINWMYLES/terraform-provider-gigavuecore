@@ -1,0 +1,33 @@
+---
+page_title: "gigavuecore_get_all_time_stamping_ptp_configs Data Source - gigavuecore"
+subcategory: ""
+description: |-
+  Reads the get all time stamping ptp configs data source.
+---
+
+# gigavuecore_get_all_time_stamping_ptp_configs Data Source
+
+Reads the get all time stamping ptp configs data source.
+
+## Example Usage
+
+```terraform
+data "gigavuecore_get_all_time_stamping_ptp_configs" "example" {
+  box_id = null
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `box_id` (Number, optional) - specify the cluster node by boxId. By default all nodes are selected.
+
+### Attributes
+
+In addition to all arguments above, the following attributes are exported:
+
+* `items` (List(Object({alias, box_id, domain, local_priority, mode, priority2, step_type})), computed)
+
