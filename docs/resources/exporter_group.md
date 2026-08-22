@@ -1,0 +1,45 @@
+---
+page_title: "gigavuecore_exporter_group Resource - gigavuecore"
+subcategory: ""
+description: |-
+  Get Apps Exporter Group for given alias
+---
+
+# gigavuecore_exporter_group Resource
+
+Get Apps Exporter Group for given alias
+
+## Example Usage
+
+```terraform
+resource "gigavuecore_exporter_group" "example" {
+  alias = null
+  description = null
+  exporters = []
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `alias` (String, required)
+* `description` (String, optional)
+* `exporters` (List(String), optional)
+
+### Attributes
+
+In addition to all arguments above, the following computed attributes are exported:
+
+* `description` (String, computed)
+* `exporters` (List(String), computed)
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+terraform import gigavuecore_exporter_group.example {alias}
+```
