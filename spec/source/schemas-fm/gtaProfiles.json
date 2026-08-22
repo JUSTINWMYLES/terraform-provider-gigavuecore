@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "gta profile schema",
+  "definitions": {
+    "CoreNetworkNodes": {
+      "type": "object",
+      "description": "core network nodes specified in one of 3 ways: list of addresses, range of addresses, or an address subnet",
+      "additionalProperties": false,
+      "maxProperties": 1,
+      "minProperties": 1,
+      "properties": {
+        "addressList": {
+          "$ref": "#/definitions/GtaProfileCoreNetworkNodesList"
+        },
+        "addressRange": {
+          "$ref": "#/definitions/GtaProfileCoreNetworkNodesRanges"
+        },
+        "addressSubnet": {
+          "$ref": "#/definitions/GtaProfileCoreNetworkNodesSubnet"
+        }
+      }
+    },
+    "GtaProfileCoreNetworkNodesList": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "ipv4 or ipv6 addresses",
+          "example": [
+            "1.1.1.1",
+            "2.2.2.2"
+          ]
+        }
+      }
+    },
+    "GtaProfileCoreNetworkNodesRanges": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ipRanges"
+      ],
+      "properties": {
+        "ipRanges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtaProfileCoreNetworkNodesRange"
+          },
+          "example": [
+            {
+              "value": "50.50.50.1",
+              "maxValue": "50.50.50.100"
+            },
+            {
+              "value": "60.60.60.1",
+              "maxValue": "60.60.60.100"
+            }
+          ]
+        }
+      }
+    },
+    "GtaProfileCoreNetworkNodesRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "maxValue"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "ipv4 or ipv6 minimum value"
+        },
+        "maxValue": {
+          "type": "string",
+          "description": "ipv4 or ipv6 maximum value"
+        }
+      }
+    },
+    "GtaProfileCoreNetworkNodesSubnet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "values"
+      ],
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "array of ipv4 or ipv6 subnet address space. Mutually exclusive with value",
+          "example": [
+            "192.168.10.0/24",
+            "192.168.20.0/24"
+          ]
+        }
+      }
+    },
+    "GtaProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "alias of the GTA profile"
+        },
+        "controlNode": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "userNode": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "srcPort": {
+          "type": "integer",
+          "format": "int32",
+          "example": 5000
+        },
+        "dstPort": {
+          "type": "integer",
+          "format": "int32",
+          "example": 5001
+        },
+        "coreNetworkNodes": {
+          "$ref": "#/definitions/CoreNetworkNodes"
+        }
+      }
+    },
+    "GtaProfileQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gtaProfile"
+      ],
+      "properties": {
+        "gtaProfile": {
+          "$ref": "#/definitions/GtaProfile"
+        }
+      }
+    },
+    "GtaProfilesQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gtaProfiles"
+      ],
+      "properties": {
+        "gtaProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtaProfile"
+          }
+        }
+      }
+    }
+  }
+}

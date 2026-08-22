@@ -1,0 +1,99 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemGsDump.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device GsDump schema",
+  "definitions": {
+    "GsDumpFilesQueryResponse": {
+      "id": "#/definitions/GsDumpFilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gsDumpFiles"
+      ],
+      "description": "Available Gigasmart Dump Files",
+      "properties": {
+        "gsDumpFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsDumpFile"
+          },
+          "readonly": true,
+          "description": "List of available Gigasmart Dump files"
+        }
+      }
+    },
+    "GsDumpFile": {
+      "id": "#/definitions/GsDumpFile",
+      "type": "object",
+      "required": [
+        "hostname",
+        "filename",
+        "timestamp",
+        "size"
+      ],
+      "properties": {
+        "hostname": {
+          "type": "string",
+          "description": "Hostname of the device where Gigasmart dump resides"
+        },
+        "filename": {
+          "type": "string",
+          "description": "Filename of the Gigasmart dump file"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "File creation date and time in ISO 8601 format"
+        },
+        "size": {
+          "type": "integer",
+          "description": "Size of file in bytes"
+        },
+        "gsExecStatus": {
+          "type": "string",
+          "description": "Execution status of  GigaSmart Dump"
+        },
+        "eportList": {
+          "type": "string",
+          "description": "Complete list of Eports for GigaSmart dump generation"
+        },
+        "completedList": {
+          "type": "string",
+          "description": "Eport list for which GigaSmart Dump is completed "
+        },
+        "failedList": {
+          "type": "string",
+          "description": "Eport list for which GigaSmart Dump failed"
+        }
+      }
+    },
+    "GsDumpSpec": {
+      "id": "#/definitions/GsDumpSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GigaSMART Dump Specification",
+      "required": [
+        "clusterId",
+        "hostname",
+        "engineIds"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "Cluster Id for which dump is initiated"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "Hostname for which dump is initiated"
+        },
+        "engineIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of the Gigasmart engine ports for which dump is initiated"
+        }
+      }
+    }
+  }
+}

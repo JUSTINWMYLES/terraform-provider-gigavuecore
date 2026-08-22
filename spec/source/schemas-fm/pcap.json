@@ -1,0 +1,325 @@
+{
+  "id": "http://gigamon.com/schemas-fm/pcap.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "PCAP Configuration schema",
+  "definitions": {
+    "PCAPProfile": {
+      "id": "#/definitions/PCAPProfile",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "port"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string",
+          "description": "portID"
+        },
+        "direction": {
+          "type": "string",
+          "description": "tx, rx, both"
+        },
+        "channelPort": {
+          "type": "string",
+          "description": "port for capturing on egress direction"
+        },
+        "pcapRulesList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FilterRules"
+          }
+        },
+        "packetLimit": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 40000,
+          "description": "packet limit on a port for capturing"
+        }
+      }
+    },
+    "IpAddrMask": {
+      "id": "#/definitions/IpAddrMask",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Ipv4 address and mask. Private class",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "Ipv4 address ex: 10.1.1.1"
+        },
+        "mask": {
+          "type": "string",
+          "description": "Ipv4 mask ex:255.255.255.248, or <mask length>, e.g. /29"
+        }
+      }
+    },
+    "MACAddrMask": {
+      "id": "#/definitions/MACAddrMask",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "MAC address and mask",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "Specifies a single MAC address to match"
+        },
+        "mask": {
+          "type": "string",
+          "description": "Specifies a mask of MAC address"
+        }
+      }
+    },
+    "FilterRules": {
+      "id": "#/definitions/FilterRules",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "pcap filter rules",
+      "properties": {
+        "ruleId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 64,
+          "description": "Rule-id to track the filter rules"
+        },
+        "srcipv4addrandmask": {
+          "$ref": "#/definitions/IpAddrMask",
+          "description": "source ipv4 address and mask included"
+        },
+        "dstipv4addrandmask": {
+          "$ref": "#/definitions/IpAddrMask",
+          "description": "destination ipv4 address with mask included"
+        },
+        "portsrc": {
+          "type": "integer",
+          "format": "int32",
+          "description": "source port number.Valid value is between 0 to 65535"
+        },
+        "portdst": {
+          "type": "integer",
+          "format": "int32",
+          "description": "destination port number.Valid value is between 0 to 65535"
+        },
+        "protocol": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "protocol number in a range [0..255]. Well-known protocols numbers are: 0-ipv6Hop, 1-icmpIpv4, 2-igmp, 4-ipv4, 6-tcp, 17-udp, 41-ipv6, 46-rsvp, 47-gre, 58-icmpIpv6"
+        },
+        "tcpctl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "Configure TCP control bits: URG, SYN, ACK, etc"
+        },
+        "etherType" : {
+          "type": "string",
+          "description": "Ether Type"
+        },
+        "vlan": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 4094,
+          "description": "Configure vlan id. valid value is between 1 to 4094"
+        },
+        "innerVlan": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 4094,
+          "description": "Configure inner-vlan id. valid value is between 1 to 4094"
+        },
+        "srcMac": {
+          "$ref": "#/definitions/MACAddrMask",
+          "description": "source MAC address and mask included"
+        },
+        "dstMac": {
+          "$ref": "#/definitions/MACAddrMask",
+          "description": "destination MAC address and mask included"
+        },
+        "ipVer" : {
+          "type": "string",
+          "description": "IP version number",
+          "enum": [
+            "v4",
+            "v6"
+          ]
+        },
+        "dscp" : {
+          "type": "string",
+          "description": "DiffServ Code Point bits",
+          "enum": [
+            "af11",
+            "af12",
+            "af13",
+            "af21",
+            "af22",
+            "af23",
+            "af31",
+            "af32",
+            "af33",
+            "af41",
+            "af42",
+            "af43",
+            "ef"
+          ]
+        },
+        "ip4Frag": {
+          "type": "String",
+          "description": "IP fragmentation bits, with in range [0..255]",
+          "enum": [
+            "noFrag",
+            "allFrag",
+            "allFrag",
+            "firstFrag",
+            "firstOrNoFrag"
+          ]
+        },
+        "ip4Ttl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "time to live value, with in range [0..255]"
+        },
+        "packetHitCount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "count of packets matches the configured rule. Applicable for GET",
+          "readOnly": true
+        }
+      }
+    },
+    "PCAPProfilePOST": {
+      "id": "#/definitions/PCAPProfilePOST",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pcapConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PCAPProfile"
+          }
+        }
+      }
+    },
+    "PCAPFilesDeleteList": {
+      "id": "#/definitions/PCAPFilesDeleteList",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pcapDeleteList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PcapFilesDelete"
+          }
+        }
+      }
+    },
+    "PCAPProfileQueryResponse": {
+      "id": "#/definitions/PCAPProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pcapAll": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PCAPProfile"
+          }
+        }
+      }
+    },
+    "PcapFilesQueryResponse": {
+      "id": "#/definitions/PcapFilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pcapFiles"
+      ],
+      "description": "Available pcap files",
+      "properties": {
+        "pcapFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PcapFilesPerBox"
+          },
+          "readOnly": true,
+          "description": "List of available pcap files"
+        }
+      }
+    },
+    "PcapFilesPerBox": {
+      "id": "#/definitions/PcapFilesPerBox",
+      "type": "object",
+      "required": [
+        "captureFiles",
+        "boxId"
+      ],
+      "description": "Available pcap Files",
+      "properties": {
+        "boxId": {
+          "type": "string",
+          "description": "The chassis Box ID value"
+        },
+        "captureFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PcapFile"
+          },
+          "readOnly": true,
+          "description": "List of available pcap files"
+        }
+      }
+    },
+    "PcapFile": {
+      "id": "#/definitions/PcapFile",
+      "type": "object",
+      "required": [
+        "filename",
+        "timestamp",
+        "size"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "Name of the PCAP file"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "File creation date and time in ISO 8601 format"
+        },
+        "size": {
+          "type": "integer",
+          "description": "Size of file in bytes"
+        }
+      }
+    },
+    "PcapFilesDelete": {
+      "id": "#/definitions/PcapFilesDelete",
+      "type": "object",
+      "required": [
+        "boxId",
+        "fileName"
+      ],
+      "properties": {
+        "boxId": {
+          "type": "string",
+          "description": "The chassis Box ID value"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "Name of the PCAP file"
+        }
+      }
+    }
+  }
+}

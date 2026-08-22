@@ -1,0 +1,73 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gigaInsightNode.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Insight Node schema",
+  "definitions": {
+    "GigaInsightNode": {
+      "id": "#/definitions/GigaInsightNode",
+      "type": "object",
+      "description": "Gigamon Insight Node definition",
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "description": "Unique identifier for the GI node"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Alias name for the GI node"
+        },
+        "ipv4Address": {
+          "type": "string",
+          "description": "IPv4 address of the GI node"
+        },
+        "ipv6Address": {
+          "type": "string",
+          "description": "IPv6 address of the GI node"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the GI node"
+        },
+        "nodeVersion": {
+          "type": "string",
+          "description": "Version of the GigaInsight node software"
+        },
+        "promptBundle": {
+          "$ref": "#/definitions/PromptBundleInfo"
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the node was created"
+        },
+        "lastStatusUpdatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the node was last updated"
+        },
+        "lastConfigUpdatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the node was last online"
+        }
+      }
+    },
+    "PromptBundleInfo": {
+      "id": "#/definitions/PromptBundleInfo",
+      "type": "object",
+      "description": "Prompt bundle information for the GI node",
+      "properties": {
+        "promptBundleVersion": {
+          "type": "string",
+          "description": "Version of the prompt bundle"
+        },
+        "lastUpdatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the prompt bundle was last updated"
+        }
+      }
+    }
+  }
+}
+

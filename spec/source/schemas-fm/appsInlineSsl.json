@@ -1,0 +1,1620 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsInlineSsl.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Inline SSL Configuration schema",
+  "definitions": {
+    "InlineSslConfig": {
+      "id": "#/definitions/InlineSslConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "inline SSL configuration parameters",
+      "properties": {
+        "caching": {
+          "$ref": "#/definitions/InlineSslCaching"
+        },
+        "sslVersions": {
+          "$ref": "#/definitions/InlineSslVersions"
+        },
+        "resumption": {
+          "$ref": "#/definitions/InlineSslResumption"
+        },
+        "startTls": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        },
+        "monitor": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse",
+          "deprecated": true,
+          "description": "This property is moved to ssl profile for device version >=5.7"
+        },
+        "dheCiphersuit": {
+          "type": "string",
+          "enum": [
+            "disable",
+            "enable"
+          ],
+          "default": "disable"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "InlineSslResumption": {
+      "id": "#/definitions/InlineSslResumption",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "client": {
+          "$ref": "#/definitions/InlineSslGenericEnableTrue",
+          "description": "enable client initiated resumption (for debug purposes only)"
+        }
+      }
+    },
+    "InlineSslGenericEnableTrue": {
+      "id": "#/definitions/InlineSslGenericEnableTrue",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "InlineSslGenericEnableFalse": {
+      "id": "#/definitions/InlineSslGenericEnableFalse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "InlineSslVersions": {
+      "id": "#/definitions/InlineSslVersions",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minVersion",
+        "maxVersion"
+      ],
+      "properties": {
+        "minVersion": {
+          "type": "string",
+          "enum": [
+            "sslv3",
+            "tls1",
+            "tls11",
+            "tls12",
+            "tls13"
+          ]
+        },
+        "connectionResetActionForMinVersion": {
+          "type": "string",
+          "enum": [
+            "no-decrypt",
+            "drop"
+          ],
+          "default": "drop",
+          "description": "Action to take to reset connection if TLS version is lower than configured"
+        },
+        "maxVersion": {
+          "type": "string",
+          "enum": [
+            "sslv3",
+            "tls1",
+            "tls11",
+            "tls12",
+            "tls13"
+          ],
+          "description": "maxVersion must be greater than minVersion"
+        },
+        "connectionResetActionForMaxVersion": {
+          "type": "string",
+          "enum": [
+            "no-decrypt",
+            "drop"
+          ],
+          "default": "no-decrypt",
+          "description": "Action to take to reset connection if TLS version is higher than configured"
+        }
+      }
+    },
+    "InlineSslCaching": {
+      "id": "#/definitions/InlineSslCaching",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "persistence": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        }
+      }
+    },
+    "InlineSslProfile": {
+      "id": "#/definitions/InlineSslProfile",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Inline SSL Profile",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the inline SSL profile"
+        },
+        "certificate": {
+          "$ref": "#/definitions/InlineSslProfileCertificate",
+          "description": "SSL profile certificate configuration"
+        },
+        "decrypt": {
+          "$ref": "#/definitions/InlineSslProfileDecrypt",
+          "description": "SSL profile configuration on decrypt action"
+        },
+        "noDecrypt": {
+          "$ref": "#/definitions/InlineSslProfileNoDecrypt",
+          "description": "SSL profile configuration on no-decrypt action"
+        },
+        "nonSslTcp": {
+          "$ref": "#/definitions/InlineSslProfileNonSslTcp",
+          "description": "SSL profile configuration on TCP proxy action"
+        },
+        "tcp": {
+          "$ref": "#/definitions/InlineSslProfileTcp",
+          "description": "SSL profile configuration on TCP"
+        },
+        "highAvail": {
+          "$ref": "#/definitions/InlineSslProfileHa",
+          "description": "SSL profile configuration on high availability"
+        },
+        "networkGroup": {
+          "$ref": "#/definitions/InlineSslProfileNetworkGroup",
+          "description": "SSL Profile configuration for multiple entry in network groups"
+        },
+        "monitor": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable",
+            "inline"
+          ],
+          "default": "disable"
+        },
+        "defaultAction": {
+          "type": "string",
+          "description": "Action to take if none of the profile rules match",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ],
+          "default": "no-decrypt"
+        },
+        "tool": {
+          "$ref": "#/definitions/InlineSslProfileToolConfig",
+          "description": "SSL Profile configuration for Tools"
+        },
+        "startTls": {
+          "$ref": "#/definitions/InlineSslProfileStartTls",
+          "description": "SSL profile configuration on start TLS action"
+        },
+        "urlCache": {
+          "$ref": "#/definitions/InlineSslProfileUrlCache",
+          "description": "SSL profile configuration on url-cache"
+        },
+        "rules": {
+          "type": "array",
+          "description": "inline SSL profile rules",
+          "items": {
+            "$ref": "#/definitions/InlineSslProfileRule"
+          }
+        },
+        "keyMap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSslProfileKeyMap"
+          }
+        },
+        "splitProxy": {
+          "$ref": "#/definitions/InlineSslProfileSplitProxy",
+          "description": "SSL profile configuration for Split Proxy"
+        },
+        "oneArm": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "default": "disable"
+        },
+        "resilientInline": {
+          "$ref": "#/definitions/InlineSslProfileResilientInline",
+          "description": "SSL profile configuration for Resilient Inline Arrangement"
+        },
+        "toolL3": {
+          "$ref": "#/definitions/InlineSslProfileToolL3",
+          "description": "SSL profile configuration for Layer 3 ISSL"
+        },
+        "inboundToolEarlyInspect": {
+          "$ref": "#/definitions/InboundToolEarlyInspect",
+          "description": "SSL profile configuration for InboundToolEarlyInspect"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "InlineSslProfileTcp": {
+      "id": "#/definitions/InlineSslProfileTcp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "timewaitTimeout": {
+          "type": "integer",
+          "default": 30,
+          "minimum": 0,
+          "maximum": 300,
+          "description": "TCP Wait Timeout value"
+        },
+        "delayedAck": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable/disable TCP delayed ACK"
+        },
+        "synRetries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12,
+          "description": "TCP Sync retries"
+        }
+      }
+    },
+    "InlineSslProfileKeyMaps": {
+      "id": "#/definitions/InlineSslProfileKeyMaps",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "keyMaps"
+      ],
+      "properties": {
+        "keyMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSslProfileKeyMap"
+          }
+        }
+      }
+    },
+    "InlineSslProfileKeyMap": {
+      "id": "#/definitions/InlineSslProfileKeyMap",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hostname",
+        "key"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "integer",
+          "readonly": true,
+          "example": 1
+        },
+        "hostname": {
+          "type": "string",
+          "description": "hostname or IP address"
+        },
+        "key": {
+          "type": "string",
+          "description": "SSL key alias"
+        }
+      }
+    },
+    "InlineSslProfileRules": {
+      "id": "#/definitions/InlineSslProfileRules",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "type": "array",
+          "description": "inline SSL profile rules",
+          "items": {
+            "$ref": "#/definitions/InlineSslProfileRule"
+          }
+        }
+      }
+    },
+    "InlineSslProfileRule": {
+      "id": "#/definitions/InlineSslProfileRule",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "inline SSL profile rule",
+      "example": {
+        "type": "domain",
+        "ruleId": 1,
+        "value": "string",
+        "action": "decrypt"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/InlineSslProfileRuleDomain"
+        },
+        {
+          "$ref": "#/definitions/InlineSslProfileRuleCategory"
+        },
+        {
+          "$ref": "#/definitions/InlineSslProfileRuleIssuer"
+        },
+        {
+          "$ref": "#/definitions/InlineSslProfileRuleIpv4"
+        },
+        {
+          "$ref": "#/definitions/InlineSslProfileRuleL4Port"
+        },
+        {
+          "$ref": "#/definitions/InlineSslProfileRuleVlan"
+        },
+        {
+          "$ref": "#/definitions/InlineSslProfileRuleIpv6"
+        }
+      ]
+    },
+    "InlineSslProfileConfig": {
+      "id": "#/definitions/InlineSslProfileConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Inline SSL Profile",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the inline SSL profile"
+        },
+        "certificate": {
+          "$ref": "#/definitions/InlineSslProfileCertificate",
+          "description": "SSL profile certificate configuration"
+        },
+        "decrypt": {
+          "$ref": "#/definitions/InlineSslProfileDecryptConfig",
+          "description": "SSL profile configuration on decrypt action"
+        },
+        "noDecrypt": {
+          "$ref": "#/definitions/InlineSslProfileNoDecrypt",
+          "description": "SSL profile configuration on no-decrypt action"
+        },
+        "nonSslTcp": {
+          "$ref": "#/definitions/InlineSslProfileNonSslTcp",
+          "description": "SSL profile configuration on TCP proxy action"
+        },
+        "tcp": {
+          "$ref": "#/definitions/InlineSslProfileTcp",
+          "description": "SSL profile configuration on TCP"
+        },
+        "highAvail": {
+          "$ref": "#/definitions/InlineSslProfileHa",
+          "description": "SSL profile configuration on high availability"
+        },
+        "networkGroup": {
+          "$ref": "#/definitions/InlineSslProfileNetworkGroup",
+          "description": "SSL Profile configuration for multiple entry in network groups"
+        },
+        "monitor": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable",
+            "inline"
+          ],
+          "default": "disable"
+        },
+        "defaultAction": {
+          "type": "string",
+          "description": "Action to take if none of the profile rules match",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ],
+          "default": "no-decrypt"
+        },
+        "tool": {
+          "$ref": "#/definitions/InlineSslProfileToolConfig",
+          "description": "SSL Profile configuration for Tools"
+        },
+        "startTls": {
+          "$ref": "#/definitions/InlineSslProfileStartTls",
+          "description": "SSL profile configuration on start TLS action"
+        },
+        "urlCache": {
+          "$ref": "#/definitions/InlineSslProfileUrlCache",
+          "description": "SSL profile configuration on url-cache"
+        },
+        "splitProxy": {
+          "$ref": "#/definitions/InlineSslProfileSplitProxy",
+          "description": "SSL profile configuration for Split Proxy"
+        },
+        "oneArm": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "default": "disable"
+        }
+      }
+    },
+    "InlineSslProfileUrlCache": {
+      "id": "#/definitions/InlineSslProfileUrlCache",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "missAction": {
+          "type": "string",
+          "description": "The action to take if local URL category resolution misses",
+          "enum": [
+            "decrypt",
+            "no-decrypt",
+            "defer"
+          ],
+          "default": "no-decrypt"
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "description": "defer timeout in seconds. Only applicable for missAction 'defer'",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 1
+        }
+      }
+    },
+    "InlineSslProfileDecrypt": {
+      "id": "#/definitions/InlineSslProfileDecrypt",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "toolBypass": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        },
+        "tcp": {
+          "$ref": "#/definitions/InlineSslProfileDecryptTcp",
+          "description": "SSL decryption TCP control"
+        }
+      }
+    },
+    "InlineSslProfileNoDecrypt": {
+      "id": "#/definitions/InlineSslProfileNoDecrypt",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "toolBypass": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        }
+      }
+    },
+    "InlineSslProfileToolConfig": {
+      "id": "#/definitions/InlineSslProfileToolConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "failAction": {
+          "type": "string",
+          "description": "Action to take if the tool fails",
+          "enum": [
+            "fail-open",
+            "fail-close"
+          ],
+          "default": "fail-open"
+        },
+        "earlyEngage": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable/disable tool early engage"
+        }
+      }
+    },
+    "InlineSslProfileNonSslTcp": {
+      "id": "#/definitions/InlineSslProfileNonSslTcp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "toolBypass": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        }
+      }
+    },
+    "InlineSslProfileSplitProxy": {
+      "id": "#/definitions/InlineSslProfileSplitProxy",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        },
+        "serverNonPfsCiphers": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        }
+      }
+    },
+    "InlineSslProfileResilientInline": {
+      "id": "#/definitions/InlineSslProfileResilientInline",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        }
+      }
+    },
+    "InboundToolEarlyInspect": {
+      "id": "#/definitions/InboundToolEarlyInspect",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        },
+        "connectionTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "description": "connection timeout timeout in seconds.",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 10
+        }
+      }
+    },
+    "InlineSslProfileToolL3": {
+      "id": "#/definitions/InlineSslProfileToolL3",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "natPat": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        },
+        "http2Downgrade": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        },
+        "cacheServerCertTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "description": "cache server timeout in seconds.",
+          "minimum": 1,
+          "maximum": 1440,
+          "default": 30
+        }
+      }
+    },
+
+    "InlineSslProfileHa": {
+      "id": "#/definitions/InlineSslProfileHa",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activeStandby": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        }
+      }
+    },
+    "InlineSslProfileNetworkGroup": {
+      "id": "#/definitions/InlineSslProfileNetworkGroup",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "multipleEntry": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        }
+      }
+    },
+    "InlineSslProfileStartTls": {
+      "id": "#/definitions/InlineSslProfileStartTls",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "l4port": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "InlineSslProfileDecryptConfig": {
+      "id": "#/definitions/InlineSslProfileDecryptConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "toolBypass": {
+          "$ref": "#/definitions/InlineSslGenericEnableFalse"
+        },
+        "tcp": {
+          "$ref": "#/definitions/InlineSslProfileDecryptTcpConfig",
+          "description": "SSL decryption TCP control"
+        }
+      }
+    },
+    "InlineSslProfileDecryptTcp": {
+      "id": "#/definitions/InlineSslProfileDecryptTcp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inactiveTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 2,
+          "maximum": 1440,
+          "default": 5,
+          "description": "SSL decryption TCP inactive timeout (in minutes)"
+        },
+        "portMap": {
+          "description": "SSL decryption port map",
+          "$ref": "#/definitions/InlineSslProfileDecryptTcpPortMap"
+        }
+      }
+    },
+    "InlineSslProfileDecryptTcpConfig": {
+      "id": "#/definitions/InlineSslProfileDecryptTcpConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inactiveTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 2,
+          "maximum": 1440,
+          "default": 5,
+          "description": "SSL decryption TCP inactive timeout (in minutes)"
+        },
+        "portMap": {
+          "description": "SSL decryption port map",
+          "$ref": "#/definitions/InlineSslProfileDecryptTcpPortMapConfig"
+        }
+      }
+    },
+    "InlineSslProfileDecryptTcpPortMap": {
+      "id": "#/definitions/InlineSslProfileDecryptTcpPortMap",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultOutPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65536,
+          "description": "egress port for decryption port map. 0 is disabled.",
+          "default": 0
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSslProfileDecryptTcpPortMapPorts"
+          }
+        }
+      }
+    },
+    "InlineSslProfileDecryptTcpPortMapConfig": {
+      "id": "#/definitions/InlineSslProfileDecryptTcpPortMapConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultOutPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65536,
+          "description": "egress port for decryption port map. 0 is disabled.",
+          "default": 0
+        }
+      }
+    },
+    "InlineSslProfileDecryptTcpPortMaps": {
+      "id": "#/definitions/InlineSslProfileDecryptTcpPortMaps",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "portMaps"
+      ],
+      "properties": {
+        "portMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSslProfileDecryptTcpPortMapPorts"
+          }
+        }
+      }
+    },
+    "InlineSslProfileDecryptTcpPortMapPorts": {
+      "id": "#/definitions/InlineSslProfileDecryptTcpPortMapPorts",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inPort",
+        "outPort"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "integer",
+          "readonly": true,
+          "example": 1
+        },
+        "inPort": {
+          "type": "integer",
+          "format": "int32",
+          "description": "ingress port for decryption port map",
+          "minimum": 1,
+          "maximum": 65536
+        },
+        "outPort": {
+          "type": "integer",
+          "format": "int32",
+          "description": "egress port for decryption port map",
+          "minimum": 1,
+          "maximum": 65536
+        }
+      }
+    },
+    "InlineSslProfileCertificate": {
+      "id": "#/definitions/InlineSslProfileCertificate",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expired": {
+          "type": "string",
+          "description": "SSL profile on expired certificate",
+          "enum": [
+            "decrypt",
+            "drop"
+          ],
+          "default": "drop"
+        },
+        "invalid": {
+          "type": "string",
+          "description": "SSL profile on invalid certificate",
+          "enum": [
+            "decrypt",
+            "drop"
+          ],
+          "default": "drop"
+        },
+        "revocation": {
+          "$ref": "#/definitions/InlineSslProfileCertRevoke",
+          "description": "SSL profile certificate revocation configuration"
+        },
+        "selfSigned": {
+          "type": "string",
+          "description": "SSL profile on self-signed certificate",
+          "enum": [
+            "decrypt",
+            "drop"
+          ],
+          "default": "drop"
+        },
+        "unknownCa": {
+          "type": "string",
+          "description": "SSL profile on unknown CA certificate",
+          "enum": [
+            "decrypt",
+            "drop"
+          ],
+          "default": "drop"
+        }
+      }
+    },
+    "InlineSslProfileCertRevoke": {
+      "id": "#/definitions/InlineSslProfileCertRevoke",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "crl": {
+          "$ref": "#/definitions/InlineSslProfileCertRevokeConfig",
+          "description": "SSL profile certificate revocation configuration"
+        },
+        "ocsp": {
+          "$ref": "#/definitions/InlineSslProfileCertRevokeConfig",
+          "description": "SSL profile certificate revocation configuration"
+        }
+      }
+    },
+    "InlineSslProfileCertRevokeConfig": {
+      "id": "#/definitions/InlineSslProfileCertRevokeConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "fail": {
+          "type": "string",
+          "enum": [
+            "soft",
+            "hard"
+          ],
+          "description": "only applicable when enabled"
+        },
+        "defer": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 20,
+          "maximum": 100,
+          "description": "timeout in seconds"
+        }
+      }
+    },
+    "InlineSslProfileRuleDomain": {
+      "id": "#/definitions/InlineSslProfileRuleDomain",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "domain rule",
+      "required": [
+        "type",
+        "value",
+        "action"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "domain"
+          ]
+        },
+        "ruleId": {
+          "type": "integer",
+          "readonly": true,
+          "example": 1
+        },
+        "value": {
+          "type": "string",
+          "format": "hostname",
+          "description": "hostname string. e.g. gigamon.com"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ]
+        }
+      }
+    },
+    "InlineSslProfileRuleCategory": {
+      "id": "#/definitions/InlineSslProfileRuleCategory",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "category rule",
+      "required": [
+        "type",
+        "value",
+        "action"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "category"
+          ]
+        },
+        "ruleId": {
+          "type": "integer",
+          "readonly": true,
+          "example": 1
+        },
+        "value": {
+          "type": "string",
+          "description": "category name"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ]
+        }
+      }
+    },
+    "InlineSslProfileRuleIssuer": {
+      "id": "#/definitions/InlineSslProfileRuleIssuer",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "issuer rule",
+      "required": [
+        "type",
+        "value",
+        "action"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "issuer"
+          ]
+        },
+        "ruleId": {
+          "type": "integer",
+          "readonly": true,
+          "example": 1
+        },
+        "value": {
+          "type": "string",
+          "description": "Issuer name string. e.g. /C=US/ST=ca/L=santa clara/O=gigamon/OU=eng/CN=RootCA/emailAddress=john.doe@gigamon"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ]
+        }
+      }
+    },
+    "InlineSslProfileRuleIpv4": {
+      "id": "#/definitions/InlineSslProfileRuleIpv4",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "IPv4 rule",
+      "required": [
+        "type",
+        "value",
+        "mask",
+        "action"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ipv4src",
+            "ipv4dst"
+          ]
+        },
+        "ruleId": {
+          "type": "integer",
+          "readonly": true,
+          "example": 1
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "IPv4 address according to the \"dotted-quad\" syntax"
+        },
+        "mask": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "IPv4 netmask according to the \"dotted-quad\" syntax"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ]
+        }
+      }
+    },
+    "InlineSslProfileRuleIpv6": {
+      "id": "#/definitions/InlineSslProfileRuleIpv6",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "IPv6 rule",
+      "required": [
+        "type",
+        "value",
+        "mask",
+        "action"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ipv6src",
+            "ipv6dst"
+          ]
+        },
+        "ruleId": {
+          "type": "integer",
+          "readonly": true,
+          "example": 1
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "IPv6 address"
+        },
+        "mask": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "IPv6 netmask"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ]
+        }
+      }
+    },
+    "InlineSslProfileRuleL4Port": {
+      "id": "#/definitions/InlineSslProfileRuleL4Port",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "IPv4 rule",
+      "required": [
+        "type",
+        "value",
+        "action"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "l4portsrc",
+            "l4portdst"
+          ]
+        },
+        "ruleId": {
+          "type": "integer",
+          "readonly": true,
+          "example": 1
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "description": "layer 4 port. Value of '0' means 'any' port",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "description": "specify a range of ports - value..valueMax, valueMax must be > value",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ]
+        }
+      }
+    },
+    "InlineSslProfileRuleVlan": {
+      "id": "#/definitions/InlineSslProfileRuleVlan",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "vlan rule",
+      "required": [
+        "type",
+        "value",
+        "action"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "vlan"
+          ]
+        },
+        "ruleId": {
+          "type": "integer",
+          "readonly": true,
+          "example": 1
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "description": "vlan id. Value of '0' means 'any' vlan id",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 4094
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "description": "specify a range of vlan ids - value..valueMax, valueMax must be > value",
+          "minimum": 0,
+          "maximum": 4094
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "decrypt",
+            "no-decrypt"
+          ]
+        }
+      }
+    },
+    "InlineSslProfilesQueryResponse": {
+      "id": "#/definitions/InlineSslProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inlineSslProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSslProfile"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineSslProfileQueryResponse": {
+      "id": "#/definitions/InlineSslProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inlineSslProfile": {
+          "$ref": "#/definitions/InlineSslProfile"
+        }
+      }
+    },
+    "InlineSslProfilesList": {
+      "id": "#/definitions/InlineSslProfilesList",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fileSource": {
+          "$ref": "../schemas-common/common.json#/definitions/RemoteFileSpec",
+          "description": "Remote location to fetch file from. Mutually exclusive with 'list'"
+        },
+        "list": {
+          "type": "string",
+          "description": "The nodecryptlist or decryptlist . Mutually exclusive with 'fileSource'"
+        }
+      }
+    },
+    "InlineSslSigningConfig": {
+      "id": "#/definitions/InlineSslSigningConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primaryKeyAlias": {
+          "type": "string",
+          "description": "alias of the key from apps/keystore/keys"
+        },
+        "secondaryKeyAlias": {
+          "type": "string",
+          "description": "alias of the key from apps/keystore/keys"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "InlineSslSigning": {
+      "id": "#/definitions/InlineSslSigning",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signingFor",
+        "keyAlias"
+      ],
+      "properties": {
+        "signingFor": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary"
+          ]
+        },
+        "keyAlias": {
+          "type": "string",
+          "description": "Keystore key alias (from apps/keystore/keys)"
+        }
+      }
+    },
+    "InlineSslTrustStoreQueryResponse": {
+      "id": "#/definitions/InlineSslTrustStoreQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trustStoreEntries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSslTrustStoreEntry"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SslTrustStoreQueryResponse": {
+      "id": "#/definitions/SslTrustStoreQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trustStoreList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSslTrustStoreEntry"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SslClientTrustStoresQueryResponse": {
+      "id": "#/definitions/SslClientTrustStoresQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clientTrustStores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClientTrustStoreEntry"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SslClientTrustStoreQueryResponse": {
+      "id": "#/definitions/SslClientTrustStoreQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clientTrustStore": {
+          "$ref": "#/definitions/ClientTrustStoreEntry"
+        }
+      },
+      "context": {
+        "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+      }
+    },
+    "ClientTrustStoreEntry": {
+      "id": "#/definitions/ClientTrustStoreEntry",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "sslTrustStoreEntries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SslTrustStoreEntry"
+          }
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "SslTrustStoreEntry": {
+      "id": "#/definitions/SslTrustStoreEntry",
+      "type": "object",
+      "readonly": true,
+      "properties": {
+        "subjectName": {
+          "type": "string"
+        },
+        "issuerName": {
+          "type": "string"
+        },
+        "subjectCommonName": {
+          "type": "string"
+        },
+        "issuerCommonName": {
+          "type": "string"
+        },
+        "fingerprint": {
+          "type": "string"
+        },
+        "expireDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SslClientTrustStore": {
+      "id": "#/definitions/SslClientTrustStore",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "fileSource": {
+          "$ref": "../schemas-common/common.json#/definitions/RemoteFileSpec",
+          "description": "Remote location to fetch file from. Mutually exclusive with 'file'"
+        },
+        "file": {
+          "type": "string",
+          "description": "The contents of the file. Mutually exclusive with 'fileSource'"
+        }
+      }
+    },
+    "SslClientTrustStoreCertificate": {
+      "id": "#/definitions/SslClientTrustStoreCertificate",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "certificate": {
+          "type": "string"
+        }
+      }
+    },
+    "InlineSslTrustStoreEntry": {
+      "id": "#/definitions/InlineSslTrustStoreEntry",
+      "type": "object",
+      "readonly": true,
+      "properties": {
+        "subjectName": {
+          "type": "string"
+        },
+        "issuerName": {
+          "type": "string"
+        },
+        "subjectCommonName": {
+          "type": "string"
+        },
+        "issuerCommonName": {
+          "type": "string"
+        },
+        "fingerprint": {
+          "type": "string"
+        },
+        "expireDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      },
+      "additionalProperties": false
+    },
+    "InlineSslTrustStore": {
+      "id": "#/definitions/InlineSslTrustStore",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fileSource": {
+          "$ref": "../schemas-common/common.json#/definitions/RemoteFileSpec",
+          "description": "Remote location to fetch file from. Mutually exclusive with 'file'"
+        },
+        "file": {
+          "type": "string",
+          "description": "The contents of the file. Mutually exclusive with 'fileSource'"
+        }
+      }
+    },
+    "InlineSslTrustStoreCertSpec": {
+      "id": "#/definitions/InlineSslTrustStoreCertSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fileSource": {
+          "$ref": "../schemas-common/common.json#/definitions/RemoteFileSpec",
+          "description": "Remote location to fetch file from. Mutually exclusive with 'file'"
+        },
+        "file": {
+          "type": "string",
+          "description": "The contents of the file. Mutually exclusive with 'fileSource'"
+        }
+      }
+    },
+    "InlineSslTrustStoreCertificate": {
+      "id": "#/definitions/InlineSslTrustStoreCertificate",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "certificate": {
+          "type": "string"
+        }
+      }
+    },
+    "InlineSslCertValidCacheStatus": {
+      "id": "#/definitions/InlineSslCertValidCacheStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "readonly": true
+        },
+        "numEntries": {
+          "type": "integer",
+          "format": "int32",
+          "readonly": true
+        }
+      }
+    },
+    "InlineSslCertValidCacheRecordsQueryResponse": {
+      "id": "#/definitions/InlineSslCertValidCacheRecordsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSslCertValidCacheRecord"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineSslCertValidCacheRecord": {
+      "id": "#/definitions/InlineSslCertValidCacheRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sha1": {
+          "type": "string"
+        },
+        "certCn": {
+          "type": "string"
+        },
+        "revocationStatus": {
+          "type": "string"
+        },
+        "expiry": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "InlineSslUrlCacheStatus": {
+      "id": "#/definitions/InlineSslUrlCacheStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "dbVersion": {
+          "type": "string"
+        },
+        "numEntries": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "InlineSslUrlCacheRecordsQueryResponse": {
+      "id": "#/definitions/InlineSslUrlCacheRecordsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSslUrlCacheRecord"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineSslUrlCacheRecord": {
+      "id": "#/definitions/InlineSslUrlCacheRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "addedOn": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiry": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "InlineSslProfileNoDecryptlistQueryResponse": {
+      "id": "#/definitions/InlineSslProfileNoDecryptlistQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "list": {
+          "type": "string"
+        }
+      }
+    },
+    "InlineSslProfileNoDecryptlistDomainQueryResponse": {
+      "id": "#/definitions/InlineSslProfileNoDecryptlistDomainQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "result": {
+          "type": "string",
+          "deprecated": true,
+          "description": "(deprecated: use resultAlias instead)"
+        },
+        "resultAlias": {
+          "type": "string"
+        }
+      }
+    },
+    "InlineSslProfileListInfo": {
+      "id": "#/definitions/InlineSslProfileListInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whitelist": {
+          "$ref": "#/definitions/InlineSslProfileWhitelistInfo"
+        },
+        "nodecryptlist": {
+          "$ref": "#/definitions/InlineSslProfileNoDecryptlistInfo"
+        },
+        "blacklist": {
+          "$ref": "#/definitions/InlineSslProfileWhitelistInfo"
+        },
+        "decryptlist": {
+          "$ref": "#/definitions/InlineSslProfileNoDecryptlistInfo"
+        }
+      }
+    },
+    "InlineSslProfileWhitelistInfo": {
+      "deprecated": true,
+      "id": "#/definitions/InlineSslProfileWhitelistInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "numEntries": {
+          "type": "integer",
+          "description": "the number of entries in the whitelist or blacklist. (deprecated: use nodecryptlist and decryptlist instead of whitelist and blacklist)"
+        }
+      }
+    },
+    "InlineSslProfileNoDecryptlistInfo": {
+      "id": "#/definitions/InlineSslProfileNoDecryptlistInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "numEntries": {
+          "type": "integer",
+          "description": "the number of entries in the nodecryptlist or decryptlist"
+        }
+      }
+    }
+  }
+}

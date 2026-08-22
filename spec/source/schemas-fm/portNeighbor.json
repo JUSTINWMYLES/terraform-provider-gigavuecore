@@ -1,0 +1,205 @@
+{
+  "id": "http://gigamon.com/schemas-fm/portNeighbor.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Physical Port Neighbor schema",
+  "definitions": {
+    "GigaPortNeighbors": {
+      "id": "#/definitions/GigaPortNeighbors",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "discovered Port Neighbors",
+      "required": [
+        "portId",
+        "neighbors"
+      ],
+      "properties": {
+        "portId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "id of the port this neighbor details are for"
+        },
+        "neighbors": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/GigaPortLldpNeighbor"
+              },
+              {
+                "$ref": "#/definitions/GigaPortCdpNeighbor"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "GigaPortLldpNeighbor": {
+      "id": "#/definitions/GigaPortLldpNeighbor",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Port Neighbor discovered over LLDP",
+      "required": [
+        "type",
+        "chassisId",
+        "portId",
+        "ttl"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "lldp"
+          ]
+        },
+        "chassisId": {
+          "type": "string"
+        },
+        "portId": {
+          "type": "string"
+        },
+        "portDescr": {
+          "type": "string"
+        },
+        "sysName": {
+          "type": "string"
+        },
+        "sysDescr": {
+          "type": "string"
+        },
+        "sysCapAvailable": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sysCapEnabled": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "mgmtAddr": {
+          "type": "string",
+          "description": "ipv4 or ipv6"
+        },
+        "vlanName": {
+          "type": "string"
+        },
+        "portVlanId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "mgmtVlanId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "linkAggPortId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "linkAggStatus": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "mtu": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lastUpdate": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Timestamp of the last update. In UTC milliseconds"
+        }
+      }
+    },
+    "GigaPortCdpNeighbor": {
+      "id": "#/definitions/GigaPortCdpNeighbor",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Port Neighbor discovered over CDP",
+      "required": [
+        "type",
+        "deviceId",
+        "portId"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "cdp"
+          ]
+        },
+        "deviceId": {
+          "type": "string"
+        },
+        "portId": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "swVersion": {
+          "type": "string"
+        },
+        "portVlanId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "sysCapAvailable": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ifaceAddr": {
+          "type": "string",
+          "description": "ipv4"
+        },
+        "mgmtAddr": {
+          "type": "string",
+          "description": "ipv4"
+        },
+        "netPrefixAddr": {
+          "type": "string",
+          "description": "ipv4"
+        },
+        "netPrefixMask": {
+          "type": "string",
+          "description": "ipv4"
+        },
+        "lastUpdate": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Timestamp of the last update. In UTC milliseconds"
+        }
+      }
+    },
+    "GigaPortsNeighborsQueryResponse": {
+      "id": "#/definitions/GigaPortsNeighborsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "portNeighbors"
+      ],
+      "properties": {
+        "portNeighbors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaPortNeighbors"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

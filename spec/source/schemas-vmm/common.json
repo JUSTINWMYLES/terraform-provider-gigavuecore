@@ -1,0 +1,194 @@
+{
+  "id": "http://gigamon.com/schemas/common.json#",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon common dependencies schema",
+
+  "properties": {},
+  
+  "definitions": {
+
+    "GigaErrors": {
+      "id": "#/definitions/GigaErrors",
+      "type": "object",
+      "additionalProperties": true,
+
+      "description": "Gigamon Errors report",
+
+      "required": [
+        "errors"
+      ],
+
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+             "$ref": "#/definitions/GigaError"
+          },
+          "minItems": 0
+        }
+      }
+    },
+
+    "GigaError": {
+      "id": "#/definitions/GigaError",
+      "type": "object",
+      "additionalProperties": true,
+
+      "description": "Gigamon Error report",
+
+      "required": [
+        "code",
+        "msg"
+      ],
+
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "error code"
+        },
+        "msg": {
+          "type": "string",
+          "description": "error description string"
+        }
+      }
+    },
+
+    "QueryResultContext": {
+      "id": "#/definitions/QueryResultContext",
+      "type": "object",
+      "additionalProperties": true,
+
+      "description": "Gigamon query result context",
+
+      "required": [
+        "totalItems"
+      ],
+
+      "properties": {
+        "totalItems": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "total number of items in the queried entity type"
+        },
+        "pageNo": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "page number of the returned result set"
+        },
+        "pageSize": {
+          "type": "integer",
+          "minimum": 5,
+          "description": "page size of the returned result set"
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "entity field to sort on. Optionally suffixed with sorting order of ':asc' or ':desc'. If omitted, sorting order defaults to ':asc'"
+          },
+          "description": "sorting info of the returned result set. list of fields in the array indicate sorting order"
+        }
+      }
+    },
+
+    "Ipv4AddressWithMask": {
+      "id": "#/definitions/Ipv4AddressWithMask",
+      "type": "object",
+      "additionalProperties": true,
+
+      "required": [
+        "ipv4Addr",
+        "ipv4Mask"
+      ],
+
+      "properties": {
+        "ipv4Addr": {"type": "string", "format": "ipv4"},
+        "ipv4Mask": {"type": "string", "format": "ipv4"}
+      }
+
+    },
+
+    "EntityHealthState" : {
+      "id": "#/definitions/EntityHealthState",
+      "type": "string",
+      "enum": [
+          "green",
+          "yellow",
+          "orange",
+          "red",
+          "grey"],
+      "readOnly": true,
+      "description": "Read-only. 'green' indicates healthy state; 'yellow'  indicates warning state; 'orange'  indicates error state; 'red'  indicates critical state; 'grey' indicates undeployed state;"
+    },
+
+    "EntityHealthStateReason" : {
+      "id": "#/definitions/EntityHealthStateReason",
+      "type" :"object",
+      "properties" : {
+        "severity" : {
+          "$ref": "common.json#/definitions/EntityHealthState"
+        },
+        "message" : {
+          "type" : "string",
+          "readOnly": true,
+          "description" : "Read-only. Describes the reason for component's health state"
+        }
+      }
+    },
+
+    "EntityHealthStateReasons" : {
+      "id": "#/definitions/EntityHealthStateReasons",
+      "type": "array",
+      "items": {
+        "$ref": "common.json#/definitions/EntityHealthStateReason"
+      },
+      "readOnly": true
+    },
+
+    "EntityTrafficHealthState" : {
+      "id": "#/definitions/EntityTrafficHealthState",
+      "type": "string",
+      "enum": [
+        "green",
+        "red",
+        "grey"],
+      "readOnly": true,
+      "description": "Read-only. 'green' indicates traffic healthy state; 'red'  indicates traffic critical state; 'grey' indicates traffic not monitored state;"
+    },
+
+    "EntityTrafficHealthStateReason" : {
+      "id": "#/definitions/EntityTrafficHealthStateReason",
+      "type" :"object",
+      "properties" : {
+        "severity" : {
+          "$ref": "common.json#/definitions/EntityTrafficHealthState"
+        },
+        "message" : {
+          "type" : "string",
+          "readOnly": true,
+          "description" : "Read-only. Describes the reason for component's traffic health state"
+        }
+      }
+    },
+
+    "EntityTrafficHealthStateReasons" : {
+      "id": "#/definitions/EntityTrafficHealthStateReasons",
+      "type": "array",
+      "items": {
+        "$ref": "common.json#/definitions/EntityTrafficHealthStateReason"
+      },
+      "readOnly": true
+    },
+
+    "EntityOverallHealthStatus" : {
+      "id": "#/definitions/EntityOverallHealthStatus",
+      "type": "string",
+      "enum": [
+        "green",
+        "red",
+        "grey"],
+      "readOnly": true,
+      "description": "Read-only. 'green' indicates healthy state; 'red'  indicates critical state; 'grey' indicates undeployed state;"
+    }
+  }
+}

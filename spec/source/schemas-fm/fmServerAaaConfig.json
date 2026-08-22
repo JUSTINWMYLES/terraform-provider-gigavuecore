@@ -1,0 +1,49 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmServerAaaConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Server AaaConfig",
+  "definitions": {
+    "FmServerAaaConfig": {
+      "id": "#/definitions/FmServerAaaConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Configure FM Server AAA Config settings",
+      "required": [
+        "authMethod",
+        "defaultUserGroup"
+      ],
+      "properties": {
+        "authMethod": {
+          "type": "string",
+          "description": "Auth Method",
+          "enum": [
+            "local",
+            "ldap",
+            "radius",
+            "tacacs+"
+            ]
+        },
+        "accountingMethod": {
+          "type": "string",
+          "description": "Accounting Method"
+        },
+        "defaultUserGroup": {
+          "type": "string",
+          "description": "Default UserGroup"
+        },
+        "defaultLoginAttempts": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 3,
+          "default": 5,
+          "maximum": 5,
+          "description": "DefaultLoginAttempts will only be applicable for local auth type"
+        },
+        "userLockEnabled": {
+          "type": "boolean",
+          "description": "UserLockEnabled will only be applicable for local auth type"
+        }
+      }
+    }
+  }
+}

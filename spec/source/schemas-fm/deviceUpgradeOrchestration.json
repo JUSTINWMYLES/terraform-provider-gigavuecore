@@ -1,0 +1,1381 @@
+{
+  "id": "http://gigamon.com/schemas-fm/deviceUpgradeOrchestration.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Device Upgrade Orchestration Schema",
+  "definitions": {
+    "GigaTagInResource": {
+      "id": "#/definitions/CmsObjectHealthStateReason",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "tagKey",
+        "tagValues"
+      ],
+      "properties": {
+        "tagKey": {
+          "type": "string",
+          "description": "Tag Key"
+        },
+        "tagValues": {
+          "type": "array",
+          "items": {
+          },
+          "description": "Tag Values"
+        }
+      }
+    },
+    "CmsObjectHealthStateReason": {
+      "id": "#/definitions/CmsObjectHealthStateReason",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "severity"
+      ],
+      "properties": {
+        "severity": {
+          "type": "string",
+          "description": "Severity"
+        },
+        "message": {
+          "type": "string",
+          "description": "Message"
+        },
+        "trafficHealthStateComputationType": {
+          "type": "string",
+          "description": "Traffic Health State Computation Type",
+          "enum": [
+            "PORT_LOW_UTIL",
+            "PORT_HIGH_UTIL",
+            "PORT_PACKET_DROP",
+            "PORT_PACKET_ERROR",
+            "GIGASTREAM_IMBALANCE"
+          ]
+        }
+      }
+    },
+    "DeviceUpgradeSummary": {
+      "id": "#/definitions/DeviceUpgradeSummary",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "clusterId",
+        "deviceIp",
+        "swVersion",
+        "healthState",
+        "maintenance"
+
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "Cluster ID"
+        },
+        "deviceIp": {
+          "type": "string",
+          "description": "Device IP"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "Host Name"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model",
+          "enum": [
+            "HC2",
+            "HD8",
+            "HC1",
+            "HC3",
+            "HD4",
+            "HB1",
+            "TA1",
+            "TA10",
+            "TA40",
+            "TA100",
+            "TACX",
+            "TA10S",
+            "TA40S",
+            "TACS",
+            "TA10A",
+            "TA200",
+            "TA200E",
+            "TA200S",
+            "GTAPA",
+            "TA25",
+            "TA25A",
+            "TA400",
+            "OS",
+            "DELL_S4112F_ON",
+            "GTAPASF",
+            "HC1P",
+            "TA25E",
+            "TA25EA",
+            "TA400E",
+            "VMNode",
+            "FM",
+            "UNKNOWN"
+          ]
+        },
+        "swVersion": {
+          "type": "string",
+          "description": "Software Version"
+        },
+        "licensed": {
+          "type": "boolean",
+          "description": "Licensed"
+        },
+        "role": {
+          "type": "string",
+          "description": "Role"
+        },
+        "lastExecutedTask": {
+          "type": "string",
+          "description": "Last Executed Task"
+        },
+        "ubootVersion": {
+          "type": "string",
+          "description": "UBoot Version"
+        },
+        "serialNumber": {
+          "type": "string",
+          "description": "Serial Number"
+        },
+        "discoveryOutcome": {
+          "type": "string",
+          "description": "Discovery Outcome"
+        },
+        "fetchStage": {
+          "type": "string",
+          "description": "Fetch Stage"
+        },
+        "installStage": {
+          "type": "string",
+          "description": "Install Stage"
+        },
+        "activateStage": {
+          "type": "string",
+          "description": "Activate Stage"
+        },
+        "verifyStage": {
+          "type": "string",
+          "description": "Verify Stage"
+        },
+        "fetchInfo": {
+          "type": "string",
+          "description": "Fetch Info"
+        },
+        "installInfo": {
+          "type": "string",
+          "description": "Install Info"
+        },
+        "activateInfo": {
+          "type": "string",
+          "description": "Activate Info"
+        },
+        "verifyInfo": {
+          "type": "string",
+          "description": "Verify Info"
+        },
+        "taskStatus": {
+          "type": "string",
+          "description": "Task Status"
+        },
+        "chassisOperStatus": {
+          "type": "string",
+          "description": "Chassis OperStatus"
+        },
+        "healthState": {
+          "type": "string",
+          "description": "Health State"
+        },
+        "healthStateReasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsObjectHealthStateReason"
+          }
+        },
+        "maintenance": {
+          "type": "boolean",
+          "description": " Maintenance"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaTagInResource"
+          }
+        },
+        "verifyInfo": {
+          "type": "string",
+          "description": "Verify Info"
+        },
+        "taskStatus": {
+          "type": "string",
+          "description": "Task Status"
+        },
+        "chassisOperStatus": {
+          "type": "string",
+          "description": "Chassis OperStatus"
+        }
+      }
+    },
+    "DeviceUpgradeSummaryListQueryResponse": {
+      "id": "#/definitions/DeviceUpgradeSummaryListQueryResponse",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "deviceUpgradeSummary"
+      ],
+      "properties": {
+        "deviceUpgradeSummary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceUpgradeSummary"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+
+    "DeviceUpgradeTaskInfoRecord": {
+      "id": "#/definitions/DeviceUpgradeTaskInfoRecord",
+      "type": "object",
+      "since": "FM 6.1",
+      "additionalProperties": false,
+      "required": [
+        "taskId"
+      ],
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "description": "Task ID"
+        },
+        "taskName": {
+          "type": "string",
+          "description": "Task Name"
+        },
+        "taskType": {
+          "type": "string",
+          "description": "Task Type"
+        },
+        "taskStatus": {
+          "type": "string",
+          "description": "Task Status"
+        },
+        "scheduledTime": {
+          "type": "string",
+          "description": "Scheduled Time"
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Start Date"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "End Date"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Created By"
+        },
+        "createdTime": {
+          "type": "string",
+          "description": "Created Time"
+        },
+        "timeLeft": {
+          "type": "string",
+          "description": "Time Left"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description"
+        }
+      }
+    },
+    "UpgradeJobsResponse": {
+      "id": "#/definitions/UpgradeJobsResponse",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "description": "UpgradeJobs definitions",
+      "required": [
+        "deviceUpgradeTaskInfoRecord"
+      ],
+      "properties": {
+        "deviceUpgradeTaskInfoRecord": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceUpgradeTaskInfoRecord"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+
+    "DeviceUpgradeContext": {
+      "id": "#/definitions/DeviceUpgradeContext",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "DeviceUpgrade context",
+      "required": [
+        "deviceIp",
+        "clusterName",
+        "hostname",
+        "model"
+      ],
+      "properties": {
+        "deviceIp": {
+          "type": "string",
+          "description": "Device IP"
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "Cluster Name"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "Host Name"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model"
+        },
+        "fileType": {
+          "type": "string",
+          "description": "File Type"
+        },
+        "filePath": {
+          "type": "string",
+          "description": "File Path"
+        },
+        "configBackup": {
+          "type": "boolean",
+          "description": "Config Backup"
+        }
+      }
+    },
+    "UpgradeJobInfoResponse": {
+      "id": "#/definitions/UpgradeJobInfoResponse",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "taskId"
+      ],
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "description": "Task ID"
+        },
+        "taskName": {
+          "type": "string",
+          "description": "Task Name"
+        },
+        "taskType": {
+          "type": "string",
+          "description": "Task Type"
+        },
+        "taskStatus": {
+          "type": "string",
+          "description": "Task Status"
+        },
+        "imageServer": {
+          "type": "string",
+          "description": "Image Server"
+        },
+        "scheduledTime": {
+          "type": "string",
+          "description": "Scheduled Time"
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Start Date"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "End Date"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Created By"
+        },
+        "createdTime": {
+          "type": "string",
+          "description": "Created Time"
+        },
+        "lastUpdateTime": {
+          "type": "string",
+          "description": "Last Update Time"
+        },
+        "timeLeft": {
+          "type": "string",
+          "description": "Time Left"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description"
+        },
+        "deviceUpgradeContext": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceUpgradeContext"
+          }
+        }
+      }
+    },
+
+    "GsUpgradeStepStatus": {
+      "id": "#/definitions/GsUpgradeStepStatus",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "time"
+      ],
+      "properties": {
+        "time": {
+          "type": "string",
+          "description": "Time"
+        },
+        "message": {
+          "type": "string",
+          "description": "Message"
+        }
+      }
+    },
+    "CmsNodeGsImageUpgradeStatus": {
+      "id": "#/definitions/CmsNodeGsImageUpgradeStatus",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "description": "Node ID"
+        },
+        "hostName": {
+          "type": "string",
+          "description": "Host Name"
+        },
+        "stackMode": {
+          "type": "string",
+          "description": "Stack Mode",
+          "enum": [
+            "Unknown",
+            "Standalone",
+            "Master",
+            "Leader",
+            "Standby",
+            "Slave",
+            "Member",
+            "Unreachable"
+          ]
+        },
+        "productCode": {
+          "type": "string",
+          "description": "Product Code"
+        },
+        "nodeUpgradeState": {
+          "type": "string",
+          "description": "Node Upgrade State",
+          "enum": [
+            "NotStarted",
+            "Upgrading",
+            "ImageFetch",
+            "ImageInstall",
+            "ImageActivationPreparation",
+            "ConfigBackup",
+            "ReloadStarted",
+            "VersionVerification",
+            "SanityCheck",
+            "FirmwareUpgrade",
+            "CCCardSyncCheck",
+            "PostImageUpgradeVerification",
+            "Success",
+            "Failed",
+            "Skipped"
+          ]
+        },
+        "previousVersion": {
+          "type": "object",
+          "description": "Previous Version"
+        },
+        "currentVersion": {
+          "type": "object",
+          "description": "Current Version"
+        },
+        "stepStatus" : {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsUpgradeStepStatus"
+          }
+        }
+      }
+    },
+    "CmsNodeImageUpgradeStatus": {
+      "id": "#/definitions/CmsNodeImageUpgradeStatus",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "nodeId",
+        "status"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "description": "Node ID"
+        },
+        "hostName": {
+          "type": "string",
+          "description": "Host Name"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status",
+          "enum": [
+            "NotStarted",
+            "Upgrading",
+            "ImageFetch",
+            "ImageInstall",
+            "ImageActivationPreparation",
+            "ConfigBackup",
+            "ReloadStarted",
+            "VersionVerification",
+            "SanityCheck",
+            "FirmwareUpgrade",
+            "CCCardSyncCheck",
+            "PostImageUpgradeVerification",
+            "Success",
+            "Failed",
+            "Skipped"
+          ]
+        },
+        "numStepsInTask": {
+          "type": "integer",
+          "description": "Number of Steps In Task"
+        },
+        "currentStep": {
+          "type": "integer",
+          "description": "Current Step"
+        },
+        "stepStatus": {
+          "type": "string",
+          "description": "Step Status"
+        },
+        "priorVersion": {
+          "type": "string",
+          "description": "Prior Version"
+        },
+        "currentVersion": {
+          "type": "string",
+          "description": "Current Version"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "File Name"
+        },
+        "fileServer": {
+          "type": "string",
+          "description": "File Server"
+        },
+        "lastCompletedStage": {
+          "type": "string",
+          "description": "Last Completed Stage"
+        },
+        "nodeLog" : {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsScheduledTaskLogRecord"
+          }
+        }
+      }
+    },
+    "CmsScheduledTaskLogRecord": {
+      "id": "#/definitions/CmsScheduledTaskLogRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clusterId",
+        "nodeId",
+        "time"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "Cluster ID"
+        },
+        "nodeId": {
+          "type": "string",
+          "description": "Node ID"
+        },
+        "time": {
+          "type": "string",
+          "description": "Time"
+        },
+        "message": {
+          "type": "string",
+          "description": "Message"
+        }
+      }
+    },
+    "CmsClusterObjectDiffEntry": {
+      "id": "#/definitions/CmsClusterObjectDiffEntry",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "objectName",
+        "prevState",
+        "afterState"
+      ],
+      "properties": {
+        "objectName": {
+          "type": "string",
+          "description": "Object Name"
+        },
+        "prevState": {
+          "type": "string",
+          "description": "Previous State"
+        },
+        "afterState": {
+          "type": "string",
+          "description": "After State"
+        }
+      }
+    },
+    "CmsClusterObjectDiffReport": {
+      "id": "#/definitions/CmsClusterObjectDiffReport",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "nodes": {
+          "description": "Nodes Differences",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "cardsUp": {
+          "type": "array",
+          "description": "Cards Up Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "networkPortsUp": {
+          "type": "array",
+          "description": "Network Ports Up Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "toolPortsUp": {
+          "type": "array",
+          "description": "Tool Ports Up Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "hybridPortsUp": {
+          "type": "array",
+          "description": "Hybrid Ports Up Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "circuitPortsUp": {
+          "type": "array",
+          "description": "Circuit Ports Up Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "inlineNetworkPortsUp": {
+          "type": "array",
+          "description": "Inline Network Ports Up Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "inlineToolPortsUp": {
+          "type": "array",
+          "description": "Inline Tool Ports Up Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "stackPortsUp": {
+          "type": "array",
+          "description": "Stack Ports Up Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "gigasmartPortsUp": {
+          "type": "array",
+          "description": "Giga Smart Ports Up Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "stackLinks": {
+          "type": "array",
+          "description": "Stack Links Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "maps": {
+          "type": "array",
+          "description": "Maps Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        },
+        "gsops": {
+          "type": "array",
+          "description": "Gsops Differences",
+          "items": {
+            "$ref": "#/definitions/CmsClusterObjectDiffEntry"
+          }
+        }
+      }
+    },
+    "CmsClusterObjectCounts": {
+      "id": "#/definitions/CmsClusterObjectCounts",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+      ],
+      "properties": {
+        "nodes": {
+          "type": "integer",
+          "description": "Number of Nodes"
+        },
+        "cardsUp": {
+          "type": "integer",
+          "description": "Number of Cards Up"
+        },
+        "networkPortsUp": {
+          "type": "integer",
+          "description": "Number of Network Ports Up"
+        },
+        "toolPortsUp": {
+          "type": "integer",
+          "description": "Number of Tool Ports Up"
+        },
+        "hybridPortsUp": {
+          "type": "integer",
+          "description": "Number of Hybrid Ports Up"
+        },
+        "circuitPortsUp": {
+          "type": "integer",
+          "description": "Number of Circuit Ports Up"
+        },
+        "inlineNetworkPortsUp": {
+          "type": "integer",
+          "description": "Number of Inline Network Ports Up"
+        },
+        "inlineToolPortsUp": {
+          "type": "integer",
+          "description": "Number of Inline Tool Ports Up"
+        },
+        "stackPortsUp": {
+          "type": "integer",
+          "description": "Number of Stack Ports Up"
+        },
+        "gigasmartPortsUp": {
+          "type": "integer",
+          "description": "Number of Giga Smart Ports Up"
+        },
+        "stackLinks": {
+          "type": "integer",
+          "description": "Number of Stack Links"
+        },
+        "maps": {
+          "type": "integer",
+          "description": "Number of Maps"
+        },
+        "gsops": {
+          "type": "integer",
+          "description": "Number Gsops"
+        }
+      }
+    },
+    "CmsClusterUpgradeSummary": {
+      "id": "#/definitions/CmsClusterUpgradeSummary",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "numInitialValidationComplete": {
+          "type": "integer",
+          "description": "Initial Validation Complete Count"
+        },
+        "numInitFetchComplete": {
+          "type": "integer",
+          "description": "Init Fetch Complete Count"
+        },
+        "numInstallComplete": {
+          "type": "integer",
+          "description": "Install Complete Count"
+        },
+        "numActivationPreparationComplete": {
+          "type": "integer",
+          "description": "Activation Preparation Complete Count"
+        },
+        "numConfigBackupComplete": {
+          "type": "integer",
+          "description": "Config Backup Complete Count"
+        },
+        "numReloadStarted": {
+          "type": "integer",
+          "description": "Reload Started Count"
+        },
+        "numReloadComplete": {
+          "type": "integer",
+          "description": "Reload Complete Count"
+        },
+        "numVerificationComplete": {
+          "type": "integer",
+          "description": "Verification Complete Count"
+        },
+        "numPostUpgradeValidationComplete": {
+          "type": "integer",
+          "description": "Post Upgrade Validation Complete Count"
+        },
+        "numUbootComplete": {
+          "type": "integer",
+          "description": "UBoot Complete Count"
+        },
+        "numUpgradeComplete": {
+          "type": "integer",
+          "description": "Upgrade Complete Count"
+        },
+        "numNodesSuccess": {
+          "type": "integer",
+          "description": "Nodes Success Count"
+        },
+        "numInitialValidationComplete": {
+          "type": "integer",
+          "description": "CC-Card Sync Complete Count"
+        }
+      }
+    },
+    "CmsClusterImageUpgradeStatus": {
+      "id": "#/definitions/CmsClusterImageUpgradeStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "FM 6.4",
+      "required": [
+        "taskId",
+        "clusterId"
+      ],
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "description": "Task ID"
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Cluster ID"
+        },
+        "taskName": {
+          "type": "string",
+          "description": "Task Name"
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Start Time"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "End Time"
+        },
+        "operationState": {
+          "type": "string",
+          "description": "Operation State"
+        },
+        "overallUpgradeStatus": {
+          "type": "string",
+          "description": "Overall Upgrade Status"
+        },
+        "upgradeFlow": {
+          "type": "string",
+          "description": "Upgrade Flow",
+          "enum": [
+            "Legacy",
+            "Orchestrated"
+          ]
+        },
+        "stage": {
+          "type": "string",
+          "description": "Stage",
+          "enum": [
+            "Preparation",
+            "ImageFetch",
+            "ImageInstall",
+            "ImageActivationPreparation",
+            "ImageActivation",
+            "ImageActivationProgress",
+            "DeviceUpgradeBuildVerification",
+            "FirmwareUpgrade",
+            "CcCardSync",
+            "PostUpgradeVerification"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "description": "Status",
+          "enum": [
+            "Not Started",
+            "Initial Validation Completed",
+            "Image Fetch Completed",
+            "Image Install Completed",
+            "Image Activation Preparation Completed",
+            "Config Backup Completed",
+            "Image Apply Completed",
+            "Reload Started",
+            "Reload Completed",
+            "Version Verification Completed",
+            "Uboot Install Completed",
+            "Upgrade Completed",
+            "Cc Card Sync",
+            "Sanity Check",
+            "Post Image Upgrade Verification",
+            "Post Image Upgrade Verification Completed",
+            "Success",
+            "Failed",
+            "Reset"
+          ]
+        },
+        "upgradeSummary": {
+          "$ref": "#definitions/CmsClusterUpgradeSummary"
+        },
+        "objectCountsExpected" : {
+          "$ref": "#definitions/CmsClusterObjectCounts"
+        },
+        "objectCounts" : {
+          "$ref": "#definitions/CmsClusterObjectCounts"
+        },
+        "objectDiffReport" : {
+          "$ref": "#definitions/CmsClusterObjectDiffReport"
+        },
+        "clusterLog" : {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsScheduledTaskLogRecord"
+          }
+        },
+        "nodeUpgradeStatus" : {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsNodeImageUpgradeStatus"
+          }
+        },
+        "nodeGsUpgradeStatus" : {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsNodeGsImageUpgradeStatus"
+          }
+        }
+      }
+    },
+    "UpgradeInfoByTaskIdAndClusterIdResponse": {
+      "id": "#/definitions/UpgradeInfoByTaskIdAndClusterIdResponse",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "clusterImageUpgradeStatus"
+      ],
+      "properties": {
+        "clusterImageUpgradeStatus": {
+          "$ref": "#/definitions/CmsClusterImageUpgradeStatus"
+        }
+      }
+    },
+
+    "UpgradeInfoByTaskIdResponse": {
+      "id": "#/definitions/UpgradeInfoByTaskIdResponse",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "clustersStatus"
+      ],
+      "properties": {
+        "clustersStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsClusterImageUpgradeStatus"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+
+    "UpgradeExecutionTimelineResponse": {
+      "id": "#/definitions/UpgradeExecutionTimelineResponse",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "clustersStatus"
+      ],
+      "properties": {
+        "clustersStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CmsClusterImageUpgradeStatus"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+
+    "GigaInstallFileDef": {
+      "id": "#/definitions/GigaInstallFileDef",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "deviceModel",
+        "deviceModelQualifier",
+        "fileType",
+        "filePath",
+        "targetSlot"
+      ],
+      "properties": {
+        "deviceModel": {
+          "type": "string",
+          "description": "Device Model",
+          "enum": [
+            "HC2",
+            "HD8",
+            "HC1",
+            "HC3",
+            "HD4",
+            "HB1",
+            "TA1",
+            "TA10",
+            "TA40",
+            "TA100",
+            "TACX",
+            "TA10S",
+            "TA40S",
+            "TACS",
+            "TA10A",
+            "TA200",
+            "TA200E",
+            "TA200S",
+            "GTAPA",
+            "TA25",
+            "TA25A",
+            "TA400",
+            "OS",
+            "DELL_S4112F_ON",
+            "GTAPASF",
+            "HC1P",
+            "TA25E",
+            "TA25EA",
+            "TA400E",
+            "VMNode",
+            "FM",
+            "UNKNOWN"
+          ]
+        },
+        "deviceModelQualifier": {
+          "type": "string",
+          "description": "Device Model Qualifier",
+          "enum": [
+              "HDCCV1",
+              "HDCCV2"
+          ]
+        },
+        "fileType": {
+          "type": "string",
+          "description": "File Type"
+        },
+        "filePath": {
+          "type": "string",
+          "description": "File Path"
+        },
+        "targetSlot": {
+          "type": "string",
+          "description": "Target Slot"
+        },
+        "updateUboot": {
+          "type": "string",
+          "description": "Update UBoot"
+        }
+      }
+    },
+    "DeviceUpgradeSpec": {
+      "id": "#/definitions/DeviceUpgradeSpec",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "taskId",
+        "imageServer",
+        "clusterIds",
+        "imageFileSpecs"
+      ],
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "description": "Task ID"
+        },
+        "taskName": {
+          "type": "string",
+          "description": "Task Name"
+        },
+        "imageServer": {
+          "type": "string",
+          "description": "Image Server"
+        },
+        "clusterIds": {
+          "type": "array",
+          "description": "Cluster IDs",
+          "items": {
+          }
+        },
+        "nodeIds": {
+          "type": "array",
+          "description": "Node IDs",
+          "items": {
+          }
+        },
+        "imageFileSpecs": {
+          "type": "array",
+          "description": "Image File Specs",
+          "items": {
+            "$ref": "#/definitions/GigaInstallFileDef"
+          }
+        },
+        "reboot": {
+          "type": "boolean",
+          "description": "Reboot"
+        },
+        "configBackup": {
+          "type": "boolean",
+          "description": "Config Backup"
+        },
+        "fetchStage": {
+          "type": "boolean",
+          "description": "Fetch Stage"
+        },
+        "installStage": {
+          "type": "boolean",
+          "description": "Install Stage"
+        },
+        "activateStage": {
+          "type": "boolean",
+          "description": "Activate Stage"
+        },
+        "postCheckStage": {
+          "type": "boolean",
+          "description": "Post Check Stage"
+        },
+        "skipNotReachableDevices": {
+          "type": "boolean",
+          "description": "Skip Not Reachable Devices"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaTagInResource"
+          }
+        },
+        "upgradeState": {
+          "type": "string",
+          "description": "Upgrade State",
+          "enum": [
+            "ACTIVE",
+            "COMPLETED",
+            "INACTIVE"
+          ]
+        },
+        "execClusterCounter": {
+          "type": "integer",
+          "description": "Exec Cluster Counter"
+        }
+      }
+    },
+
+    "DeviceUpgradeResumeSpec": {
+      "id": "#/definitions/DeviceUpgradeResumeSpec",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "clusterName",
+        "deviceIp",
+        "taskId",
+        "configBackup",
+        "fetchStage",
+        "installStage",
+        "activateStage",
+        "postCheckStage"
+      ],
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "description": "Cluster Name"
+        },
+        "deviceIp": {
+          "type": "string",
+          "description": "Device IP"
+        },
+        "taskId": {
+          "type": "string",
+          "description": "Task ID"
+        },
+        "configBackup": {
+          "type": "boolean",
+          "description": "Config Backup"
+        },
+        "fetchStage": {
+          "type": "boolean",
+          "description": "Fetch Stage"
+        },
+        "installStage": {
+          "type": "boolean",
+          "description": "Install Stage"
+        },
+        "activateStage": {
+          "type": "boolean",
+          "description": "Activate Stage"
+        },
+        "postCheckStage": {
+          "type": "boolean",
+          "description": "Post Check Stage"
+        }
+      }
+    },
+    "DeviceUpgradeResumeSpecs": {
+      "id": "#/definitions/DeviceUpgradeResumeSpecs",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "deviceUpgradeResumeSpecs"
+      ],
+      "properties": {
+        "deviceUpgradeResumeSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceUpgradeResumeSpec"
+          }
+        }
+      }
+    },
+
+    "DeviceUpgradeRetrySpec": {
+      "id": "#/definitions/DeviceUpgradeRetrySpec",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "clusterName",
+        "option",
+        "taskId"
+      ],
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "description": "Cluster Name"
+        },
+        "option": {
+          "type": "string",
+          "description": "Option",
+          "enum": [
+            "Current",
+            "Next"
+          ]
+        },
+        "taskId": {
+          "type": "string",
+          "description": "Task ID"
+        }
+      }
+    },
+    "DeviceUpgradeRetrySpecs": {
+      "id": "#/definitions/DeviceUpgradeRetrySpecs",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "deviceUpgradeRetrySpecs"
+      ],
+      "properties": {
+        "deviceUpgradeRetrySpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceUpgradeRetrySpec"
+          }
+        }
+      }
+    },
+
+    "DeviceUpgradeResetSpec": {
+      "id": "#/definitions/DeviceUpgradeResetSpec",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "clusterName",
+        "taskId"
+      ],
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "description": "Cluster Name"
+        },
+        "taskId": {
+          "type": "string",
+          "description": "Task ID"
+        }
+      }
+    },
+    "DeviceUpgradeResetSpecs": {
+      "id": "#/definitions/DeviceUpgradeResetSpecs",
+      "type": "object",
+      "since": "FM 6.4",
+      "additionalProperties": false,
+      "required": [
+        "deviceUpgradeResetSpecs"
+      ],
+      "properties": {
+        "deviceUpgradeResetSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceUpgradeResetSpec"
+          }
+        }
+      }
+    }
+  }
+}

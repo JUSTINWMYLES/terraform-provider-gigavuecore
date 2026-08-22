@@ -1,0 +1,114 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fabricPortGroups.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Fabric Port Group Schema",
+  "definitions": {
+    "GigaFabricPortGroupRequest": {
+      "id": "#/definitions/GigaFabricPortGroupRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "alias",
+        "portList",
+        "portWeights"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the Fabric Port Group"
+        },
+        "comment": {
+          "type": "string",
+          "description": "Description of the Fabric Port Group"
+        },
+        "smartLb": {
+          "type": "boolean",
+          "const": true,
+          "description": "Smart Load Balancing, it is always enabled otherwise Fabric Port Group cannot be used in the Fabric Map "
+        },
+        "portList": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Port List"
+        },
+        "portWeights": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "Port Weights (1 to 100)"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "GigaFabricPortGroupResponse": {
+      "id": "#/definitions/GigaFabricPortGroupResponse",
+      "allOf": [
+        {
+          "$ref": "#/definitions/GigaFabricPortGroupRequest"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "healthState": {
+              "type": "string",
+              "description": "Health State"
+            },
+            "trafficHealthState": {
+              "type": "string",
+              "description": "Traffic Health State"
+            },
+            "healthStateReasons": {
+              "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+              "readonly": true
+            },
+            "trafficHealthStateReasons": {
+              "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+              "readonly": true
+            }
+          }
+        }
+      ]
+    },
+    "GigaFabricPortGroupQueryResponse": {
+      "id": "#/definitions/GigaFabricPortGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigaFabricPortGroup"
+      ],
+      "properties": {
+        "gigaFabricPortGroup": {
+          "$ref": "#/definitions/GigaFabricPortGroupResponse"
+        }
+      }
+    },
+    "GigaFabricPortGroupsQueryResponse": {
+      "id": "#/definitions/GigaFabricPortGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigaFabricPortGroups"
+      ],
+      "properties": {
+        "gigaFabricPortGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaFabricPortGroupResponse"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

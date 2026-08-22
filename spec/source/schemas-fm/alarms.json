@@ -1,0 +1,717 @@
+{
+  "id": "http://gigamon.com/schemas-fm/alarms.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Alarms schema",
+  "definitions": {
+    "GigaAlarm": {
+      "id": "#/definitions/GigaAlarm",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon Alarm instance",
+      "required": [
+        "id",
+        "ts",
+        "type",
+        "resourceType",
+        "resourceId",
+        "severity",
+        "acknowledged"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "ts": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Alarm timestamp in ISO 8601 format"
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Alarm Type identifier",
+          "enum": [
+            "Abnormal Fan Operation",
+            "Card Unhealthy",
+            "CPU Over Loaded",
+            "Faulty Power Module",
+            "GigaStream Unhealthy",
+            "IP Interface Unhealthy",
+            "Low Memory",
+            "Map Unhealthy",
+            "Port Down",
+            "Port Group Unhealthy",
+            "Port Pair Unhealthy",
+            "Tunnel Port Unhealthy",
+            "Virtual Port Unhealthy"
+          ]
+        },
+        "resourceType": {
+          "type": "string",
+          "enum": [
+            "Card",
+            "Device",
+            "Device CPU",
+            "Device Memory",
+            "Fan",
+            "GigaStream",
+            "IP Interface",
+            "Map",
+            "Port",
+            "Port Group",
+            "Port Pair ",
+            "Power Module",
+            "Tunnel Port",
+            "VPort"
+          ],
+          "readOnly": true,
+          "description": "Resource Type of the alarm"
+        },
+        "resourceId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Resource ID of the alarm"
+        },
+        "alias": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Alias of the Resource ID"
+        },
+        "hostname": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Hostname of the Resource"
+        },
+        "deviceIp": {
+          "type": "string",
+          "readOnly": true,
+          "description": "IP address of the device"
+        },
+        "clusterId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Cluster ID of the device"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "Critical",
+            "Major",
+            "Minor",
+            "Warn",
+            "Info",
+            "Clear"
+          ],
+          "readOnly": true,
+          "description": "Severity of the alarm"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Alarm description"
+        },
+        "comment": {
+          "type": "string",
+          "readOnly": true,
+          "description": "User comments"
+        },
+        "acknowledged": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "True if the alarm is acknowledged by the user"
+        },
+        "acknowledgedBy": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "User who acknowledged the alarm"
+        },
+        "acknowledgedTs": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Alarm acknowledged timestamp in ISO 8601 format"
+        },
+        "unacknowledgedBy": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "User who unacknowledged the alarm"
+        },
+        "unacknowledgedTs": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Alarm unacknowledged timestamp in ISO 8601 format"
+        },
+        "suppressed": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "True if the alarm is suppressed"
+        }
+      }
+    },
+    "GigaAlarmQueryResponse": {
+      "id": "#/definitions/GigaAlarmQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "alarm"
+      ],
+      "properties": {
+        "alarm": {
+          "$ref": "#/definitions/GigaAlarm"
+        }
+      }
+    },
+    "GigaAlarmsQueryResponse": {
+      "id": "#/definitions/GigaAlarmsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "alarms"
+      ],
+      "properties": {
+        "alarms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaAlarm"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GigaAlarmAggregateSummary": {
+      "id": "GigaAlarmAggregateSummary",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 5.7",
+      "required": [
+        "groupBy",
+        "aggGroups"
+      ],
+      "properties": {
+        "groupBy": {
+          "type": "string",
+          "enum": [
+            "severity"
+          ],
+          "description": "aggregation grouping category"
+        },
+        "aggGroups": {
+          "type": "array",
+          "description": "list of aggregate counts per groupBy type",
+          "items": {
+            "$ref": "#/definitions/GigaAlarmAggregateGroup"
+          }
+        }
+      }
+    },
+    "GigaAlarmAggregateGroup": {
+      "id": "GigaAlarmAggregateGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 5.7",
+      "required": [
+        "groupName",
+        "count"
+      ],
+      "properties": {
+        "groupName": {
+          "type": "string",
+          "description": "Name of the group. For grouping based on severity, this field will have a value from the set ['Clear', 'Warn', 'Minor', 'Major', 'Critical']"
+        },
+        "count": {
+          "type": "integer",
+          "description": "the number of alarms in the aggregation group",
+          "minimum": 0
+        }
+      }
+    },
+    "GigaAlarmAggregateSummaryQueryResponse": {
+      "id": "GigaAlarmAggregateSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 5.7",
+      "required": [
+        "summary"
+      ],
+      "properties": {
+        "summary": {
+          "$ref": "#/definitions/GigaAlarmAggregateSummary"
+        }
+      }
+    },
+    "GigaAlarmUpdateSpec": {
+      "id": "#/definitions/GigaAlarmUpdateSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 5.7",
+      "properties": {
+        "comment": {
+          "type": "string",
+          "description": "Alarm comments"
+        },
+        "acknowledged": {
+          "type": "boolean",
+          "description": "Acknowledgement status"
+        }
+      }
+    },
+    "GigaAlarmId": {
+      "id": "#/definitions/GigaAlarmId",
+      "type": "string"
+    },
+    "GigaAlarmBulkDeleteSpec": {
+      "id": "#/definitions/GigaAlarmBulkDeleteSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "FM 5.8",
+      "required": [
+        "alarmIds"
+      ],
+      "properties": {
+        "alarmIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaAlarmId"
+          },
+          "description": "IDs of alarms that needs to be deleted"
+        }
+      }
+    },
+    "GigaAlarmBulkAcknowledgementSpec": {
+      "id": "#/definitions/GigaAlarmBulkAcknowledgementSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "FM 5.8",
+      "required": [
+        "alarmIds"
+      ],
+      "properties": {
+        "alarmIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaAlarmId"
+          },
+          "description": "IDs of alarms that needs to be acknowledged"
+        },
+        "comment": {
+          "type": "string",
+          "description": "Alarm comment"
+        }
+      }
+    },
+    "GigaAlarmBulkUnacknowledgementSpec": {
+      "id": "#/definitions/GigaAlarmBulkUncknowledgementSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "FM 5.8",
+      "required": [
+        "alarmIds"
+      ],
+      "properties": {
+        "alarmIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaAlarmId"
+          },
+          "description": "IDs of alarms that needs to be unacknowledged"
+        },
+        "comment": {
+          "type": "string",
+          "description": "Alarm comment"
+        }
+      }
+    },
+    "GigaAlarmBulkDeleteSpecResponse": {
+      "id": "#/definitions/GigaAlarmBulkDeleteSpecResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "FM 5.8",
+      "properties": {
+        "results": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Alarm IDs with the operation result [SUCCESS/FAIL]"
+        },
+        "success": {
+          "type": "integer",
+          "description": "Number of alarms successfully deleted",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "failure": {
+          "type": "integer",
+          "description": "Number of alarms failed to delete",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "total": {
+          "type": "integer",
+          "description": "Total number of alarms requested to delete",
+          "minimum": 0,
+          "readOnly": true
+        }
+      }
+    },
+    "GigaAlarmBulkAcknowledgementSpecResponse": {
+      "id": "#/definitions/GigaAlarmBulkAcknowledgementSpecResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "FM 5.8",
+      "properties": {
+        "results": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Alarm IDs with the operation result [SUCCESS/FAIL]"
+        },
+        "success": {
+          "type": "integer",
+          "description": "Number of alarms successfully acknowledged",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "failure": {
+          "type": "integer",
+          "description": "Number of alarms failed to acknowledge",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "total": {
+          "type": "integer",
+          "description": "Total number of alarms requested to acknowledge",
+          "minimum": 0,
+          "readOnly": true
+        }
+      }
+    },
+    "GigaAlarmBulkUnacknowledgementSpecResponse": {
+      "id": "#/definitions/GigaAlarmBulkUnacknowledgementSpecResponse",
+      "type": "object",
+      "since": "FM 5.8",
+      "properties": {
+        "results": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Alarm IDs with the operation result [SUCCESS/FAIL]"
+        },
+        "success": {
+          "type": "integer",
+          "description": "Number of alarms successfully unacknowledged",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "failure": {
+          "type": "integer",
+          "description": "Number of alarms failed to unacknowledge",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "total": {
+          "type": "integer",
+          "description": "Total number of alarms requested to unacknowledge",
+          "minimum": 0,
+          "readOnly": true
+        }
+      }
+    },
+    "GigaAlarmSuppressedEntity": {
+      "id": "#/definitions/GigaAlarmSuppressedEntity",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resourceType",
+        "resourceId"
+      ],
+      "properties": {
+        "resourceType": {
+          "type": "string",
+          "enum": [
+            "portPair",
+            "portGroup",
+            "virtualPort",
+            "map",
+            "device",
+            "fan",
+            "powerModule",
+            "gigaCard",
+            "port",
+            "gigaStream",
+            "gigaIpInterface",
+            "tunnelPort",
+            "gigaFabricMap",
+            "battery",
+            "gtapPortGroup",
+            "stackLink",
+            "gsgroup",
+            "gsop",
+            "inlineIbPathway",
+            "inlineNetwork",
+            "inlineNetworkGroup",
+            "inlineNetworkLag",
+            "inlineTool",
+            "inlineToolGroup",
+            "inlineSerialToolGroup",
+            "gigaCircuitTunnel",
+            "toolMirror",
+            "flexInlineSolutionMaps",
+            "gigaFabricPortGroup",
+            "policy",
+            "fmSystem",
+            "cluster",
+            "opensearchCluster"
+
+          ]
+        },
+        "resourceId": {
+          "type": "string",
+          "description": "Id of the resource to be suppressed"
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Cluster/Node Id"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Alias"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "FM Hostname"
+        },
+        "selectedReason": {
+          "type": "string",
+          "description": "Suppression Reason"
+        },
+        "alarmTypes": {
+          "type": "array",
+          "enum": [
+            "Low Memory",
+            "CPU Over Loaded",
+            "Operational Mode [SAFE or Limited]",
+            "Abnormal Fan Operation",
+            "Faulty Power Module",
+            "Card Unhealthy",
+            "CPU Temperature Unhealthy",
+            "Port Down",
+            "Port Traffic Unhealthy",
+            "Port Unhealthy",
+            "Port Pair Unhealthy",
+            "Port Group Unhealthy",
+            "Virtual Port Unhealthy",
+            "Map Unhealthy",
+            "GigaStream Unhealthy",
+            "IP Interface Unhealthy",
+            "Tunnel Port Unhealthy",
+            "Fabric Map Unhealthy",
+            "Battery Unhealthy",
+            "Port Group Incompatible",
+            "Stack Link Unhealthy",
+            "GigaSMART Group Unhealthy",
+            "GigaSMART Operation Unhealthy",
+            "Inline Ib Pathway Unhealthy",
+            "Inline Network Unhealthy",
+            "Inline Network Group Unhealthy",
+            "Inline Network Lag Unhealthy",
+            "Inline Tool Unhealthy",
+            "Inline Tool Group Unhealthy",
+            "Inline Serial Tool Group Unhealthy",
+            "Circuit Tunnel Unhealthy",
+            "Tool Mirror Unhealthy",
+            "Flex Inline Config Solution Unhealthy",
+            "Fabric Port Group Unhealthy",
+            "Intent Policy Unhealthy",
+            "High Memory Usage",
+            "High Filesystem Usage",
+            "High CPU Usage",
+            "OpenSearch Cluster Status"
+          ],
+          "items": {
+            "type": "string",
+            "description": "Alarm Types to be suppressed"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        },
+        "createdBy": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Alarm suppression rule created by FM User"
+        },
+        "updatedBy": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Alarm suppression rule updated by FM User"
+        },
+        "enable": {
+          "type": "boolean",
+          "description": "FM Alarm Suppression rule state"
+        },
+        "expiryTime": {
+          "type": "integer",
+          "description": "Expiry interval for suppression rule"
+        },
+        "expiryTimeUnit": {
+          "type": "string",
+          "description": "Expiry interval unit",
+          "enum": [
+            "minutes",
+            "hours",
+            "days",
+            "weeks",
+            "months"
+          ]
+        },
+        "expiryTs": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Expiry Timestamp(UTC) for suppression rule"
+        },
+        "createdTs": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Alarm suppression rule creation timestamp in ISO 8601 format"
+        },
+        "updatedTs": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Alarm suppression rule updated timestamp in ISO 8601 format"
+        }
+      }
+    },
+    "GigaAlarmSuppressedEntitiesQueryResponse": {
+      "id": "#/definitions/GigaAlarmSuppressedEntitiesQueryResponse",
+      "type": "object",
+      "since": "FM 5.14",
+      "additionalProperties": true,
+      "required": [
+        "suppressedEntities"
+      ],
+      "properties": {
+        "suppressedEntities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaAlarmSuppressedEntity"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GigaAlarmSuppressedSpecResults": {
+      "id": "#/definitions/GigaAlarmSuppressedSpecResults",
+      "type": "object",
+      "since": "FM 5.14",
+      "properties": {
+        "results": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Result of Alarm Suppression operation"
+        },
+        "success": {
+          "type": "integer",
+          "description": "Number of rules for which operation(suppress/unsuppress/edit/delete) successfully performed",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "failure": {
+          "type": "integer",
+          "description": "Number of rules for which operation(suppress/unsuppress/edit/delete) failed",
+          "minimum": 0,
+          "readOnly": true
+        },
+        "total": {
+          "type": "integer",
+          "description": "Total number of rules for which operation(suppress/unsuppress/edit/delete) requested",
+          "minimum": 0,
+          "readOnly": true
+        }
+      }
+    },
+    "GigaAlarmAutoSuppressionRule": {
+      "id": "#/definitions/GigaAlarmAutoSuppressionRule",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "enable"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "image_upgrade",
+            "config_restore",
+            "device_reboot",
+            "cluster_operation"
+          ],
+          "description": "Type of operation on Cluster/Node"
+        },
+        "enable": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "GigaAlarmAutoSuppressionSpec": {
+      "id": "#/definitions/GigaAlarmAutoSuppressionSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enable",
+        "autoSuppressionRules"
+      ],
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/Disable auto alarm suppression rules for operation Image Upgrade,Config Restore,Device Reboot and Cluster Operation"
+        },
+        "autoSuppressionRules": {
+          "type": "array",
+          "description": "Alarm Auto Suppression Rules",
+          "items": {
+            "$ref": "#/definitions/GigaAlarmAutoSuppressionRule"
+          }
+        }
+      }
+    },
+    "GigaAlarmSuppressedSpec": {
+      "id": "#/definitions/GigaAlarmSuppressedSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "suppressedEntities"
+      ],
+      "properties": {
+        "suppressedEntities": {
+          "type": "array",
+          "description": "Suppression Rules for resource",
+          "items": {
+            "$ref": "#/definitions/GigaAlarmSuppressedEntity"
+          }
+        }
+      }
+    }
+  }
+}

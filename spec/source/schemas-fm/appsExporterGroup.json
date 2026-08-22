@@ -1,0 +1,56 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsExporterGroup.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Exporter Group schema",
+  "definitions": {
+    "AppsExporterGroupSpec": {
+      "id": "#/definitions/AppsExporterGroupSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "exporters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AppsExporterGroupsQueryResponse": {
+      "id": "#/definitions/AppsExporterGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsExporterGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsExporterGroupSpec"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "AppsExporterGroupQueryResponse": {
+      "id": "#/definitions/AppsExporterGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsExporterGroup": {
+          "type": "object",
+          "$ref": "#/definitions/AppsExporterGroupSpec"
+        }
+      }
+    }
+  }
+}

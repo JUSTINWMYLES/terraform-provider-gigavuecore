@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device Email Settings",
+  "definitions": {
+    "NodeSystemEmailServer": {
+      "id": "#/definitions/NodeSystemEmailServer",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Email Server",
+      "required": [
+        "smtpServer",
+        "domainName",
+        "returnAddress"
+      ],
+      "properties": {
+        "smtpServer": {
+          "type": "string",
+          "description": "SMTP Server"
+        },
+        "domainName": {
+          "type": "string",
+          "description": "Domain Name"
+        },
+        "returnAddress": {
+          "type": "string",
+          "default": "do-not-reply",
+          "description": "Return Address"
+        },
+        "includeHostname": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include Hostname"
+        },
+        "enableAutoSupportNotif": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Auto Support Notifications"
+        },
+        "enableSmtpAuth": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable SMTP auth"
+        },
+        "username": {
+          "type": "string",
+          "description": "SMTP Username"
+        },
+        "password": {
+          "type": "string",
+          "description": "SMTP Password"
+        },
+        "mailHubPort": {
+          "type": "integer"
+        }
+      }
+    },
+    "NodeSystemEmailRecipient": {
+      "id": "#/definitions/NodeSystemEmailRecipient",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Email Recipients",
+      "required": [
+        "emailAddress"
+      ],
+      "properties": {
+        "emailAddress": {
+          "type": "string",
+          "description": "Email address"
+        },
+        "enableDetails": {
+          "type": "boolean",
+          "default": true,
+          "description": "Get Details"
+        },
+        "enableInfos": {
+          "type": "boolean",
+          "default": true,
+          "description": "Get Infos"
+        },
+        "enableFailures": {
+          "type": "boolean",
+          "default": true,
+          "description": "Get Failures"
+        }
+      }
+    },
+    "NodeSystemEmailRecipientsQueryResponse": {
+      "id": "#/definitions/NodeSystemEmailRecipientsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recipients"
+      ],
+      "properties": {
+        "recipients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeSystemEmailRecipient"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

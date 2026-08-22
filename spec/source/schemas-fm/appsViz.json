@@ -1,0 +1,456 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsViz.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Visibility Configuration schema",
+  "definitions": {
+    "GigaMetadataExportDestinationConfig": {
+      "id": "#/definitions/GigaMetadataExportDestinationConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destinationName": {
+          "type": "string"
+        },
+        "exportIpInterface": {
+          "type": "string"
+        },
+        "exporterConfig": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporter"
+        },
+        "exporterAlias": {
+          "type": "string"
+        },
+        "exportMetaAppProfileAlias": {
+          "type": "string"
+        },
+        "applicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+          }
+        },
+        "exportMetaAppProfile": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationProfile"
+        }
+      }
+    },
+    "GigaAppExportConfig": {
+      "id": "#/definitions/GigaAppExportConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cacheConfig": {
+          "$ref": "appsMetadata.json#/definitions/MetadataCacheConfig"
+        },
+        "cacheConfigAlias": {
+          "type": "string"
+        },
+        "gsopConfig": {
+          "$ref": "smart.json#/definitions/GigasmartOp"
+        },
+        "gsopAlias": {
+          "type": "string"
+        },
+        "destinationConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaMetadataExportDestinationConfig"
+          }
+        }
+      }
+    },
+    "EgressTrafficConfig": {
+      "id": "#/definitions/EgressTrafficConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dropAppProfileAlias": {
+          "type": "string"
+        },
+        "passAppProfileAlias": {
+          "type": "string"
+        },
+        "gsopConfig": {
+          "$ref": "smart.json#/definitions/GigasmartOp"
+        },
+        "gsopAlias": {
+          "type": "string"
+        },
+        "mapAlias": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "egressTrafficMap": {
+          "$ref": "map.json#/definitions/MapSpec"
+        },
+        "gsApps": {
+          "$ref": "smart.json#/definitions/GigasmartApps"
+        }
+      }
+    },
+    "AppFilterConfig": {
+      "id": "#/definitions/AppFilterConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "egressTrafficConfig": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EgressTrafficConfig"
+          }
+        },
+        "sapfProfile": {
+          "$ref": "apps.json#/definitions/SessionAwareApfProfile"
+        },
+        "sapfProfileAlias": {
+          "type": "string"
+        }
+      }
+    },
+    "IngressTrafficConfig": {
+      "id": "#/definitions/IngressTrafficConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mapAlias": {
+          "type": "string"
+        },
+        "ingressTrafficMap": {
+          "$ref": "map.json#/definitions/Map"
+        }
+      }
+    },
+    "RefSolution": {
+      "id": "#/definitions/RefSolution",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "associatedMap": {
+          "type": "string"
+        }
+      }
+    },
+    "MonitorSolutionConfig": {
+      "id": "#/definitions/MonitorSolutionConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "cluster id"
+        },
+        "solutionAlias": {
+          "type": "string",
+          "description": "solution alias"
+        },
+        "gsGroup": {
+          "type": "string",
+          "description": "gsgroup alias associated with monitor"
+        },
+        "monitorIpInterface": {
+          "type": "string",
+          "description": "ip interface alias associated with monitor"
+        },
+        "vportAlias": {
+          "type": "string",
+          "description": "vport alias associated with monitor"
+        },
+        "exporterAlias": {
+          "type": "string",
+          "description": "exporter alias associated with monitor"
+        },
+        "vportConfig": {
+          "$ref": "smart.json#/definitions/Vport"
+        },
+        "exporterConfig": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporter"
+        },
+        "userDefinedApplications" : {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/UserDefinedApplications"
+          }
+        },
+        "userDefinedApplicationProfile" : {
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/UserDefinedApplicationProfile"
+          }
+        },
+        "configStatus": {
+          "type": "string"
+        },
+        "refSols": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RefSolution"
+          }
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "action": {
+          "type": "string"
+        },
+        "errorMessage": {
+          "type": "string"
+        }
+      }
+    },
+    "AppsVisibilitySolution": {
+      "id": "#/definitions/AppsVisibilitySolution",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "cluster id for which solution is getting created"
+        },
+        "solutionAlias": {
+          "type": "string",
+          "description": "user defined application visibility solution alias"
+        },
+        "solutionDesc": {
+          "type": "string",
+          "description": "user defined application visibility solution description"
+        },
+        "monitorSolutionConfig": {
+          "$ref": "#/definitions/MonitorSolutionConfig",
+          "description": "Monitor configuration"
+        },
+        "associatedMonitorSolutionAlias": {
+          "type": "string",
+          "description": "monitor object alias"
+        },
+        "configStatus": {
+          "type": "string",
+          "description": "configuration status"
+        },
+        "solutionStatus": {
+          "type": "string",
+          "description": "solution status"
+        },
+        "solutionType": {
+          "type": "string",
+          "enum": [
+            "monitor",
+            "attach_monitor",
+            "monitor_asf",
+            "monitor_asf_export"
+          ],
+          "description": "user intent solution type"
+        },
+        "ingressTrafficConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IngressTrafficConfig"
+          },
+          "description": "ingress traffic configuration"
+        },
+        "appFilterConfig": {
+          "$ref": "#/definitions/AppFilterConfig",
+          "description": "application filter configuration"
+        },
+        "appExportConfig": {
+          "$ref": "#/definitions/GigaAppExportConfig",
+          "description": "application export configuration"
+        },
+        "deleteMonitorSol": {
+          "type": "boolean"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "ingressMapAliasesToDelete": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "egressMapAliasesToDelete": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exporterAliasesToDelete": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AppsVisibilitySolutionQueryResponse": {
+      "id": "#/definitions/AppsVisibilitySolutionQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appVzbilitySolution": {
+          "$ref": "#/definitions/AppsVisibilitySolution"
+        }
+      }
+    },
+    "AppsVisibilitySolutionsQueryResponse": {
+      "id": "#/definitions/AppsVisibilitySolutionsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appVzbilitySolutions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsVisibilitySolution"
+          }
+        }
+      }
+    },
+    "AppsVisibilitySolutionSpec": {
+      "id": "#/definitions/AppsVisibilitySolutionSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "cluster id for which solution is getting created"
+        },
+        "solutionAlias": {
+          "type": "string",
+          "description": "user defined application visibility solution alias"
+        },
+        "solutionDesc": {
+          "type": "string",
+          "description": "user defined application visibility solution description"
+        },
+        "monitorSolutionConfig": {
+          "$ref": "#/definitions/MonitorSolutionConfigSpec",
+          "description": "Monitor configuration"
+        },
+        "associatedMonitorSolutionAlias": {
+          "type": "string",
+          "description": "monitor object alias"
+        },
+        "configStatus": {
+          "type": "string",
+          "description": "configuration status"
+        },
+        "solutionStatus": {
+          "type": "string",
+          "description": "solution status"
+        },
+        "solutionType": {
+          "type": "string",
+          "enum": [
+            "monitor",
+            "attach_monitor",
+            "monitor_asf",
+            "monitor_asf_export"
+          ],
+          "description": "user intent solution type"
+        },
+        "ingressTrafficConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IngressTrafficConfig"
+          },
+          "description": "ingress traffic configuration"
+        },
+        "appFilterConfig": {
+          "$ref": "#/definitions/AppFilterConfig",
+          "description": "application filter configuration"
+        },
+        "appExportConfig": {
+          "$ref": "#/definitions/GigaAppExportConfig",
+          "description": "application export configuration"
+        },
+        "deleteMonitorSol": {
+          "type": "boolean"
+        },
+        "ingressMapAliasesToDelete": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "egressMapAliasesToDelete": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exporterAliasesToDelete": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "MonitorSolutionConfigSpec": {
+      "id": "#/definitions/MonitorSolutionConfigSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "cluster id"
+        },
+        "solutionAlias": {
+          "type": "string",
+          "description": "solution alias"
+        },
+        "gsGroup": {
+          "type": "string",
+          "description": "gsgroup alias associated with monitor"
+        },
+        "monitorIpInterface": {
+          "type": "string",
+          "description": "ip interface alias associated with monitor"
+        },
+        "vportAlias": {
+          "type": "string",
+          "description": "vport alias associated with monitor"
+        },
+        "exporterAlias": {
+          "type": "string",
+          "description": "exporter alias associated with monitor"
+        },
+        "vportConfig": {
+          "$ref": "smart.json#/definitions/VportSpec"
+        },
+        "exporterConfig": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporter"
+        },
+        "configStatus": {
+          "type": "string"
+        },
+        "refSols": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RefSolution"
+          }
+        },
+        "action": {
+          "type": "string"
+        },
+        "errorMessage": {
+          "type": "string"
+        }
+      }
+    }
+
+  }
+}

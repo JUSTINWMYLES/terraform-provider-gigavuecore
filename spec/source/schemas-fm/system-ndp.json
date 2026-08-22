@@ -1,0 +1,29 @@
+{
+  "definitions": {
+    "SystemNdpQueryResponse": {
+      "id": "#/definitions/SystemNdpQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "systemNdpConfig": {
+          "$ref": "#/definitions/SystemNdpConfig"
+        }
+      }
+    },
+    "SystemNdpConfig": {
+      "id": "#/definitions/SystemNdpConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ndpRefreshInterval": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 3,
+          "maximum": 30,
+          "default": 30,
+          "description": "System Ndp Refresh Interval in Seconds"
+        }
+      }
+    }
+  }
+}

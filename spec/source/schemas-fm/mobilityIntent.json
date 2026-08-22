@@ -1,0 +1,4469 @@
+{
+  "id": "http://gigamon.com/schemas-fm/mobilityIntent.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Mobility Solution Schema",
+  "definitions": {
+    "mobilitySolutions": {
+      "id": "#/definitions/mobilitySolutions",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/mobilitySolution"
+      }
+    },
+    "mobilitySolution": {
+      "id": "#/definitions/mobilitySolution",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "solutionAlias",
+        "solutionType",
+        "sites"
+      ],
+      "properties": {
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "solutionType": {
+          "type": "string",
+          "description": "Type of the solution",
+          "enum": [
+            "NON_CUPS",
+            "CUPS",
+            "MIXED"
+          ]
+        },
+        "sites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/siteConfig"
+          }
+        },
+        "trafficPolicies": {
+          "description": "Global forwarding policies for the processing nodes",
+          "$ref": "#/definitions/trafficPolicies"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "tags": {
+          "type": "array",
+          "description": "RBAC Tags",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "mobilitySolutionsCreateSpec": {
+      "id": "#/definitions/mobilitySolutionsCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "solutionAlias",
+        "solutionType",
+        "sites"
+      ],
+      "properties": {
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the solution"
+        },
+        "solutionType": {
+          "type": "string",
+          "description": "Type of the solution",
+          "enum": [
+            "NON_CUPS",
+            "CUPS",
+            "MIXED"
+          ]
+        },
+        "sites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/siteConfigCreateSpec"
+          }
+        },
+        "trafficPolicies": {
+          "$ref": "#/definitions/trafficPoliciesCreateSpec"
+        },
+        "tags": {
+          "type": "array",
+          "description": "RBAC Tags",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "siteConfig": {
+      "id": "#/definitions/siteConfigs",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "toolBindings"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the Site"
+        },
+        "skipDeployment": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled, the deployment of the Site will be skipped"
+        },
+        "networkPorts": {
+          "type": "array",
+          "description": "Network ports common to all the processing nodes. It is of the format 'cluster:port'.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "toolBindings": {
+          "type": "array",
+          "description": "List of all tools used in the forwarding policies",
+          "items": {
+            "$ref": "#/definitions/toolBinding"
+          }
+        },
+        "gtpNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mobilityIntentGTPNodeConfig"
+          }
+        },
+        "cpNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mobilityIntentCPNodeConfig"
+          }
+        },
+        "upNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mobilityIntentUPNodeConfig"
+          }
+        },
+        "samExporterNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mobilityIntentSAMExporterNodeConfig"
+          }
+        },
+        "siteOverrideOfPolicyArrangements": {
+          "description": "Policies defined here override global forwarding policies",
+          "$ref": "#/definitions/trafficPolicies"
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "siteConfigCreateSpec": {
+      "id": "#/definitions/siteConfigCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "toolBindings"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the Site"
+        },
+        "skipDeployment": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled, the deployment of the Site will be skipped"
+        },
+        "networkPorts": {
+          "type": "array",
+          "description": "Network ports common to all the processing nodes. It is of the format 'cluster:port'.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "toolBindings": {
+          "type": "array",
+          "description": "List of all tools used in the forwarding policies",
+          "items": {
+            "$ref": "#/definitions/toolBinding"
+          }
+        },
+        "gtpNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mobilityIntentGTPNodeCreateConfig"
+          }
+        },
+        "cpNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mobilityIntentCPNodeCreateConfig"
+          }
+        },
+        "upNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mobilityIntentUPNodeCreateConfig"
+          }
+        },
+        "samExporterNodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mobilityIntentSAMExporterNodeCreateConfig"
+          }
+        },
+        "siteOverrideOfPolicyArrangements": {
+          "$ref": "#/definitions/trafficPoliciesCreateSpec"
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "trafficPolicies": {
+      "id": "#/definitions/trafficPolicies",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "forNonCupsLTE": {
+          "$ref": "#/definitions/forNonCupsLTE"
+        },
+        "forLTE": {
+          "$ref": "#/definitions/forLTE"
+        },
+        "for5G": {
+          "$ref": "#/definitions/for5G"
+        }
+      }
+    },
+    "trafficPoliciesCreateSpec": {
+      "id": "#/definitions/trafficPoliciesCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Forwarding policies for the processing nodes",
+      "properties": {
+        "forNonCupsLTE": {
+          "$ref": "#/definitions/forNonCupsLTECreateSpec"
+        },
+        "forLTE": {
+          "$ref": "#/definitions/forLTECreateSpec"
+        },
+        "for5G": {
+          "$ref": "#/definitions/for5GCreateSpec"
+        }
+      }
+    },
+    "forNonCupsLTE": {
+      "id": "#/definitions/forNonCupsLTE",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whitelisting": {
+          "$ref": "#/definitions/whitelistingNonCupsLte"
+        },
+        "sampling": {
+          "$ref": "#/definitions/samplingNonCupsLte"
+        },
+        "flowfiltering": {
+          "$ref": "#/definitions/flowfilteringNonCupsLte"
+        },
+        "gtpFlowTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 6000
+        },
+        "gtpPersistence": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpPersistence"
+        },
+        "overlapMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled flow-filtering cannot be configured"
+        },
+        "loadBalancing": {
+          "$ref": "#/definitions/loadBalancing_non_cups_lte"
+        }
+      }
+    },
+    "forLTE": {
+      "id": "#/definitions/forLTE",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whitelisting": {
+          "$ref": "#/definitions/whitelistingLte"
+        },
+        "sampling": {
+          "$ref": "#/definitions/samplingLte"
+        },
+        "gtpFlowTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 6000
+        },
+        "gtpPersistence": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpPersistence"
+        },
+        "overlapMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled flow-filtering cannot be configured"
+        },
+        "loadBalancing_lte": {
+          "$ref": "#/definitions/loadBalancing_lte"
+        }
+      }
+    },
+    "for5G": {
+      "id": "#/definitions/for5G",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whitelisting": {
+          "$ref": "#/definitions/whitelisting5g"
+        },
+        "sampling": {
+          "$ref": "#/definitions/sampling5g"
+        },
+        "gtpFlowTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 6000
+        },
+        "gtpPersistence": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpPersistence"
+        },
+        "overlapMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled flow-filtering cannot be configured"
+        },
+        "loadBalancing": {
+          "$ref": "#/definitions/loadBalancing_5g"
+        }
+      }
+    },
+    "forNonCupsLTECreateSpec": {
+      "id": "#/definitions/forNonCupsLTECreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whitelisting": {
+          "$ref": "#/definitions/whitelistingNonCupsLteCreateSpec"
+        },
+        "sampling": {
+          "$ref": "#/definitions/samplingNonCupsLteCreateSpec"
+        },
+        "flowfiltering": {
+          "$ref": "#/definitions/flowfilteringNonCupsLteCreateSpec"
+        },
+        "gtpFlowTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 6000
+        },
+        "gtpPersistence": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpPersistence"
+        },
+        "overlapMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled flow-filtering cannot be configured"
+        },
+        "loadBalancing": {
+          "$ref": "#/definitions/loadBalancing_non_cups_lte"
+        }
+      }
+    },
+    "forLTECreateSpec": {
+      "id": "#/definitions/forLTECreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whitelisting": {
+          "$ref": "#/definitions/whitelistingLteCreateSpec"
+        },
+        "sampling": {
+          "$ref": "#/definitions/samplingLteCreateSpec"
+        },
+        "gtpFlowTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 6000
+        },
+        "gtpPersistence": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpPersistence"
+        },
+        "overlapMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled flow-filtering cannot be configured"
+        },
+        "loadBalancing": {
+          "$ref": "#/definitions/loadBalancing_lte"
+        }
+      }
+    },
+    "for5GCreateSpec": {
+      "id": "#/definitions/for5GCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whitelisting": {
+          "$ref": "#/definitions/whitelisting5gCreateSpec"
+        },
+        "sampling": {
+          "$ref": "#/definitions/sampling5gCreateSpec"
+        },
+        "gtpFlowTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 6000
+        },
+        "gtpPersistence": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpPersistence"
+        },
+        "overlapMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled flow-filtering cannot be configured"
+        },
+        "loadBalancing": {
+          "$ref": "#/definitions/loadBalancing_5g"
+        }
+      }
+    },
+    "loadBalancing_5g": {
+      "id": "#/definitions/loadBalancing_5g",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "appType",
+        "hashingKey"
+      ],
+      "properties": {
+        "appType": {
+          "type": "string",
+          "enum": [
+            "flow5g"
+          ]
+        },
+        "hashingKey": {
+          "type": "string",
+          "enum": [
+            "supi",
+            "pei",
+            "gpsi"
+          ]
+        }
+      }
+    },
+    "loadBalancing_non_cups_lte": {
+      "id": "#/definitions/loadBalancing_non_cups_lte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "appType",
+        "hashingKey"
+      ],
+      "properties": {
+        "appType": {
+          "type": "string",
+          "enum": [
+            "gtp"
+          ]
+        },
+        "hashingKey": {
+          "type": "string",
+          "enum": [
+            "imsi",
+            "imei",
+            "msisdn"
+          ]
+        }
+      }
+    },
+    "loadBalancing_lte": {
+      "id": "#/definitions/loadBalancing_lte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "appType",
+        "hashingKey"
+      ],
+      "properties": {
+        "appType": {
+          "type": "string",
+          "enum": [
+            "gtp"
+          ]
+        },
+        "hashingKey": {
+          "type": "string",
+          "enum": [
+            "imsi",
+            "imei",
+            "msisdn"
+          ]
+        }
+      }
+    },
+    "whitelistingNonCupsLte": {
+      "id": "#/definitions/whitelistingNonCupsLte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flowMaps"
+      ],
+      "properties": {
+        "whiteListAlias": {
+          "type": "string",
+          "description": "Alias of referenced GTP Whitelist.Use either whiteListAlias or multiWhitelists."
+        },
+        "multiWhitelists": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Alias/Aliases of referenced GTP Whitelists.Use either whiteListAlias or multiWhitelists.",
+          "since": "H 5.12"
+        },
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/whitelistMapsNonCupsLte"
+          }
+        }
+      }
+    },
+    "whitelistingLte": {
+      "id": "#/definitions/whitelistingLte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flowMaps"
+      ],
+      "properties": {
+        "whiteListAlias": {
+          "type": "string",
+          "description": "Alias of referenced GTP Whitelist.Use either whiteListAlias or multiWhitelists."
+        },
+        "multiWhitelists": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Alias/Aliases of referenced GTP Whitelists.Use either whiteListAlias or multiWhitelists.",
+          "since": "H 5.12"
+        },
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/whitelistMapsLte"
+          }
+        }
+      }
+    },
+    "whitelisting5g": {
+      "id": "#/definitions/whitelisting5g",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flowMaps"
+      ],
+      "properties": {
+        "whiteListAlias": {
+          "type": "string",
+          "description": "Alias of referenced GTP Whitelist.Use either whiteListAlias or multiWhitelists."
+        },
+        "multiWhitelists": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Alias/Aliases of referenced GTP Whitelists.Use either whiteListAlias or multiWhitelists.",
+          "since": "H 5.12"
+        },
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/whitelistMaps5g"
+          }
+        }
+      }
+    },
+    "whitelistingNonCupsLteCreateSpec": {
+      "id": "#/definitions/whitelistingNonCupsLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flowMaps"
+      ],
+      "properties": {
+        "whiteListAlias": {
+          "type": "string",
+          "description": "Alias of referenced GTP Whitelist.Use either whiteListAlias or multiWhitelists."
+        },
+        "multiWhitelists": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Alias/Aliases of referenced GTP Whitelists.Use either whiteListAlias or multiWhitelists.",
+          "since": "H 5.12"
+        },
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/whitelistMapsNonCupsLteCreateSpec"
+          }
+        }
+      }
+    },
+    "whitelistingLteCreateSpec": {
+      "id": "#/definitions/whitelistingLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flowMaps"
+      ],
+      "properties": {
+        "whiteListAlias": {
+          "type": "string",
+          "description": "Alias of referenced GTP Whitelist.Use either whiteListAlias or multiWhitelists."
+        },
+        "multiWhitelists": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Alias/Aliases of referenced GTP Whitelists.Use either whiteListAlias or multiWhitelists.",
+          "since": "H 5.12"
+        },
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/whitelistMapsLteCreateSpec"
+          }
+        }
+      }
+    },
+    "whitelisting5gCreateSpec": {
+      "id": "#/definitions/whitelisting5gCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flowMaps"
+      ],
+      "properties": {
+        "whiteListAlias": {
+          "type": "string",
+          "description": "Alias of referenced GTP Whitelist.Use either whiteListAlias or multiWhitelists."
+        },
+        "multiWhitelists": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Alias/Aliases of referenced GTP Whitelists.Use either whiteListAlias or multiWhitelists.",
+          "since": "H 5.12"
+        },
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/whitelistMaps5gCreateSpec"
+          }
+        }
+      }
+    },
+    "whitelistMapsNonCupsLte": {
+      "id": "#/definitions/whitelistMapsNonCupsLte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the whitelist map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "map.json#/definitions/MapFlowWhitelistRuleGtp"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "whitelistMapsLte": {
+      "id": "#/definitions/whitelistMapsLte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the whitelist map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "map.json#/definitions/MapFlowWhitelistRuleGtp"
+          }
+        }
+      }
+    },
+    "whitelistMaps5g": {
+      "id": "#/definitions/whitelistMaps5g",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the whitelist map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "map.json#/definitions/MapFlowWhitelistRule5g"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "whitelistMapsNonCupsLteCreateSpec": {
+      "id": "#/definitions/whitelistMapsNonCupsLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the whitelist map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "map.json#/definitions/MapFlowWhitelistRuleGtp"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "whitelistMapsLteCreateSpec": {
+      "id": "#/definitions/whitelistMapsLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the whitelist map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "map.json#/definitions/MapFlowWhitelistRuleGtp"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "whitelistMaps5gCreateSpec": {
+      "id": "#/definitions/whitelistMaps5gCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the whitelist map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "map.json#/definitions/MapFlowWhitelistRule5g"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "samplingNonCupsLte": {
+      "id": "#/definitions/sampling",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/samplingMapsNonCupsLte"
+          }
+        }
+      }
+    },
+    "samplingLte": {
+      "id": "#/definitions/sampling",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/samplingMapsLte"
+          }
+        }
+      }
+    },
+    "sampling5g": {
+      "id": "#/definitions/sampling5g",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/samplingMaps5g"
+          }
+        }
+      }
+    },
+    "samplingNonCupsLteCreateSpec": {
+      "id": "#/definitions/samplingNonCupsLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/samplingMapsNonCupsLteCreateSpec"
+          }
+        }
+      }
+    },
+    "samplingLteCreateSpec": {
+      "id": "#/definitions/samplingLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/samplingMapsLteCreateSpec"
+          }
+        }
+      }
+    },
+    "flowfilteringNonCupsLte": {
+      "id": "#/definitions/flowfilteringNonCupsLte",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/flowfilteringMapsNonCupsLte"
+          }
+        }
+      }
+    },
+    "flowfilteringNonCupsLteCreateSpec": {
+      "id": "#/definitions/flowfilteringNonCupsLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/flowfilteringMapsNonCupsLteCreateSpec"
+          }
+        }
+      }
+    },
+    "sampling5gCreateSpec": {
+      "id": "#/definitions/sampling5gCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/samplingMaps5gCreateSpec"
+          }
+        }
+      }
+    },
+    "samplingMapsNonCupsLte": {
+      "id": "#/definitions/samplingMapsNonCupsLte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the sampling map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowSampleRuleNonCupsGtp"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "samplingMapsLte": {
+      "id": "#/definitions/samplingMapsLte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the sampling map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowSampleRuleLte"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "samplingMaps5g": {
+      "id": "#/definitions/samplingMaps5g",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the sampling map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowSampleRule5g"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "samplingMapsNonCupsLteCreateSpec": {
+      "id": "#/definitions/samplingMapsNonCupsLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the sampling map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowSampleRuleNonCupsGtp"
+          }
+        },
+        "rotationalFlowSampling": {
+          "$ref": "#/definitions/rotationalFlowSampling"
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "samplingMapsLteCreateSpec": {
+      "id": "#/definitions/samplingMapsLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the sampling map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowSampleRuleLte"
+          }
+        },
+        "rotationalFlowSampling": {
+          "$ref": "#/definitions/rotationalFlowSampling"
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "rotationalFlowSampling": {
+      "id": "#/definitions/rotationalFlowSampling",
+      "type": "object",
+      "required": [
+        "enable",
+        "offset",
+        "timer"
+      ],
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "description": "To enable rotational sampling"
+        },
+        "timer": {
+          "type": "integer",
+          "minimum": 15,
+          "maximum": 45000
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99
+        }
+
+      }
+    },
+    "flowfilteringMapsNonCupsLte": {
+      "id": "#/definitions/flowfilteringMapsNonCupsLte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the flow-filtering map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "passRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowFilterRuleNonCupsGtp"
+          }
+        },
+        "dropRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowFilterRuleNonCupsGtp"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "flowfilteringMapsNonCupsLteCreateSpec": {
+      "id": "#/definitions/flowfilteringMapsNonCupsLteCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the flow-filtering map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "passRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowFilterRuleNonCupsGtp"
+          }
+        },
+        "dropRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowFilterRuleNonCupsGtp"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "samplingMaps5gCreateSpec": {
+      "id": "#/definitions/samplingMaps5gCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "tool",
+        "rules"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the sampling map"
+        },
+        "tool": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapFlowSampleRule5g"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "MapFlowSampleRule5g": {
+      "id": "#/definitions/MapFlowSampleRule5g",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "controlPlanePercentage",
+        "userPlanePercentage"
+      ],
+      "properties": {
+        "supi": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,15})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "pei": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,15})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "gpsi": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,15})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "dnn": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[a-zA-Z0-9.*-]*$",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Access Point Name pattern.  Alphanumeric, '.', '-', and '*' allowed."
+        },
+        "nsiid": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([0-9]{1,3})|([0-9]{1,3}[.][a-fA-F0-9]{1,6})|([0-9]{1,3}[.][a-fA-F0-9]{0,5}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the SD value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "plmnId": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([0-9]{3}[.][0-9]{2,3})|([0-9]{3}[.][0-9]{0,2}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the MNC value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "tac": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([0-9a-fA-F]{6})|([0-9a-fA-F]{2,5}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "nci": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([A-Fa-f0-9]{9})|([A-Fa-f0-9]{4,8}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "nas_5qi": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{1,3})$",
+          "default": "*",
+          "description": "5G QoS Indicator",
+          "since": "H 5.10"
+        },
+        "controlPlanePercentage": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "userPlanePercentage": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "MapFlowSampleRuleNonCupsGtp": {
+      "id": "#/definitions/MapFlowsampleRuleNonCupsGtp",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gtpSamplePercentage"
+      ],
+      "properties": {
+        "imsi": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,15})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "imei": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,16})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "msisdn": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,15})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "apn": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[a-zA-Z0-9.*-]*$",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Access Point Name pattern.  Alphanumeric, '.', '-', and '*' allowed."
+        },
+        "plmnId": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([0-9]{3}[.][0-9]{2,3})|([0-9]{3}[.][0-9]{0,2}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the MNC value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "tac": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([0-9a-fA-F]{4})|([0-9a-fA-F]{2,3}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "eci": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([A-Fa-f0-9]{4,9})|([A-Fa-f0-9]{3,8}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "qci": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "QoS Class Indicator",
+          "since": "H 4.8"
+        },
+        "interface": {
+          "type": "string",
+          "enum": [
+            "Gn",
+            "S5",
+            "S10",
+            "S11",
+            "S2b",
+            "S11U"
+          ],
+          "description": "interface type. Mutually exclusive with version",
+          "since": "H 4.5"
+        },
+        "version": {
+          "type": "string",
+          "enum": [
+            "any",
+            "v1",
+            "v2"
+          ],
+          "default": "any",
+          "description": "mutually exclusive with interface",
+          "since": "H 4.5"
+        },
+        "gtpSamplePercentage": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "periodicRecalc": {
+          "type": "boolean",
+          "default": "false",
+          "description": "Enable Periodic Recalc for rotational sampling. Map look up in the data path based on this flag"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "MapFlowSampleRuleLte": {
+      "id": "#/definitions/MapFlowsampleRuleLte",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "controlPlanePercentage",
+        "userPlanePercentage"
+      ],
+      "properties": {
+        "imsi": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,15})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "imei": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,16})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "msisdn": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,15})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "apn": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[a-zA-Z0-9.*-]*$",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Access Point Name pattern.  Alphanumeric, '.', '-', and '*' allowed."
+        },
+        "plmnId": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([0-9]{3}[.][0-9]{2,3})|([0-9]{3}[.][0-9]{0,2}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the MNC value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "tac": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([0-9a-fA-F]{4})|([0-9a-fA-F]{2,3}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "eci": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([A-Fa-f0-9]{4,9})|([A-Fa-f0-9]{3,8}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix",
+          "since": "H 5.10"
+        },
+        "qci": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "QoS Class Indicator",
+          "since": "H 4.8"
+        },
+        "snssai": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([0-9]{1,3})|([0-9]{1,3}[.][a-fA-F0-9]{1,6})|([0-9]{1,3}[.][a-fA-F0-9]{0,5}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the SD value, it is treated as prefix",
+          "since": "H 6.8"
+        },
+        "tac_5g": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([0-9a-fA-F]{6})|([0-9a-fA-F]{2,5}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix",
+          "since": "H 6.8"
+        },
+        "nci": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|([A-Fa-f0-9]{9})|([A-Fa-f0-9]{4,8}[*]))$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix",
+          "since": "H 6.8"
+        },
+        "nas_5qi": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{1,3})$",
+          "default": "*",
+          "description": "5G QoS Indicator",
+          "since": "H 6.8"
+        },
+        "interface": {
+          "type": "string",
+          "enum": [
+            "Gn",
+            "S5",
+            "S10",
+            "S11",
+            "S2b",
+            "S11U",
+            "S1U",
+            "S5S8U",
+            "N3",
+            "N9"
+          ],
+          "description": "interface type. Mutually exclusive with version",
+          "since": "H 4.5"
+        },
+        "version": {
+          "type": "string",
+          "enum": [
+            "any",
+            "v1",
+            "v2"
+          ],
+          "default": "any",
+          "description": "mutually exclusive with interface",
+          "since": "H 4.5"
+        },
+        "controlPlanePercentage": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "userPlanePercentage": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "periodicRecalc": {
+          "type": "boolean",
+          "default": "false",
+          "description": "Enable Periodic Recalc for rotational sampling. Map look up in the data path based on this flag"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "MapFlowFilterRuleNonCupsGtp": {
+      "id": "#/definitions/MapFlowFilterRuleNonCupsGtp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "imsi": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,15})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "imei": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,16})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "msisdn": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^([*]|[0-9]{6,15})|([0-9]{0,14}[*])$",
+          "default": "*",
+          "description": "If '*' is added at the end of the value, it is treated as prefix"
+        },
+        "interface": {
+          "type": "string",
+          "enum": [
+            "Gn",
+            "S5",
+            "S10",
+            "S11",
+            "S2b",
+            "S11U"
+          ],
+          "description": "interface type. Mutually exclusive with version",
+          "since": "H 4.5"
+        },
+        "version": {
+          "type": "string",
+          "enum": [
+            "v1",
+            "v2"
+          ],
+          "default": "v1",
+          "description": "mutually exclusive with interface",
+          "since": "H 4.5"
+        }
+      }
+    },
+    "mobilityPoliciesLTE": {
+      "id": "#/definitions/mobilityPoliciesLTE",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whitelistAlias": {
+          "type": "string",
+          "description": "Alias of referenced GTP Whitelist"
+        },
+        "whiteListLoadBalance": {
+          "$ref": "smart.json#/definitions/GigasmartAppMobilityLoadBalanceConfig"
+        },
+        "flowSampleLoadBalance": {
+          "$ref": "smart.json#/definitions/GigasmartAppMobilityLoadBalanceConfig"
+        },
+        "flowTimeOut": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "gtpPersistence": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpPersistence"
+        },
+        "overlapMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled flow-filtering cannot be configured"
+        },
+        "whitelistMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MobilityEgressWhiteListMapLTEConfig"
+          }
+        },
+        "samplingMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MobilityEgressSamplingMapLTEConfig"
+          }
+        }
+      }
+    },
+    "mobilityPolicies5G": {
+      "id": "#/definitions/mobilityPolicies5G",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whitelistAlias": {
+          "type": "string",
+          "description": "Alias of referenced GTP Whitelist"
+        },
+        "whiteListLoadBalance": {
+          "$ref": "smart.json#/definitions/GigasmartAppMobilityLoadBalanceConfig"
+        },
+        "flowSampleLoadBalance": {
+          "$ref": "smart.json#/definitions/GigasmartAppMobilityLoadBalanceConfig"
+        },
+        "flowTimeOut": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "gtpPersistence": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpPersistence"
+        },
+        "overlapMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled flow-filtering cannot be configured"
+        },
+        "whitelistMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MobilityEgressWhiteListMap5GConfig"
+          }
+        },
+        "samplingMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MobilityEgressSamplingMap5GConfig"
+          }
+        }
+      }
+    },
+    "MobilityEgressWhiteListMapLTEConfig": {
+      "id": "#/definitions/MobilityEgressWhiteListMapLTEConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "toolAlias": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Alias of whitelist map"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "secondLevel"
+          ],
+          "description": "'secondLevel' maps are from vPorts to tool/hybrid/gigastream;"
+        },
+        "subType": {
+          "type": "string",
+          "enum": [
+            "flowWhitelist",
+            "flowWhitelist-ol"
+          ]
+        },
+        "flowWhitelistRules": {
+          "$ref": "map.json#/definitions/MapFlowWhitelistRules",
+          "description": "This field is only valid for 'secondLevel/flowWhitelist' map types"
+        }
+      }
+    },
+    "MobilityEgressWhiteListMap5GConfig": {
+      "id": "#/definitions/MobilityEgressWhiteListMap5GConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "toolAlias": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Alias of whitelist map"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "secondLevel"
+          ],
+          "description": "'secondLevel' maps are from vPorts to tool/hybrid/gigastream;"
+        },
+        "subType": {
+          "type": "string",
+          "enum": [
+            "flowWhitelist5g"
+          ]
+        },
+        "flowWhitelistRules": {
+          "$ref": "map.json#/definitions/MapFlowWhitelistRules",
+          "description": "This field is only valid for 'secondLevel/flowWhitelist' map types"
+        }
+      }
+    },
+    "MobilityEgressSamplingMapLTEConfig": {
+      "id": "#/definitions/MobilityEgressSamplingMapLTEConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "toolAlias": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Alias of sampling map"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "secondLevel"
+          ],
+          "description": "'secondLevel' maps are from vPorts to tool/hybrid/gigastream;"
+        },
+        "subType": {
+          "type": "string",
+          "enum": [
+            "flowSample",
+            "flowSample-ol"
+          ]
+        },
+        "flowSampleRules": {
+          "$ref": "map.json#/definitions/MapFlowSampleRules",
+          "description": "This field is only valid for 'secondLevel/flowSample' map types"
+        }
+      }
+    },
+    "MobilityEgressSamplingMap5GConfig": {
+      "id": "#/definitions/MobilityEgressSamplingMap5GConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "toolAlias": {
+          "type": "string",
+          "description": "Alias of referenced tool"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Alias of sampling map"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "secondLevel"
+          ],
+          "description": "'secondLevel' maps are from vPorts to tool/hybrid/gigastream;"
+        },
+        "subType": {
+          "type": "string",
+          "enum": [
+            "flowSample5g"
+          ]
+        },
+        "flowSample5gRules": {
+          "$ref": "map.json#/definitions/MapFlowSample5gRule",
+          "description": "This field is only valid for 'secondLevel/flowSample5g' map types"
+        }
+      }
+    },
+    "mobilityGtpNodeConfig": {
+      "id": "#/definitions/mobilityGtpNodeConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the GTP node"
+        },
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the configured solution"
+        },
+        "siteName": {
+          "type": "string",
+          "description": "Name of the site where the node is deployed"
+        },
+        "gsGroupConfig": {
+          "$ref": "smart.json#/definitions/GsGroup"
+        },
+        "gsopConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "smart.json#/definitions/GigasmartOp"
+          }
+        },
+        "vportConfig": {
+          "$ref": "smart.json#/definitions/Vport"
+        },
+        "controlMetadataIpInterfaceConfig": {
+          "$ref": "ipInterface.json#/definitions/IpInterface"
+        },
+        "policiesNonCupsLTEConfig": {
+          "$ref": "#/definitions/MobilityPolicyEgressTrafficMapping"
+        },
+        "trafficSourceConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MobilityPolicyIngressTrafficMapping"
+          }
+        },
+        "controlSamExporterNodeConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/controlSamExporterNodeConfig"
+          }
+        },
+        "collectorToolConfig": {
+          "$ref": "#/definitions/FmMobilityTrafficMapping"
+        }
+      }
+    },
+    "mobilityControlNodeConfig": {
+      "id": "#/definitions/mobilityControlNodeConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the Control node"
+        },
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the configured solution"
+        },
+        "siteName": {
+          "type": "string",
+          "description": "Name of the site where the node is deployed"
+        },
+        "gsGroupConfig": {
+          "$ref": "smart.json#/definitions/GsGroup"
+        },
+        "gsopConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "smart.json#/definitions/GigasmartOp"
+          }
+        },
+        "vportConfig": {
+          "$ref": "smart.json#/definitions/Vport"
+        },
+        "exporterConfig": {
+          "type": "array",
+          "items": {
+            "$ref": "appsExporter.json#/definitions/AppsExporterSpec"
+          }
+        },
+        "sffpProfileConfig": {
+          "$ref": "sffpProfiles.json#/definitions/SffpProfile"
+        },
+        "gpfcpProfileConfig": {
+          "$ref": "gpfcpProfiles.json#/definitions/GpfcpProfile"
+        },
+        "ipInterfaceConfig": {
+          "$ref": "ipInterface.json#/definitions/IpInterface"
+        },
+        "controlMetadataIpInterfaceConfig": {
+          "$ref": "ipInterface.json#/definitions/IpInterface"
+        },
+        "policies5GConfig": {
+          "$ref": "#/definitions/MobilityPolicyEgressTrafficMapping"
+        },
+        "policiesLTEConfig": {
+          "$ref": "#/definitions/MobilityPolicyEgressTrafficMapping"
+        },
+        "trafficSourceConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MobilityPolicyIngressTrafficMapping"
+          }
+        },
+        "controlSamExporterNodeConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/controlSamExporterNodeConfig"
+          }
+        },
+        "collectorToolConfig": {
+          "$ref": "#/definitions/FmMobilityTrafficMapping"
+        }
+      }
+    },
+    "mobilityUserNodeConfig": {
+      "id": "#/definitions/mobilityUserNodeConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the User node"
+        },
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the configured solution"
+        },
+        "siteName": {
+          "type": "string",
+          "description": "Name of the site where the node is deployed"
+        },
+        "gsGroupConfig": {
+          "$ref": "smart.json#/definitions/GsGroup"
+        },
+        "gsopConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "smart.json#/definitions/GigasmartOp"
+          }
+        },
+        "vportConfig": {
+          "$ref": "smart.json#/definitions/Vport"
+        },
+        "listenerConfig": {
+          "$ref": "appsListener.json#/definitions/AppsListenerSpec"
+        },
+        "exporterConfig": {
+          "type": "array",
+          "items": {
+            "$ref": "appsExporter.json#/definitions/AppsExporterSpec"
+          },
+          "description": "Supported since 6.8"
+        },
+        "ipInterfaceConfig": {
+          "$ref": "ipInterface.json#/definitions/IpInterface"
+        },
+        "policies5GConfig": {
+          "$ref": "#/definitions/MobilityPolicyEgressTrafficMapping"
+        },
+        "policiesLTEConfig": {
+          "$ref": "#/definitions/MobilityPolicyEgressTrafficMapping"
+        },
+        "trafficSourceConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MobilityPolicyIngressTrafficMapping"
+          }
+        },
+        "collectorToolConfig": {
+          "$ref": "#/definitions/FmMobilityTrafficMapping"
+        },
+        "gpfcpProfileConfig": {
+          "$ref": "gpfcpProfiles.json#/definitions/GpfcpProfile"
+        }
+      }
+    },
+    "mobilitySAMNodeConfig": {
+      "id": "#/definitions/mobilitySAMNodeConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the Sam node"
+        },
+        "solutionAlias": {
+          "type": "string",
+          "description": "Alias of the configured solution"
+        },
+        "siteName": {
+          "type": "string",
+          "description": "Name of the site where the node is deployed"
+        },
+        "location": {
+          "$ref": "#/definitions/locationSpec"
+        },
+        "ipInterfaceConfig": {
+          "$ref": "ipInterface.json#/definitions/IpInterface"
+        },
+        "engineLevelAppVzConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/engineLevelAppVzConfig"
+          }
+        }
+      }
+    },
+    "controlSamExporterNodeConfig": {
+      "id": "#/definitions/controlSamExporterNodeConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "samExporterNodeAlias": {
+          "type": "string",
+          "description": "Alias of the Sam node to which this node is attached to"
+        },
+        "exporterDestinationIP": {
+          "type": "string",
+          "description": "Destination IP to which the control JSON records are exported to"
+        },
+        "applicationPort": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Application port to which the control JSON records are exported to"
+        },
+        "controlMetadataExporterConfig": {
+          "$ref": "appsExporter.json#/definitions/AppsExporterSpec"
+        },
+        "controlMetadataExporterProfileConfig": {
+          "$ref": "appsMetadata.json#/definitions/MetadataExporter"
+        },
+        "toolAlias": {
+          "type": "string",
+          "description": "Alias of the tool used in the policy"
+        }
+      }
+    },
+    "FmMobilityTrafficMapping": {
+      "id": "#/definitions/FmMobilityTrafficMapping",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "trafficConfigAlias": {
+          "type": "string",
+          "description": "Alias of whitelist/sampling maps defined by user. For collector tools the map alias is autogenerated"
+        },
+        "siteName": {
+          "type": "string",
+          "description": "Name of the site where the node is deployed"
+        },
+        "fabricMapAlias": {
+          "type": "string",
+          "description": "Auto generated alias of the fabric map created in solution"
+        },
+        "clusterMapAliases": {
+          "type": "array",
+          "description": "Auto generated child map aliases of the fabric map created in solution",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nodeType": {
+          "$ref": "#/definitions/nodeType"
+        },
+        "nodeAlias": {
+          "type": "string",
+          "description": "Alias of the gtp, control or user node"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "mobilityIntentGTPNodeConfig": {
+      "id": "#/definitions/mobilityIntentGTPNodeConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "nodeType",
+        "location",
+        "trafficSources"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the GTP node"
+        },
+        "deployed": {
+          "type": "boolean",
+          "default": true,
+          "readOnly": true,
+          "description": "True when the GTP node is attempted for deployment"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "PARTIAL_SUCCESS",
+            "SUCCESS",
+            "FAILED",
+            "INCOMPLETE_DELETION",
+            "PENDING",
+            "DAMAGED"
+          ],
+          "readOnly": true
+        },
+        "configStatusReasons": {
+          "readOnly": true,
+          "type": "string"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "nodeType": {
+          "type": "string",
+          "description": "Type of the GTP Node",
+          "enum": [
+            "GTP"
+          ]
+        },
+        "location": {
+          "$ref": "#/definitions/locationSpec"
+        },
+        "nodeOverrideNetworkPorts": {
+          "type": "array",
+          "description": "Network ports for the GTP node. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "additionalToolPorts": {
+          "type": "array",
+          "description": "Additional Tool ports for the GTP node which takes a copy of traffic along with vport that is added into the first level maps. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "collectorTools": {
+          "type": "array",
+          "description": "Collector Tool ports. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gtpRandomSampling": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpRandomSampling"
+        },
+        "trafficSources": {
+          "type": "array",
+          "description": "List of all traffic sources for the GTP node",
+          "items": {
+            "$ref": "#/definitions/trafficSources"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "mobilityIntentCPNodeConfig": {
+      "id": "#/definitions/mobilityIntentCPNodeConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "nodeType",
+        "location",
+        "trafficSources"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the Control Node"
+        },
+        "deployed": {
+          "type": "boolean",
+          "default": true,
+          "readOnly": true,
+          "description": "True when the Control node attempted for deployment"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "PARTIAL_SUCCESS",
+            "SUCCESS",
+            "FAILED",
+            "INCOMPLETE_DELETION",
+            "PENDING",
+            "DAMAGED"
+          ],
+          "readOnly": true
+        },
+        "configStatusReasons": {
+          "readOnly": true,
+          "type": "string"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "nodeType": {
+          "type": "string",
+          "description": "Type of the Control Node",
+          "enum": [
+            "PCPN_LTE",
+            "PCPN_5G"
+          ]
+        },
+        "location": {
+          "$ref": "#/definitions/locationSpec"
+        },
+        "ipInterfaceAlias": {
+          "type": "string",
+          "description": "Alias of the ip interface used by Control Node"
+        },
+        "controlMetadataIpInterfaceAlias": {
+          "type": "string",
+          "description": "Alias of the ip interface used for exporting control json records"
+        },
+        "nodeOverrideNetworkPorts": {
+          "type": "array",
+          "description": "Network ports for the Control node. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "additionalToolPorts": {
+          "type": "array",
+          "description": "Additional Tool ports for the Control node which takes a copy of traffic along with vport that is added into the first level maps. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "collectorTools": {
+          "type": "array",
+          "description": "Collector Tool ports. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "numberOfLteSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 12000,
+          "default": 5000,
+          "description": "Number of LTE sessions to allocate for Control LTE Node (PCPN_LTE)"
+        },
+        "numberOf5gSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 12000,
+          "default": 5000,
+          "description": "Number of 5G sessions to allocate for Control 5G Node (PCPN_5G)"
+        },
+        "app5gHTTP2Ports": {
+          "type": "array",
+          "description": "List of TCP ports",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "gtpControlSample": {
+          "type": "boolean",
+          "default": true,
+          "description": "When enabled, GTP Control plane traffic for the subscribers contained within the subscriber sample defined in GTP flowsample maps will be sent to tools. When disabled, all GTP Control plane traffic for all subscribers in GTP flowsample maps will be sent to tools."
+        },
+        "gtpRandomSampling": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpRandomSampling"
+        },
+        "appTcp": {
+          "$ref": "#/definitions/GsGroupParamsTcp"
+        },
+        "trafficSources": {
+          "type": "array",
+          "description": "List of all traffic sources for the Control node",
+          "items": {
+            "$ref": "#/definitions/trafficSources"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "mobilityIntentUPNodeConfig": {
+      "id": "#/definitions/mobilityIntentUPNodeConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "nodeType",
+        "location",
+        "trafficSources"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the User node"
+        },
+        "deployed": {
+          "type": "boolean",
+          "default": true,
+          "readOnly": true,
+          "description": "True when the User node is attempted for deployment"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "PARTIAL_SUCCESS",
+            "SUCCESS",
+            "FAILED",
+            "INCOMPLETE_DELETION",
+            "PENDING",
+            "DAMAGED"
+          ],
+          "readOnly": true
+        },
+        "configStatusReasons": {
+          "readOnly": true,
+          "type": "string"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "nodeType": {
+          "type": "string",
+          "description": "Type of the User Node",
+          "enum": [
+            "PUPN"
+          ]
+        },
+        "location": {
+          "$ref": "#/definitions/locationSpec"
+        },
+        "ipInterfaceAlias": {
+          "type": "string",
+          "description": "Alias of the ip interface used by User Node"
+        },
+        "nodeOverrideNetworkPorts": {
+          "type": "array",
+          "description": "Network ports for the User node. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "additionalToolPorts": {
+          "type": "array",
+          "description": "Additional Tool ports for the User node which takes a copy of traffic along with vport that is added into the first level maps. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "collectorTools": {
+          "type": "array",
+          "description": "Collector Tool ports. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "numberOfLteSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 12000,
+          "default": 5000,
+          "description": "Number of LTE sessions to allocate for UPN Node"
+        },
+        "gtpControlSample": {
+          "type": "boolean",
+          "default": true,
+          "description": "When enabled, GTP Control plane traffic for the subscribers contained within the subscriber sample defined in GTP flowsample maps will be sent to tools. When disabled, all GTP Control plane traffic for all subscribers in GTP flowsample maps will be sent to tools."
+        },
+        "gtpRandomSampling": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpRandomSampling"
+        },
+        "standAloneMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable or Disable standAloneMode in User Nodes"
+        },
+        "trafficSources": {
+          "type": "array",
+          "description": "List of all traffic sources for the User node",
+          "items": {
+            "$ref": "#/definitions/trafficSources"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "GsGroupParamsTcp": {
+      "id": "#/definitions/GsGroupParamsTcp",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "TCP Loadbalancing properties for Control 5G node (PCPN_5G)",
+      "properties": {
+        "loadBalance": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true it enables TCP loadbalancing on the Tool Ports"
+        },
+        "application": {
+          "type": "string",
+          "enum": [
+            "broadcast",
+            "drop",
+            "enhanced"
+          ],
+          "default": "broadcast",
+          "description": "To choose the action on Unknown Application Data"
+        },
+        "tcpControl": {
+          "type": "string",
+          "enum": [
+            "broadcast",
+            "drop",
+            "enhanced"
+          ],
+          "default": "broadcast",
+          "description": "To choose the action on TCP Control messages"
+        }
+      }
+    },
+    "mobilityIntentGTPNodeCreateConfig": {
+      "id": "#/definitions/mobilityIntentGTPNodeCreateConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "nodeType",
+        "location",
+        "trafficSources"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the GTP node"
+        },
+        "nodeType": {
+          "type": "string",
+          "description": "Type of the GTP Node",
+          "enum": [
+            "GTP"
+          ]
+        },
+        "location": {
+          "$ref": "#/definitions/locationSpec"
+        },
+        "controlMetadataIpInterfaceAlias": {
+          "type": "string",
+          "description": "Alias of the ip interface used for exporting control json records"
+        },
+        "nodeOverrideNetworkPorts": {
+          "type": "array",
+          "description": "Network ports for the GTP node. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "additionalToolPorts": {
+          "type": "array",
+          "description": "Additional Tool ports for the GTP node which takes a copy of traffic along with vport that is added into the first level maps. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "collectorTools": {
+          "type": "array",
+          "description": "Collector Tool ports. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gtpRandomSampling": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpRandomSampling"
+        },
+        "trafficSources": {
+          "type": "array",
+          "description": "List of all traffic sources for the GTP node",
+          "items": {
+            "$ref": "#/definitions/trafficSourcesCreateSpec"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "mobilityIntentCPNodeCreateConfig": {
+      "id": "#/definitions/mobilityIntentCPNodeCreateConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "nodeType",
+        "location",
+        "trafficSources"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the Control node"
+        },
+        "nodeType": {
+          "type": "string",
+          "description": "Type of the Control Node",
+          "enum": [
+            "PCPN_LTE",
+            "PCPN_5G"
+          ]
+        },
+        "location": {
+          "$ref": "#/definitions/locationSpec"
+        },
+        "ipInterfaceAlias": {
+          "type": "string",
+          "description": "Alias of the ip interface used by Control Node"
+        },
+        "controlMetadataIpInterfaceAlias": {
+          "type": "string",
+          "description": "Alias of the ip interface used for exporting control json records"
+        },
+        "nodeOverrideNetworkPorts": {
+          "type": "array",
+          "description": "Network ports for the Control node. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "additionalToolPorts": {
+          "type": "array",
+          "description": "Additional Tool ports for the Control node which takes a copy of traffic along with vport that is added into the first level maps. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "collectorTools": {
+          "type": "array",
+          "description": "Collector Tool ports. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "numberOfLteSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 12000,
+          "default": 5000,
+          "description": "Number of LTE sessions to allocate for Control LTE Node (PCPN_LTE)"
+        },
+        "numberOf5gSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 12000,
+          "default": 5000,
+          "description": "Number of 5G sessions to allocate for Control 5G Node (PCPN_5G)"
+        },
+        "app5gHTTP2Ports": {
+          "type": "array",
+          "description": "List of TCP ports",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "gtpControlSample": {
+          "type": "boolean",
+          "default": true,
+          "description": "When enabled, GTP Control plane traffic for the subscribers contained within the subscriber sample defined in GTP flowsample maps will be sent to tools. When disabled, all GTP Control plane traffic for all subscribers in GTP flowsample maps will be sent to tools."
+        },
+        "gtpRandomSampling": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpRandomSampling"
+        },
+        "appTcp": {
+          "$ref": "#/definitions/GsGroupParamsTcp"
+        },
+        "trafficSources": {
+          "type": "array",
+          "description": "List of all traffic sources for the Control node",
+          "items": {
+            "$ref": "#/definitions/trafficSourcesCreateSpec"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "mobilityIntentUPNodeCreateConfig": {
+      "id": "#/definitions/mobilityIntentUPNodeCreateConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "nodeType",
+        "location",
+        "trafficSources"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the User node"
+        },
+        "nodeType": {
+          "type": "string",
+          "description": "Type of the User Node",
+          "enum": [
+            "PUPN"
+          ]
+        },
+        "location": {
+          "$ref": "#/definitions/locationSpec"
+        },
+        "ipInterfaceAlias": {
+          "type": "string",
+          "description": "Alias of the ip interface used by User Node"
+        },
+        "nodeOverrideNetworkPorts": {
+          "type": "array",
+          "description": "Network ports for the User node. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "additionalToolPorts": {
+          "type": "array",
+          "description": "Additional Tool ports for the User node which takes a copy of traffic along with vport that is added into the first level maps. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "collectorTools": {
+          "type": "array",
+          "description": "Collector Tool ports. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "numberOfLteSessions": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 12000,
+          "default": 5000,
+          "description": "Number of LTE sessions to allocate for UPN Node"
+        },
+        "gtpControlSample": {
+          "type": "boolean",
+          "default": true,
+          "description": "When enabled, GTP Control plane traffic for the subscribers contained within the subscriber sample defined in GTP flowsample maps will be sent to tools. When disabled, all GTP Control plane traffic for all subscribers in GTP flowsample maps will be sent to tools."
+        },
+        "gtpRandomSampling": {
+          "$ref": "smart.json#/definitions/GsGroupParamsGtpRandomSampling"
+        },
+        "standAloneMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable or Disable standAloneMode in User Nodes. Applicable for nodeType = PUPN"
+        },
+        "trafficSources": {
+          "type": "array",
+          "description": "List of all traffic sources for the User node",
+          "items": {
+            "$ref": "#/definitions/trafficSourcesCreateSpec"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "mobilityIntentSAMExporterNodeConfig": {
+      "id": "#/definitions/mobilityIntentSAMExporterNodeConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "nodeType",
+        "location"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the SAM Exporter node"
+        },
+        "deployed": {
+          "type": "boolean",
+          "default": true,
+          "readOnly": true,
+          "description": "True when the SAM node is attempted for deployment"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "PARTIAL_SUCCESS",
+            "SUCCESS",
+            "FAILED",
+            "INCOMPLETE_DELETION",
+            "PENDING",
+            "DAMAGED"
+          ],
+          "readOnly": true
+        },
+        "configStatusReasons": {
+          "readOnly": true,
+          "type": "string"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "deploymentDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EngineDeploymentDetails"
+          },
+          "readOnly": true
+        },
+        "nodeType": {
+          "type": "string",
+          "description": "Type of the SAM Exporter Node",
+          "enum": [
+            "SAM_EXPORTER"
+          ]
+        },
+        "location": {
+          "$ref": "#/definitions/locationSpec"
+        },
+        "ipInterfaceAlias": {
+          "type": "string",
+          "description": "Alias of the ip interface used by SAM Exporter Node"
+        },
+        "nodeOverrideNetworkPorts": {
+          "type": "array",
+          "description": "Network ports for the SAM Exporter node. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "engineSourceMappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/engineSourceMappingsSpec"
+          }
+        },
+        "paramConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/paramConfigsSpec"
+          }
+        },
+        "engineMetaDataCacheConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/engineMetaDataCacheConfigsSpec"
+          }
+        },
+        "controlPlaneSetting": {
+          "$ref": "#/definitions/controlPlaneSettingSpec"
+        },
+        "exporterConfig": {
+          "$ref": "#/definitions/exporterConfigSpec"
+        },
+        "appProfileConfig": {
+          "$ref": "#/definitions/appProfileConfigSpec"
+        },
+        "SMAFDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SMAFDetailsSpec"
+          }
+        },
+        "trafficSources": {
+          "type": "array",
+          "description": "List of all traffic sources for the SAM Exporter node",
+          "items": {
+            "$ref": "#/definitions/trafficSources"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "mobilityIntentSAMExporterNodeCreateConfig": {
+      "id": "#/definitions/mobilityIntentSAMExporterNodeCreateConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "nodeType",
+        "location"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the SAM Exporter node"
+        },
+        "ipInterfaceAlias": {
+          "type": "string",
+          "description": "Alias of the ip interface used by SAM Exporter Node"
+        },
+        "nodeOverrideNetworkPorts": {
+          "type": "array",
+          "description": "Network ports for the SAM Exporter node. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nodeType": {
+          "type": "string",
+          "description": "Type of the SAM Exporter Node",
+          "enum": [
+            "SAM_EXPORTER"
+          ]
+        },
+        "location": {
+          "$ref": "#/definitions/locationSpec"
+        },
+        "engineSourceMappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/engineSourceMappingsSpec"
+          }
+        },
+        "paramConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/paramConfigsSpec"
+          }
+        },
+        "engineMetaDataCacheConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/engineMetaDataCacheConfigsSpec"
+          }
+        },
+        "controlPlaneSetting": {
+          "$ref": "#/definitions/controlPlaneSettingSpec"
+        },
+        "exporterConfig": {
+          "$ref": "#/definitions/exporterConfigSpec"
+        },
+        "appProfileConfig": {
+          "$ref": "#/definitions/appProfileConfigSpec"
+        },
+        "SMAFDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SMAFDetailsSpec"
+          }
+        },
+        "trafficSources": {
+          "type": "array",
+          "description": "List of all traffic sources for the SAM Exporter node",
+          "items": {
+            "$ref": "#/definitions/trafficSourcesCreateSpec"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "MobilityPolicyIngressTrafficMapping": {
+      "id": "#/definitions/MobilityPolicyIngressTrafficMapping",
+      "type": "object",
+      "properties": {
+        "siteName": {
+          "type": "string",
+          "description": "Name of the site where the node is deployed"
+        },
+        "fabricMapAlias": {
+          "type": "string",
+          "description": "Auto generated alias of the fabric map created in solution"
+        },
+        "clusterMapAliases": {
+          "type": "array",
+          "description": "Auto generated child map aliases of the fabric map created in solution",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nodeType": {
+          "$ref": "#/definitions/nodeType"
+        },
+        "nodeAlias": {
+          "type": "string",
+          "description": "Alias of the Node"
+        },
+        "networkElementFunctionName": {
+          "type": "string",
+          "description": "Alias for the network function defined by user"
+        },
+        "networkElementFunctionType": {
+          "type": "string",
+          "description": "Type of the network function (SGW-C/SGW-P/...)"
+        },
+        "interfaceType": {
+          "type": "string",
+          "description": "Type of the network function (Sxa/Sxb/N4/N11...)"
+        },
+        "srcPorts": {
+          "type": "array",
+          "description": "Source ports for the network element. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tunnelIdentifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaMobilityRuleElement"
+          }
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "MobilityPolicyEgressTrafficMapping": {
+      "id": "#/definitions/MobilityPolicyEgressTrafficMapping",
+      "type": "object",
+      "properties": {
+        "whitelistMapConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmMobilityTrafficMapping"
+          }
+        },
+        "samplingMapConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmMobilityTrafficMapping"
+          }
+        },
+        "filteringMapConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmMobilityTrafficMapping"
+          }
+        }
+      }
+    },
+    "GigaMobilityRuleElement": {
+      "id": "#/definitions/GigaMobilityRuleElement",
+      "type": "object",
+      "GigaMobilityTunnelIdentifierType": {
+        "type": "string",
+        "enum": [
+          "IPADDRESS",
+          "VxLan",
+          "VLAN",
+          "PORT"
+        ]
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/MobilityRuleElementIpAddress"
+        },
+        {
+          "$ref": "#/definitions/MobilityRuleElementL4Port"
+        },
+        {
+          "$ref": "#/definitions/MobilityRuleElementVlan"
+        },
+        {
+          "$ref": "#/definitions/MobilityRuleInnerIp6SrcAddress"
+        },
+        {
+          "$ref": "#/definitions/MobilityRuleInnerIp6DstAddress"
+        },
+        {
+          "$ref": "#/definitions/MobilityRuleInnerIpFrag"
+        },
+        {
+          "$ref": "#/definitions/MobilityRuleInnerIp4SrcAddress"
+        },
+        {
+          "$ref": "#/definitions/MobilityRuleInnerIp4DstAddress"
+        },
+        {
+          "$ref": "#/definitions/MobilityRuleInnerL4SrcPort"
+        },
+        {
+          "$ref": "#/definitions/MobilityRuleInnerL4SrcPort"
+        }
+      ]
+    },
+    "trafficSources": {
+      "id": "#/definitions/trafficSources",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "networkFunctionName",
+        "networkFunctionType",
+        "networkFunctionInterfaces"
+      ],
+      "properties": {
+        "networkFunctionName": {
+          "type": "string"
+        },
+        "networkFunctionType": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "expandPortIdentifier": {
+          "type": "boolean",
+          "default": false,
+          "description": "if enabled two rules added will be created with source port and destination port along with the other identifiers."
+        },
+        "ip4FragRuleType": {
+          "type": "string",
+          "description": "if provided, the ip frag rule of given type would be appended to the rules.",
+          "enum": [
+            "noFrag",
+            "allFrag",
+            "allFragNoFirst",
+            "firstFrag",
+            "firstOrNoFrag"
+          ]
+        },
+        "groupInterfaces": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable if the user needs to combine rules in tunnelIdentifiers into single ingress map"
+        },
+        "networkFunctionInterfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/networkFunctionInterfaces"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "trafficSourcesCreateSpec": {
+      "id": "#/definitions/trafficSourcesCreateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "networkFunctionName",
+        "networkFunctionType",
+        "networkFunctionInterfaces"
+      ],
+      "properties": {
+        "networkFunctionName": {
+          "type": "string"
+        },
+        "networkFunctionType": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "sourceGroupId": {
+          "type": "string",
+          "description": "if provided a vport with this sourceGroupId would be created else default vport would be used"
+        },
+        "expandPortIdentifier": {
+          "type": "boolean",
+          "default": false,
+          "description": "if enabled two rules added will be created with source port and destination port along with the other identifiers."
+        },
+        "ip4FragRuleType": {
+          "type": "string",
+          "description": "if provided, the ip frag rule of given type would be appended to the rules.",
+          "enum": [
+            "noFrag",
+            "allFrag",
+            "allFragNoFirst",
+            "firstFrag",
+            "firstOrNoFrag"
+          ]
+        },
+        "groupInterfaces": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable if the user needs to combine rules in tunnelIdentifiers into single ingress map"
+        },
+        "networkFunctionInterfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/networkFunctionInterfaces"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "User defined tags (Aggregation tags)",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "networkFunctionInterfaces": {
+      "id": "#/definitions/networkFunctionInterfaces",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourceOverrideNetworkPorts": {
+          "type": "array",
+          "description": "Network ports for the network element. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourceOverrideDstPorts:": {
+          "type": "array",
+          "description": "Tool ports which takes a copy of traffic along with vport that is added into the first level maps. Its a list of ports of format cluster:port",
+          "items": {
+            "type": "string"
+          }
+        },
+        "comment": {
+          "type": "string"
+        },
+        "interfaceType": {
+          "type": "string"
+        },
+        "tunnelIdentifiers": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/MobilityRuleElementIpAddress"
+              },
+              {
+                "$ref": "#/definitions/MobilityRuleElementL4Port"
+              },
+              {
+                "$ref": "#/definitions/MobilityRuleElementVlan"
+              },
+              {
+                "$ref": "#/definitions/MobilityRuleInnerIp6SrcAddress"
+              },
+              {
+                "$ref": "#/definitions/MobilityRuleInnerIp6DstAddress"
+              },
+              {
+                "$ref": "#/definitions/MobilityRuleInnerIpFrag"
+              },
+              {
+                "$ref": "#/definitions/MobilityRuleInnerIp4SrcAddress"
+              },
+              {
+                "$ref": "#/definitions/MobilityRuleInnerIp4DstAddress"
+              },
+              {
+                "$ref": "#/definitions/MobilityRuleInnerL4SrcPort"
+              },
+              {
+                "$ref": "#/definitions/MobilityRuleInnerL4SrcPort"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "MobilityRuleElementIpAddress": {
+      "id": "#/definitions/MobilityRuleElementIpAddress",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "IPADDRESS"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "If none of 'valueMax', 'netMask', 'cidrMask' are included, specifies a single address to match. Otherwise, it is an address range reference"
+        },
+        "netMask": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Mutually exclusive with 'valueMax' and 'cidrMask'"
+        },
+        "cidrMask": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "Mutually exclusive with 'valueMax' and 'netMask'"
+        }
+      }
+    },
+    "MobilityRuleElementL4Port": {
+      "id": "#/definitions/MobilityRuleElementL4Port",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "PORT"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "If present, value must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "default": "none",
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "MobilityRuleElementVlan": {
+      "id": "#/definitions/MobilityRuleElementVlan",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "VLAN"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 4094
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 4094,
+          "description": "If present, value must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "default": "none",
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "MobilityRuleInnerIp6SrcAddress": {
+      "id": "#/definitions/MobilityRuleInnerIp6SrcAddress",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "INNERIP6SRC"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "If none of 'netMask', 'cidrMask' are included, specifies a single address to match. Otherwise, it is an address range reference"
+        },
+        "netMask": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "Mutually exclusive with 'cidrMask'"
+        },
+        "cidrMask": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Mutually exclusive with 'netMask"
+        }
+      }
+    },
+    "MobilityRuleInnerIp6DstAddress": {
+      "id": "#/definitions/MobilityRuleInnerIp6DstAddress",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "INNERIP6DST"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "If none of 'netMask', 'cidrMask' are included, specifies a single address to match. Otherwise, it is an address range reference"
+        },
+        "netMask": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "Mutually exclusive with 'cidrMask'"
+        },
+        "cidrMask": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 128,
+          "description": "Mutually exclusive with 'netMask"
+        }
+      }
+    },
+    "MobilityRuleInnerIpFrag": {
+      "id": "#/definitions/MobilityRuleInnerIpFrag",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "INNERIP4FRAG"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "enum": [
+            "noFrag",
+            "allFrag",
+            "allFragNoFirst",
+            "firstFrag",
+            "firstOrNoFrag"
+          ]
+        }
+      }
+    },
+    "MobilityRuleInnerIp4SrcAddress": {
+      "id": "#/definitions/MobilityRuleInnerIp4SrcAddress",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "INNERIP4SRC"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "If none of 'netMask', 'cidrMask' are included, specifies a single address to match. Otherwise, it is an address range reference"
+        },
+        "netMask": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Mutually exclusive with 'cidrMask'"
+        },
+        "cidrMask": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "Mutually exclusive with 'netMask"
+        }
+      }
+    },
+    "MobilityRuleInnerIp4DstAddress": {
+      "id": "#/definitions/MobilityRuleInnerIp4DstAddress",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "INNERIP4DST"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "If none of 'valueMax', 'netMask', 'cidrMask' are included, specifies a single address to match. Otherwise, it is an address range reference"
+        },
+        "netMask": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Mutually exclusive with 'valueMax' and 'cidrMask'"
+        },
+        "cidrMask": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "Mutually exclusive with 'valueMax' and 'netMask"
+        }
+      }
+    },
+    "MobilityRuleInnerL4SrcPort": {
+      "id": "#/definitions/MobilityRuleInnerL4SrcPort",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "INNERPORTSRC"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "If present, value must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "MobilityRuleInnerL4DstPort": {
+      "id": "#/definitions/MobilityRuleInnerL4SrcPort",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceTunnelIdentifierType": {
+          "type": "string",
+          "enum": [
+            "INNERPORTDST"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "If present, value must be greater than 'value'"
+        },
+        "subset": {
+          "type": "string",
+          "default": "none",
+          "enum": [
+            "none",
+            "even",
+            "odd"
+          ],
+          "description": "Only valid when 'valueMax' is present"
+        }
+      }
+    },
+    "locationSpec": {
+      "id": "#/definitions/locationSpec",
+      "type": "object",
+      "description": "Location of the engine port",
+      "additionalProperties": false,
+      "required": [
+        "clusterId",
+        "enginePorts"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "enginePorts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "engineSourceMappingsSpec": {
+      "id": "#/definitions/engineSourceMappingsSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "networkSource",
+        "enginePort"
+      ],
+      "properties": {
+        "networkSource": {
+          "type": "string"
+        },
+        "enginePort": {
+          "type": "string"
+        }
+      }
+    },
+    "paramConfigsSpec": {
+      "id": "#/definitions/paramConfigsSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enginePort": {
+          "type": "string"
+        },
+        "resourceMetadata": {
+          "type": "integer",
+          "format": "int32",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 12
+        }
+      }
+    },
+    "engineMetaDataCacheConfigsSpec": {
+      "id": "#/definitions/engineMetaDataCacheConfigsSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enginePort": {
+          "type": "string"
+        },
+        "event": {
+          "type": "string",
+          "enum": [
+            "txnEnd",
+            "none"
+          ],
+          "default": "txnEnd"
+        },
+        "flowBehavior": {
+          "type": "string",
+          "enum": [
+            "unidir",
+            "bidir"
+          ],
+          "default": "bidir"
+        },
+        "match": {
+          "$ref": "#/definitions/metaDataCacheMatchSpec"
+        },
+        "flowsSize": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "idleTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "default": 1800,
+          "minimum": 60,
+          "maximum": 604800
+        },
+        "observationDomainId": {
+          "type": "integer",
+          "format": "int32",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 255
+        }
+      }
+    },
+    "exporterConfigSpec": {
+      "id": "#/definitions/exporterConfigSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activeTimeout": {
+          "type": "string",
+          "format": "int32",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 604800
+        },
+        "inactiveTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "default": 60,
+          "minimum": 1,
+          "maximum": 604800
+        },
+        "recordType": {
+          "type": "string",
+          "default": "cohesive",
+          "enum": [
+            "cohesive",
+            "segregated"
+          ]
+        }
+      }
+    },
+    "appProfileConfigSpec": {
+      "id": "#/definitions/appProfileConfigSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "applications": {
+          "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec"
+        },
+        "applicationId": {
+          "type": "boolean",
+          "default": false
+        },
+        "counter": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "packets": {
+              "type": "boolean",
+              "default": false
+            },
+            "packetsLong": {
+              "type": "boolean",
+              "default": false
+            },
+            "bytes": {
+              "type": "boolean",
+              "default": false
+            },
+            "bytesLong": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "flow": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "endReason": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "transport": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dstPort": {
+              "type": "boolean",
+              "default": false
+            },
+            "srcPort": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "gtpu": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "teid": {
+              "type": "boolean",
+              "default": false
+            },
+            "qfi": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "innerIpv4": {
+          "$ref": "#/definitions/innerIpv4SourceDestination"
+        },
+        "outerIpv4": {
+          "$ref": "#/definitions/outerIpv4SourceDestination"
+        },
+        "innerIpv6": {
+          "$ref": "#/definitions/innerIpv6SourceDestination"
+        },
+        "outerIpv6": {
+          "$ref": "#/definitions/outerIpv6SourceDestination"
+        },
+        "timestamp": {
+          "$ref": "#/definitions/timestamp"
+        }
+      }
+    },
+    "SMAFDetailsSpec": {
+      "id": "#/definitions/SMAFDetailsSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "managementAddress": {
+          "type": "string"
+        },
+        "controlApplication": {
+          "type": "object",
+          "properties": {
+            "interfaceAddress": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "protocol": {
+              "type": "string",
+              "default": "UDP",
+              "enum": [
+                "UDP"
+              ]
+            }
+          }
+        },
+        "userApplication": {
+          "type": "object",
+          "properties": {
+            "interfaceAddress": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "protocol": {
+              "type": "string",
+              "default": "UDP",
+              "enum": [
+                "UDP"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "nodeType": {
+      "id": "#/definitions/nodeType",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "GTP",
+            "PCPN_LTE",
+            "PCPN_5G",
+            "PUPN",
+            "SAM_EXPORTER"
+          ]
+        }
+      }
+    },
+    "toolBinding": {
+      "id": "#/definitions/toolBinding",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "toolClusterId",
+        "toolResourceType"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the tool"
+        },
+        "toolClusterId": {
+          "type": "string",
+          "description": "ClusterId in which the tool resource is present"
+        },
+        "toolResourceId": {
+          "type": "string",
+          "description": "ID of the tool resource"
+        },
+        "toolResourceType": {
+          "type": "string",
+          "description": "Type of the tool resource",
+          "enum": [
+            "GIGASTREAM",
+            "PORTGROUP",
+            "SAM_EXPORTER"
+          ]
+        },
+        "metaDataExporterAlias": {
+          "type": "string",
+          "description": "Alias of the metadata exporter used for SAM Generation"
+        }
+      }
+    },
+    "assignedResource": {
+      "id": "#/definitions/assignedResource",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "string"
+        },
+        "resourceType": {
+          "type": "string",
+          "enum": [
+            "GIGASTREAM",
+            "PORTGROUP"
+          ]
+        }
+      }
+    },
+    "metaDataCacheMatchSpec": {
+      "id": "#/definitions/metaDataCacheMatchSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ipv4": {
+          "$ref": "#/definitions/ipv4Match"
+        },
+        "ipv6": {
+          "$ref": "#/definitions/ipv6Match"
+        },
+        "transport": {
+          "type": "object",
+          "properties": {
+            "dstPort": {
+              "default": false,
+              "type": "boolean"
+            },
+            "srcPort": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "controlPlaneSettingSpec": {
+      "id": "#/definitions/controlPlaneSettingSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trigger": {
+          "type": "string",
+          "default": "Immediate"
+        },
+        "encoding": {
+          "type": "string",
+          "default": "JSON"
+        },
+        "encodingFormat": {
+          "type": "string",
+          "enum": [
+            "hierarchy",
+            "flat"
+          ],
+          "default": "hierarchy"
+        },
+        "eventEnable": {
+          "type": "object",
+          "properties": {
+            "modify": {
+              "default": false,
+              "type": "boolean"
+            },
+            "update": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "ipv4Match": {
+      "id": "#/definitions/ipv4Match",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "source": {
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "prefixMinMask": {
+              "type": "string"
+            }
+          }
+        },
+        "destination": {
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "prefixMinMask": {
+              "type": "string"
+            }
+          }
+        },
+        "protocol": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "ipv6Match": {
+      "id": "#/definitions/ipv6Match",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "source": {
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "prefixMinMask": {
+              "type": "string"
+            }
+          }
+        },
+        "destination": {
+          "additionalProperties": false,
+          "type": "object",
+          "properties": {
+            "prefixMinMask": {
+              "type": "string"
+            }
+          }
+        },
+        "nextHeader": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "innerIpv4SourceDestination": {
+      "id": "#/definitions/innerIpv4SourceDestination",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "boolean",
+          "default": false
+        },
+        "destination": {
+          "type": "boolean",
+          "default": false
+        },
+        "protocol": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "outerIpv4SourceDestination": {
+      "id": "#/definitions/outerIpv4SourceDestination",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "boolean",
+          "default": false
+        },
+        "destination": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "innerIpv6SourceDestination": {
+      "id": "#/definitions/innerIpv6SourceDestination",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "boolean",
+          "default": false
+        },
+        "destination": {
+          "type": "boolean",
+          "default": false
+        },
+        "nextHeader": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "outerIpv6SourceDestination": {
+      "id": "#/definitions/outerIpv6SourceDestination",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "boolean",
+          "default": false
+        },
+        "destination": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "EngineDeploymentDetails": {
+      "id": "#/definitions/EngineDeploymentDetails",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "enginePort": {
+          "type": "string",
+          "readOnly": true
+        },
+        "samNodeAlias": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "ipInterfaceSolution": {
+      "id": "#/definitions/ipInterfaceSolution",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ipInterfaceConfigs"
+      ],
+      "properties": {
+        "ipInterfaceConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ipInterfaceConfigs"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "RBAC Tags",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "ipInterfaceConfigs": {
+      "id": "#/definitions/ipInterfaceConfigs",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "clusterName",
+        "interfaces",
+        "ipAddress",
+        "ipMask",
+        "gateway",
+        "applications"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the ip interface solution"
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "clusterId"
+        },
+        "interfaces": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "network ports ,tool ports or circuit ports"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "ipv4/ipv6 address"
+        },
+        "ipMask": {
+          "type": "string",
+          "description": "ipAddress netmask required with ipAddress"
+        },
+        "gateway": {
+          "type": "string",
+          "description": "gateway ipv4 or ipv6 address"
+        },
+        "mtu": {
+          "type": "integer",
+          "format": "int32",
+          "default": 1500,
+          "minimum": 1500,
+          "maximum": 9400
+        },
+        "applications": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "CPN",
+              "UPN",
+              "CONTROL_METADATA_EXPORTER",
+              "USER_METADATA_EXPORTER"
+            ]
+          },
+          "description": "GigaSMART applications for which the ipInterface is used"
+        },
+        "managedStatus": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE"
+          ],
+          "readOnly": true,
+          "description": "managed status of the ip interface configuration. ACTIVE if the cluster is managed in this FM , else it will be marked as INACTIVE"
+        },
+        "refCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "number of control or user nodes using this ip interface configuration",
+          "readOnly": true
+        },
+        "configStatusReasons": {
+          "type": "string",
+          "readOnly": true
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "PARTIAL_SUCCESS",
+            "SUCCESS",
+            "FAILED",
+            "INCOMPLETE_DELETION",
+            "PENDING",
+            "DAMAGED"
+          ],
+          "readOnly": true
+        }
+      }
+    },
+    "engineLevelAppVzConfig": {
+      "id": "#/definitions/engineLevelAppVzConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enginePort": {
+          "type": "string"
+        },
+        "appVzConfig": {
+          "$ref": "appsViz.json#/definitions/AppsVisibilitySolution"
+        }
+      }
+    },
+    "timestamp": {
+      "id": "#/definitions/timestamp",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flowEndMsec": {
+          "type": "boolean",
+          "default": false
+        },
+        "flowEndsec": {
+          "type": "boolean",
+          "default": false
+        },
+        "flowStartMsec": {
+          "type": "boolean",
+          "default": false
+        },
+        "flowStartsec": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}

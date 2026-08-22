@@ -1,0 +1,292 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemTime.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device System Time Configuration schema",
+  "definitions": {
+    "NodeSystemTime": {
+      "id": "#/definitions/NodeSystemTime",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node Time Clock config",
+      "properties": {
+        "time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "In ISO-8601 date format 'yyyy-MM-dd'T'HH:mm:ssZ'"
+        },
+        "timeZone": {
+          "type": "string",
+          "default": "Etc/UTC",
+          "description": "TZ in the form Area/Location or Etc/GMT, e.g. America/Los_Angeles, Etc/GMT-8"
+        },
+        "utcOffset": {
+          "type": "integer",
+          "readonly": true,
+          "description": "Read-only. UTC Offset in seconds"
+        }
+      }
+    },
+    "NtpConfig": {
+      "id": "#/definitions/NtpConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node NTP config",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "enable/disable use of NTP for synchronization of the system's clock"
+        },
+        "authEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "clockSync": {
+          "type": "boolean",
+          "default": false,
+          "readonly": true,
+          "description": "indicates system's clock is synchronized with referenced NTP server"
+        },
+        "refServer": {
+          "type": "string",
+          "readonly": true,
+          "description": "Address of NTP server used to synchronize the system's clock. ipv4 or ipv6 or hostname"
+        },
+        "authKeys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NtpAuthKey",
+            "description": "list of Authentication Keys"
+          }
+        },
+        "ntpServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NtpServer"
+          }
+        },
+        "statuses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NtpServerStatus",
+            "description": "NTP Server Status",
+            "readonly": true
+          }
+        }
+      }
+    },
+    "NtpAuthKey": {
+      "id": "#/definitions/NtpAuthKey",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "NTP Server",
+      "required": [
+        "keyNumber"
+      ],
+      "properties": {
+        "keyNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "trusted": {
+          "type": "boolean",
+          "default": true
+        },
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "MD5 key"
+        }
+      }
+    },
+    "NtpServer": {
+      "id": "#/definitions/NtpServer",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "NTP Server",
+      "required": [
+        "server"
+      ],
+      "properties": {
+        "server": {
+          "type": "string",
+          "description": "ipv4 or ipv6 or hostname"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "version": {
+          "type": "string",
+          "enum": [
+            "v3",
+            "v4"
+          ],
+          "default": "v4"
+        },
+        "preferred": {
+          "type": "boolean",
+          "default": false
+        },
+        "keyNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "default": 1
+        },
+        "keyEnabled": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "NtpServerStatus": {
+      "id": "#/definitions/NtpServerStatus",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "NTP Server Status",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "ip address of the server"
+        },
+        "status": {
+          "type": "string",
+          "description": "server status"
+        },
+        "stratum": {
+          "type": "integer",
+          "format": "int32",
+          "readonly": true
+        },
+        "offset": {
+          "type": "number",
+          "format": "float",
+          "description": "milliseconds in float",
+          "readonly": true
+        },
+        "pollInterval": {
+          "type": "integer",
+          "description": "seconds",
+          "readonly": true
+        },
+        "lastResp": {
+          "type": "integer",
+          "description": "seconds",
+          "readonly": true
+        },
+        "refClock": {
+          "type": "string",
+          "readonly": true
+        }
+      }
+    },
+    "NtpSyncupSpec": {
+      "id": "#/definitions/NtpSyncupSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Spec for requesting one-time sync-up with an NTP server",
+      "required": [
+        "server"
+      ],
+      "properties": {
+        "server": {
+          "type": "string",
+          "description": "ipv4 or ipv6 or hostname"
+        }
+      }
+    },
+    "PtpConfig": {
+      "id": "#/definitions/PtpConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node PTP config",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable/disable use of NTP for synchronization of the system's clock"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "peer",
+            "endToEnd"
+          ],
+          "default": "endToEnd"
+        }
+      }
+    },
+    "PpsSource": {
+      "id": "#/definitions/PpsSource",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node Pulse-Per-Second config",
+      "properties": {
+        "ppsOffset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 280,
+          "default": 0,
+          "description": "in nano-seconds. Configured values are in the range of [1..280]. Value of 0 represents the system default"
+        },
+        "ppsSourceAdmin": {
+          "type": "string",
+          "enum": [
+            "extCoaxial",
+            "extRs232",
+            "extRs485"
+          ],
+          "description": "Admin-configured timestamp source. Each of the values corresponds to a connector on the HCCv2 Control Card"
+        },
+        "ppsSourceOper": {
+          "type": "string",
+          "enum": [
+            "internal",
+            "extCoaxial",
+            "extRs232",
+            "extRs485"
+          ],
+          "description": "Read-only. The actual runtime timestamp source being used"
+        }
+      }
+    },
+    "NtpServerQueryResponse": {
+      "id": "#/definitions/NtpServerQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "ntpServer"
+      ],
+      "properties": {
+        "ntpServer": {
+          "$ref": "#/definitions/NtpServer"
+        }
+      }
+    },
+    "NtpServersQueryResponse": {
+      "id": "#/definitions/NtpServersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "ntpServers"
+      ],
+      "properties": {
+        "ntpServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NtpServer"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

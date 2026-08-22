@@ -1,0 +1,2479 @@
+{
+  "id": "http://gigamon.com/schemas-fm/licensing.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Licensing schema",
+  "definitions": {
+    "FmLicense": {
+      "id": "#/definitions/FmLicense",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon FM License State",
+      "since": "FM 3.1",
+      "required": [
+        "licenseKey",
+        "targetFmId",
+        "active",
+        "valid"
+      ],
+      "properties": {
+        "licenseKey": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "targetFmId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "identifies FM instance this license is issued for"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Start date in ISO 8601 format. If omitted, license is effective from the date of issue"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "End date in ISO 8601 format. If omitted, license never expires"
+        },
+        "active": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "license is valid, matched target FM instance and within the valid time period"
+        },
+        "valid": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "license is well-formed, not revoked and matches the target FM instance"
+        },
+        "revoked": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "indicates whether the license key is revoked"
+        },
+        "wellFormed": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "indicates that FM is able to parse and interpret the license key string"
+        },
+        "inactiveReason": {
+          "type": "string",
+          "readOnly": true,
+          "description": "If license is inactive, this field contains the reason"
+        },
+        "description": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Description of the SKU code this license is issued for"
+        }
+      }
+    },
+    "FmLicensingSummary": {
+      "id": "#/definitions/FmLicensingSummary",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon FM Licensing State Summary",
+      "since": "FM 3.1",
+      "required": [
+        "targetFmId",
+        "baseBundle",
+        "features"
+      ],
+      "properties": {
+        "targetFmId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "baseBundle": {
+          "$ref": "#/definitions/FmLicenseBaseBundle",
+          "readOnly": true,
+          "description": "Base Bundle License info"
+        },
+        "features": {
+          "$ref": "#/definitions/FmLicenseFeatures",
+          "readOnly": true,
+          "description": "Licensed Features info"
+        },
+        "vmm": {
+          "$ref": "#/definitions/FmLicenseVmm",
+          "readOnly": true,
+          "description": "Licensed VMM info"
+        },
+        "openStack": {
+          "$ref": "#/definitions/FmLicenseOpenStack",
+          "readOnly": true,
+          "description": "Licensed OpenStack info"
+        },
+        "aws": {
+          "$ref": "#/definitions/FmLicenseAws",
+          "readOnly": true,
+          "description": "Licensed AWS info"
+        },
+        "azure": {
+          "$ref": "#/definitions/FmLicenseAzure",
+          "readOnly": true,
+          "description": "Licensed Azure info"
+        }
+      }
+    },
+    "FmLicenseBaseBundle": {
+      "id": "#/definitions/FmLicenseBaseBundle",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon FM License Base Bundle summary",
+      "since": "FM 3.1",
+      "required": [
+        "type",
+        "nodes"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "base",
+            "standard",
+            "professional",
+            "prime"
+          ],
+          "readOnly": true
+        },
+        "nodes": {
+          "type": "integer",
+          "minimum": 0,
+          "readOnly": true,
+          "description": "number of licensed physical nodes"
+        }
+      }
+    },
+    "FmLicenseFeatures": {
+      "id": "#/definitions/FmLicenseFeatures",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon FM License Features",
+      "since": "FM 3.1",
+      "properties": {
+        "reporting": {
+          "$ref": "#/definitions/FmLicenseFeaturesReporting",
+          "readOnly": true
+        },
+        "trending": {
+          "$ref": "#/definitions/FmLicenseFeaturesTrending",
+          "readOnly": true
+        },
+        "dashboardCustomization": {
+          "$ref": "#/definitions/FmLicenseFeaturesDashboardCustomization",
+          "readOnly": true
+        },
+        "trafficAnalyzer": {
+          "$ref": "#/definitions/FmLicenseFeaturesTrafficAnalyzer",
+          "readOnly": true
+        }
+      }
+    },
+    "FmLicenseFeaturesReporting": {
+      "id": "#/definitions/FmLicenseFeaturesReporting",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon FM License Reporting Feature summary",
+      "since": "FM 3.1",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "base",
+            "addon"
+          ],
+          "readOnly": true
+        }
+      }
+    },
+    "FmLicenseFeaturesTrending": {
+      "id": "#/definitions/FmLicenseFeaturesTrending",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon FM License Trending Feature summary",
+      "since": "FM 3.1",
+      "required": [
+        "type",
+        "historicalDays"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "base",
+            "addon"
+          ],
+          "readOnly": true
+        },
+        "historicalDays": {
+          "type": "integer",
+          "minimum": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "FmLicenseFeaturesDashboardCustomization": {
+      "id": "#/definitions/FmLicenseFeaturesDashboardCustomization",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon FM License Dashboard Customization Feature summary",
+      "since": "FM 3.1",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "base",
+            "addon"
+          ],
+          "readOnly": true
+        }
+      }
+    },
+    "FmLicenseFeaturesTrafficAnalyzer": {
+      "id": "#/definitions/FmLicenseFeaturesTrafficAnalyzer",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon FM License Traffic Analyzer Feature summary",
+      "since": "FM 3.1",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "base",
+            "addon"
+          ],
+          "readOnly": true
+        }
+      }
+    },
+    "FmLicenseVmm": {
+      "id": "#/definitions/FmLicenseVmm",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "VMM License summary",
+      "since": "FM 3.1",
+      "properties": {
+        "licensed": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "nodes": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "readOnly": true,
+          "description": "number of licensed GVM nodes"
+        },
+        "historicalDays": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "FmLicenseOpenStack": {
+      "id": "#/definitions/FmLicenseOpenStack",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "OpenStack License summary",
+      "since": "FM 3.2",
+      "properties": {
+        "licensed": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "vNics": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "readOnly": true,
+          "description": "number of licensed vNics"
+        }
+      }
+    },
+    "FmLicenseAws": {
+      "id": "#/definitions/FmLicenseAws",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "AWS License summary",
+      "since": "FM 3.5",
+      "properties": {
+        "licensed": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "vNics": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "readOnly": true,
+          "description": "number of licensed vNics"
+        }
+      }
+    },
+    "FmLicenseAzure": {
+      "id": "#/definitions/FmLicenseAzure",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Azure License summary",
+      "since": "FM 5.3",
+      "properties": {
+        "licensed": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "vNics": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "readOnly": true,
+          "description": "number of licensed vNics"
+        }
+      }
+    },
+    "FmLicensesQueryResponse": {
+      "id": "#/definitions/FmLicensesQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "licenses"
+      ],
+      "properties": {
+        "licenses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmLicense"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "FmLicensingSummaryQueryResponse": {
+      "id": "#/definitions/FmLicensingSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "licensingSummary"
+      ],
+      "properties": {
+        "licensingSummary": {
+          "$ref": "#/definitions/FmLicensingSummary"
+        }
+      }
+    },
+    "FmLicensingConfig": {
+      "id": "#/definitions/FmLicensingConfig",
+      "type": "object",
+      "properties": {
+        "volumeUsageAlertEnabled": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "volumeUsageAlertThreshold": {
+          "type": "integer",
+          "example": "100"
+        },
+        "monthsPerPeriod": {
+          "type": "integer",
+          "example": "1"
+        },
+        "licenseExpiryAlertEnabled": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "expiryAlertsLastSentOn": {
+          "type": "integer",
+          "example": "20221116"
+        },
+        "mandatoryVblReportReceiver": {
+          "type": "string",
+          "example": "Vbl-Reports@subscriptions.gigamon.com"
+        },
+        "mandatoryUpcomingRenewalsReceiver": {
+          "type": "string",
+          "example": "License-Renewal@subscriptions.gigamon.com"
+        },
+        "otherVblReportReceivers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "receiver1@thecompany.com"
+          }
+        },
+        "otherUpcomingRenewalsReceivers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "receiver2@thecompany.com"
+          }
+        },
+        "expiredLicensesExist": {
+          "type": "boolean",
+          "example": "true"
+        }
+      }
+    },
+    "EmailReceivers": {
+      "id": "#/definitions/EmailReceivers",
+      "type": "object",
+      "properties": {
+        "vblReport": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "newReceiver1@thecompany.com"
+          }
+        },
+        "upcomingRenewals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "newReceiver2@thecompany.com"
+          }
+        }
+      }
+    },
+    "CardTarget": {
+      "id": "#/definitions/CardTarget",
+      "type": "object",
+      "properties": {
+        "slotId": {
+          "type": "string",
+          "example": "3"
+        },
+        "hwType": {
+          "type": "string",
+          "example": "SMT-HC3-C05"
+        },
+        "id": {
+          "type": "string",
+          "example": "5cd50a4a2406af088ff0a19e"
+        },
+        "clusterName": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "boxId": {
+          "type": "integer",
+          "example": "3"
+        },
+        "serialNumber": {
+          "type": "string",
+          "example": "1DX0-5969"
+        },
+        "healthy": {
+          "type": "boolean"
+        }
+      }
+    },
+    "FeatureDetails": {
+      "id": "#/definitions/FeatureDetails",
+      "type": "object",
+      "properties": {
+        "sku": {
+          "type": "string",
+          "example": "SMT-HC3-HS1"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "licenseKey": {
+          "type": "string",
+          "example": "LK2-SMT_HC3_HS1-7YGJ-1765-25GC-1D6L-VKCE-BQNB-N1HT-GGH"
+        }
+      }
+    },
+    "BoundFeatureDetails": {
+      "id": "#/definitions/BoundFeatureDetails",
+      "type": "object",
+      "properties": {
+        "slotId": {
+          "type": "integer",
+          "example": "3"
+        },
+        "skus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FeatureDetails"
+          }
+        }
+      }
+    },
+    "FmLicensingChassisTarget": {
+      "id": "#/definitions/FmLicensingChassisTarget",
+      "type": "object",
+      "required": [
+        "nodeId",
+        "model",
+        "productVersion",
+        "hostId",
+        "hostName",
+        "deleted",
+        "cards"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "model": {
+          "$ref": "../schemas-common/common.json#/definitions/GigaDeviceModel"
+        },
+        "productVersion": {
+          "type": "string",
+          "example": "5.7.00_Beta"
+        },
+        "hostId": {
+          "type": "string",
+          "example": "4dd6592498c8"
+        },
+        "hostName": {
+          "type": "string",
+          "example": "dev-box2"
+        },
+        "deleted": {
+          "type": "boolean"
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CardTarget"
+          }
+        },
+        "id": {
+          "type": "string",
+          "example": "5cd50a472406af088ff094a2"
+        },
+        "clusterName": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "boxId": {
+          "type": "integer",
+          "example": "3"
+        },
+        "serialNumber": {
+          "type": "string",
+          "example": "J98C8"
+        },
+        "healthy": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AllocationMap": {
+      "id": "#/definitions/AllocationMap",
+      "type": "object",
+      "properties": {
+        "deploymentMac": {
+          "type": "string",
+          "example": "00:0C:29:9A:E6:82"
+        },
+        "chassis": {
+          "$ref": "#/definitions/FmLicensingChassisTarget"
+        },
+        "slotToLicenses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BoundFeatureDetails"
+          }
+        }
+      }
+    },
+    "FmLicensingGetAllAllocationMaps": {
+      "id": "#/definitions/FmLicensingGetAllAllocationMaps",
+      "type": "object",
+      "properties": {
+        "allocationMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AllocationMap"
+          }
+        }
+      }
+    },
+    "FmLicensingGetAllDevices": {
+      "id": "#/definitions/FmLicensingGetAllDevices",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "devices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmLicensingChassisTarget"
+          }
+        }
+      }
+    },
+    "FeatureActivation": {
+      "id": "#/definitions/FeatureActivation",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "BFFF237A21C86A1F",
+          "description": "database identifier"
+        },
+        "sku": {
+          "type": "string",
+          "example": "SMT-HC3-GEN3-AMI",
+          "description": "the license SKU (Stock Keeping Unit) or product code that uniquely identifies the license type in Gigamon catalog"
+        },
+        "eid": {
+          "type": "string",
+          "example": "996eb71a-b1c0-4bca-9535-38633272f866",
+          "description": "entitlement id as encoded in the license"
+        },
+        "aid": {
+          "type": "string",
+          "example": "15e4aea5-ab39-49a6-a85c-5335db2ae762",
+          "description": "activation id as encoded in the license"
+        },
+        "bundle": {
+          "type": "string",
+          "example": "Unbundled",
+          "description": "this field is unused in floating licenses"
+        },
+        "startDate": {
+          "type": "string",
+          "example": "2019/04/02",
+          "description": "start date of the license, when it transitions into ACTIVE state"
+        },
+        "endDate": {
+          "type": "string",
+          "example": "2020/04/02",
+          "description": "end date of the license, when it transitions out of ACTIVE state"
+        },
+        "registrationDate": {
+          "type": "string",
+          "example": "2019/05/28",
+          "description": "date when the license was imported into FM"
+        },
+        "numLicenses": {
+          "type": "integer",
+          "example": "10",
+          "description": "licenses provided by the SKU is multiplied by this factor"
+        },
+        "revoked": {
+          "type": "boolean",
+          "example": "false",
+          "description": "was the license revoked"
+        },
+       "revocationCode": {
+          "type": "string",
+          "example": "no longer needed",
+          "description": "explains why the license was revoked"
+        },
+        "revocationDate": {
+          "type": "string",
+          "example": "1970/01/01",
+          "description": "date when the license was revoked"
+        },
+        "licenseType": {
+          "type": "string",
+          "description": "type of the license",
+          "enum": [
+            "Commercial",
+            "Trial",
+            "Demo",
+            "Internal",
+            "Partner",
+            "Lab"
+          ],
+          "example": "Commercial"
+        },
+        "licenseStatus": {
+          "type": "string",
+          "description": "status of the license",
+          "enum": [
+            "Active",
+            "Unknown",
+            "Future",
+            "Expiring Soon",
+            "Recently Expired",
+            "Expired",
+            "Deactivated"
+          ]
+        },
+        "graceDays": {
+          "type": "integer",
+          "example": "45",
+          "description": "number of days of grace period beyond the license end date that allows the functionality provided by the license to be used as if the license was still active"
+        },
+        "description": {
+          "type": "string",
+          "example": "HC3-GEN3-AMI-perp",
+          "description": "a description of this subset of features"
+        },
+        "totalVolume": {
+          "type": "string",
+          "example": "0.00",
+          "description": "unused for floating licenses"
+        },
+        "bindingErrors": {
+          "type": "boolean",
+          "example": "false",
+          "description": "true if there are heartbeat misses (from FM to device) or any operational error on license bindings to device"
+        },
+        "bindings": {
+          "type": "array",
+          "description": "provides information on the chassis/cards where licenses from this floating pool are assigned to",
+          "items": {
+            "$ref": "#/definitions/Bindings"
+          }
+        }
+      }
+    },
+    "FmLicensingFeatureActivations": {
+      "id": "#/definitions/FmLicensingFeatureActivations",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FeatureActivation"
+          }
+        }
+      }
+    },
+    "VBLFeatureActivation": {
+      "id": "#/definitions/VBLFeatureActivation",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "9E477A43D23BDBA8",
+          "description": "database identifier"
+        },
+        "sku": {
+          "type": "string",
+          "example": "VBL-25KT-BN-SVP",
+          "description": "the license SKU (Stock Keeping Unit) or product code that uniquely identifies the license type in Gigamon catalog"
+        },
+        "feature": {
+          "type": "string",
+          "example": "geneve,slicing,masking,trailer,tunneling,enhanced-lb,lb,flowmap",
+          "description": "comma-separated list of features that this license comprises of"
+        },
+        "eid": {
+          "type": "string",
+          "example": "ff564a8e-5a46-4ac1-a205-1642e9f48f4c",
+          "description": "entitlement id as encoded in the license"
+        },
+        "aid": {
+          "type": "string",
+          "example": "15e4aea5-ab39-49a6-a85c-5335db2ae762",
+          "description": "activation id as encoded in the license"
+        },
+        "bundle": {
+          "type": "string",
+          "example": "SecureVUEPlus",
+          "description": "the bundle family (bundles of a single family can be active at any point of time on an FM)"
+        },
+        "startDate": {
+          "type": "string",
+          "example": "2023/03/09",
+          "description": "start date of the license, when it transitions into ACTIVE state"
+        },
+        "endDate": {
+          "type": "string",
+          "example": "2024/03/09",
+          "description": "end date of the license, when it transitions out of ACTIVE state"
+        },
+        "registrationDate": {
+          "type": "string",
+          "example": "2023/03/10",
+          "description": "date when the license was imported into FM"
+        },
+        "numLicenses": {
+          "type": "integer",
+          "example": "1",
+          "description": "total volume allowance is this number times the allowance set by the SKU definition"
+        },
+        "revoked": {
+          "type": "boolean",
+          "example": "false",
+          "description": "was the license revoked"
+        },
+        "revocationCode": {
+          "type": "string",
+          "example": "No longer needed",
+          "description": "explains why the license was revoked"
+        },
+        "revocationDate": {
+          "type": "string",
+          "example": "1970/01/01",
+          "description": "date when the license was revoked"
+        },
+        "licenseType": {
+          "type": "string",
+          "description": "type of the license",
+          "enum": [
+            "Commercial",
+            "Trial",
+            "Demo",
+            "Internal",
+            "Partner",
+	    "Lab"
+          ],
+          "example": "Commercial"
+        },
+        "licenseStatus": {
+          "type": "string",
+          "description": "status of the license",
+          "enum": [
+            "Active",
+            "Unknown",
+            "Future",
+            "Expiring Soon",
+            "Recently Expired",
+            "Expired",
+            "Deactivated"
+          ]
+        },
+        "graceDays": {
+          "type": "integer",
+          "example": "45",
+          "description": "number of days of grace period beyond the license end date that allows the functionality provided by the license to be used as if the license was still active"
+        },
+        "description": {
+          "type": "string",
+          "example": "25KT-BaseApps",
+          "description": "a description of this subset of features"
+        },
+        "totalVolume": {
+          "type": "string",
+          "example": "26214400.00",
+          "description": "in Gigabytes per day"
+        },
+        "bindingErrors": {
+          "type": "boolean",
+          "example": "false",
+          "description": "uused for floating licenses"
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Bindings"
+          },
+          "example": "[]",
+          "description": "unused for VBL licenses"
+        }
+      }
+    },
+    "VBLLicensingFeatureActivations": {
+      "id": "#/definitions/VBLLicensingFeatureActivations",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VBLFeatureActivation"
+          }
+        }
+      }
+    },
+    "EMSEntitlements": {
+      "id": "#/definitions/EMSEntitlements",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "context":{
+          "type": "object",
+          "properties": {
+            "totalItems": {
+              "type": "integer",
+              "example": 2000
+            },
+            "pageNo": {
+              "type": "integer",
+              "example": 100
+            },
+            "pageSize": {
+              "type": "integer",
+              "example": 20
+            },
+            "sort": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": ["sku:desc"]
+            }
+          }
+        },
+        "entitlements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "e09994d9-ff8b-11ea-8d65-06d9bff4db46"
+              },
+              "eid": {
+                "type": "string",
+                "example": "e09994d9-ff8b-11ea-8d65-06d9bff4db46"
+              },
+              "gid": {
+                "type": "string",
+                "example": "INT180618015045305"
+              },
+              "sku": {
+                "type": "string",
+                "example": "UPG-TAC20"
+              },
+              "feature": {
+                "type": "string",
+                "example": "PORT"
+              },
+              "numLicenses": {
+                "type": "integer",
+                "example": 1
+              },
+              "availableLicenses": {
+                "type": "integer",
+                "example": 0
+              },
+              "startDate": {
+                "type": "string",
+                "example": "2019/06/18"
+              },
+              "endDate": {
+                "type": "string",
+                "example": "2038/01/18"
+              },
+              "graceDays": {
+                "type": "integer",
+                "example": 45
+              },
+              "licenseType": {
+                "type": "string",
+                "example": "Commercial"
+              },
+              "licenseStatus": {
+                "type": "string",
+                "example": "Active"
+              },
+              "description": {
+                "type": "string",
+                "example": "TA200-Upg32-64-Port"
+              }
+            }
+          }
+        }
+      }
+    },
+    "EMSActivations": {
+      "id": "#/definitions/EMSActivations",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "context":{
+          "type": "object",
+          "properties": {
+            "totalItems": {
+              "type": "integer",
+              "example": 2
+            },
+            "pageNo": {
+              "type": "integer",
+              "example": 1
+            },
+            "pageSize": {
+              "type": "integer",
+              "example": 20
+            },
+            "sort": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": ["numLicenses:desc"]
+            }
+          }
+        },
+        "activations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "fb17010b-49e8-47f0-8f64-6624924f2db6"
+              },
+              "entlItemId": {
+                "type": "string",
+                "example": "e3dc26f6-cee3-437a-a257-6e573ef665dc"
+              },
+              "ownerFm": {
+                "type": "boolean",
+                "example": false
+              },
+              "imported": {
+                "type": "boolean",
+                "example": false
+              },
+              "eid": {
+                "type": "string",
+                "example": "6f727ded-3870-4833-88ab-ca51a52f3688"
+              },
+              "gid": {
+                "type": "string",
+                "example": "SO201921323-101-099701"
+              },
+              "vmac": {
+                "type": "string",
+                "example": "14:18:77:5a:9f:21"
+              },
+              "numLicenses": {
+                "type": "integer",
+                "example": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "SkuCatalogEntry": {
+      "id": "#definitions/SkuCatalogEntry",
+      "type": "object",
+      "properties": {
+        "deviceModel": {
+          "$ref": "../schemas-common/common.json#/definitions/GigaDeviceModel"
+        },
+        "sku": {
+          "type": "string",
+          "example": "SMT-HC3-HS1"
+        },
+        "features": {
+          "type": "string",
+          "example": "masking,slicing,trailer,tunneling"
+        },
+        "targetType": {
+          "type": "string",
+          "enum": [
+            "CHASSIS_TYPE",
+            "CARD_TYPE",
+            "FM_TYPE"
+          ]
+        }
+      }
+    },
+    "FmLicensingGetAllSkus": {
+      "id": "#/definitions/FmLicensingGetAllSkus",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "devices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SkuCatalogEntry"
+          }
+        }
+      }
+    },
+    "BoxIdAndLicenseKey": {
+      "id": "#/definitions/Bindings",
+      "type": "object",
+      "properties": {
+        "boxId": {
+          "type": "integer",
+          "example": 1,
+          "description": "id of the box within the chasis cluster"
+        },
+        "licenseKey": {
+          "type": "string",
+          "example": "LK2-SMT_HC1_GEN3_DD1_20231102215517-7YF0-QLAJ-1G5L-Q36C-J37U-D4JU-KLCM-R6VQ-BC41-3K6E-423K-7U7V-21D7-W1F7-X8CH-JN8W-BG86-GT3T-J4CY-B3FJ-UTCF-6GQH-J59J-EKC1",
+          "description": "the license key to install"
+        }
+      }
+    },
+    "Bindings": {
+      "id": "#/definitions/Bindings",
+      "type": "object",
+      "properties": {
+        "targetType": {
+          "type": "string",
+          "enum": [
+            "CARD_TYPE",
+            "CHASSIS_TYPE",
+            "FM_TYPE"
+          ]
+        },
+        "clusterName": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "boxId": {
+          "type": "integer",
+          "example": "1"
+        },
+        "slotId": {
+          "type": "integer",
+          "example": "1"
+        },
+        "licenseKey": {
+          "type": "string",
+          "example": "85e97ca612eafd0c9e6a90bc0762b24ae75c59bc0b57353b28a333daeb53221b877d139e7c69660b289b25c8d727ec9b7a8d8209240f4ad37ac527e509b3c6e000a9fd9c55913ab4c30f25a0cfde3301980e74fa265184ca707939b3f23d2ddd8b9f1318f4757734eac9ffbf3d3b544356582e2b7b05d3ce4948490db2e72edf347bba91a60b1a691f10b2cedbecad1a9d736b913bc6ed5367429c3dee1affdded62e2792bef5167d7b6720f209ae8719c2bf8890ba102d544605e5e2b3072b6LK2-SMT_HC3-7YF0-86GT-1CEG-LMEU-4KTL-EUPJ-4WHF-L2A4-L3",
+          "description": "encoded string of a license key that looks like LK2-SMT_HC3-7YF0-86GT-1CEG-LMEU-4KTL-EUPJ-4WHF-L2A4-L3 when decoded"
+        }
+      }
+    },
+    "BindingOpsResult": {
+      "id": "#/definitions/BindingOpsResult",
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "example": "10.115.62.13"
+        },
+        "boxId": {
+          "type": "integer",
+          "example": "6"
+        },
+        "slotId": {
+          "type": "integer",
+          "example": "2"
+        },
+        "reason": {
+          "type": "string",
+          "example": "Delete key from device error: GigaDeviceLicenseKey.licenseKey [] -> may not be empty"
+        },
+        "message": {
+          "type": "string",
+          "example": "HC3v1-SLM-KB (IP 10.115.62.13), Slot 2"
+        }
+      }
+    },
+    "BindingsReturn": {
+      "id": "#/definitions/BindingsReturn",
+      "type": "object",
+      "properties": {
+        "bindingOpsResult": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BindingOpsResult"
+          }
+        }
+      }
+    },
+    "LicensingBindings": {
+      "id": "#/definitions/LicensingBindings",
+      "type": "object",
+      "properties": {
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Bindings"
+          }
+        }
+      }
+    },
+    "activationCount": {
+      "id": "#/definitions/activationCount",
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "string",
+          "example": "x/y, where x = number of expiring soon licenses, and y = number of expired (grace) licenses"
+        }
+      }
+    },
+    "expiringCount": {
+      "id": "#/definitions/expiringCount",
+      "type": "object",
+      "properties": {
+        "expiringSoonActivations": {
+          "type": "string",
+          "example": "4"
+        },
+        "expiringSoonLicenses": {
+          "type": "string",
+          "example": "6"
+        },
+        "expiringGraceActivations": {
+          "type": "string",
+          "example": "4"
+        },
+        "expiringGraceLicenses": {
+          "type": "string",
+          "example": "4"
+        }
+      }
+    },
+    "importLicenseResponse": {
+      "id": "#/definitions/importLicenseResponse",
+      "type": "object",
+      "properties": {
+        "dbInsertedCnt": {
+          "type": "integer",
+          "description": "number of license feature activation records inserted to FM database (already existing records are skipped)",
+          "example": "4"
+        },
+        "fileParsedOkCnt": {
+          "type": "integer",
+          "description": "number of license feature activation records parsed from the imported file",
+          "example": "6"
+        },
+        "error": {
+          "type": "string",
+          "description": "import failure message",
+          "example": "No unexpired base bundle exists for add-on SKU VBL-50T-ADD-5GC"
+        },
+        "hasVbl": {
+          "type": "boolean",
+          "description": "true if VBL licenses were imported",
+          "example": "true"
+        }
+      }
+    },
+    "importRevocationResponse": {
+      "id": "#/definitions/importRevocationResponse",
+      "type": "object",
+      "properties": {
+        "parsedTargetCnt": {
+          "type": "string",
+          "example": "4"
+        },
+        "bindingsRemovedCnt": {
+          "type": "string",
+          "example": "6"
+        }
+      }
+    },
+    "revokeLicenseResponse": {
+      "id": "#/definitions/revokeLicenseResponse",
+      "type": "object",
+      "properties": {
+        "revocationCode": {
+          "type": "string",
+          "example": "LK2-PORT-AAAA-BBBB-CCCC-DDDD-EEEE-FFFF"
+        },
+        "opError": {
+          "type": "string",
+          "example": "Failed to revoke license key"
+        }
+      }
+    },
+    "keyData": {
+      "id": "#/definitions/keyData",
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "example": "10.115.62.13"
+        },
+        "boxId": {
+          "type": "integer",
+          "example": "1"
+        },
+        "serialNum": {
+          "type": "string",
+          "example": "1D60-0010"
+        },
+        "features": {
+          "type": "string",
+          "example": "header-stripping,add-header"
+        }
+      }
+    },
+    "reassignOpsResult": {
+      "id": "#/definitions/reassignOpsResult",
+      "type": "object",
+      "properties": {
+        "activationId": {
+          "type": "string",
+          "example": "as08g7dsa-h70s7sd-87d8-saf66-g07a07gd8as70"
+        },
+        "bindingOpsResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BindingOpsResult"
+          }
+        }
+      }
+    },
+    "ReplaceOldFmResult": {
+      "id": "#/definitions/ReplaceOldFmResult",
+      "type": "object",
+      "properties": {
+        "succeededDeletes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/keyData"
+          }
+        },
+        "failedDeletes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/keyData"
+          }
+        },
+        "failedDeleteErrors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reassignOpsResultList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/reassignOpsResult"
+          }
+        }
+      }
+    },
+    "renewalResults": {
+      "id": "#/definitions/renewalResults",
+      "type": "object",
+      "properties": {
+        "bindingOpsResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BindingOpsResult"
+          }
+        }
+      }
+    },
+    "currentAppsResult": {
+      "id": "#/definitions/currentAppsResult",
+      "type": "object",
+      "properties": {
+        "currentApps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "The name of the application.",
+            "example": "dedup"
+          }
+        }
+      }
+    },
+    "allowanceResult": {
+      "id": "#/definitions/allowanceResult",
+      "type": "object",
+      "properties": {
+        "any": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "description": "Daily allowance usage in bytes"
+          }
+        },
+        "app": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "description": "Application usage in bytes"
+          }
+        },
+        "bundle": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "description": "Bundle usage in bytes"
+          }
+        }
+      }
+    },
+    "latestVolumeAndPeriodsResult": {
+      "id": "#/definitions/latestVolumeAndPeriodsResult",
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string",
+          "example": "May 3, 2020 - Jun 2, 2020"
+        },
+        "dateCodes": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "description": "Date codes."
+          }
+        }
+      }
+    },
+    "volumeResult": {
+      "id": "#/definitions/volumeResult",
+      "type": "object",
+      "properties": {
+        "periods": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "The billing period.",
+            "example": "May 3, 2020 - Jun 2, 2020"
+          }
+        },
+        "latestVolume": {
+          "type": "object",
+          "$ref": "#/definitions/latestVolumeAndPeriodsResult"
+        }
+      }
+    },
+    "Overuse": {
+      "id": "#/definitions/Overuse",
+      "type": "object",
+      "properties": {
+        "app": {
+          "type": "string",
+          "example": "masking"
+        },
+        "allowance": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "example": "1073741824",
+            "description": "units in bytes, holds up to Long.MAX_VALUE"
+          }
+        },
+        "usage": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "example": "2147483648"
+          }
+        },
+        "overage": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "example": "1073741824"
+          }
+        },
+        "totalAllowance": {
+          "type": "number",
+          "example": "499289948160"
+        },
+        "totalUsage": {
+          "type": "number",
+          "example": "740881858560"
+        },
+        "totalOverage": {
+          "type": "number",
+          "example": "241591910400"
+        }
+      }
+    },
+    "featureVolume": {
+      "id": "#/definitions/featureVolume",
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string",
+          "example": "May 3, 2020 - Jun 2, 2020"
+        },
+        "daysCompleted": {
+          "type": "integer",
+          "example": "30"
+        },
+        "dateCodes": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "example": "20200417",
+            "description": "The date code in format YYYYMMDD"
+          }
+        },
+        "apps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "The name of the application.",
+            "example": "dedup"
+          }
+        },
+        "overuse": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Overuse"
+          }
+        },
+        "id": {
+          "type": "string",
+          "example": "1590537560178--694486466"
+        }
+      }
+    },
+    "featureVolumesResult": {
+      "id": "#/definitions/featureVolumeResult",
+      "type": "object",
+      "properties": {
+        "volumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/featureVolume"
+          }
+        }
+      }
+    },
+    "OveruseMap": {
+      "id": "#/definitions/OveruseMap",
+      "type": "object",
+      "properties": {
+        "totalAllowance": {
+          "type": "number"
+        },
+        "totalUsage": {
+          "type": "number"
+        },
+        "totalOverage": {
+          "type": "number"
+        }
+      },
+      "required": ["totalAllowance", "totalUsage", "totalOverage"]
+    },
+    "summarySingleVolume": {
+      "id": "#/definitions/summarySingleVolume",
+      "type": "object",
+      "properties": {
+        "startDate": {
+          "type": "integer",
+          "example": "20200503",
+          "description": "The date code in format YYYYMMDD"
+        },
+        "period": {
+          "type": "string",
+          "example": "May 3, 2020 - Jun 2, 2020"
+        },
+        "daysCompleted": {
+          "type": "number",
+          "example": "6"
+        },
+        "overuseMap": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OveruseMap"
+          }
+        }
+      }
+    },
+    "summaryVolumes": {
+      "id": "#/definitions/summaryVolumes",
+      "type": "object",
+      "properties": {
+        "volumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/summarySingleVolume"
+          }
+        }
+      }
+    },
+    "deactivableVblActivation": {
+      "id": "#/definitions/deactivableVblActivation",
+      "type": "object",
+      "properties": {
+        "aid": {
+          "type": "string",
+          "example": "15e4aea5-ab39-49a6-a85c-5335db2ae762",
+          "description": "activation id as encoded in the license"
+        },
+        "sku": {
+          "type": "string",
+          "example": "VBL-1T-BN-CORE-TRIAL",
+          "description": "the license SKU (Stock Keeping Unit) or product code that uniquely identifies the license type in Gigamon catalog"
+        },
+        "startDate": {
+          "type": "integer",
+          "example": "20231108",
+          "description": "start date of the license (format YYYYMMDD)"
+        },
+        "endDate": {
+          "type": "integer",
+          "example": "20231208",
+          "description": "end date of the license (format YYYYMMDD)"
+        },
+        "licenseStatus": {
+          "type": "string",
+          "description": "status of the license",
+          "enum": [
+            "Active",
+            "Unknown",
+            "Future",
+            "Expiring Soon",
+            "Recently Expired",
+            "Expired",
+            "Deactivated"
+          ]
+        },
+        "totalVolume": {
+          "type": "string",
+          "example": "1024 GB daily",
+          "description": "ingress traffic volume licensed per day (in GigaBytes)"
+        }
+      }
+    },
+    "deactivableVbls": {
+      "id": "#/definitions/deactivableVbls",
+      "type": "object",
+      "properties": {
+        "vblActivations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/deactivableVblActivation"
+          }
+        }
+      }
+    },
+    "processedVolumesResult": {
+      "id": "#/definitions/processedVolumesResult",
+      "type": "object",
+      "properties": {
+        "any": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "description": "Application tier usage in bytes"
+          }
+        },
+        "app": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "description": "Application usage in bytes"
+          }
+        },
+        "any0": {
+          "type": "number"
+        }
+      }
+    },
+    "detailedReport": {
+      "id": "#/definitions/detailedReport",
+      "type": "object",
+      "properties": {
+        "virtualMac": {
+          "type": "string",
+          "example": "00:0C:29:9A:E6:82"
+        },
+        "fmSwVersion": {
+          "type": "string",
+          "example": "5.10.00"
+        },
+        "timeOfReportCreation": {
+          "type": "string",
+          "example": "2020-07-09T13:47:30"
+        },
+        "featureVolumes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/featureVolume"
+          }
+        }
+      }
+    },
+    "dayVolume": {
+      "id": "#/definitions/dayVolume",
+      "type": "object",
+      "properties": {
+        "allowance": {
+          "type": "number",
+          "example": "4051290851",
+          "description": "Allowance of this day volume in bytes"
+        },
+        "usage": {
+          "type": "number",
+          "example": "280124112",
+          "description": "Usage of this day volume in bytes"
+        },
+        "overage": {
+          "type": "number",
+          "example": "3241241",
+          "description": "Overage on this day in bytes, usually difference between allowance and usage if positive, else 0"
+        },
+        "usage95p": {
+          "type": "number",
+          "example": "1241241",
+          "description": "95th percentile usage on this day calculated with a lookback period of 90 days"
+        }
+      }
+    },
+    "periodVolume": {
+      "id": "#/definitions/periodVolume",
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string",
+          "example": "Jul 10, 2020 - Aug 9, 2020",
+          "description": "Period from start to end dates formatted"
+        },
+        "daysCompleted": {
+          "type": "number",
+          "example": "15",
+          "description": "Number of days completed in the current period"
+        },
+        "daysOverage": {
+          "type": "number",
+          "example": "3",
+          "description": "Number of days with usage exceeding allowance during the current period"
+        },
+        "daysOver95p": {
+          "type": "number",
+          "example": "2",
+          "description": "Days where 95th percentile usage exceeded allowance, during the period"
+        },
+        "dateCodes": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "description": "The date codes of the current period in format YYYYMMDD",
+            "example": [20200710, 20200711, 20200712]
+          }
+        },
+        "apps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "List of apps licensed in the current period",
+            "example": ["masking","slicing"]
+          }
+        },
+        "bundles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "List of bundles licensed in the current period",
+            "example": "CoreVUE"
+          }
+        },
+        "posIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "List of license POS ids in the current period",
+            "example": "POS1234567"
+          }
+        }
+      }
+    },
+    "appVolume": {
+      "id": "#/definitions/appVolume",
+      "type": "object",
+      "properties": {
+        "app": {
+          "type": "string",
+          "example": "masking",
+          "description": "Name of the app of this app volume"
+        },
+        "totalAllowance": {
+          "type": "number",
+          "example": "4051290851",
+          "description": "Total allowance of this app volume in bytes"
+        },
+        "totalUsage": {
+          "type": "number",
+          "example": "280124112",
+          "description": "Total usage of this app volume in bytes"
+        },
+        "totalOverage": {
+          "type": "number",
+          "example": "1241241",
+          "description": "Total overage of this app volume in bytes"
+        },
+        "dayVolumes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/dayVolume"
+          }
+        }
+      }
+    },
+    "appVolumeSummary": {
+      "id": "#/definitions/appVolumeSummary",
+      "type": "object",
+      "properties": {
+        "app": {
+          "type": "string",
+          "example": "masking",
+          "description": "Name of the app of this app volume"
+        },
+        "totalAllowance": {
+          "type": "number",
+          "example": "4051290851",
+          "description": "Total allowance of this app volume in bytes"
+        },
+        "totalUsage": {
+          "type": "number",
+          "example": "280124112",
+          "description": "Total usage of this app volume in bytes"
+        },
+        "totalOverage": {
+          "type": "number",
+          "example": "1241241",
+          "description": "Total overage of this app volume in bytes"
+        }
+      }
+    },
+    "bundleVolume": {
+      "id": "#/definitions/bundleVolume",
+      "type": "object",
+      "properties": {
+        "bundle": {
+          "type": "string",
+          "example": "CoreVUE",
+          "description": "Name of the bundle of this bundle volume"
+        },
+        "maxDailyAllowance": {
+          "type": "number",
+          "example": "4051290851",
+          "description": "Max daily allowance of this bundle volume in bytes"
+        },
+        "maxDailyUsage": {
+          "type": "number",
+          "example": "280124112",
+          "description": "Maximum daily usage of this bundle volume in bytes"
+        },
+        "daysOverage": {
+          "type": "integer",
+          "example": "3",
+          "description": "Number of days in the period where licensed volume limit was exceeded"
+        },
+        "totalAllowance": {
+          "type": "number",
+          "example": "4051290851",
+          "description": "Total bundle allowance in bytes"
+        },
+        "totalUsage": {
+          "type": "number",
+          "example": "280124112",
+          "description": "Total bundle usage in bytes"
+        },
+        "totalOverage": {
+          "type": "number",
+          "example": "1241241",
+          "description": "Total bundle overage in bytes"
+        },
+        "dayVolumes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/dayVolume"
+          }
+        }
+      }
+    },
+    "bundleVolumeSummary": {
+      "id": "#/definitions/bundleVolumeSummary",
+      "type": "object",
+      "properties": {
+        "bundle": {
+          "type": "string",
+          "example": "SecureVUEPlus",
+          "description": "Name of the license bundle"
+        },
+        "maxDailyAllowance": {
+          "type": "number",
+          "example": "4051290851",
+          "description": "Max daily allowance of this bundle in bytes"
+        },
+        "maxDailyUsage": {
+          "type": "number",
+          "example": "280124112",
+          "description": "Maximum daily usage of this bundle in bytes"
+        },
+        "daysOverage": {
+          "type": "integer",
+          "example": "3",
+          "description": "Number of days in the period where licensed volume allowance was exceeded"
+        },
+        "totalAllowance": {
+          "type": "number",
+          "example": "4051290851",
+          "description": "Total bundle allowance for the period in bytes"
+        },
+        "totalUsage": {
+          "type": "number",
+          "example": "280124112",
+          "description": "Total bundle usage for the period in bytes"
+        },
+        "totalOverage": {
+          "type": "number",
+          "example": "1241241",
+          "description": "Total bundle overage for the period in bytes"
+        }
+      }
+    },
+    "PeriodVolumeDetailed": {
+      "id": "#/definitions/PeriodVolumeDetailed",
+      "type": "object",
+      "properties": {
+        "periodVolume": {
+          "type": "object",
+          "$ref": "#/definitions/periodVolume"
+        },
+        "appVolume": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/appVolume"
+          }
+        },
+        "maxDailyAllowance": {
+          "type": "number",
+          "description": "Max daily allowance for the period in bytes",
+          "example": 274877906944000
+        },
+        "maxDailyUsage": {
+          "type": "number",
+          "description": "Max daily usage for the period in bytes",
+          "example": 5140482399892
+        },
+        "bestUnit": {
+          "type": "string",
+          "description": "Best unit to represent the volume (TeraMegaBytes, GigaBytes,..)",
+          "example": "TB"
+        },
+        "bundleVolume": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/bundleVolume"
+          }
+        }
+      }
+    },
+    "PeriodVolumeSummary": {
+      "id": "#/definitions/PeriodVolumeSummary",
+      "type": "object",
+      "properties": {
+        "periodVolume": {
+          "type": "object",
+          "$ref": "#/definitions/periodVolume"
+        },
+        "appVolume": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/appVolumeSummary"
+          }
+        },
+        "bundleVolume": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/bundleVolumeSummary"
+          }
+        },
+        "bestUnit": {
+          "type": "string",
+          "description": "Best unit to represent the volume (TeraBytes, GigaBytes,..)",
+          "example": "TB"
+        }
+      }
+    },
+    "MonSessionToAppTierMap": {
+      "id": "#/definitions/MonSessionToAppTierMap",
+      "type": "object",
+      "description": "mapping from monitoring session id to app tier",
+      "additionalProperties": {
+        "type": "number",
+        "description": "application tier"
+      },
+      "example": {
+        "6c28a8ad-51a4-4d8f-b455-3116615c8266": 10,
+	"24cc2857-ce12-4146-8c29-a258f8d2b39a": 40
+      }
+    },
+    "latestPeriodResult": {
+      "id": "#/definitions/latestPeriodResult",
+      "type": "object",
+      "properties": {
+        "latestVolume": {
+          "type": "object",
+          "$ref": "#/definitions/PeriodVolumeDetailed"
+        },
+        "periods": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "List of periods in this volume",
+            "example": "Jul 10, 2020 - Aug 9, 2020"
+          }
+        }
+      }
+    },
+    "periodVolumeResult": {
+      "id": "#/definitions/periodVolumeResult",
+      "type": "object",
+      "properties": {
+        "volumes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/periodVolume"
+          }
+        }
+      }
+    },
+    "FmLicensingGetAllClusterLicenses": {
+      "id": "#/definitions/FmLicensingClusterLicenses",
+      "type": "object",
+      "properties": {
+        "clusterLicensesList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ClusterLicenses"
+          }
+        }
+      }
+    },
+    "ClusterLicenses": {
+      "id": "#/definitions/ClusterLicenses",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "5cd50a4a2406af088ff0a19e"
+        },
+        "clusterName": {
+          "type": "string",
+          "example": "myCluster-1"
+        },
+        "hashCode": {
+          "type": "string",
+          "example": "5-449458804"
+        },
+        "chassisModules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ChassisModule"
+          }
+        }
+      }
+    },
+    "ChassisModule": {
+      "id": "#/definitions/ChassisModule",
+      "type": "object",
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "model": {
+          "$ref": "../schemas-common/common.json#/definitions/GigaDeviceModel",
+          "example": "HC3"
+        },
+        "hostName": {
+          "type": "string",
+          "example": "dev-box2"
+        },
+        "hwType": {
+          "type": "string",
+          "example": "SMT-HC3-C05"
+        },
+        "id": {
+          "type": "string",
+          "example": "5cd50a4a2406af088ff0a19e"
+        },
+        "clusterName": {
+          "type": "string",
+          "example": "myCluster-1"
+        },
+        "boxId": {
+          "type": "integer",
+          "example": "3"
+        },
+        "serialNumber": {
+          "type": "string",
+          "example": "C1143"
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CardModule"
+          }
+        },
+        "licenses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LicenseData"
+          }
+        }
+      }
+    },
+    "CardModule": {
+      "id": "#/definitions/CardModule",
+      "type": "object",
+      "properties": {
+        "slotId": {
+          "type": "string",
+          "example": "1",
+          "description": "chassis slot number where the card is inserted"
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "name of the cluster of chassis",
+          "example": "myCluster-1"
+        },
+        "boxId": {
+          "type": "integer",
+          "example": "3"
+        },
+        "serialNumber": {
+          "type": "string",
+          "example": "1F70-0039"
+        },
+        "hwType": {
+          "type": "string",
+          "example": "SMT-HC0-Q02X08",
+          "description": "the hardware type for the card"
+        },
+        "licenses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LicenseData"
+          }
+        }
+      }
+    },
+    "LicenseData": {
+      "id": "#/definitions/LicenseData",
+      "type": "object",
+      "properties": {
+        "features": {
+          "type": "string",
+          "example": "apf,flowrule-gtp",
+          "description": "Comma-separated list of licensed application names"
+        },
+        "licenseType": {
+          "type": "string",
+          "description": "type of the license",
+          "enum": [
+            "Commercial",
+            "Trial",
+            "Demo",
+            "Internal",
+            "Partner",
+            "Lab"
+          ],
+          "example": "Commercial"
+        },
+        "startDate": {
+          "type": "integer",
+          "example": "20231005",
+          "description": "The license start date code in format YYYYMMDD"
+        },
+        "endDate": {
+          "type": "integer",
+          "example": "20241004",
+          "description": "The license end date code in format YYYYMMDD"
+        },
+        "licenseStatus": {
+          "type": "string",
+          "description": "status of the license",
+          "enum": [
+            "Active",
+            "Unknown",
+            "Future",
+            "Expiring Soon",
+            "Recently Expired",
+            "Expired",
+            "Deactivated"
+          ]
+        },
+        "notifPeriod": {
+          "type": "integer",
+          "example": "15",
+          "description": "number of days before the end date of the license when notification is sent out about impending license expiry"
+        },
+        "gracePeriod": {
+          "type": "integer",
+          "example": "15",
+          "description": "number of days after the end date of the license for which the user can still use the license as if it was still valid"
+        },
+        "floated": {
+          "type": "boolean",
+          "example": "false",
+          "description": "true if the license was assigned using current Fabric Manager from a floating license pool, false otherwise"
+        }
+      }
+    },
+    "UnlicensedChassisAndCards": {
+      "id": "#/definitions/UnlicensedChassisAndCards",
+      "type": "object",
+      "properties": {
+        "unlicensedChassis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["Cluster 10.115.38.63, Box id 1, Serial number JF97D", "Cluster 10.115.38.89, Box id 1, Serial number J9A5B"],
+          "description": "list of chassis that are missing GVOS license"
+        },
+        "unlicensedCards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["Cluster 10.115.38.63, Box id 1, Slot 4, Serial number 1DW0-2002", "Cluster 10.115.38.89, Box id 1, Slot 2, Serial number 1DW0-2001"],
+          "description": "list of cards that are missing GVOS-module license"
+        }
+      }
+    },
+    "LicensedFeaturesFromNode": {
+      "id": "#/definitions/LicensedFeaturesFromNode",
+      "type": "object",
+      "properties": {
+        "context": {
+          "type": "object",
+          "properties": {
+            "totalItems": {
+              "type": "integer",
+              "example": "3",
+              "description": "number of items in 'licenses' property below"
+            }
+          }
+        },
+        "licenses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+	    "$ref": "#/definitions/NodeLockedFeatures"
+          }
+        }
+      }
+    },
+    "NodeLockedFeatures": {
+      "id": "#/definitions/NodeLockedFeatures",
+      "type": "object",
+      "properties": {
+        "boxId": {
+          "type": "integer",
+          "example": 1
+        },
+        "slotId": {
+          "type": "integer",
+          "example": 2
+        },
+        "features": {
+          "type": "object",
+          "$ref": "#/definitions/LicensedFeatureList"
+        }
+      }
+    },
+    "LicensedFeatureList": {
+      "id": "#/definitions/LicensedFeatureList",
+      "type": "object",
+      "properties": {
+        "apf": {
+          "type": "object",
+          "properties": {
+            "expiry": {
+              "type": "string",
+              "example": "never"
+            }
+          }
+        },
+        "erspan": {
+          "type": "object",
+          "properties": {
+            "expiry": {
+              "type": "string",
+              "example": "never"
+            }
+          }
+        },
+        "masking": {
+          "type": "object",
+          "properties": {
+            "expiry": {
+              "type": "string",
+              "example": "never"
+            }
+          }
+        }
+      }
+    },
+    "CategoryExpiryFl": {
+      "id": "#/definitions/CategoryExpiryFl",
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": "1"
+        },
+        "expiry": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "Qty    1 of SKU VBL-50T-BN-SVP      expiry on 2023/12/31 [AID ae8a7fe7-d75f-4bd4-81c6-a0753d6a9398]"
+          }
+        }
+      }
+    },
+    "CategoryExpiryNll": {
+      "id": "#/definitions/CategoryExpiryNll",
+      "type": "object",
+
+      "properties": {
+        "count": {
+          "type": "integer",
+          "example": "1"
+        },
+        "expiry": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "Card    Serial number 1EH0-0184  expiry on 2023/09/16 [Features dedup]"
+          }
+        }
+      }
+    },
+    "ListOfCategoryExpiryFl": {
+      "id": "#/definitions/ListOfCategoryExpiryFl",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CategoryExpiryFl"
+      }
+    },
+
+    "ListOfCategoryExpiryNll": {
+      "id": "#/definitions/ListOfCategoryExpiryNll",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CategoryExpiryNll"
+      }
+    },
+    "periodSummaryResult": {
+      "id": "#/definitions/periodSummaryResult",
+      "type": "object",
+      "properties": {
+        "periods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/PeriodVolumeSummary"
+          }
+        }
+      }
+    },
+    "periodSummaryResultWithUnit": {
+      "id": "#/definitions/periodSummaryResultWithUnit",
+      "type": "object",
+      "properties": {
+        "summaries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/PeriodVolumeSummary"
+          }
+        },
+        "lowestUnit": {
+          "type": "string",
+          "example": "TB"
+        }
+      }
+    },
+    "periodVolumeReport": {
+      "id": "#/definitions/periodVolumeReport",
+      "type": "object",
+      "properties": {
+        "volumeReport": {
+          "type": "object",
+          "properties": {
+            "virtualMac": {
+              "type": "string",
+              "example": "00:0C:29:9A:E6:82"
+            },
+            "fmSwVersion": {
+              "type": "string",
+              "example": "6.4.00"
+            },
+            "timeOfReportCreation": {
+              "type": "string",
+              "example": "2023-07-27T08:43:13Z"
+            },
+            "periodVolumes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "$ref": "#/definitions/PeriodVolumeDetailed"
+              }
+            }
+          }
+	}
+      }
+    },
+    "displayPeriods": {
+      "id": "#/definitions/displayPeriods",
+      "type": "object",
+      "properties": {
+        "monthsPerPeriod": {
+          "type": "number",
+          "example": "1"
+        },
+        "nToDisplayStringMap": {
+          "type": "object",
+	  "additionalProperties": {
+            "type": "string",
+            "description": "time range of data (as displayed)"
+          },
+          "example": {
+            "0": "All Periods",
+            "1": "Latest period (1 month)",
+            "2": "Last 2 periods (2 months)",
+            "3": "Last 3 periods (3 months)",
+            "6": "Last 6 periods (6 months)",
+            "12": "Last 12 periods (12 months)",
+            "24": "Last 24 periods (24 months)"
+          }
+        }
+      }
+    },
+    "customerResult": {
+      "id": "#/definitions/customerResult",
+      "type": "string",
+      "example": "Gigamon, Inc"
+    },
+    "highestBundleResult": {
+      "id": "#/definitions/highestBundleResult",
+      "type": "string",
+      "example": "NetVUE",
+      "description": "name of the highest bundle family currently installed"
+    },
+    "emailServerConfiguredResult": {
+      "id": "#/definitions/emailServerConfiguredResult",
+      "type": "boolean",
+      "example": "false"
+    },
+    "defaultLicenseResult": {
+      "id": "#/definitions/defaultLicenseResult",
+      "type": "boolean",
+      "example": "false"
+    },
+    "RemovedClusterIds": {
+      "id": "#/definitions/removedClusterIds",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "example": "6052d2577f3d9530beeb4c8c"
+      }
+    }
+  }
+}

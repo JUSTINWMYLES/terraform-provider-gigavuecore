@@ -1,0 +1,1614 @@
+{
+  "id": "http://gigamon.com/schemas-fm/physical.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Physical Device schema",
+  "definitions": {
+    "GigaChassis": {
+      "id": "#/definitions/GigaChassis",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon Device Chassis",
+      "required": [
+        "chassisId"
+      ],
+      "properties": {
+        "chassisId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "deviceName": {
+          "type": "string",
+          "readonly": true,
+          "description": "maps to hostname"
+        },
+        "model": {
+          "$ref": "../schemas-common/common.json#/definitions/GigaDeviceModel",
+          "readonly": true,
+          "description": "device model"
+        },
+        "globalNodeId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "memory": {
+          "$ref": "#/definitions/Memory",
+          "description": "Device Memory",
+          "since": "H 4.7"
+        },
+        "cpuLoadAvg": {
+          "$ref": "#/definitions/CpuLoadAvg",
+          "description": "CPU Load Average",
+          "since": "H 4.7"
+        },
+        "fileSystemStatistics": {
+          "$ref": "#/definitions/FileSystemStatistics",
+          "description": "FileSystem Statistics",
+          "since": "H 4.7"
+        },
+        "cpldVersion": {
+          "type": "string",
+          "readOnly": true,
+          "since": "H 4.8"
+        },
+        "tsVersion": {
+          "type": "integer",
+          "readOnly": true,
+          "since": "H 4.8"
+        },
+        "boxId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "hwType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "100G",
+            "100GRight",
+            "100GLeft",
+            "default"
+          ],
+          "description": "Use of 100G ports requires chassis mode value to be 100G. 100G applicable to HC2-v2 only. 100GLeft, Right refers to left, right side chassis bank.",
+          "readOnly": true,
+          "since": "H 4.7"
+        },
+        "hwRevision": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serialNumber": {
+          "type": "string",
+          "readOnly": true
+        },
+        "productCode": {
+          "type": "string",
+          "readOnly": true
+        },
+        "productName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "productVersion": {
+          "type": "string",
+          "readOnly": true
+        },
+        "gitFullHash": {
+          "type": "string",
+          "readOnly": true
+        },
+        "productBuildDate": {
+          "type": "string",
+          "readOnly": true
+        },
+        "sysDescr": {
+          "type": "string",
+          "readOnly": true
+        },
+        "sysLocation": {
+          "type": "string",
+          "readOnly": true
+        },
+        "sysContact": {
+          "type": "string",
+          "readOnly": true
+        },
+        "ubootVersion": {
+          "type": "string",
+          "readOnly": true
+        },
+        "ccSyncStatus": {
+          "type": "string",
+          "readOnly": true
+        },
+        "hostId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "bootTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "the time system booted up. In ISO-8601 date format 'yyyy-MM-dd'T'HH:mm:ssZ'",
+          "readOnly": true
+        },
+        "versionSummary": {
+          "type": "string",
+          "readOnly": true
+        },
+        "buildId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaCard"
+          },
+          "readOnly": true
+        },
+        "fanTrays": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ChassisFanTray"
+          },
+          "readOnly": true
+        },
+        "powerModules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ChassisPowerModule"
+          },
+          "readOnly": true
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaPort"
+          },
+          "readonly": true,
+          "description": "details of the ports on this chassis"
+        },
+        "powerManagement": {
+          "$ref": "#/definitions/PowerManagement",
+          "description": "applicable for HC3 devices"
+        },
+        "hardwareInfo": {
+          "$ref": "#/definitions/HardwareInfo"
+        },
+        "gdp": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable/disable GDP for chassis"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "operStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "left",
+            "not-reachable"
+          ],
+          "readOnly": true
+        },
+        "leafConfig": {
+          "$ref": "#/definitions/LeafConfig"
+        },
+        "systemMode": {
+          "type": "string",
+          "enum": [
+            "operational",
+            "safe",
+            "limited"
+          ],
+          "readOnly": true,
+          "description": "'operational': fully configurable; 'safe': no configuration possible; 'limited': limited configuration possible"
+        },
+        "vxlanId": {
+          "type": "integer",
+          "since": "H 5.8",
+          "readOnly": true,
+          "description": "Global vxlan id configured , Value of 0 disables the vxlanId"
+        },
+        "l2greId": {
+          "type": "integer",
+          "since": "H 5.8",
+          "readOnly": true,
+          "description": "Global l2gre id configured, Value of 0 disables the vxlanId"
+        }
+      }
+    },
+    "HardwareInfo": {
+      "id": "#/definitions/HardwareInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "hardware info  of dell box",
+      "properties": {
+        "labelRevision": {
+          "type": "string",
+          "description": "labelRevision of dell box"
+        },
+        "serviceTag": {
+          "type": "string",
+          "description": "service tag"
+        },
+        "baseMacAddress": {
+          "type": "string",
+          "description": "macAddress"
+        },
+        "diagVersion": {
+          "type": "string",
+          "description": "diag version"
+        },
+        "productName": {
+          "type": "string",
+          "description": "product name"
+        },
+        "manufactureDate": {
+          "type": "string",
+          "description": "loader version"
+        },
+        "partNumber": {
+          "type": "string",
+          "description": "part number"
+        },
+        "platformName": {
+          "type": "string",
+          "description": "platformName"
+        },
+        "deviceVersion": {
+          "type": "string",
+          "description": "device version"
+        }
+      }
+    },
+    "LeafConfig": {
+      "id": "#/definitions/LeafConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Configuration of Leaf node for Spine-Link",
+      "since": "H 5.4",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "default",
+            "protected"
+          ]
+        }
+      }
+    },
+    "Memory": {
+      "id": "#/definitions/Memory",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Device Memory",
+      "since": "H 4.7",
+      "properties": {
+        "used": {
+          "type": "integer",
+          "description": "MB"
+        },
+        "free": {
+          "type": "integer",
+          "description": "MB"
+        },
+        "total": {
+          "type": "integer",
+          "description": "MB"
+        },
+        "timeStamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date-time of stats collection in RFC 3339 format"
+        }
+      }
+    },
+    "CpuLoadAvg": {
+      "id": "#/definitions/CpuLoadAvg",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "CPU Load Average",
+      "since": "H 4.7",
+      "properties": {
+        "load1": {
+          "type": "number",
+          "format": "float",
+          "description": "cpu load averages for past 1 minute"
+        },
+        "load5": {
+          "type": "number",
+          "format": "float",
+          "description": "cpu load averages for past 5 minutes"
+        },
+        "load15": {
+          "type": "number",
+          "format": "float",
+          "description": "cpu load averages for past 15 minutes"
+        },
+        "timeStamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date-time of stats collection in RFC 3339 format"
+        }
+      }
+    },
+    "PowerManagement": {
+      "id": "#/definitions/PowerManagement",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Power Manager Information",
+      "since": "H 5.0",
+      "properties": {
+        "totalPower": {
+          "type": "integer",
+          "format": "int32",
+          "readOnly": true,
+          "description": "watts"
+        },
+        "totalBaseSystemPower": {
+          "type": "integer",
+          "format": "int32",
+          "readOnly": true,
+          "description": "watts"
+        },
+        "powerAvailable": {
+          "type": "integer",
+          "format": "int32",
+          "readOnly": true,
+          "description": "watts"
+        },
+        "powerAllocated": {
+          "type": "integer",
+          "format": "int32",
+          "readOnly": true,
+          "description": "watts"
+        },
+        "powerRedundancy": {
+          "type": "string",
+          "enum": [
+            "on",
+            "off"
+          ],
+          "readOnly": true
+        },
+        "totalRedundantPower": {
+          "type": "integer",
+          "format": "int32",
+          "readOnly": true,
+          "description": "watts"
+        }
+      }
+    },
+    "FileSystemStatistics": {
+      "id": "#/definitions/FileSystemStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "File System Statistics",
+      "since": "H 4.7",
+      "properties": {
+        "varStatistics": {
+          "$ref": "#/definitions/FsStatistics",
+          "description": "Statistics for /var filesystem"
+        },
+        "configStatistics": {
+          "$ref": "#/definitions/FsStatistics",
+          "description": "Statistics for /config filesystem"
+        },
+        "timeStamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date-time of stats collection in RFC 3339 format"
+        }
+      }
+    },
+    "FsStatistics": {
+      "id": "#/definitions/FsStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "File System Statistics",
+      "properties": {
+        "spaceTotal": {
+          "type": "integer",
+          "description": "MB"
+        },
+        "spaceUsed": {
+          "type": "integer",
+          "description": "MB"
+        },
+        "spaceFree": {
+          "type": "integer",
+          "description": "MB"
+        },
+        "spaceAvailable": {
+          "type": "integer",
+          "description": "MB"
+        },
+        "spacePercentFree": {
+          "type": "integer",
+          "description": "percent"
+        },
+        "inodesPercentFree": {
+          "type": "integer",
+          "description": "percent"
+        }
+      }
+    },
+    "GigaCard": {
+      "id": "#/definitions/GigaCard",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Represents a Card in a Gigamon Chassis",
+      "required": [
+        "slotId"
+      ],
+      "properties": {
+        "slotId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "device card slot id"
+        },
+        "hwType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "hwRevision": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serialNumber": {
+          "type": "string",
+          "readOnly": true
+        },
+        "productCode": {
+          "type": "string",
+          "readOnly": true
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ]
+        },
+        "adminStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ]
+        },
+        "operStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "shutdown",
+            "removed",
+            "mismatch",
+            "inserted",
+            "unsupported",
+            "licenseMismatch",
+            "licenseWait",
+            "noPower"
+          ],
+          "readOnly": true
+        },
+        "powerReq": {
+          "type": "integer",
+          "format": "int32",
+          "readOnly": true,
+          "description": "watt",
+          "since": "H 5.0"
+        },
+        "powerPriority": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Power slot Priority",
+          "since": "H 5.0"
+        },
+        "temperatures": {
+          "$ref": "#/definitions/GigaCardTemps"
+        },
+        "voltages": {
+          "$ref": "#/definitions/GigaCardVoltage"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "32x",
+            "2q",
+            "48x",
+            "56x",
+            "64x",
+            "0x",
+            "16x"
+          ],
+          "readOnly": true,
+          "since": "H 4.6"
+        },
+        "fabricHashAdv": {
+          "type": "boolean",
+          "default": false,
+          "description": "Advanced Fabric Hash. Supported only for Q02X32/Q08 cards",
+          "since": "H 4.8"
+        },
+        "alarmBufferThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 0,
+          "description": "card micro burst threshold",
+          "since": "H 5.4"
+        },
+        "pldInfo": {
+          "$ref": "#/definitions/PldInfo",
+          "description": "only applicable to HC3 chassis",
+          "since": "H 5.0"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "ChassisFanTray": {
+      "id": "#/definitions/ChassisFanTray",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Represents a Fan Tray in a Gigamon Chassis",
+      "required": [
+        "fantrayId"
+      ],
+      "properties": {
+        "fantrayId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "chassis Fan Tray id"
+        },
+        "hwType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "hwRevision": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serialNumber": {
+          "type": "string",
+          "readOnly": true
+        },
+        "productCode": {
+          "type": "string",
+          "readOnly": true
+        },
+        "operStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "fault",
+            "absent"
+          ],
+          "readOnly": true
+        },
+        "fanDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ChassisFanTrayFanStatus"
+          },
+          "readOnly": true
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "ChassisFanTrayFanStatus": {
+      "id": "#/definitions/ChassisFanTrayFanStatus",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Status of a Fan in a Chassis Fan Tray",
+      "required": [
+        "fanId",
+        "fanSpeedRpm"
+      ],
+      "properties": {
+        "fanId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "id of a fan in a FanTray"
+        },
+        "fanSpeedRpm": {
+          "type": "integer",
+          "format": "int32",
+          "readOnly": true,
+          "description": "fan speed in rpm"
+        },
+        "timeStamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date-time of stats collection in RFC 3339 format"
+        }
+      }
+    },
+    "ChassisPowerModule": {
+      "id": "#/definitions/ChassisPowerModule",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Represents a Power Module in a Gigamon Chassis",
+      "required": [
+        "powerModuleId"
+      ],
+      "properties": {
+        "powerModuleId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "chassis Power Module id"
+        },
+        "hwType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "hwRevision": {
+          "type": "string",
+          "readOnly": true
+        },
+        "serialNumber": {
+          "type": "string",
+          "readOnly": true
+        },
+        "productCode": {
+          "type": "string",
+          "readOnly": true
+        },
+        "operStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "fault",
+            "absent"
+          ],
+          "readOnly": true,
+          "description": "applicable for non-HC2 devices"
+        },
+        "operStatusTop": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "fault",
+            "absent"
+          ],
+          "readOnly": true,
+          "description": "applicable for HC2 devices"
+        },
+        "operStatusBottom": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "fault",
+            "absent"
+          ],
+          "readOnly": true,
+          "description": "applicable for HC2 devices"
+        },
+        "powerVoltages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PowerVolts"
+          }
+        },
+        "capacity": {
+          "type": "integer",
+          "format": "int32",
+          "readonly": true,
+          "description": "watts"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "GigaCardTemps": {
+      "id": "#/definitions/GigaCardTemps",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 4.6",
+      "properties": {
+        "intake": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "exhaust": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "cpu": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "switch": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "board": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "e1Port": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "cavCpu": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "e1Cpu": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "e2Cpu": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "topSwitch": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "rearPanel": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "qsfpCage": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "bottomSwitch": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "nearCpu": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "sfpCage": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "cpuMajor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "switchMajor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "topSwitchMajor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "rearPanelMajor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "qsfpCageMajor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "bottomSwitchMajor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "nearCpuMajor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "sfpCageMajor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "cpuMinor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "switchMinor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "topSwitchMinor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "rearPanelMinor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "qsfpCageMinor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "bottomSwitchMinor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "nearCpuMinor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "sfpCageMinor": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "cpuShut": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "switchShut": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "topSwitchShut": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "rearPanelShut": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "qsfpCageShut": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "bottomSwitchShut": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "nearCpuShut": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "sfpCageShut": {
+          "type": "number",
+          "readOnly": true,
+          "description": "celsius"
+        },
+        "timeStamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date-time of stats collection in RFC 3339 format"
+        }
+      }
+    },
+    "GigaCardVoltage": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/GigaCardVolts"
+      }
+    },
+    "GigaCardVolts": {
+      "id": "#/definitions/GigaCardVolts",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "voltage",
+        "value"
+      ],
+      "properties": {
+        "voltage": {
+          "type": "string",
+          "enum": [
+            "2.5v",
+            "3.3v",
+            "5.0v",
+            "12v",
+            "vccp1",
+            "vccp2"
+          ],
+          "readOnly": true
+        },
+        "value": {
+          "type": "number",
+          "readOnly": true,
+          "description": "volt"
+        },
+        "timeStamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date-time of stats collection in RFC 3339 format"
+        }
+      }
+    },
+    "PowerVolts": {
+      "id": "#/definitions/PowerVolts",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "voltage",
+        "value"
+      ],
+      "properties": {
+        "voltage": {
+          "type": "string",
+          "enum": [
+            "12v",
+            "0.95v",
+            "sense"
+          ],
+          "readOnly": true
+        },
+        "value": {
+          "type": "number",
+          "readOnly": true,
+          "description": "volt"
+        },
+        "timeStamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date-time of stats collection in RFC 3339 format"
+        }
+      }
+    },
+    "GigaPort": {
+      "id": "#/definitions/GigaPort",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon Device Port",
+      "required": [
+        "portId",
+        "portType"
+      ],
+      "properties": {
+        "portId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "device port id"
+        },
+        "hostName": {
+          "type": "string",
+          "description": "device host name"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "device port alias"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "portType": {
+          "type": "string",
+          "enum": [
+            "network",
+            "tool",
+            "stack",
+            "inline-net",
+            "inline-tool",
+            "hybrid",
+            "gigasmart",
+            "circuit"
+          ],
+          "description": "Configures port type for eligible ports based on the underlying card/chassis hardware type. 'gigasmart' port type can never be explicitly assigned"
+        },
+        "adminStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ]
+        },
+        "operStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "none"
+          ],
+          "readOnly": true
+        },
+        "isSignalDetected": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "none"
+          ],
+          "readOnly": true
+        },
+        "portRole": {
+          "deprecated": true,
+          "type": "string",
+          "enum": [
+            "master",
+            "slave"
+          ],
+          "readOnly": true,
+          "description": "master/slave role of port. (deprecated: use portRoleAlias)"
+        },
+        "portRoleAlias": {
+          "type": "string",
+          "enum": [
+            "source",
+            "receiver"
+          ],
+          "readOnly": true,
+          "description": "source/receiver role of port"
+        },
+        "cableLength": {
+          "type": "string",
+          "description": "Attached cable length in meter"
+        },
+        "sfp": {
+          "$ref": "#/definitions/GigaPortSfp",
+          "readOnly": true
+        },
+        "operSpeed": {
+          "type": "string",
+          "enum": [
+            "10M",
+            "100M",
+            "1G",
+            "10G",
+            "25G",
+            "40G",
+            "100G"
+          ],
+          "description": "Port operational runtime speed"
+        },
+        "configSpeed": {
+          "type": "string",
+          "enum": [
+            "10M",
+            "100M",
+            "1G",
+            "10G",
+            "25G",
+            "40G",
+            "100G"
+          ],
+          "description": "The configured line speed of a port. Only applicable for copper ports. Only applicable if auto-negotiation is off"
+        },
+        "duplex": {
+          "type": "string",
+          "enum": [
+            "full",
+            "half"
+          ],
+          "description": "Only applicable for 10M/100M operations. Only applicable if auto-negotiation is off. Duplex is always set to full for 10G ports. If this parameter is set explicitly on one end of the connection, it must also be set explicitly on the other end. Duplex mismatches will occur if the duplex setting are forced on one end of the connection while the other end attempts to auto-negotiate settings"
+        },
+        "autoNeg": {
+          "type": "boolean",
+          "description": "When auto-negotiation is enabled, duplex and speed settings are ignored (they are set via auto-negotiation). Auto-negotiation is always disabled for 40Gb and 100Gb ports. For 1Gb speeds over copper, auto-negotiation must be enabled, per the IEEE 802.3 specification."
+        },
+        "forceLinkUp": {
+          "type": "boolean",
+          "description": "Forces connection on an optical port. Use this option when an optical GigaPORT tool port is connected to a legacy optical tool that does not transmit light; Available for optical 1Gb/10Gb tool ports; Not available for 10Gb-capable ports with a 1Gb SFP installed. 10Gb-capable optical tool ports only support force-linkup when a 10Gb SFP+ is installed."
+        },
+        "forceLinkUpStatus": {
+          "type": "string",
+          "enum": [
+            "on",
+            "off",
+            "RXon",
+            "on_unsupported"
+          ],
+          "readOnly": true,
+          "description": "Forcelinkup state for the port configured"
+        },
+        "mtu": {
+          "type": "integer",
+          "minimum": 1500,
+          "maximum": 9600
+        },
+        "breakoutMode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "2q",
+            "4x",
+            "na",
+            "4x25g"
+          ],
+          "default": "na",
+          "readOnly": true,
+          "description": "none = port not broken out; na = port not capable of breakout; 4x = 4x10G; 2q = 2x40G",
+          "since": "H 4.7"
+        },
+        "ude": {
+          "$ref": "#/definitions/UnidirectionalEthernet"
+        },
+        "gsparams": {
+          "$ref": "#/definitions/GsparamsResource"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "lastStateTransitionTime": {
+          "type": "integer",
+          "format": "utc-millisecond",
+          "minimum": 0,
+          "readonly": true,
+          "description": "Port state change timestamp in milliseconds"
+        }
+      }
+    },
+    "UnidirectionalEthernet": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unidirectional Ethernet",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Only applicable if 100g-bidi is detected",
+          "default": true
+        }
+      }
+    },
+    "GsparamsResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Gsparams Resource HW limit for engine port",
+      "properties": {
+        "bufferasf": {
+          "$ref": "#/definitions/ResourceBasfRange"
+        },
+        "metadata": {
+          "$ref": "#/definitions/ResourceMdataRange"
+        }
+      }
+    },
+    "ResourceBasfRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min": {
+          "type": "integer",
+          "readonly": true,
+          "minimum": 1,
+          "maximum": 1,
+          "default": 0
+        },
+        "max": {
+          "type": "integer",
+          "readonly": true,
+          "minimum": 1,
+          "maximum": 5,
+          "default": 0
+        },
+        "initial": {
+          "type": "integer",
+          "readonly": true,
+          "minimum": 1,
+          "maximum": 2,
+          "default": 0
+        }
+      }
+    },
+    "ResourceMdataRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min": {
+          "type": "integer",
+          "readonly": true,
+          "minimum": 1,
+          "maximum": 1,
+          "default": 0
+        },
+        "max": {
+          "type": "integer",
+          "readonly": true,
+          "minimum": 1,
+          "maximum": 10,
+          "default": 0
+        },
+        "initial": {
+          "type": "integer",
+          "readonly": true,
+          "minimum": 1,
+          "maximum": 1,
+          "default": 0
+        }
+      }
+    },
+    "GigaPortSfp": {
+      "id": "#/definitions/GigaPortSfp",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Port SFP details",
+      "required": [
+        "sfpType"
+      ],
+      "properties": {
+        "sfpType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "vendorName": {
+          "type": "string",
+          "readOnly": true
+        },
+        "vendorSn": {
+          "type": "string",
+          "readOnly": true
+        },
+        "vendorPn": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "GigaChassisConfigSpec": {
+      "id": "#/definitions/GigaChassisConfigSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Device Chassis Configuration/Update Spec. All the properties on the spec are optional. Only values included in the spec are used for update",
+      "required": [
+        "boxId"
+      ],
+      "properties": {
+        "boxId": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1,
+          "description": "Configure the chassis Box ID value"
+        },
+        "leafConfig": {
+          "$ref": "#/definitions/LeafConfig"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "100G",
+            "100GRight",
+            "100GLeft",
+            "default"
+          ],
+          "default": "default",
+          "description": "Use of 100G ports requires chassis mode value to be 100G. 100G applicable to HC2-v2 only. 100GLeft, Right refers to left, right side chassis bank.",
+          "since": "H 4.7"
+        },
+        "serialNumber": {
+          "type": "string",
+          "description": "Specify Chassis Serial Number (Defaults to the local chassis)"
+        },
+        "chassisType": {
+          "type": "string",
+          "description": "Specify chassis type (to provision offline) valid values: hb1, hc1, hc2, hc2-v2, hc3, hd4-ccv1, hd4-ccv2, hd8-ccv1, hd8-ccv2, ly2r, ta1, ta10, ta10a, ta40, itac, tacx"
+        },
+        "gdp": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable/disable GDP for chassis"
+        },
+        "vxlanId": {
+          "type": "integer",
+          "since": "H 5.8",
+          "minimum": 1,
+          "maximum": 16777215,
+          "description": "for type vxlan maximum value is 16777215 , Value of 0 disables the vxlanId"
+        },
+        "l2greId": {
+          "type": "integer",
+          "since": "H 5.8",
+          "minimum": 1,
+          "maximum": 4294967295,
+          "description": "for type l2gre maximum value is 4294967295 , Value of 0 disables the vxlanId"
+        }
+      }
+    },
+    "GigaCardConfigSpec": {
+      "id": "#/definitions/GigaCardConfigSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Device Card Configuration/Update Spec. All the properties on the spec are optional. Only values included in the spec are used for update",
+      "required": [
+        "slotId"
+      ],
+      "properties": {
+        "slotId": {
+          "type": "string",
+          "description": "device card slot id. used to identify target card. not updatable"
+        },
+        "adminStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "description": "up: bring card up; down: shutdown the card"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "32x",
+            "2q",
+            "48x",
+            "56x",
+            "64x",
+            "0x",
+            "16x"
+          ]
+        },
+        "filterTemplate": {
+          "type": "string",
+          "description": "alias of filter template or 'defaults'.'defaults' is special alias for predefined filter templates",
+          "since": "H 5.0"
+        },
+        "fabricHashAdv": {
+          "type": "boolean",
+          "default": false,
+          "description": "Advanced Fabric Hash. Supported only for Q02X32/Q08 cards",
+          "since": "H 4.8"
+        },
+        "alarmBufferThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 0,
+          "description": "card micro burst threshold",
+          "since": "H 5.4"
+        },
+        "pldUpgrade": {
+          "type": "boolean",
+          "description": "Upgrade PLD image",
+          "since": "H 5.0"
+        }
+      }
+    },
+    "PldInfo": {
+      "id": "#/definitions/PldInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "needUpgrade"
+      ],
+      "properties": {
+        "pldRevision": {
+          "type": "string",
+          "description": "PLD revision"
+        },
+        "needUpgrade": {
+          "type": "boolean"
+        }
+      }
+    },
+    "GigaPortConfigSpec": {
+      "id": "#/definitions/GigaPortConfigSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Device Port Configuration/Update Spec. All the properties (except portId) on the spec are optional. Only values included in the spec are used for update",
+      "required": [
+        "portId"
+      ],
+      "properties": {
+        "portId": {
+          "type": "string",
+          "description": "device port id. used to identify target port."
+        },
+        "alias": {
+          "type": "string",
+          "description": "device port alias"
+        },
+        "portType": {
+          "type": "string",
+          "enum": [
+            "network",
+            "tool",
+            "stack",
+            "inline-net",
+            "inline-tool",
+            "hybrid",
+            "gigasmart",
+            "circuit"
+          ]
+        },
+        "adminStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ]
+        },
+        "configSpeed": {
+          "type": "string",
+          "enum": [
+            "10M",
+            "100M",
+            "1G",
+            "10G",
+            "25G",
+            "40G",
+            "100G"
+          ]
+        },
+        "duplex": {
+          "type": "string",
+          "enum": [
+            "full",
+            "half"
+          ]
+        },
+        "autoNeg": {
+          "type": "boolean"
+        },
+        "forceLinkUp": {
+          "type": "boolean"
+        },
+        "mtu": {
+          "type": "integer",
+          "minimum": 1500,
+          "maximum": 9600
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 512
+        },
+        "breakoutMode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "2q",
+            "4x",
+            "4x25g"
+          ],
+          "since": "H 4.7",
+          "description": "4x = 4x10G; 2q = 2x40G"
+        },
+        "ude": {
+          "$ref": "#/definitions/UnidirectionalEthernet"
+        },
+        "cableLength": {
+          "type": "string",
+          "description": "Attached cable length in meter"
+        }
+      }
+    },
+    "GigaChassissQueryResponse": {
+      "id": "#/definitions/GigaChassissQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "chassisList"
+      ],
+      "properties": {
+        "chassisList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaChassis"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GigaCardQueryResponse": {
+      "id": "#/definitions/GigaCardQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "card"
+      ],
+      "properties": {
+        "card": {
+          "$ref": "#/definitions/GigaCard"
+        }
+      }
+    },
+    "GigaCardsQueryResponse": {
+      "id": "#/definitions/GigaCardsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "cards"
+      ],
+      "properties": {
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaCard"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GigaPortQueryResponse": {
+      "id": "#/definitions/GigaPortQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "port"
+      ],
+      "properties": {
+        "port": {
+          "$ref": "#/definitions/GigaPort"
+        }
+      }
+    },
+    "GigaPortsQueryResponse": {
+      "id": "#/definitions/GigaPortsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "ports"
+      ],
+      "properties": {
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaPort"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

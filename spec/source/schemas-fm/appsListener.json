@@ -1,0 +1,174 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsListener.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Listener schema",
+  "definitions": {
+    "AppsListenerSpec": {
+      "id": "#/definitions/AppsListenerSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias of the listener"
+        },
+        "description": {
+          "type": "string",
+          "description": "Comments if necessary"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "gtp-cups",
+            "tunnel",
+            "tls-pcapng"
+          ],
+          "default": "gtp-cups",
+          "description": "Type of Apps that listen"
+        },
+        "l4": {
+          "$ref": "#/definitions/ListenerL4Spec"
+        },
+        "l3": {
+          "$ref": "#/definitions/L3Spec"
+        },
+        "tcpProfile": {
+          "type": "string",
+          "description": "TCP profile"
+        },
+        "sslProfile": {
+          "type": "string",
+          "description": "SSL profile"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "promiscuous",
+            "interface"
+          ],
+          "default": "interface",
+          "description": "Listen to IP interface or promiscuous mode"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive"
+          ],
+          "readonly": true
+        },
+        "ipInterface": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Alias of IP Interface associated",
+            "readonly": true
+          }
+        },
+        "gsGroupAssociated": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "ListenerL4Spec": {
+      "id": "#/definitions/ListenerL4Spec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "portList",
+        "protocol"
+      ],
+      "properties": {
+        "portList": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "description": "Port lists to listen on"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "tcp",
+            "udp"
+          ],
+          "description": "Protocol used - TCP or UDP"
+        }
+      }
+    },
+    "L3Spec": {
+      "id": "#/definitions/L3Spec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "ipv4",
+            "ipv6",
+            "dual"
+          ],
+          "description": "Protocol used - ipv4 , ipv6 or both"
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 255,
+          "description": "TTL Value to use"
+        },
+        "dscp": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 63,
+          "description": "DSCP Value to use"
+        }
+      }
+    },
+    "AppsListenerQueryResponse": {
+      "id": "#/definitions/AppsListenerQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "appsListener"
+      ],
+      "properties": {
+        "appsListener": {
+          "$ref": "#/definitions/AppsListenerSpec"
+        }
+      }
+    },
+    "AppsListenersQueryResponse": {
+      "id": "#/definitions/AppsListenersQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appsListeners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppsListenerSpec"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

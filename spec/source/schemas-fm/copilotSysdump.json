@@ -1,0 +1,51 @@
+{
+  "id": "http://gigamon.com/schemas-fm/copilotSysdump.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Copilot Sysdump schema",
+  "definitions": {
+    "CopilotSysdumpQueryResponse": {
+      "id": "#/definitions/CopilotSysdumpQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Fm Copilot Sysdump Files",
+      "required": [
+      "sysdumpFiles"
+      ],
+      "properties": {
+        "sysdumpFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CopilotSysdumpFile"
+          },
+          "readOnly": true,
+          "description": "List of copilot sysdump files"
+        }
+      }
+    },
+    "CopilotSysdumpFile": {
+      "id": "#/definitions/CopilotSysdumpFile",
+      "type": "object",
+      "required": [
+        "filename",
+        "timestamp",
+        "size"
+      ],
+      "description": "Available Copilot Sysdump File",
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "The sysdump filename"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "File creation date and time in ISO 8601 format"
+        },
+        "size": {
+          "type": "integer",
+          "description": "The sysdump file size in bytes"
+        }
+      }
+    }
+  }
+}

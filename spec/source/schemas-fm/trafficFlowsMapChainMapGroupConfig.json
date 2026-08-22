@@ -1,0 +1,264 @@
+{
+  "id": "http://gigamon.com/schemas-fm/trafficFlowsPriorityConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Schema for TrafficFlowsPriorityConfig and response wrappers.",
+  "definitions": {
+    "TrafficFlowsPriorityConfig": {
+      "id": "#/definitions/TrafficFlowsPriorityConfig",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceAlias": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priorityConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusteredPriorityConfig"
+          }
+        }
+      },
+      "required": [
+        "alias",
+        "sourceAlias"
+      ],
+      "additionalProperties": false
+    },
+    "ClusteredPriorityConfig": {
+      "id": "#/definitions/ClusteredPriorityConfig",
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "srcPortsAsId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapChainId": {
+          "type": "string"
+        },
+        "orderedComponents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PriorityComponent"
+          },
+          "minItems": 1
+        },
+        "collectorMapAlias": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "clusterName",
+        "srcPortsAsId",
+        "orderedComponents"
+      ],
+      "additionalProperties": false
+    },
+    "TrafficFlowsPriorityConfigListQueryResponse": {
+      "id": "#/definitions/TrafficFlowsPriorityConfigListQueryResponse",
+      "type": "object",
+      "properties": {
+        "sourceMapChains": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TrafficFlowsPriorityConfig"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TrafficFlowsPriorityConfigSingleQueryResponse": {
+      "id": "#/definitions/TrafficFlowsPriorityConfigSingleQueryResponse",
+      "type": "object",
+      "properties": {
+        "sourceMapChain": {
+          "$ref": "#/definitions/TrafficFlowsPriorityConfig"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClusteredPrioritySpec": {
+      "id": "#/definitions/ClusteredPrioritySpec",
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Cluster name, cannot be empty"
+        },
+        "srcPortsAsId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Source ports as ID, cannot be empty"
+        },
+        "mapChainId": {
+          "type": "string",
+          "description": "Map chain ID"
+        },
+        "priorityType": {
+          "type": "string",
+          "description": "Priority type, mandatory"
+        },
+        "component": {
+          "$ref": "#/definitions/PriorityComponent",
+          "description": "Component, mandatory"
+        },
+        "refComponent": {
+          "$ref": "#/definitions/PriorityComponent",
+          "description": "Reference component"
+        }
+      },
+      "required": [
+        "clusterName",
+        "srcPortsAsId",
+        "priorityType",
+        "component"
+      ],
+      "additionalProperties": false
+    },
+    "TrafficFlowsMapPriorityConfig": {
+      "id": "#/definitions/TrafficFlowsMapPriorityConfig",
+      "type": "object",
+      "description": "Schema for TrafficFlowsMapPriorityConfig",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Alias is mandatory, cannot be null or blank"
+        },
+        "sourceAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "SourceAlias is mandatory, cannot be null or blank"
+        },
+        "priorityConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusteredPrioritySpec"
+          },
+          "description": "List of clustered priority specifications"
+        }
+      },
+      "required": [
+        "alias",
+        "sourceAlias"
+      ],
+      "additionalProperties": false
+    },
+    "TrafficFlowsMapGroupConfig": {
+      "id": "#/definitions/TrafficFlowsMapGroupConfig",
+      "type": "object",
+      "description": "TrafficFlowsMapGroupConfig configuration object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceAlias": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapGroupConfig": {
+          "$ref": "#/definitions/ClusteredMapGroupConfig"
+        }
+      },
+      "required": [
+        "alias",
+        "sourceAlias",
+        "mapGroupConfig"
+      ],
+      "additionalProperties": false
+    },
+    "ClusteredMapGroupConfig": {
+      "id": "#/definitions/ClusteredMapGroupConfig",
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapGroupAlias": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comment": {
+          "type": "string"
+        },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/PriorityComponent"
+          }
+        }
+      },
+      "required": [
+        "clusterName",
+        "mapGroupAlias",
+        "components"
+      ],
+      "additionalProperties": false
+    },
+    "PriorityComponent": {
+      "id": "#/definitions/PriorityComponent",
+      "description": "Schema for PriorityComponent representing a component with health and traffic state.",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "components alias is mandatory, it cannot be empty"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "FABRIC_MAP",
+            "TRAFFIC_FLOW",
+            "TRAFFIC_FLOW_SOURCE",
+            "MAP"
+          ]
+        },
+        "sourceAlias": {
+          "type": "string"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        },
+        "trafficHealthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        }
+      },
+      "required": [
+        "alias"
+      ],
+      "additionalProperties": false
+    },
+    "TrafficFlowsMapGroupConfigSingleQueryResponse": {
+      "id": "#/definitions/TrafficFlowsMapGroupConfigSingleQueryResponse",
+      "type": "object",
+      "properties": {
+        "sourceMapGroup": {
+          "$ref": "#/definitions/TrafficFlowsMapGroupConfig"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

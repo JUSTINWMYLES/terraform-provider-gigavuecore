@@ -1,0 +1,38 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gigaInsightNodeHeartBeat.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Insight Node HeartBeat schema",
+  "definitions": {
+    "GigaInsightNodeHeartBeat": {
+      "id": "#/definitions/GigaInsightNodeHeartBeat",
+      "type": "object",
+      "description": "Gigamon Insight Node HeartBeat payload",
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "description": "The node identifier"
+        },
+        "nodeVersion": {
+          "type": "string",
+          "description": "The GigaInsight node version"
+        },
+        "promptBundle": {
+          "type": "object",
+          "description": "The prompt bundle information installed on the node",
+          "properties": {
+            "promptBundleVersion": {
+              "type": "string",
+              "description": "The prompt bundle version installed on the node"
+            },
+            "promptBundleLastUpdatedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The date and time when the prompt bundle was last updated on the node"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

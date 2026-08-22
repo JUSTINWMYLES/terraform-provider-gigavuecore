@@ -1,0 +1,498 @@
+{
+  "id": "http://gigamon.com/schemas-fm/tunnels.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Tunnel Spec Library management schema",
+  "definitions": {
+    "TunnelSpec": {
+      "id": "#/definitions/TunnelSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "VFM Tunnel specification",
+      "since": "v3.2",
+      "properties": {
+        "tunnel": {
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "gre",
+                "vxlan",
+                "l2gre",
+                "udp"
+              ],
+              "description": "Tunnel type"
+            }
+          },
+          "oneOf": [
+            {
+              "$ref": "#/definitions/TunnelGreSpec"
+            },
+            {
+              "$ref": "#/definitions/TunnelVxlanSpec"
+            },
+            {
+              "$ref": "#/definitions/TunnelL2greSpec"
+            },
+            {
+              "$ref": "#/definitions/TunnelUdpSpec"
+            }
+          ]
+        }
+      }
+    },
+    "TunnelGreSpec": {
+      "id": "#/definitions/TunnelGreSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GRE tunnel spec",
+      "since": "v3.2",
+      "required": [
+        "alias",
+        "remoteIP"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Tunnel spec id, auto generated when tunnel spec is created"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel spec alias, user defined"
+        },
+        "remoteIP": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel remote address"
+        },
+        "remoteAddress": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel remote IP or FQDN address. FQDN only applicable if traffic direction is 'out'"
+        },
+        "nodeIfaceSubnetCIDR": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Source Subnet CIDR to be used for this particular destination"
+        },
+        "dscp": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel dscp"
+        },
+        "description": {
+          "type": "string",
+          "description": "Additional information"
+        },
+        "trafficDirection": {
+          "type": "string",
+          "enum": [
+            "in",
+            "out"
+          ],
+          "description": "Tunnel traffic direction. 'in' for traffic coming into FM, 'out' for traffic going out of FM."
+        }
+      }
+    },
+    "TunnelL2greSpec": {
+      "id": "#/definitions/TunnelL2greSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "L2GRE tunnel spec",
+      "since": "v3.2",
+      "required": [
+        "alias",
+        "remoteIP",
+        "trafficDirection",
+        "key"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Tunnel spec id, auto generated when tunnel spec is created"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel spec alias, user defined"
+        },
+        "remoteIP": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel remote address"
+        },
+        "remoteAddress": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel remote IP or FQDN address. FQDN only applicable if traffic direction is 'out'"
+        },
+        "ipVersion": {
+          "type": "string",
+          "minLength": 1,
+          "description": "IP version"
+        },
+        "key": {
+          "type": "integer",
+          "description": "L2gre key"
+        },
+        "dscp": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 63,
+          "description": "Tunnel dscp"
+        },
+        "prec": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7,
+          "description": "IP Precedence"
+        },
+        "flowLabel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048575,
+          "description": "Flow label"
+        },
+        "mtu": {
+          "type": "integer",
+          "minimum": 1280,
+          "maximum": 9600,
+          "description": "MTU"
+        },
+        "ttl": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 255,
+          "description": "Time to Live"
+        },
+        "description": {
+          "type": "string",
+          "description": "Additional information"
+        },
+        "trafficDirection": {
+          "type": "string",
+          "enum": [
+            "in",
+            "out"
+          ],
+          "description": "Tunnel traffic direction. 'in' for traffic coming into FM, 'out' for traffic going out of FM."
+        }
+      }
+    },
+    "TunnelUdpSpec": {
+      "id": "#/definitions/TunnelUdpSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "UDP tunnel spec",
+      "since": "v3.2",
+      "required": [
+        "alias",
+        "remoteIP",
+        "dPort",
+        "sPort"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Tunnel id, auto generated when tunnel is created"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel alias, user defined"
+        },
+        "remoteIP": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel remote address"
+        },
+        "remoteAddress": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel remote IP or FQDN address. FQDN only applicable if traffic direction is 'out'"
+        },
+        "dPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65635,
+          "description": "Tunnel remote port"
+        },
+        "sPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65635,
+          "description": "Tunnel remote port"
+        },
+        "dscp": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 63,
+          "description": "Tunnel dscp"
+        },
+        "prec": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7,
+          "description": "IP Precedence"
+        },
+        "flowLabel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048575,
+          "description": "Flow label"
+        },
+        "mtu": {
+          "type": "integer",
+          "minimum": 1280,
+          "maximum": 9600,
+          "description": "MTU"
+        },
+        "ttl": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 255,
+          "description": "Time to Live"
+        },
+        "description": {
+          "type": "string",
+          "description": "Additional information"
+        },
+        "trafficDirection": {
+          "type": "string",
+          "enum": [
+            "in",
+            "out"
+          ],
+          "description": "Tunnel traffic direction. 'in' for traffic coming into FM, 'out' for traffic going out of FM."
+        }
+      }
+    },
+    "TunnelVxlanSpec": {
+      "id": "#/definitions/TunnelVxlanSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "VXLAN tunnel spec",
+      "since": "v3.2",
+      "required": [
+        "alias",
+        "remoteIP",
+        "dPort",
+        "vni"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Tunnel id, auto generated when tunnel is created"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel alias, user defined"
+        },
+        "remoteIP": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel remote address"
+        },
+        "remoteAddress": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel remote IP or FQDN address. FQDN only applicable if traffic direction is 'out'"
+        },
+        "dscp": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 63,
+          "description": "Tunnel dscp"
+        },
+        "prec": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7,
+          "description": "IP Precedence"
+        },
+        "flowLabel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048575,
+          "description": "Flow label"
+        },
+        "mtu": {
+          "type": "integer",
+          "minimum": 1280,
+          "maximum": 9600,
+          "description": "MTU"
+        },
+        "ttl": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 255,
+          "description": "Time to Live"
+        },
+        "dPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65635,
+          "description": "Tunnel remote port"
+        },
+        "sPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65635,
+          "description": "Tunnel remote port"
+        },
+        "vni": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777215,
+          "description": "VxLAN Network Identifier"
+        },
+        "description": {
+          "type": "string",
+          "description": "Additional information"
+        },
+        "trafficDirection": {
+          "type": "string",
+          "enum": [
+            "in",
+            "out"
+          ],
+          "description": "Tunnel traffic direction. 'in' for traffic coming into FM, 'out' for traffic going out of FM."
+        }
+      }
+    },
+    "TunnelStateProbesRequest": {
+      "id": "#/definitions/TunnelStateProbesRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tunnel State Probe Request",
+      "since": "v3.3",
+      "required": [
+        "specs"
+      ],
+      "properties": {
+        "specs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunnelStateProbeRequest"
+          }
+        }
+      }
+    },
+    "TunnelStateProbeRequest": {
+      "id": "#/definitions/TunnelStateProbeRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tunnel State Probe Request",
+      "since": "v3.3",
+      "required": [
+        "nodeId",
+        "actionType",
+        "destAddress"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Uuid of the Source node('gvm' or 'v series')"
+        },
+        "actionType": {
+          "type": "string",
+          "enum": [
+            "ping",
+            "arping",
+            "traceroute"
+          ],
+          "description": "method to probe the tunnel state with"
+        },
+        "destAddress": {
+          "type": "string",
+          "description": "Target Tunnel destination address"
+        }
+      }
+    },
+    "TunnelStateProbeResult": {
+      "id": "#/definitions/TunnelStateProbeResult",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tunnel state probe action result",
+      "since": "v3.2",
+      "required": [
+        "nodeId",
+        "nodeName",
+        "stateCode",
+        "stateMsg"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Uuid of the Source node('gvm' or 'v series')"
+        },
+        "nodeName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the Source node('gvm' or 'v series')"
+        },
+        "stateCode": {
+          "type": "string",
+          "enum": [
+            "success",
+            "failed",
+            "invalidPingParams",
+            "failedUnknownReason"
+          ],
+          "description": "Tunnel state probe action code. success (0); action failed (1); ping parameters invalid (2); unknown reason (-1)"
+        },
+        "stateMsg": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tunnel state probe action message"
+        }
+      }
+    },
+    "TunnelSpecQueryResponse": {
+      "id": "#/definitions/TunnelSpecQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "tunnelSpec"
+      ],
+      "properties": {
+        "tunnelSpec": {
+          "$ref": "#/definitions/TunnelSpec"
+        }
+      }
+    },
+    "TunnelSpecsQueryResponse": {
+      "id": "#/definitions/TunnelSpecsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "tunnelSpecs"
+      ],
+      "properties": {
+        "tunnelSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunnelSpec"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

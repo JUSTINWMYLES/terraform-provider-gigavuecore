@@ -1,0 +1,603 @@
+{
+  "id": "http://gigamon.com/schemas-fm/clusterConfigImageUpgradeStatus.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Cluster Image Upgrade Status Schema",
+  "definitions": {
+    "clustersImageUpgradeStatusQueryResponse": {
+      "id": "#/definitions/clustersImageUpgradeStatusQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clustersStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/clusterImageUpgradeStatus"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "clusterImageUpgradeStatusQueryResponse": {
+      "id": "#/definitions/clusterImageUpgradeStatusQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clusterImageUpgradeStatus": {
+          "$ref": "#/definitions/clusterImageUpgradeStatus"
+        }
+      }
+    },
+    "imageUpgradeTaskStatusQueryResponse": {
+      "id": "#/definitions/imageUpgradeTaskStatusQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "upgradeTaskStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/imageUpgradeStatus"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "imageUpgradeStatusQueryResponse": {
+      "id": "#/definitions/imageUpgradeStatusQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "clusterImageUpgradeStatus": {
+          "$ref": "#/definitions/imageUpgradeStatus"
+        }
+      }
+    },
+    "imageUpgradeStatus": {
+      "id": "#/definitions/imageUpgradeStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "image upgrade status ",
+      "properties": {
+        "taskName": {
+          "type": "string",
+          "description": "name of the task"
+        },
+        "taskGroupId": {
+          "type": "string",
+          "description": "system generated id"
+        },
+        "numNodes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "total number of nodes"
+        },
+        "numNodesSuccess": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "total number of nodes success state "
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "InProgress",
+            "Partial Success",
+            "Success",
+            "Failed"
+          ],
+          "description": "Image Upgrade Status"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Start Time in UTC format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "End Time in UTC format"
+        },
+        "multiUpgradeStatus": {
+          "type": "array",
+          "default": null,
+          "items": {
+            "$ref": "#/definitions/clusterImageUpgradeStatus"
+          },
+          "description": "list of the upgrade Status"
+        }
+      }
+    },
+    "clusterImageUpgradeStatus": {
+      "id": "#/definitions/clusterImageUpgradeStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "cluster Image upgrade status ",
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "description": "taskId of the task"
+        },
+        "taskName": {
+          "type": "string",
+          "description": "name of the task"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "Start Time in UTC format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "End Time in UTC format"
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "Id of the Target cluster"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "Not Started",
+            "Initial Validation Complete",
+            "Image Install Complete",
+            "Reload Complete",
+            "Version Verification Complete",
+            "Uboot Install Complete",
+            "Upgrade Completion",
+            "Sanity Check",
+            "Success",
+            "Failed"
+          ],
+          "description": "Cluster Image Upgrade Status"
+        },
+        "upgradeSummary": {
+          "id": "#/definitions/upgradeSummary",
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Cluster upgrade Summary",
+          "properties": {
+            "numInitialValidationComplete": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of items in the initial validation complete state"
+            },
+            "numInstallComplete": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of items in the installation complete state"
+            },
+            "numReloadComplete": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of items in the reload complete state"
+            },
+            "numVerificationComplete": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of items in the verification complete state"
+            },
+            "numUbootComplete": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of items in the Uboot complete state"
+            },
+            "numUpgradeComplete": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of items in the upgrade complete state"
+            },
+            "numNodesSuccess": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of items in the nodes success state "
+            }
+          }
+        },
+        "objectCountsExpected": {
+          "id": "#/definitions/objectCountsExpected",
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Cluster objectCounts Expected",
+          "properties": {
+            "nodes": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of nodes"
+            },
+            "cardsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of cards in up state"
+            },
+            "networkPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of network ports in up state"
+            },
+            "toolPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of tool ports in up state"
+            },
+            "hybridPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of hybrid ports in up state"
+            },
+            "circuitPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of circuit ports in up state"
+            },
+            "inlineNetworkPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of inlineNetwork ports in up state "
+            },
+            "inlineToolPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of inlineTool ports in up state "
+            },
+            "stackPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of stack ports in up state"
+            },
+            "gigasmartPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of gigasmart ports in up state"
+            },
+            "stackLinks": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of stacklinks"
+            },
+            "maps": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of maps"
+            },
+            "gsops": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of gigasmart operations"
+            }
+          }
+        },
+        "objectCounts": {
+          "id": "#/definitions/objectCounts",
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Cluster objectCounts",
+          "properties": {
+            "nodes": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of nodes"
+            },
+            "cardsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of cards in up state"
+            },
+            "networkPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of network ports in up state"
+            },
+            "toolPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of tool ports in up state"
+            },
+            "hybridPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of hybrid ports in up state"
+            },
+            "circuitPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of circuit ports in up state"
+            },
+            "inlineNetworkPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of inlineNetwork ports in up state "
+            },
+            "inlineToolPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of inlineTool ports in up state "
+            },
+            "stackPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of stack ports in up state"
+            },
+            "gigasmartPortsUp": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of gigasmart ports in up state"
+            },
+            "stackLinks": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of stacklinks"
+            },
+            "maps": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of maps"
+            },
+            "gsops": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "total number of gigasmart operations"
+            }
+          }
+        },
+        "objectDiffReport": {
+          "id": "#/definitions/objectDiffReport",
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Cluster object Diff report",
+          "properties": {
+            "nodeDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in nodes"
+            },
+            "cardsUpDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in cards in up state"
+            },
+            "networkPortsUpDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in network ports in up state"
+            },
+            "toolPortsUpDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in tool ports in up state"
+            },
+            "hybridPortsUpDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in hybrid ports in up state"
+            },
+            "circuitPortsUpDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in circuit ports in up state"
+            },
+            "inlineNetworkPortsUpDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in inlineNetwork ports in up state "
+            },
+            "inlineToolPortsUpDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in inlineTool ports in up state "
+            },
+            "stackPortsUpDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in stack ports in up state"
+            },
+            "gigasmartPortsUpDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in gigasmart ports in up state"
+            },
+            "stackLinksDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in stacklinks"
+            },
+            "mapsDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in maps"
+            },
+            "gsopDifferences": {
+              "type": "array",
+              "default": null,
+              "items": {
+                "$ref": "#/definitions/ObjectDiffEntry"
+              },
+              "description": "Diff in gigasmart operations"
+            }
+          }
+        },
+        "clusterLog": {
+          "type": "array",
+          "default": null,
+          "items": {
+            "$ref": "#/definitions/ScheduledTaskLogRecord"
+          },
+          "description": "list of the cluster Log"
+        },
+        "nodeUpgradeStatus": {
+          "type": "array",
+          "default": null,
+          "items": {
+            "$ref": "#/definitions/NodeUpgradeStatusSpec"
+          },
+          "description": "list of the nodeUpgrade status"
+        }
+      }
+    },
+    "ObjectDiffEntry": {
+      "id": "#/definitions/objectDiffEntry",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Object Differences Entry",
+      "properties": {
+        "objectName": {
+          "type": "string",
+          "description": "alias of the object"
+        },
+        "prevState": {
+          "type": "string",
+          "description": "previous state of the object"
+        },
+        "afterState": {
+          "type": "string",
+          "description": "next state of the object"
+        }
+      }
+    },
+    "ScheduledTaskLogRecord": {
+      "id": "#/definitions/scheduledTaskLogRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "scheduled Task Log Record",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "Id of the Target cluster"
+        },
+        "nodeId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "unique ID representing device. This will be available only for nodeLog"
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "In ISO-8601 date format 'yyyy-MM-dd'T'HH:mm:ssZ'"
+        },
+        "message": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Read-only. Describes the reason for image upgrade state"
+        }
+      }
+    },
+    "NodeUpgradeStatusSpec": {
+      "id": "#/definitions/nodeUpgradeStatusSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "nodeUpgrade Status",
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "unique ID representing device. This will be available in nodeLog"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "hostname or IP address"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "Not Started",
+            "Upgrading",
+            "Sanity Check",
+            "Success",
+            "Failed"
+          ],
+          "description": "node upgrade status"
+        },
+        "numStepsInTask": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "total number of steps in task"
+        },
+        "currentStep": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "current step number of task"
+        },
+        "stepStatus": {
+          "type": "string",
+          "description": "Describes the status of current step "
+        },
+        "priorVersion": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Device Version before upgrade"
+        },
+        "currentVersion": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Current Device Version "
+        },
+        "fileName": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Image filename"
+        },
+        "fileServer": {
+          "type": "string",
+          "readOnly": true,
+          "description": "IpAddress of the Destination Image file server "
+        },
+        "nodeLog": {
+          "type": "array",
+          "default": null,
+          "items": {
+            "$ref": "#/definitions/ScheduledTaskLogRecord"
+          },
+          "description": "list of the node Log"
+        }
+      }
+    }
+  }
+}

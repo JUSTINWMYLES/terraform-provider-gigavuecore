@@ -1,0 +1,110 @@
+{
+  "id": "http://gigamon.com/schemas-fm/spineLinks.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Spine-links Configuration schema",
+  "definitions": {
+    "SpineLinkQueryResponse": {
+      "id": "#/definitions/SpineLinkQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "spine-links configuration parameters",
+      "properties": {
+        "spineLinks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpineLink"
+          }
+        }
+      }
+    },
+    "SpineLink": {
+      "id": "#/definitions/SpineLink",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "spine-link configuration",
+      "required": [
+        "alias",
+        "leafBoxId",
+        "links"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "readonly": true
+        },
+        "comment": {
+          "type": "string",
+          "readonly": true
+        },
+        "leafBoxId": {
+          "type": "integer",
+          "readonly": true,
+          "description": "box-id of the leaf node this spineLink is configured on"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpineLinkElement"
+          },
+          "readonly": true,
+          "description": "List of links from this Leaf node to the Spine Nodes"
+        }
+      }
+    },
+    "SpineLinkElement": {
+      "id": "#/definitions/SpineLinkElement",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "leafGigastream"
+      ],
+      "properties": {
+        "leafGigastream": {
+          "type": "string",
+          "readonly": true,
+          "description": "leaf node stack gigastream alias"
+        },
+        "spineBoxId": {
+          "type": "integer",
+          "readonly": true,
+          "description": "box-id of the spine nodes this spineLink is connected to"
+        },
+        "spineGigastream": {
+          "type": "string",
+          "readonly": true,
+          "description": "spine node gigastream alias"
+        },
+        "stackLink": {
+          "type": "string",
+          "readonly": true,
+          "description": "Alias of the Stack Link this Spine Link is running over. Will be empty if corresponding StackLink is not yet created"
+        }
+      }
+    },
+    "SpineLinkConfig": {
+      "id": "#/definitions/SpineLinkConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "spine-link configuration",
+      "required": [
+        "alias",
+        "gigastreams"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "gigastreams": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "leaf node stack gigastream aliases"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

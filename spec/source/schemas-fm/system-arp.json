@@ -1,0 +1,93 @@
+{
+  "definitions": {
+    "SystemArpEntry": {
+      "id": "#/definitions/SystemArpEntry",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "ip address"
+        },
+        "hwAddress": {
+          "type": "string",
+          "description": "hardware address"
+        },
+        "age": {
+          "type": "string",
+          "format": "partial-time",
+          "description": "Age in ISO-8601 partial-time format (time-hour : time-minute : time-second)"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "reachable",
+            "notReachable",
+            "inProgress"
+          ]
+        },
+        "iface": {
+          "type": "string",
+          "description": "interface name"
+        }
+      }
+    },
+    "SystemArpRefreshIntervalQueryResponse": {
+      "id": "#/definitions/SystemArpRefreshIntervalQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "systemArpRefreshInterval": {
+          "$ref": "#/definitions/SystemArpAgeingTimer"
+        }
+      }
+    },
+    "SystemArpAgeingTimer": {
+      "id": "#/definitions/SystemArpAgeingTimer",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "arpRefreshInterval": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 3,
+          "maximum": 30,
+          "default": 30,
+          "description": "System Arp Refresh Interval in Seconds"
+        }
+      }
+    },
+    "Ipv6NeighborsQueryResponse": {
+      "id": "#/definitions/Ipv6NeighborsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "arpEntries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SystemArpEntry"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SystemArpQueryResponse": {
+      "id": "#/definitions/SystemArpQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "arpEntries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SystemArpEntry"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

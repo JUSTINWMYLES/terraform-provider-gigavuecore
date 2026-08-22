@@ -1,0 +1,57 @@
+{
+  "id": "http://gigamon.com/schemas-fm/cdaAuditReport.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Customer Deployed Assets Report Schema",
+  "definitions": {
+    "CdaAuditReportInfo": {
+      "id": "#/definitions/CdaAuditReportInfo",
+      "type": "object",
+      "since": "FM 6.13",
+      "additionalProperties": false,
+      "required": [
+        "fileName",
+        "createdDate",
+        "createdBy",
+        "fileSize"
+      ],
+      "properties": {
+        "fileName": {
+          "type": "string",
+          "description": "Name of the CDA Audit Report"
+        },
+        "createdDate": {
+          "type": "string",
+          "description": "Created Time of the CDA Audit Report"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "FM user who has created the CDA Audit Report"
+        },
+        "fileSize": {
+          "type": "string",
+          "description": "CDA Audit Report file size"
+        }
+      }
+    },
+    "CdaReportQueryResponse": {
+      "id": "#/definitions/CdaReportQueryResponse",
+      "type": "object",
+      "since": "FM 6.13",
+      "additionalProperties": false,
+      "required": [
+        "cdaAuditReportInfo"
+      ],
+      "properties": {
+        "fmUserTokenEntities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CdaAuditReportInfo"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

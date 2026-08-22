@@ -1,0 +1,492 @@
+{
+  "id": "http://gigamon.com/schemas-fm/acme.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "FmAcmeServerConfigDetails": {
+      "id": "#/definitions/FmAcmeServerConfigDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fmAcmeServerConfigDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AcmeServerConfigDetails"
+          }
+        }
+      }
+    },
+    "AcmeServerConfigDetails": {
+      "id": "#/definitions/AcmeServerConfigDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "acmeServerUrl": {
+          "type": "string"
+        },
+        "acmeEnabled": {
+          "type": "boolean",
+          "default": "False"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      }
+    },
+    "FmAcmeCertDetails": {
+      "id": "#/definitions/FmAcmeCertDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "acmeCertificate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmAcmeCertificateDetails"
+          }
+        }
+      }
+    },
+    "FmAcmeCertificateDetails": {
+      "id": "#/definitions/FmAcmeCertificateDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "acmeServerAlias",
+        "domain"
+      ],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "domain name can be FM IP or FQDN"
+        },
+        "acmeServerAlias": {
+          "type": "string"
+        },
+        "algorithm": {
+          "enum": [
+            "rsa-2048",
+            "rsa-4096",
+            "prime256v1",
+            "secp384r1"
+          ],
+          "default": "rsa-4096",
+          "type": "string"
+        },
+        "renewDays": {
+          "type": "integer",
+          "description": "default will be 1/3rd of certificate validity period"
+        }
+      }
+    },
+    "AcmeCertificateTaskRecord": {
+      "id": "#/definitions/AcmeCertificateTaskRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "acmeCertificate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AcmeCertDetails"
+          }
+        }
+      }
+    },
+    "AcmeCertDetails": {
+      "id": "#/definitions/AcmeCertDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "domain name will be FM IP or FQDN"
+        },
+        "taskId": {
+          "type": "string"
+        },
+        "issuedCertDetails": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "acmeServerAlias": {
+              "type": "string"
+            },
+            "algorithm": {
+              "enum": [
+                "rsa-2048",
+                "rsa-4096",
+                "prime256v1",
+                "secp384r1"
+              ],
+              "default": "rsa-4096",
+              "type": "string"
+            },
+            "nextRenew": {
+              "type": "string"
+            },
+            "expiry": {
+              "type": "string"
+            },
+            "firstIssued": {
+              "type": "string",
+              "description": "Date of the first issued certificate for FM"
+            },
+            "lastSuccessRenew": {
+              "type": "string"
+            },
+            "lastFailedRenew": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "InProgress",
+                "Success",
+                "Failure"
+              ]
+            },
+            "renewDays": {
+              "type": "string",
+              "description": "only user Configured renewal days is shown"
+            },
+            "taskGroupId": {
+              "type": "string"
+            }
+          }
+        },
+        "certLastRequestStatus": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "domain name can be FM IP or FQDN"
+            },
+            "acmeServerAlias": {
+              "type": "string",
+              "description": "only for issue acmeServerAlias details will be shown"
+            },
+            "requestType": {
+              "type": "string",
+              "enum": [
+                "issue",
+                "renew",
+                "revoke"
+              ]
+            },
+            "certStatus": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "AcmeCertificateDetails": {
+      "id": "#/definitions/AcmeCertificateDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "acmeCertificate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AcmeConfigDetails"
+          }
+        }
+      }
+    },
+    "GigaDeviceAcmeCertDetails": {
+      "id": "#/definitions/GigaDeviceAcmeCertDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "acmeCertificate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceAcmeCertDetails"
+          }
+        }
+      }
+    },
+    "DeviceAcmeCertDetails": {
+      "id": "#/definitions/DeviceAcmeCertDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "acmeServerUrl"
+      ],
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "acmeServerUrl": {
+          "type": "string"
+        },
+        "algorithm": {
+          "enum": [
+            "rsa-2048",
+            "rsa-4096",
+            "ec-prime256v1",
+            "ec-secp384r1"
+          ],
+          "default": "CLASSIC - rsa-2048 , FIPS- ec-prime256v1",
+          "type": "string"
+        },
+        "renewDays": {
+          "type": "integer",
+          "description": "default will be 1/3rd of certificate validity period"
+        }
+      }
+    },
+    "ClusterAcmeCertificateDetails": {
+      "id": "#/definitions/ClusterAcmeCertificateDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "acmeCertificate": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AcmeConfigDetails"
+          }
+        }
+      }
+    },
+    "AcmeConfigDetails": {
+      "id": "#/definitions/AcmeConfigDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain"
+      ],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "domain name can be FM IP or FQDN"
+        }
+      }
+    },
+    "GigaDeviceAcmeSpecResponse": {
+      "id": "#/definitions/GigaDeviceAcmeSpecResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "certificateInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaDeviceAcmeSpec"
+          }
+        }
+      }
+    },
+    "GigaDeviceAcmeResponse": {
+      "id": "#/definitions/GigaDeviceAcmeResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "boxId": {
+          "type": "string"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "issuedCert": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "domain": {
+              "type": "string"
+            },
+            "acmeCaUrl": {
+              "type": "string"
+            },
+            "acmeService": {
+              "type": "string"
+            },
+            "algorithm": {
+              "enum": [
+                "rsa-2048",
+                "rsa-4096",
+                "ec-prime256v1",
+                "ec-secp384r1"
+              ],
+              "default": "CLASSIC - rsa-2048 , FIPS- ec-prime256v1",
+              "type": "string"
+            },
+            "nextRenew": {
+              "type": "string"
+            },
+            "expiry": {
+              "type": "string"
+            },
+            "firstIssued": {
+              "type": "string"
+            },
+            "lastSuccessRenew": {
+              "type": "string"
+            },
+            "lastFailedRenew": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "certName": {
+              "type": "string"
+            },
+            "renewDays": {
+              "type": "integer",
+              "description": "default will be 1/3rd of certificate validity period"
+            }
+          }
+        },
+        "lastAcmeRequest": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "domainName": {
+              "type": "string"
+            },
+            "acmeCaUrl": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "issue",
+                "renew",
+                "revoke"
+              ]
+            },
+            "status": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "AcmeGlobalConfigDetails": {
+      "id": "#/definitions/AcmeGlobalConfigDetails",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "acmeServerUrl",
+        "operationType"
+      ],
+      "properties": {
+        "acmeServerUrl": {
+          "type": "string"
+        },
+        "operationType": {
+          "enum": [
+            "issue",
+            "renew",
+            "revoke",
+            "clear"
+          ],
+          "type": "string"
+        },
+        "algorithm": {
+          "enum": [
+            "rsa-2048",
+            "rsa-4096",
+            "ec-prime256v1",
+            "ec-secp384r1"
+          ],
+          "type": "string",
+          "default": "CLASSIC - rsa-2048 , FIPS- ec-prime256v1"
+        },
+        "renewDays": {
+          "type": "integer",
+          "description": "default will be 1/3rd of certificate validity period"
+        }
+      }
+    },
+    "GigaDeviceAcmeSpec": {
+      "id": "#/definitions/GigaDeviceAcmeSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "boxId": {
+          "type": "string"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "issuedCert": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "domain": {
+              "type": "string"
+            },
+            "acmeCaUrl": {
+              "type": "string"
+            },
+            "acmeService": {
+              "type": "string"
+            },
+            "algorithm": {
+              "enum": [
+                "rsa-2048",
+                "rsa-4096",
+                "ec-prime256v1",
+                "ec-secp384r1"
+              ],
+              "default": "CLASSIC - rsa-2048 , FIPS- ec-prime256v1",
+              "type": "string"
+            },
+            "nextRenew": {
+              "type": "string"
+            },
+            "expiry": {
+              "type": "string"
+            },
+            "firstIssued": {
+              "type": "string"
+            },
+            "lastSuccessRenew": {
+              "type": "string"
+            },
+            "lastFailedRenew": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "certName": {
+              "type": "string"
+            },
+            "renewDays": {
+              "type": "integer",
+              "description": "default will be 1/3rd of certificate validity period"
+            }
+          }
+        },
+        "lastAcmeRequest": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "domainName": {
+              "type": "string"
+            },
+            "acmeCaUrl": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "issue",
+                "renew",
+                "revoke"
+              ]
+            },
+            "status": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

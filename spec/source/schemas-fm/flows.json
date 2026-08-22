@@ -1,0 +1,801 @@
+{
+  "id": "http://gigamon.com/schemas-fm/flows.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon flows schema",
+  "definitions": {
+    "flows": {
+      "id": "#definitions/flows",
+      "type": "object",
+      "ApplicationFlowType": {
+        "type": "string",
+        "enum": [
+          "regular",
+          "regularWithApp",
+          "prioritizedFlow"
+        ],
+        "description": "Discriminator for Flow subtypes"
+      },
+      "FlowBase": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "alias",
+          "type"
+        ],
+        "properties": {
+          "alias": {
+            "type": "string",
+            "description": "Unique flow alias"
+          },
+          "type": {
+            "$ref": "#/definitions/flows/ApplicationFlowType"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+            }
+          }
+        }
+      },
+      "RegularFlow": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/flows/FlowBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "regular"
+                ]
+              },
+              "encapTunnel": {
+                "type": "object",
+                "$ref": "#/definitions/EncapTunnel",
+                "description": "Detailed definition of this encap tunnel"
+              },
+              "destinations": {
+                "type": "array",
+                "items": {
+                  "$ref": "trafficEndpoint.json#/definitions/trafficEndpoint-update",
+                  "description": "Detailed definition of this destinations"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RegularFlowWithApp": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/flows/FlowBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "regularWithApp"
+                ]
+              },
+              "application": {
+                "type": "object",
+                "$ref": "#/definitions/Application",
+                "description": "Detailed definition of this application"
+              },
+              "encapTunnel": {
+                "type": "object",
+                "$ref": "#/definitions/EncapTunnel",
+                "description": "Detailed definition of this encap tunnel"
+              },
+              "destinations": {
+                "type": "array",
+                "items": {
+                  "$ref": "trafficEndpoint.json#/definitions/trafficEndpoint-update",
+                  "description": "Detailed definition of this destinations"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PrioritizedAppFlows": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/flows/FlowBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "PrioritizedAppFlows"
+                ]
+              },
+              "applicationFlows": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/ApplicationFlows-update",
+                  "description": "Detailed definition of this application Flows"
+                }
+              },
+              "globalApplicationFlowConfig": {
+                "type": "object",
+                "$ref": "#/definitions/Application",
+                "description": "Detailed definition of this globalApplicationFlowConfig"
+              }
+            }
+          }
+        ]
+      },
+      "Flow": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/flows/RegularFlow"
+          },
+          {
+            "$ref": "#/definitions/flows/RegularFlowWithApp"
+          },
+          {
+            "$ref": "#/definitions/flows/PrioritizedAppFlows"
+          }
+        ]
+      }
+    },
+
+    "flows-get": {
+      "ApplicationFlowType": {
+        "type": "string",
+        "enum": [
+          "regular",
+          "regularWithApp",
+          "prioritizedFlow"
+        ],
+        "description": "Discriminator for Flow subtypes"
+      },
+      "FlowBase": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "alias",
+          "type"
+        ],
+        "properties": {
+          "alias": {
+            "type": "string",
+            "description": "Unique flow alias"
+          },
+          "type": {
+            "$ref": "#/definitions/flows/ApplicationFlowType"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+            }
+          },
+          "healthState": {
+            "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+            "readonly": true
+          },
+          "healthStateReasons": {
+            "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+            "readonly": true
+          }
+        }
+      },
+      "RegularFlow": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/flows/FlowBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "regular"
+                ]
+              },
+              "encapTunnel": {
+                "type": "object",
+                "$ref": "#/definitions/EncapTunnel",
+                "description": "Detailed definition of this encap tunnel"
+              },
+              "destinations": {
+                "type": "array",
+                "items": {
+                  "$ref": "trafficEndpoint.json#/definitions/trafficEndpoint-get",
+                  "description": "Detailed definition of this destinations"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RegularFlowWithApp": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/flows/FlowBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "regularWithApp"
+                ]
+              },
+              "application": {
+                "type": "object",
+                "$ref": "#/definitions/Application",
+                "description": "Detailed definition of this application"
+              },
+              "encapTunnel": {
+                "type": "object",
+                "$ref": "#/definitions/EncapTunnel",
+                "description": "Detailed definition of this encap tunnel"
+              },
+              "destinations": {
+                "type": "array",
+                "items": {
+                  "$ref": "trafficEndpoint.json#/definitions/trafficEndpoint-get",
+                  "description": "Detailed definition of this destinations"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PrioritizedAppFlows": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/flows/FlowBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "PrioritizedAppFlows"
+                ]
+              },
+              "applicationFlows": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/ApplicationFlows-get",
+                  "description": "Detailed definition of this application Flows"
+                }
+              },
+              "globalApplicationFlowConfig": {
+                "type": "object",
+                "$ref": "#/definitions/Application",
+                "description": "Detailed definition of this globalApplicationFlowConfig"
+              }
+            }
+          }
+        ]
+      },
+      "Flow": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/flows/RegularFlow"
+          },
+          {
+            "$ref": "#/definitions/flows/RegularFlowWithApp"
+          },
+          {
+            "$ref": "#/definitions/flows/PrioritizedAppFlows"
+          }
+        ]
+      }
+    },
+
+    "EncapTunnel": {
+      "id": "#/definitions/EncapTunnel",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "clusterId"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "encap alias"
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "cluster Id"
+        }
+      }
+    },
+    "Application": {
+      "id": "#/definitions/Application",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clusterId",
+        "gsGroupAlias"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "cluster Id"
+        },
+        "gsGroupAlias": {
+          "type": "string",
+          "description": "gsGroup Alias"
+        },
+        "gsopAlias": {
+          "type": "string",
+          "description": "gsop Alias"
+        },
+        "vportAlias": {
+          "type": "string",
+          "description": "vport Alias"
+        },
+        "enginePorts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gsgroupParams": {
+          "type": "object",
+          "$ref": "../schemas-fm/smart.json#/definitions/GsGroupParams"
+        },
+        "gsop": {
+          "type": "object",
+          "$ref": "../schemas-fm/smart.json#/definitions/GigasmartOp"
+        },
+        "virtualPort": {
+          "type": "object",
+          "$ref": "../schemas-fm/smart.json#/definitions/Vport"
+        },
+        "appDependantComponents": {
+          "type": "object",
+          "$ref": "#/definitions/applicationDependantComponents"
+        }
+      }
+    },
+    "ApplicationFlows-get": {
+      "id": "#/definitions/ApplicationFlows-get",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "application"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Uniquely identify each subFlow"
+        },
+        "application": {
+          "type": "object",
+          "$ref": "#/definitions/Application",
+          "description": "Detailed definition of this application"
+        },
+        "fstype": {
+          "type": "object",
+          "$ref": "map.json#/definitions/Fstype",
+          "description": "This field is only valid for 'secondLevel/flowSample', 'secondLevel/flowSampleOverlap', secondLevel/flowSample5g', secondLevel/flowSample5gOverlap' map types"
+        },
+        "encapTunnel": {
+          "type": "object",
+          "$ref": "#/definitions/EncapTunnel",
+          "description": "Detailed definition of this encap tunnel"
+        },
+        "appConfigRules": {
+          "type": "object",
+          "$ref": "#/definitions/AppConfigRules",
+          "description": "Detailed definition of this appConfigRules"
+        },
+        "apRules": {
+          "$ref": "map.json#/definitions/MapApRules",
+          "description": "Pass and Drop Application Profile rules"
+        },
+        "ruleMatching": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "blacklist"
+          ],
+          "default": "normal",
+          "description": "If set to 'blacklist', packet are passed when no 'drop' rules are matched. This field is only valid for 'regular/byRule' map types. (maps into 'no-rule-match' CLI command)"
+        },
+        "inlineTrafficType": {
+          "type": "string",
+          "enum": [
+            "symmetric",
+            "asymmetric"
+          ],
+          "description": "Only applicable for 'inline/passAll' map types, in which case defaults to 'symmetric'. For 'asymmetric' maps, 'srcPort' must be of type 'inline-net'"
+        },
+        "inlineTrafficPath": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "bypass",
+            "oneArm",
+            "natPat"
+          ],
+          "description": "Only applicable for 'inline' map types, in which case defaults to 'normal'. When set to 'bypass', the 'dstPorts' must be empty"
+        },
+        "trafficType": {
+          "type": "string",
+          "enum": [
+            "control",
+            "user"
+          ],
+          "since": "H 4.5",
+          "description": "Only applicable for 'firstLevel/byRule' map types, in which case defaults to 'user'"
+        },
+        "ruleType": {
+          "type": "string",
+          "enum": [
+            "byRule",
+            "passAll",
+            "collector",
+            "flowFilter",
+            "flowSample",
+            "flowWhitelist",
+            "flowSampleOverlap",
+            "flowWhitelistOverlap",
+            "ingressToVp",
+            "egressFromVp",
+            "oobFromVp",
+            "flowSampleSip",
+            "flowWhitelistSip",
+            "flowSampleDiameter",
+            "flowWhitelistDiameter",
+            "flowSample5g",
+            "flowWhitelist5g",
+            "flowSample5gOverlap",
+            "flowWhitelist5gOverlap",
+            "networkEnd",
+            "inlinePair"
+          ],
+          "default": "byRule",
+          "description": "'byRule' is applicable to all map types; 'collector' is applicable to 'regular', 'inline', 'flexInline' and 'secondLevel' maps; 'passAll' is applicable to 'regular' and 'inline' maps; 'flowFilter', 'flowSample', 'flowWhitelist', 'flowSampleSip', 'flowWhitelistSip', 'flowSampleDiameter', 'flowWhitelistDiameter', 'flowSampleOverlap', 'flowWhitelistOverlap', 'flowSample5g','flowWhitelist5g','flowSample5gOverlap' and 'flowWhitelist5gOverlap' are applicable to 'secondLevel' maps"
+        },
+        "destinations": {
+          "type": "array",
+          "items": {
+            "$ref": "trafficEndpoint.json#/definitions/trafficEndpoint-get",
+            "description": "Detailed definition of this destinations"
+          }
+        }
+      }
+    },
+    "ApplicationFlows-update": {
+      "id": "#/definitions/ApplicationFlows-update",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "application"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Uniquely identify each subFlow"
+        },
+        "application": {
+          "type": "object",
+          "$ref": "#/definitions/Application",
+          "description": "Detailed definition of this application"
+        },
+        "fstype": {
+          "type": "object",
+          "$ref": "map.json#/definitions/Fstype",
+          "description": "This field is only valid for 'secondLevel/flowSample', 'secondLevel/flowSampleOverlap', secondLevel/flowSample5g', secondLevel/flowSample5gOverlap' map types"
+        },
+        "encapTunnel": {
+          "type": "object",
+          "$ref": "#/definitions/EncapTunnel",
+          "description": "Detailed definition of this encap tunnel"
+        },
+        "appConfigRules": {
+          "type": "object",
+          "$ref": "#/definitions/AppConfigRules",
+          "description": "Detailed definition of this appConfigRules"
+        },
+        "apRules": {
+          "$ref": "map.json#/definitions/MapApRules",
+          "description": "Pass and Drop Application Profile rules"
+        },
+        "ruleMatching": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "blacklist"
+          ],
+          "default": "normal",
+          "description": "If set to 'blacklist', packet are passed when no 'drop' rules are matched. This field is only valid for 'regular/byRule' map types. (maps into 'no-rule-match' CLI command)"
+        },
+        "inlineTrafficType": {
+          "type": "string",
+          "enum": [
+            "symmetric",
+            "asymmetric"
+          ],
+          "description": "Only applicable for 'inline/passAll' map types, in which case defaults to 'symmetric'. For 'asymmetric' maps, 'srcPort' must be of type 'inline-net'"
+        },
+        "inlineTrafficPath": {
+          "type": "string",
+          "enum": [
+            "normal",
+            "bypass",
+            "oneArm",
+            "natPat"
+          ],
+          "description": "Only applicable for 'inline' map types, in which case defaults to 'normal'. When set to 'bypass', the 'dstPorts' must be empty"
+        },
+        "trafficType": {
+          "type": "string",
+          "enum": [
+            "control",
+            "user"
+          ],
+          "since": "H 4.5",
+          "description": "Only applicable for 'firstLevel/byRule' map types, in which case defaults to 'user'"
+        },
+        "ruleType": {
+          "type": "string",
+          "enum": [
+            "byRule",
+            "passAll",
+            "collector",
+            "flowFilter",
+            "flowSample",
+            "flowWhitelist",
+            "flowSampleOverlap",
+            "flowWhitelistOverlap",
+            "ingressToVp",
+            "egressFromVp",
+            "oobFromVp",
+            "flowSampleSip",
+            "flowWhitelistSip",
+            "flowSampleDiameter",
+            "flowWhitelistDiameter",
+            "flowSample5g",
+            "flowWhitelist5g",
+            "flowSample5gOverlap",
+            "flowWhitelist5gOverlap",
+            "networkEnd",
+            "inlinePair"
+          ],
+          "default": "byRule",
+          "description": "'byRule' is applicable to all map types; 'collector' is applicable to 'regular', 'inline', 'flexInline' and 'secondLevel' maps; 'passAll' is applicable to 'regular' and 'inline' maps; 'flowFilter', 'flowSample', 'flowWhitelist', 'flowSampleSip', 'flowWhitelistSip', 'flowSampleDiameter', 'flowWhitelistDiameter', 'flowSampleOverlap', 'flowWhitelistOverlap', 'flowSample5g','flowWhitelist5g','flowSample5gOverlap' and 'flowWhitelist5gOverlap' are applicable to 'secondLevel' maps"
+        },
+        "destinations": {
+          "type": "array",
+          "items": {
+            "$ref": "trafficEndpoint.json#/definitions/trafficEndpoint-update",
+            "description": "Detailed definition of this destinations"
+          }
+        }
+      }
+    },
+    "AppConfigRules": {
+      "id": "#/definitions/AppConfigRules",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gsRules": {
+          "$ref": "map.json#/definitions/MapGsRules",
+          "description": "This field is only valid for 'secondLevel/byRule' map types"
+        },
+        "flowRules": {
+          "$ref": "map.json#/definitions/MapFlowRules",
+          "description": "This field is only valid for 'secondLevel/flowFilter' map types"
+        },
+        "flowSampleRules": {
+          "$ref": "map.json#/definitions/MapFlowSampleRules",
+          "description": "This field is only valid for 'secondLevel/flowSample' map types"
+        },
+        "flowWhitelistRules": {
+          "$ref": "map.json#/definitions/MapFlowWhitelistRules",
+          "description": "This field is only valid for 'secondLevel/flowWhitelist' map types"
+        },
+        "flowSampleSipRules": {
+          "$ref": "map.json#/definitions/MapFlowSampleSipRules",
+          "description": "This field is only valid for 'secondLevel/flowSampleSip' map types"
+        },
+        "flowSampleDiameterRules": {
+          "$ref": "map.json#/definitions/MapFlowSampleDiameterRules",
+          "description": "This field is only valid for 'secondLevel/flowSampleDiameter' map types"
+        },
+        "flowSampleOverlapRules": {
+          "$ref": "map.json#/definitions/MapFlowSampleOverlapRules",
+          "description": "This field is only valid for 'secondLevel/flowSampleOverlap' map types"
+        },
+        "flowWhitelistOverlapRules": {
+          "$ref": "map.json#/definitions/MapFlowWhitelistOverlapRules",
+          "description": "This field is only valid for 'secondLevel/flowWhitelistOverlap' map types"
+        },
+        "flowSample5gRules": {
+          "$ref": "map.json#/definitions/MapFlowSample5gRules",
+          "description": "This field is only valid for 'secondLevel/flowSample5g' map types"
+        },
+        "flowWhitelist5gRules": {
+          "$ref": "map.json#/definitions/MapFlowWhitelistRule5g",
+          "description": "This field is only valid for 'secondLevel/flowWhitelist5g' map types"
+        },
+        "flowSample5gOverlapRules": {
+          "$ref": "map.json#/definitions/MapFlowSample5gOverlapRules",
+          "description": "This field is only valid for 'secondLevel/flowSample5gOverlap' map types"
+        },
+        "flowWhitelist5gOverlapRules": {
+          "$ref": "map.json#/definitions/MapFlowWhitelistOverlapRule5g",
+          "description": "This field is only valid for 'secondLevel/flowWhitelist5gOverlap' map types"
+        }
+      }
+    },
+    "applicationDependantComponents": {
+      "id": "#/definitions/applicationDependantComponents",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "appMonitorConfig": {
+          "type": "object",
+          "$ref": "#/definitions/appMonitorConfig",
+          "description": "Detailed definition of this appMonitorConfig"
+        },
+        "appFilterProfileConfig": {
+          "type": "object",
+          "$ref": "#/definitions/appFilterProfileConfig",
+          "description": "Detailed definition of this appFilterProfileConfig"
+        },
+        "appMetadataExportConfig": {
+          "type": "object",
+          "$ref": "#/definitions/appMetadataExportConfig",
+          "description": "Detailed definition of this appMetadataExportConfig"
+        },
+        "appCustomProfileConfig": {
+          "type": "object",
+          "$ref": "#/definitions/appCustomProfileConfig",
+          "description": "Detailed definition of this appCustomProfileConfig"
+        }
+      }
+    },
+    "appMonitorConfig": {
+      "id": "#/definitions/appMonitorConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "monitorExporter",
+        "monitorEnable",
+        "netflowLicenseOnly"
+      ],
+      "properties": {
+        "monitorExporter": {
+          "type": "object",
+          "$ref": "appsMetadata.json#/definitions/MetadataExporter",
+          "description": "Detailed definition of this monitorExporter"
+        },
+        "monitorEnable": {
+          "type": "boolean",
+          "description": "monitorEnable"
+        },
+        "netflowLicenseOnly": {
+          "type": "boolean",
+          "description": "netflowLicenseOnly"
+        }
+      }
+    },
+    "appFilterProfileConfig": {
+      "id": "#/definitions/appFilterProfileConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dropAppProfileAlias",
+        "passAppProfileAlias",
+        "passApplicationNames",
+        "dropApplicationNames",
+        "appFilterSession",
+        "appFilterEnable"
+      ],
+      "properties": {
+        "dropAppProfileAlias": {
+          "type": "string",
+          "description": "drop app profile alias"
+        },
+        "passAppProfileAlias": {
+          "type": "string",
+          "description": "pass app profile alias"
+        },
+        "passApplicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/appsMetadata.json#/definitions/MetadataApplicationSpec",
+            "description": "Detailed definition of this GigaMetadataApplicationSpec"
+          }
+        },
+        "dropApplicationNames": {
+          "type": "array",
+          "items": {
+            "$ref": "appsMetadata.json#/definitions/MetadataApplicationSpec",
+            "description": "Detailed definition of this GigaMetadataApplicationSpec"
+          }
+        },
+        "appFilterSession": {
+          "type": "object",
+          "$ref": "apps.json#/definitions/SessionAwareApfProfile",
+          "description": "Detailed definition of this appFilterSession"
+        },
+        "appFilterEnable": {
+          "type": "boolean",
+          "description": "appFilterEnable"
+        }
+      }
+    },
+    "appMetadataExportConfig": {
+      "id": "#/definitions/appMetadataExportConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cacheConfig",
+        "metadataExporters"
+      ],
+      "properties": {
+        "cacheConfig": {
+          "type": "object",
+          "$ref": "../schemas-fm/appsMetadata.json#/definitions/MetadataCacheConfig",
+          "description": "Detailed definition of this GigaMetaDataCache"
+        },
+        "metadataExporters": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/appsVisibility.json#/definitions/GigaMetadataExportDestinationConfig",
+            "description": "Detailed definition of this GigaAppMetadataExporterDestination"
+          }
+        }
+      }
+    },
+    "appCustomProfileConfig": {
+      "id": "#/definitions/appCustomProfileConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "userDefinedApplications"
+      ],
+      "properties": {
+        "userDefinedApplications": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AppConfigRulesSingleQueryResponse": {
+      "id": "#/definitions/AppConfigRulesSingleQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "appConfigRules"
+      ],
+      "properties": {
+        "appConfigRules": {
+          "$ref": "#/definitions/AppConfigRules"
+        }
+      }
+    }
+  }
+}
+
+
+
+
+

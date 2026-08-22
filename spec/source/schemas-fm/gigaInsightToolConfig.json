@@ -1,0 +1,24 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gigaInsightToolConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Insights Tool Config schema",
+  "definitions": {
+    "GigaInsightToolConfig": {
+      "id": "#/definitions/GigaInsightToolConfig",
+      "type": "object",
+      "description": "Gigamon Insights Tool Config definition",
+      "required": [
+        "yaml",
+        "env"
+      ],
+      "properties": {
+        "yaml": {
+          "type": "object"
+        },
+        "env": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "id": "http://gigamon.com/schemas-fm/deltaReport.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "GigaSMART Group Delta Report  schema",
+  "definitions": {
+    "FlowFilteringDeltaReportSummaryQueryResponse": {
+      "id": "#/definitions/FlowFilteringDeltaReportSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "FM 5.16",
+      "required": [
+        "flowFilteringDeltaReportSummary"
+      ],
+      "properties": {
+        "flowFilteringDeltaReportSummary": {
+          "$ref": "#/definitions/FlowFilteringDeltaReportSummary"
+        }
+      }
+    },
+    "FlowFilteringDeltaReportSummary": {
+      "id": "#/definitions/FlowFilteringDeltaReportSummary",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gsgroup"
+      ],
+      "properties": {
+        "gsgroup": {
+          "type": "string",
+          "description": "alias of gsgroup",
+          "readonly": true
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Timestamp of the earliest record of data",
+          "readonly": true
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Timestamp of the latest record of data",
+          "readonly": true
+        },
+        "resetHappened": {
+          "type": "boolean",
+          "description": "flag to notify reset/ Maintenance happened if true",
+          "default": false,
+          "readonly": true
+        },
+        "errorMsg": {
+          "type": "string",
+          "description": "Description of error regarding reset/ Maintenance",
+          "readonly": true
+        },
+        "controlTunnels": {
+          "$ref": "#/definitions/GaugeValues",
+          "description": "total number of control tunnels"
+        },
+        "controlUserTunnels": {
+          "$ref": "#/definitions/GaugeValues",
+          "description": "total number of control and user tunnels"
+        },
+        "pendingSession": {
+          "$ref": "#/definitions/GaugeValues",
+          "description": "number of sessions waiting for control message response"
+        },
+        "controlOnlySession": {
+          "$ref": "#/definitions/GaugeValues",
+          "description": "number of sessions without user bearers"
+        },
+        "gtpSessionStatistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpSessionStatistics"
+          }
+        },
+        "gtpInterfaceStatistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpInterfaceStatistics"
+          },
+          "description": "number of sessions and tunnels by interface"
+        },
+        "gtpCorrelationStatistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpCorrelationStatistics"
+          },
+          "description": "control messages and user data message counters"
+        }
+      }
+    },
+    "GtpSessionStatistics": {
+      "id": "#/definitions/GtpSessionStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceType": {
+          "type": "string",
+          "description": "interface type",
+          "readonly": true
+        },
+        "sessions": {
+          "$ref": "#/definitions/GaugeValues"
+        },
+        "tunnels": {
+          "$ref": "#/definitions/GaugeValues"
+        }
+      }
+    },
+    "GtpInterfaceStatistics": {
+      "id": "#/definitions/GtpInterfaceStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interfaceType": {
+          "type": "string",
+          "description": "interface type",
+          "readonly": true
+        },
+        "rxPkts": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "rxBytes": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "txPkts": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "txBytes": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "droppedPkts": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "droppedBytes": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "gtpCPackets": {
+          "$ref": "#/definitions/DeltaCounters"
+        }
+      }
+    },
+    "GtpCorrelationStatistics": {
+      "id": "#/definitions/GtpCorrelationStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gtpControlMessageStats": {
+          "$ref": "#/definitions/GtpControlMessageStats"
+        },
+        "gtpUserMessageStats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpUStats"
+          }
+        }
+      }
+    },
+    "GtpControlMessageStats": {
+      "id": "#/definitions/GtpControlMessageStats",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Statistics for Control Messages GTP-C",
+      "properties": {
+        "gtpVersion": {
+          "type": "string"
+        },
+        "gtpCStats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpCStats"
+          }
+        }
+      }
+    },
+    "GtpCStats": {
+      "id": "#/definitions/GtpCStats",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Statistics for Control Messages GTP-C",
+      "properties": {
+        "controlMessage": {
+          "type": "string"
+        },
+        "toolPass": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "colNoSession": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "colNoTnlx": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "colParseEr": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "colNoRule": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "colOther": {
+          "$ref": "#/definitions/DeltaCounters"
+        }
+      }
+    },
+    "GtpUStats": {
+      "id": "#/definitions/GtpUStats",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Statistics for User Messages GTP-U",
+      "properties": {
+        "toolPass": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "collector": {
+          "$ref": "#/definitions/DeltaCounters"
+        },
+        "drop": {
+          "$ref": "#/definitions/DeltaCounters"
+        }
+      }
+    },
+    "DeltaCounters": {
+      "id": "#/definitions/DeltaCounters",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Max": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "This is the latest record of data available"
+        },
+        "Min": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "This is the earliest record of data available"
+        },
+        "Delta": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "This is the differential data calculated for the selected duration"
+        }
+      }
+    },
+    "GaugeValues": {
+      "id": "#/definitions/GaugeValues",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Max": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "This is the latest record of data available"
+        },
+        "Min": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "This is the earliest record of data available"
+        }
+      }
+    }
+  }
+}

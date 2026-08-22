@@ -1,0 +1,401 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsHsm.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Hsm Configuration schema",
+  "definitions": {
+    "Hsm": {
+      "id": "#/definitions/Hsm",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsm definitions",
+      "required": [
+        "alias",
+        "type",
+        "hsmIp",
+        "hsmPort"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Hsm alias"
+        },
+        "hsmIp": {
+          "type": "string",
+          "description": "hsm server address"
+        },
+        "hsmPort": {
+          "type": "integer",
+          "format": "int32",
+          "description": "server port number, the port to use when connecting to the given nethsm"
+        },
+        "type" : {
+          "type": "string",
+          "enum": [
+            "ncipher",
+            "luna"
+          ]
+        },
+        "esn": {
+          "type": "string",
+          "description": "the ESN of the KNETI key for a given IP address"
+        },
+        "kneti": {
+          "type": "string",
+          "description": "the hash of the KNETI key for a given IP address"
+        },
+        "serverUsername": {
+          "type": "string",
+          "description": "hsm server username"
+        },
+        "serverPassword": {
+          "type": "string",
+          "description": "hsm server password"
+        },
+        "partitionLabel": {
+          "type": "string",
+          "description": "hsm partition label"
+        },
+        "partitionPassword": {
+          "type": "string",
+          "description": "hsm partition password"
+        },
+        "operationalStatus": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "yes",
+            "no"
+          ],
+          "readonly": true,
+          "description": "operational status of hsm"
+        }
+      }
+    },
+    "HsmGroup": {
+      "id": "#/definitions/HsmGroup",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsm Group definitions",
+      "required": [
+        "alias",
+        "type"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "hsm group alias"
+        },
+        "type" : {
+          "type": "string",
+          "enum": [
+            "ncipher",
+            "luna"
+          ]
+        },
+        "hsms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "alias of hsm in hsm group"
+        },
+        "comment": {
+          "type": "string",
+          "description": "Hsm Group Comment"
+        },
+        "operationalStatus": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "yes",
+            "no"
+          ],
+          "readonly": true,
+          "description": "operational status of hsm group"
+        }
+      }
+    },
+    "HsmGroupStatusReport": {
+      "id": "#/definitions/HsmGroupStatusReport",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsm Group Status Report",
+      "properties": {
+        "report": {
+          "type": "string",
+          "description": "status report"
+        },
+        "sessionStats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HsmSessionStatistics"
+          }
+        }
+      }
+    },
+
+    "HsmSessionStatistics": {
+      "id": "#/definitions/HsmSessionStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsmc statistics",
+      "properties": {
+        "engineId": {
+          "type": "string", "readOnly": true
+        },
+        "hsmcReqRcvd": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcRespSent": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcMinRtt": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcMaxRtt": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcAvgRtt": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcMinqDelay": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcMaxqDelay": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcAvgqDelay": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcMinPkcs11Rtt": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcMaxPkcs11Rtt": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcAvgPkcs11Rtt": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcErrqFull" : {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcErrPkcs11": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmcErrSendResp": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmReqSent": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmRespRcvd": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmLate": {
+          "type": "integer", "format": "int64", "readOnly": true
+        },
+        "hsmAvgRtt": {
+          "type": "integer", "format": "int64", "readOnly": true
+        }
+      }
+    },
+    "HsmGroupQueryResponse": {
+      "id": "#/definitions/HsmGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsm Group definitions",
+      "required": [
+        "hsmGroup"
+      ],
+      "properties": {
+        "hsmGroup": {
+          "$ref": "#/definitions/HsmGroup"
+        }
+      }
+    },
+    "HsmQueryResponse": {
+      "id": "#/definitions/HsmQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsm definitions",
+      "required": [
+        "hsm"
+      ],
+      "properties": {
+        "hsm": {
+          "$ref": "#/definitions/Hsm"
+        }
+      }
+    },
+    "HsmsQueryResponse": {
+      "id": "#/definitions/HsmsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsm definitions",
+      "properties": {
+        "hsms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Hsm"
+          }
+        }
+      }
+    },
+    "HsmKeyMapsQueryResponse": {
+      "id": "#/definitions/HsmKeyMapsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsm Key Maps",
+      "properties": {
+        "hsmKeyMaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SslHsmKeyMappingConfigSpec"
+          }
+        }
+      }
+    },
+    "SslHsmRfsServerConfigSpec": {
+      "id": "#/definitions/SslHsmRfsServerConfigSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "HSM server configuration",
+      "required": [
+        "address"
+      ],
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "IPv4 address of the RFS server"
+        },
+        "hours": {
+          "type": "string",
+          "description": "Period in hours of when to sync, 0 = no automatic sync"
+        }
+      }
+    },
+    "SslHsmRfsServerUpdateSpec": {
+      "id": "#/definitions/SslHsmRfsServerUpdateSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "HSM server configuration update",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "IPv4 address of the RFS server"
+        },
+        "hours": {
+          "type": "string",
+          "description": "Period in hours of when to sync, 0 = no automatic sync"
+        }
+      }
+    },
+    "SslHsmKeyMappingConfigSpec": {
+      "id": "#/definitions/SslHsmKeyMappingConfigSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "SSL Decryption server to key association",
+      "required": [
+        "address"
+      ],
+      "properties": {
+        "keyName": {
+          "type": "string",
+          "description": "key-name"
+        },
+        "keyToken": {
+          "type": "string",
+          "description": "key-token"
+        },
+        "address": {
+          "type": "string",
+          "description": "IPv4 address of the SSL endpoint (server)"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 0,
+          "description": "Port of the SSL endpoint (server). Value of 0 indicates any port"
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "Rule Id"
+        },
+        "rfsMatch": {
+          "type": "string",
+          "description": "Is there a matching RFS key, yes or no"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "rfsSyncInfoDef": {
+      "id": "#/definitions/rfsSyncInfoDef",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsm Rfs Sync Info",
+      "required": [
+        "keyName",
+        "keyToken"
+      ],
+      "properties": {
+        "keyName": {
+          "type": "string",
+          "description": "Key Name"
+        },
+        "keyToken": {
+          "type": "string",
+          "description": "Key Token"
+        }
+      }
+    },
+    "HsmRfsSyncQueryResponse": {
+      "id": "#/definitions/HsmRfsSyncQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hsm Rfs Keys",
+      "properties": {
+        "rfsSyncInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/rfsSyncInfoDef"
+          }
+        },
+        "syncPeriod": {
+          "type": "string",
+          "description": "Period in hours of when to sync, 0 = no automatic sync"
+        },
+        "rfsAddress": {
+          "type": "string",
+          "description": "IPv4 address of the RFS server"
+        },
+        "nextSync": {
+          "type": "string",
+          "description": "Time that next sync will happen"
+        },
+        "lastSync": {
+          "type": "string",
+          "description": "Time that the last sync happened"
+        },
+        "lastSyncMethod": {
+          "type": "string",
+          "description": "How the the last sync happened,either auto or manuel"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    }
+  }
+}

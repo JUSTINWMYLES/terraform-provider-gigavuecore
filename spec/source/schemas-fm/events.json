@@ -1,0 +1,384 @@
+{
+  "id": "http://gigamon.com/schemas-fm/events.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Events schema",
+  "definitions": {
+    "GigaEvent": {
+      "id": "#/definitions/GigaEvent",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon Event instance",
+      "since": "FM 3.1",
+      "required": [
+        "id",
+        "ts",
+        "type",
+        "source",
+        "scope",
+        "severity",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true
+        },
+        "ts": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Event timestamp in ISO 8601 format"
+        },
+        "tsUtc": {
+          "type": "integer",
+          "format": "utc-millisecond",
+          "minimum": 0,
+          "readonly": true,
+          "description": "Timestamp in UTC milliseconds"
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Event Type identifier",
+          "_description": "TODO: This should be enumerated to cover every Event Type supported by FM. (Similar to MIB Trap Type OID)"
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Event Source. Device ID for node-originated events like Traps or Syslogs. Component ID for FM-originated events"
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "phyDomain",
+            "phyCluster",
+            "phyNode",
+            "phyChassis",
+            "phyCard",
+            "phyPort",
+            "fmService",
+            "vmDomain",
+            "vmManager"
+          ],
+          "readonly": true,
+          "description": "Scope of the event"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "info",
+            "minor",
+            "major",
+            "critical"
+          ],
+          "readonly": true,
+          "description": "Severity of the event"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Event description"
+        },
+        "resourceType": {
+          "type": "string",
+          "enum": [
+            "Card",
+            "Port",
+            "Box",
+            "Fan"
+          ],
+          "readonly": true,
+          "description": "Affected Entity Type of the event"
+        },
+        "resourceId": {
+          "type": "string",
+          "readonly": true,
+          "description": "Affected Entity of the event"
+        }
+      }
+    },
+    "GigaAuditLogEntry": {
+      "id": "#/definitions/GigaAuditLogEntry",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon User Action Audit Log entry",
+      "since": "FM 3.1",
+      "required": [
+        "id",
+        "ts",
+        "username",
+        "target",
+        "operation",
+        "outcome",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true
+        },
+        "ts": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Event timestamp in ISO 8601 format"
+        },
+        "tsUtc": {
+          "type": "integer",
+          "format": "utc-millisecond",
+          "minimum": 0,
+          "readonly": true,
+          "description": "Timestamp in UTC milliseconds"
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Action target. Device ID for node configuration actions. Component ID for FM-based service configuration"
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Action target. Device ID for node configuration actions. Component ID for FM-based service configuration"
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Description of the user action"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "success",
+            "failure"
+          ],
+          "readonly": true,
+          "description": "Scope of the event"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Event description. In case of failure, holds error description"
+        },
+        "updateDetails": {
+          "type": "object",
+          "readonly": true,
+          "description": "Optional extension to hold the update delta details"
+        }
+      }
+    },
+    "GigaEventQueryResponse": {
+      "id": "#/definitions/GigaEventQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "event"
+      ],
+      "properties": {
+        "event": {
+          "$ref": "#/definitions/GigaEvent"
+        }
+      }
+    },
+    "GigaEventsQueryResponse": {
+      "id": "#/definitions/GigaEventsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "events"
+      ],
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaEvent"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GigaAuditLogEntryQueryResponse": {
+      "id": "#/definitions/GigaAuditLogEntryQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "auditLofEntry"
+      ],
+      "properties": {
+        "auditLofEntry": {
+          "$ref": "#/definitions/GigaAuditLogEntry"
+        }
+      }
+    },
+    "GigaAuditLogEntriesQueryResponse": {
+      "id": "#/definitions/GigaAuditLogEntriesQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "auditLogEntries"
+      ],
+      "properties": {
+        "auditLogEntries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaAuditLogEntry"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "ArchiveSpec": {
+      "id": "#/definitions/ArchiveSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.2",
+      "required": [
+        "scope",
+        "destination"
+      ],
+      "properties": {
+        "scope": {
+          "$ref": "#/definitions/ArchiveSpecScope",
+          "description": "Archiving scope"
+        },
+        "destination": {
+          "$ref": "#/definitions/ArchiveSpecDestination",
+          "description": "Destination for the archive"
+        }
+      }
+    },
+    "ArchiveSpecScope": {
+      "id": "#/definitions/ArchiveSpecScope",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.2",
+      "properties": {
+        "startDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Records older than startDate will be archived. In ISO 8601 format."
+        }
+      }
+    },
+    "ArchiveSpecDestination": {
+      "id": "#/definitions/ArchiveSpecDestination",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.2",
+      "required": [
+        "sftp"
+      ],
+      "properties": {
+        "sftp": {
+          "$ref": "#/definitions/ArchiveSpecDestSftp",
+          "description": "Specifies the credentials of server where to save archive"
+        }
+      }
+    },
+    "ArchiveSpecDestSftp": {
+      "id": "#/definitions/ArchiveSpecDestSftp",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.2",
+      "required": [
+        "hostAddress",
+        "username",
+        "password",
+        "filePath"
+      ],
+      "properties": {
+        "hostAddress": {
+          "type": "string",
+          "description": "Specifies the host address of server to save the archive"
+        },
+        "username": {
+          "type": "string",
+          "description": "specifies the username for the server login"
+        },
+        "password": {
+          "type": "string",
+          "description": "specifies the password to use for server login"
+        },
+        "filePath": {
+          "type": "string",
+          "description": "specifies the path on server to store the archive. Example: '/root/dir/archive.zip'"
+        }
+      }
+    },
+    "GigaEventAggregateSummary": {
+      "id": "GigaEventAggregateSummary",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.5",
+      "required": [
+        "groupBy",
+        "aggGroups"
+      ],
+      "properties": {
+        "groupBy": {
+          "type": "string",
+          "enum": [
+            "severity"
+          ],
+          "description": "aggregation grouping category"
+        },
+        "aggGroups": {
+          "type": "array",
+          "description": "list of aggregate counts per groupBy type",
+          "items": {
+            "$ref": "#/definitions/GigaEventAggregateGroup"
+          }
+        }
+      }
+    },
+    "GigaEventAggregateGroup": {
+      "id": "GigaEventAggregateGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.5",
+      "required": [
+        "groupName",
+        "count"
+      ],
+      "properties": {
+        "groupName": {
+          "type": "string",
+          "description": "Name of the group. For grouping based on severity, this field will have a value from the set ['info', 'minor', 'major', 'critical']"
+        },
+        "count": {
+          "type": "integer",
+          "description": "the number of events in the aggregation group",
+          "minimum": 0
+        }
+      }
+    },
+    "GigaEventAggregateSummaryQueryResponse": {
+      "id": "GigaEventAggregateSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.5",
+      "required": [
+        "summary"
+      ],
+      "properties": {
+        "summary": {
+          "$ref": "#/definitions/GigaEventAggregateSummary"
+        }
+      }
+    }
+  }
+}

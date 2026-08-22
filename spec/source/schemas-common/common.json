@@ -1,0 +1,270 @@
+{
+  "id": "http://gigamon.com/schemas-common/common.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon common dependencies schema",
+  "properties": {},
+  "definitions": {
+    "GigaErrors": {
+      "id": "#/definitions/GigaErrors",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Gigamon Errors report",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigaError"
+          },
+          "minItems": 0
+        }
+      }
+    },
+    "GigaError": {
+      "id": "#/definitions/GigaError",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Gigamon Error report",
+      "required": [
+        "code",
+        "msg"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "error code"
+        },
+        "msg": {
+          "type": "string",
+          "description": "error description string"
+        }
+      }
+    },
+    "QueryResultContext": {
+      "id": "#/definitions/QueryResultContext",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon query result context",
+      "required": [
+        "totalItems"
+      ],
+      "properties": {
+        "totalItems": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "total number of items in the queried entity type"
+        },
+        "pageNo": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "page number of the returned result set"
+        },
+        "pageSize": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "page size of the returned result set"
+        },
+        "sort": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "entity field to sort on. Optionally suffixed with sorting order of ':asc' or ':desc'. If omitted, sorting order defaults to ':asc'"
+          },
+          "description": "sorting info of the returned result set. list of fields in the array indicate sorting order"
+        }
+      }
+    },
+    "GigaDeviceModel": {
+      "id": "#/definitions/GigaDeviceModel",
+      "type": "string",
+      "enum": [
+        "HD8",
+        "HD4",
+        "HC2",
+        "HC1",
+        "HC3",
+        "TACX",
+        "HB1",
+        "TA1",
+        "TA10",
+        "TA10A",
+        "TA40",
+        "TA100",
+        "GV2404",
+        "GV420",
+        "GV212",
+        "GV216",
+        "OS",
+        "TA25",
+        "TA25A",
+        "DELL-S4112F-ON"
+      ],
+      "description": "Gigamon physical device models"
+    },
+    "EntityHealthState": {
+      "id": "#/definitions/EntityHealthState",
+      "type": "string",
+      "enum": [
+        "green",
+        "yellow",
+        "orange",
+        "red"
+      ],
+      "readonly": true,
+      "description": "Read-only. 'green' indicates healthy state; 'yellow'  indicates warning state; 'orange'  indicates error state; 'red'  indicates critical state;"
+    },
+    "EntityHealthStateReason": {
+      "id": "#/definitions/EntityHealthStateReason",
+      "type": "object",
+      "properties": {
+        "severity": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "message": {
+          "type": "string",
+          "readonly": true,
+          "description": "Read-only. Describes the reason for component's health state"
+        },
+        "trafficHealthStateComputationType": {
+          "type": "string",
+          "enum": [
+            "PORT_LOW_UTIL",
+            "PORT_HIGH_UTIL",
+            "PORT_PACKET_DROP",
+            "PORT_PACKET_ERROR",
+            "GIGASTREAM_IMBALANCE"
+          ],
+          "readonly": true,
+          "description": "Traffic Health State Computation Type"
+        }
+      }
+    },
+    "EntityHealthStateReasons": {
+      "id": "#/definitions/EntityHealthStateReasons",
+      "type": "array",
+      "items": {
+        "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReason"
+      },
+      "readonly": true
+    },
+    "Ipv4AddressWithMask": {
+      "id": "#/definitions/Ipv4AddressWithMask",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ipv4Addr",
+        "ipv4Mask"
+      ],
+      "properties": {
+        "ipv4Addr": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "ipv4Mask": {
+          "type": "string",
+          "format": "ipv4"
+        }
+      }
+    },
+    "Ipv6AddressWithMask": {
+      "id": "#/definitions/Ipv6AddressWithMask",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ipv6Addr",
+        "ipv6Mask"
+      ],
+      "properties": {
+        "ipv6Addr": {
+          "type": "string",
+          "format": "ipv6"
+        },
+        "ipv6Mask": {
+          "type": "string",
+          "format": "ipv6"
+        }
+      }
+    },
+    "RemoteFileSpec": {
+      "id": "#/definitions/RemoteFileSpec",
+      "description": "Remote file source or destination",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol",
+        "hostname",
+        "path"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "scp",
+            "sftp",
+            "ftp",
+            "tftp",
+            "http",
+            "https"
+          ],
+          "description": "Protocol to access server. HTTP and HTTPS only applicable for retrieving file"
+        },
+        "username": {
+          "type": "string",
+          "description": "user name to use for server login"
+        },
+        "password": {
+          "type": "string",
+          "description": "password to use for server login"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "server address"
+        },
+        "path": {
+          "type": "string",
+          "description": "file path on server"
+        }
+      }
+    },
+    "ResourceTag": {
+      "id": "#/definitions/ResourceTag",
+      "description": "A label with key and list of values that can be tagged to a resource",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tagKey",
+        "tagValues",
+        "propagated",
+        "propagatedTagValues"
+      ],
+      "properties": {
+        "tagKey": {
+          "type": "string",
+          "description": "Name of the tag"
+        },
+        "tagValues": {
+          "type": "array",
+          "description": "All possible values of the tag",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Password": {
+      "id": "#/definitions/Password",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "password"
+      ],
+      "properties": {
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "id": "http://gigamon.com/schemas-fm/mapGroup.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Map Group schema",
+  "since": "H 4.8",
+  "definitions": {
+    "MapGroup": {
+      "id": "#/definitions/MapGroup",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "maps"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Map Group alias"
+        },
+        "maps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of maps.SecondLevel maps with flowSample-overlap or flowWhitelist-overlap subtype"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "MapGroupsQueryResponse": {
+      "id": "#/definitions/MapGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mapGroups"
+      ],
+      "properties": {
+        "mapGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapGroup"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "MapGroupQueryResponse": {
+      "id": "#/definitions/MapGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mapGroup"
+      ],
+      "properties": {
+        "mapGroup": {
+          "$ref": "#/definitions/MapGroup"
+        }
+      }
+    }
+  }
+}

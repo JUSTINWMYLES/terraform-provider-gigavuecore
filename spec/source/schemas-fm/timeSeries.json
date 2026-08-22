@@ -1,0 +1,1727 @@
+{
+  "id": "http://gigamon.com/schemas-fm/timeSeries.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Time Series schema",
+  "definitions": {
+    "TimeSeriesDataPoint": {
+      "id": "#/definitions/TimeSeriesDataPoint",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series timestamped datapoint",
+      "since": "FM 3.1",
+      "required": [
+        "tsUtc",
+        "value"
+      ],
+      "properties": {
+        "tsUtc": {
+          "type": "integer",
+          "format": "utc-millisecond",
+          "readonly": true,
+          "description": "Timestamp in UTC milliseconds"
+        },
+        "value": {
+          "type": "integer",
+          "readonly": true,
+          "description": "time series value"
+        }
+      }
+    },
+    "PortTimeSeriesGroup": {
+      "id": "#/definitions/PortTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Physical Port Time Series Group",
+      "since": "FM 3.1",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "port"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "port.octets",
+            "port.packets",
+            "port.packetErr",
+            "port.packetDiscard",
+            "port.packetDrop",
+            "port.utilztn"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "PortTimeSeries": {
+      "id": "#/definitions/PortTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Physical Port Time Series",
+      "since": "FM 3.1",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "PortTimeSeriesTagValue": {
+      "id": "#/definitions/PortTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.1",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "node",
+            "boxPort",
+            "port",
+            "slot",
+            "portType",
+            "trafficDir"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "MapTimeSeriesGroup": {
+      "id": "#/definitions/MapTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Physical Map Time Series Group",
+      "since": "FM 3.1",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "map"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "map.octets",
+            "map.packets"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "MapTimeSeries": {
+      "id": "#/definitions/MapTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Physical Map Time Series",
+      "since": "FM 3.1",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "MapTimeSeriesTagValue": {
+      "id": "#/definitions/MapTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.1",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "map"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "FabricMapTimeSeriesGroup": {
+      "id": "#/definitions/FabricMapTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Fabric Map Time Series Group",
+      "since": "FM 5.5",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "map"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "map.octets",
+            "map.packets"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FabricMapTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "FabricMapTimeSeries": {
+      "id": "#/definitions/FabricMapTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Fabric Map Time Series",
+      "since": "FM 5.5",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FabricMapTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "FabricMapTimeSeriesTagValue": {
+      "id": "#/definitions/FabricMapTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 5.5",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "map"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "GsGroupTimeSeriesGroup": {
+      "id": "#/definitions/GsGroupTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GS Group Time Series Group",
+      "since": "FM 3.1",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gsGroup"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "gsGroup.octets",
+            "gsGroup.packets",
+            "gsGroup.packetDrop",
+            "gsGroup.packetTerm",
+            "gsGroup.packetErr",
+            "gsGroup.hbPackets",
+            "gsGroup.packetBuffer"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsGroupTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "GsGroupTimeSeries": {
+      "id": "#/definitions/GsGroupTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GS Group Time Series",
+      "since": "FM 3.1",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsGroupTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "GsGroupTimeSeriesTagValue": {
+      "id": "#/definitions/GsGroupTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.1",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "gsGroup",
+            "trafficDir"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "GsopTimeSeriesGroup": {
+      "id": "#/definitions/GsopTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GSOP Time Series Group",
+      "since": "FM 3.1",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gsop"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "gsop.octets",
+            "gsop.packets",
+            "gsop.packetDrop",
+            "gsop.packetDropNoInit",
+            "gsop.packetTerm",
+            "gsop.packetParseErr"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsopTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "GsopTimeSeries": {
+      "id": "#/definitions/GsopTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GSOP Time Series",
+      "since": "FM 3.1",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsopTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "GsopTimeSeriesTagValue": {
+      "id": "#/definitions/GsopTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.1",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "gsGroup",
+            "gsop",
+            "trafficDir"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "VportTimeSeriesGroup": {
+      "id": "#/definitions/VportTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "vPort Time Series Group",
+      "since": "FM 3.1",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gsVport"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "gsVport.octets",
+            "gsVport.packets",
+            "gsVport.packetDrop",
+            "gsVport.packetDropNoInit"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VportTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "VportTimeSeries": {
+      "id": "#/definitions/VportTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "vPort Time Series",
+      "since": "FM 3.1",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VportTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "VportTimeSeriesTagValue": {
+      "id": "#/definitions/VportTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.1",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "gsGroup",
+            "vport",
+            "trafficDir"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "TunneledPortTimeSeriesGroup": {
+      "id": "#/definitions/TunneledPortTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tunneled Port Time Series Group",
+      "since": "FM 3.2",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "tunPort"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "tunPort.octets",
+            "tunPort.packets",
+            "tunPort.packetDrop",
+            "tunPort.packetDropNoArp",
+            "tunPort.packetDropWrongAddr",
+            "tunPort.arp",
+            "tunPort.arpReq",
+            "tunPort.arpResp",
+            "tunPort.arpDrop",
+            "tunPort.icmp",
+            "tunPort.icmpDrop",
+            "tunPort.pingReq",
+            "tunPort.pingResp"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunneledPortTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "TunneledPortTimeSeries": {
+      "id": "#/definitions/TunneledPortTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tunneled Port Time Series",
+      "since": "FM 3.2",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TunneledPortTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "TunneledPortTimeSeriesTagValue": {
+      "id": "#/definitions/TunneledPortTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.2",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "gsGroup",
+            "node",
+            "boxPort",
+            "port",
+            "slot",
+            "portType",
+            "trafficDir"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "NetflowExporterTimeSeriesGroup": {
+      "id": "#/definitions/NetflowExporterTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Exporter Time Series Group",
+      "since": "FM 3.2",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "nfExporter"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "nfExporter.recordAdded",
+            "nfExporter.packet",
+            "nfExporter.packetDrop",
+            "nfExporter.packetErrNoAvailable",
+            "nfExporter.filterNoMatch",
+            "nfExporter.recordsNotAdded"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetflowExporterTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "NetflowExporterTimeSeries": {
+      "id": "#/definitions/NetflowExporterTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Exporter Time Series",
+      "since": "FM 3.2",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetflowExporterTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "NetflowExporterTimeSeriesTagValue": {
+      "id": "#/definitions/NetflowExporterTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.2",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "gsGroup",
+            "nfExporter"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "NetflowMonitorTimeSeriesGroup": {
+      "id": "#/definitions/NetflowMonitorTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Monitor Time Series Group",
+      "since": "FM 3.2",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "nfMonitor"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "nfMonitor.entries",
+            "nfMonitor.highWaterMark",
+            "nfMonitor.flowAdded",
+            "nfMonitor.flowAged",
+            "nfMonitor.timeoutActive",
+            "nfMonitor.timeoutInactive",
+            "nfMonitor.agedEvent",
+            "nfMonitor.agedWatermark",
+            "nfMonitor.agedEmergency",
+            "nfMonitor.numSampled",
+            "nfMonitor.numIngress"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetflowMonitorTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "NetflowMonitorTimeSeries": {
+      "id": "#/definitions/NetflowMonitorTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Netflow Monitor Time Series",
+      "since": "FM 3.2",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetflowMonitorTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "NetflowMonitorTimeSeriesTagValue": {
+      "id": "#/definitions/NetflowMonitorTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.2",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "gsGroup",
+            "nfMonitor"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "PortGroupLbTimeSeriesGroup": {
+      "id": "#/definitions/PortGroupLbTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "PortGroup Load Balancing Time Series Group",
+      "since": "FM 3.2",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "portGroupLb"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "pgLb.octets",
+            "pgLb.packets",
+            "pgLb.connTotal",
+            "pgLb.connActive"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortGroupLbTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "PortGroupLbTimeSeries": {
+      "id": "#/definitions/PortGroupLbTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "PortGroup Load Balancing  Time Series",
+      "since": "FM 3.2",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortGroupLbTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "PortGroupLbTimeSeriesTagValue": {
+      "id": "#/definitions/PortGroupLbTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.2",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "gsGroup",
+            "portGroup"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "GvmPortTimeSeriesGroup": {
+      "id": "#/definitions/GvmPortTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GVM Port Time Series Group",
+      "since": "FM 3.1",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gvmPort"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "gvmPort.octets",
+            "gvmPort.packets",
+            "gvmPort.packetErr",
+            "gvmPort.packetDrop"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GvmPortTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "GvmPortTimeSeries": {
+      "id": "#/definitions/GvmPortTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GVM Port Time Series",
+      "since": "FM 3.1",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GvmPortTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "GvmPortTimeSeriesTagValue": {
+      "id": "#/definitions/GvmPortTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.1",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "vcenter",
+            "host",
+            "gvm",
+            "portType"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "VmapTimeSeriesGroup": {
+      "id": "#/definitions/VmapTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "vMap Time Series Group",
+      "since": "FM 3.1",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gvmMap"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "gvmMap.octets",
+            "gvmMap.packets"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VmapTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "VmapTimeSeries": {
+      "id": "#/definitions/VmapTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "vMap Time Series",
+      "since": "FM 3.1",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VmapTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "VmapTimeSeriesTagValue": {
+      "id": "#/definitions/VmapTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 3.1",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "vcenter",
+            "host",
+            "gvm",
+            "vmap"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "GsEngineTimeSeriesGroup": {
+      "id": "#/definitions/GsEngineTimeSeriesGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GIGASMART engine Time Series Group",
+      "since": "FM 5.0",
+      "required": [
+        "type",
+        "metric",
+        "startTime",
+        "endTime",
+        "series"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "port"
+          ],
+          "readonly": true,
+          "description": "Time Series domain type"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "gsEngine.octets",
+            "gsEngine.packets",
+            "gsEngine.packetDrop"
+          ],
+          "readonly": true,
+          "description": "Time Series metric type"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Start Time in ISO 8601 format"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "readonly": true,
+          "description": "End Time in ISO 8601 format"
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsEngineTimeSeries"
+          },
+          "readonly": true,
+          "description": "time series"
+        }
+      }
+    },
+    "GsEngineTimeSeries": {
+      "id": "#/definitions/GsEngineTimeSeries",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GIGASMART engine Time Series",
+      "since": "FM 5.0",
+      "required": [
+        "context",
+        "dataPoints"
+      ],
+      "properties": {
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsEngineTimeSeriesTagValue"
+          },
+          "readonly": true,
+          "description": "Time Series query filtering values"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TimeSeriesDataPoint"
+          },
+          "readonly": true,
+          "description": "Time Series timestamped data points"
+        }
+      }
+    },
+    "GsEngineTimeSeriesTagValue": {
+      "id": "#/definitions/GsEngineTimeSeriesTagValue",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Time Series Filter Value",
+      "since": "FM 5.0",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "cluster",
+            "node",
+            "boxPort",
+            "port",
+            "slot",
+            "trafficDir"
+          ],
+          "readonly": true,
+          "description": "Time-series filtering/grouping tag"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "tag value"
+        }
+      }
+    },
+    "PortTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/PortTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/PortTimeSeriesGroup"
+        }
+      }
+    },
+    "MapTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/MapTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/MapTimeSeriesGroup"
+        }
+      }
+    },
+    "FabricMapTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/FabricMapTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/FabricMapTimeSeriesGroup"
+        }
+      }
+    },
+    "GsGroupTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/GsGroupTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/GsGroupTimeSeriesGroup"
+        }
+      }
+    },
+    "GsopTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/GsopTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/GsopTimeSeriesGroup"
+        }
+      }
+    },
+    "VportTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/VportTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/VportTimeSeriesGroup"
+        }
+      }
+    },
+    "TunneledPortTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/TunneledPortTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/TunneledPortTimeSeriesGroup"
+        }
+      }
+    },
+    "NetflowExporterTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/NetflowExporterTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/NetflowExporterTimeSeriesGroup"
+        }
+      }
+    },
+    "NetflowMonitorTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/NetflowMonitorTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/NetflowMonitorTimeSeriesGroup"
+        }
+      }
+    },
+    "PortGroupLbTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/PortGroupLbTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/PortGroupLbTimeSeriesGroup"
+        }
+      }
+    },
+    "GvmPortTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/GvmPortTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/GvmPortTimeSeriesGroup"
+        }
+      }
+    },
+    "VmapTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/VmapTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/VmapTimeSeriesGroup"
+        }
+      }
+    },
+    "GsEngineTimeSeriesGroupQueryResponse": {
+      "id": "#/definitions/GsEngineTimeSeriesGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "timeSeries"
+      ],
+      "properties": {
+        "timeSeries": {
+          "$ref": "#/definitions/GsEngineTimeSeriesGroup"
+        }
+      }
+    }
+  }
+}

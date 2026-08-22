@@ -1,0 +1,25 @@
+{
+  "id": "http://gigamon.com/schemas-fm/TrafficFlowsSettings",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "TrafficFlowsSettings",
+  "type": "object",
+  "definitions": {
+    "TrafficFlowsSettings": {
+      "id" : "#/definitions/TrafficFlowsSettings",
+      "description": "Settings for traffic flows, including migration and fabric resource configuration.",
+      "properties": {
+        "autoMigrate": {
+          "type": "boolean"
+        },
+        "fabricResource": {
+          "$ref": "../schemas-fm/fabricResource.json#/definitions/FabricResourceConfig"
+        },
+        "l2Circuit": {
+          "$ref": "../schemas-fm/fabricResource.json#/definitions/L2CircuitResourceConfig"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    }
+  }
+}

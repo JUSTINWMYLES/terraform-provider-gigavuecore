@@ -1,0 +1,305 @@
+{
+  "id": "http://gigamon.com/schemas-fm/circuitTunnel.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Circuit Tunnel Configuration schema",
+  "definitions": {
+    "CircuitTunnel": {
+      "id": "#/definitions/CircuitTunnel",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "id of the cluster in which this circuit tunnel is created"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "tunnel name"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "encap",
+            "decap"
+          ],
+          "description": "tunnel mode"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "vxlan",
+            "circuit",
+            "l2gre"
+          ]
+        },
+        "circuitIds": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 2,
+            "maximum": 4000
+          },
+          "description": "circuit ids, valid and required if type is circuit"
+        },
+        "attach": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "ipInterface if type is vxlan. ports or gigastreams if type is circuit and is valid only with decap mode."
+        },
+        "dipAddress": {
+          "type": "string",
+          "format": "ipv4",
+          "since": "H 5.8"
+        },
+        "l4SrcPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "since": "H 5.8"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "CircuitTunnelVxlanGroup": {
+      "id": "#/definitions/CircuitTunnelVxlanGroup",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "boxId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "device box id. valid range 1 - 64."
+        },
+        "vxlanIds": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 16777214
+          }
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "CircuitTunnelVxlanGroupPatch": {
+      "id": "#/definitions/CircuitTunnelVxlanGroupPatch",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "vxlanIds": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 16777215
+          }
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "CircuitTunnelL2GreGroup": {
+      "id": "#/definitions/CircuitTunnelL2GreGroup",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "boxId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "device box id. valid range 1 - 64."
+        },
+        "l2GreIds": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "maximum": 4294967294
+          }
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "CircuitTunnelL2GreGroupPatch": {
+      "id": "#/definitions/CircuitTunnelL2GreGroupPatch",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "l2GreIds": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "maximum": 4294967295
+          }
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "CircuitTunnelGlobal": {
+      "id": "#/definitions/CircuitTunnelGlobal",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boxId"
+      ],
+      "properties": {
+        "boxId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "device box id. valid range 1 - 64."
+        },
+        "vxlanL4dstPort": {
+          "type": "integer",
+          "format": "int32",
+          "default": 4789,
+          "description": "l4 destination port for tunnel terminating on the box"
+        },
+        "l2greEntropy": {
+          "type": "integer",
+          "format": "int32",
+          "default": 0,
+          "description": "entropy size"
+        },
+        "l2greProtocolType": {
+          "type": "string",
+          "description": "l2gre protocol type"
+        }
+      }
+    },
+    "CircuitTunnelGlobalPatch": {
+      "id": "#/definitions/CircuitTunnelGlobalPatch",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "vxlanL4dstPort": {
+          "type": "integer",
+          "format": "int32",
+          "default": 4789,
+          "description": "l4 destination port for tunnel terminating on the box"
+        }
+      }
+    },
+    "CircuitTunnelQueryResponse": {
+      "id": "#/definitions/CircuitTunnelsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "circuitTunnel"
+      ],
+      "properties": {
+        "circuitTunnel": {
+          "$ref": "#/definitions/CircuitTunnel"
+        }
+      }
+    },
+    "CircuitTunnelsQueryResponse": {
+      "id": "#/definitions/CircuitTunnelsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "circuitTunnels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CircuitTunnel"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "CircuitTunnelVxlanGroupsQueryResponse": {
+      "id": "#/definitions/CircuitTunnelVxlanGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "circuitTunnelVxlanGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CircuitTunnelVxlanGroup"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "CircuitTunnelL2GreGroupsQueryResponse": {
+      "id": "#/definitions/CircuitTunnelL2GreGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "circuitTunnelL2GreGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CircuitTunnelL2GreGroup"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "CircuitTunnelGlobalQueryResponse": {
+      "id": "#/definitions/CircuitTunnelGlobalQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "circuitTunnelGlobals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CircuitTunnelGlobal"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

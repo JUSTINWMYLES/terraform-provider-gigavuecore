@@ -1,0 +1,86 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmNotifyMessage.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Notification Message",
+  "definitions": {
+    "FmNotifyMessage": {
+      "id": "#/definitions/FmNotifyMessage",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "FM Notification Message",
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "message": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MessageData"
+          }
+        }
+      }
+    },
+    "MessageData": {
+      "id": "#/definitions/MessageData",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "FM Notification Message Data",
+      "required": [
+        "type",
+        "bannerConfigData"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Notification type"
+        },
+        "description": {
+          "type": "string",
+          "description": "Notification description"
+        },
+        "severity": {
+          "type": "string",
+          "description": "Notification Severity"
+        },
+        "bannerConfigData": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "hostName",
+            "diskPartition",
+            "role",
+            "thresholdPercent",
+            "currentUsagePercent",
+            "totalGB"
+          ],
+          "properties": {
+            "hostName": {
+              "type": "string",
+              "description": "Host Name"
+            },
+            "diskPartition": {
+              "type": "string",
+              "description": "Disk Partition"
+            },
+            "role": {
+              "type": "string",
+              "description": "Node Role"
+            },
+            "thresholdPercent": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "currentUsagePercent": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "totalGB": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    }
+  }
+}

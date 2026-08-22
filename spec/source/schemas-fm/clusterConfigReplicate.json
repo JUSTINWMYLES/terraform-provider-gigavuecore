@@ -1,0 +1,165 @@
+{
+  "id": "http://gigamon.com/schemas-fm/clusterConfigReplicate.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Cluster Replicate Configuration schema",
+  "definitions": {
+    "BulkReplicateConfigFile": {
+      "id": "#/definitions/BulkReplicateConfigFile",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Bulk Replicate config file",
+      "since": "FM 3.4",
+      "required": [
+        "filename"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Bulk Replicate config file name"
+        },
+        "family": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "['H' or 'G']: identifies whether this is an H-series or a G-series Config file"
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "User comments for the config file"
+        },
+        "createdTs": {
+          "type": "integer",
+          "format": "utc-millisecond",
+          "minimum": 0,
+          "readonly": true,
+          "description": "File creation timestamp in UTC milliseconds"
+        },
+        "createdTsUtc": {
+          "type": "string",
+          "format": "date-time",
+          "readonly": true,
+          "description": "File creation timestamp in ISO 8601 format"
+        }
+      }
+    },
+    "BulkReplicateConfigSpec": {
+      "id": "#/definitions/BulkReplicateConfigSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Bulk Replicate Config Spec",
+      "since": "FM 3.4",
+      "required": [
+        "filename",
+        "clusterIds"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Reference to config file to be applied. Should be a .txt file"
+        },
+        "clusterIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Cluster Ids the config file needs to be applied"
+        }
+      }
+    },
+    "BulkReplicateConfigFileRestoreLog": {
+      "id": "#/definitions/BulkReplicateConfigFileRestoreLog",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Bulk Replicate restore log file",
+      "since": "FM 3.4",
+      "required": [
+        "filename"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Bulk Replicate restore log file name"
+        },
+        "createdTs": {
+          "type": "integer",
+          "format": "utc-millisecond",
+          "minimum": 0,
+          "readonly": true,
+          "description": "File creation timestamp in UTC milliseconds"
+        },
+        "createdTsUtc": {
+          "type": "string",
+          "format": "date-time",
+          "readonly": true,
+          "description": "File creation timestamp in ISO 8601 format"
+        }
+      }
+    },
+    "BulkReplicateConfigFileQueryResponse": {
+      "id": "#/definitions/BulkReplicateConfigFileQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "file"
+      ],
+      "properties": {
+        "file": {
+          "$ref": "#/definitions/BulkReplicateConfigFile"
+        }
+      }
+    },
+    "BulkReplicateConfigFilesQueryResponse": {
+      "id": "#/definitions/BulkReplicateConfigFilesQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "files"
+      ],
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BulkReplicateConfigFile"
+          }
+        }
+      }
+    },
+    "BulkReplicateConfigRestoreLogQueryResponse": {
+      "id": "#/definitions/BulkReplicateConfigRestoreLogQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "bulkReplicateConfigRestoreLog"
+      ],
+      "properties": {
+        "bulkReplicateConfigRestoreLog": {
+          "$ref": "#/definitions/BulkReplicateConfigFileRestoreLog"
+        }
+      }
+    },
+    "BulkReplicateConfigRestoreLogsQueryResponse": {
+      "id": "#/definitions/BulkReplicateConfigRestoreLogsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "bulkReplicateConfigRestoreLogs"
+      ],
+      "properties": {
+        "bulkReplicateConfigRestoreLogs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BulkReplicateConfigFileRestoreLog"
+          }
+        }
+      }
+    }
+  }
+}

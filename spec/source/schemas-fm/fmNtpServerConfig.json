@@ -1,0 +1,121 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmNtpServerConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon ntp server config schema",
+  "definitions": {
+    "NtpServerConfig": {
+      "id": "#/definitions/NtpServerConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "FM NTP Server Config",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ntpServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NtpServer"
+          }
+        }
+      }
+    },
+    "NtpServer": {
+      "id": "#/definitions/NtpServer",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "NTP Server",
+      "required": [
+        "serverHost",
+        "authRequired"
+      ],
+      "properties": {
+        "serverHost": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Ip/Host Address"
+        },
+        "version": {
+          "type": "integer",
+          "description": "version of server"
+        },
+        "authRequired": {
+          "type": "boolean",
+          "description": "authentication enabled status"
+        },
+        "ntpAuth": {
+          "$ref": "#/definitions/NTPAuth",
+          "description":"Ntp Auth Details"
+        },
+        "serverStatus": {
+          "$ref": "#/definitions/ServerStatus",
+          "description":"Ntp Server Status"
+        },
+        "isUserNtpServer": {
+          "type": "boolean",
+          "description": "To differentiate user created ntp server and default ntp server"
+        },
+        "fmIp": {
+          "type": "String",
+          "description": "FM HighAvailability Node address/host"
+        }
+      }
+    },
+    "NTPAuth": {
+      "id": "#/definitions/NTPAuth",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "NTP Auth Details",
+      "required": [
+        "type",
+        "key",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of algorithm used for ntp server authentication"
+        },
+        "key": {
+          "type": "string",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "key for the ntp server"
+        },
+        "value": {
+          "type": "string",
+          "description":"value for the ntp server authentication"
+        }
+      }
+    },
+    "ServerStatus": {
+      "id": "#/definitions/ServerStatus",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Server Status",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "status of the server"
+        },
+        "stratum": {
+          "type": "string",
+          "description": "status of the server"
+        },
+        "offset": {
+          "type": "integer"
+        },
+        "pollInterval": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

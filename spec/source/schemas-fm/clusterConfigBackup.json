@@ -1,0 +1,482 @@
+{
+  "id": "http://gigamon.com/schemas-fm/clusterConfigBackup.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Cluster Configuration schema",
+  "definitions": {
+    "DeviceConfigFileInfo": {
+      "id": "#/definitions/DeviceConfigFileInfo",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Device-side configuration file details",
+      "since": "FM 3.2",
+      "required": [
+        "fileName"
+      ],
+      "properties": {
+        "fileName": {
+          "type": "string",
+          "readonly": true,
+          "description": "Config file name"
+        },
+        "fileSize": {
+          "type": "integer",
+          "minimum": 0,
+          "readonly": true,
+          "description": "Config file size"
+        },
+        "running": {
+          "type": "boolean",
+          "readonly": true,
+          "description": "indicates whether this is the currently active config file"
+        },
+        "nextBootFile": {
+          "type": "boolean",
+          "readonly": true,
+          "description": "indicates whether this config file should become active after reboot"
+        },
+        "lastModified": {
+          "type": "string",
+          "format": "date-time",
+          "readonly": true,
+          "description": "Last modification timestamp"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 0,
+          "readonly": true,
+          "description": "Description of the device configuration file"
+        }
+      }
+    },
+    "DeviceConfigFiles": {
+      "id": "#/definitions/DeviceConfigFiles",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "List of all the config files on a given node",
+      "since": "FM 3.2",
+      "required": [
+        "nodeId",
+        "deviceModel"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "readonly": true,
+          "description": "Node ID"
+        },
+        "boxId": {
+          "type": "string",
+          "readonly": true,
+          "description": "Cluster BoxId of the node"
+        },
+        "deviceModel": {
+          "$ref": "../schemas-common/common.json#/definitions/GigaDeviceModel",
+          "readonly": true,
+          "description": "Device model of the hosting node"
+        },
+        "swVersion": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Device's current Software version"
+        },
+        "configFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DeviceConfigFileInfo"
+          },
+          "readonly": true
+        }
+      }
+    },
+    "ClusterConfigBackupRef": {
+      "id": "#/definitions/ClusterConfigBackupRef",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Cluster reference for configuration backup",
+      "since": "FM 3.2",
+      "required": [
+        "clusterId"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Cluster Id"
+        }
+      }
+    },
+    "ClusterConfigBackupRefs": {
+      "id": "#/definitions/ClusterConfigBackupRefs",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Multi-Cluster reference for configuration backup",
+      "since": "FM 3.2",
+      "required": [
+        "clustersConfigSpecs"
+      ],
+      "properties": {
+        "clustersConfigSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterConfigBackupRef"
+          },
+          "description": "list of Clusters config backup references"
+        }
+      }
+    },
+    "DeviceConfigFileActivateSpec": {
+      "id": "#/definitions/DeviceConfigFileActivateSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Device config file activation spec",
+      "since": "FM 3.2",
+      "required": [
+        "fileName"
+      ],
+      "properties": {
+        "fileName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the config file to activate"
+        }
+      }
+    },
+    "ClusterConfigRestoreSpec": {
+      "id": "#/definitions/ClusterConfigRestoreSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Cluster Configuration restore spec",
+      "since": "FM 3.2",
+      "required": [
+        "backupId"
+      ],
+      "properties": {
+        "backupId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Reference to cluster config backup to be restored"
+        },
+        "activate": {
+          "type": "boolean",
+          "default": false,
+          "description": "indicates whether this restored config should also be made active upon restore"
+        }
+      }
+    },
+    "UpdateClusterConfigBackupSnapshot": {
+      "id": "#/definitions/UpdateClusterConfigBackupSnapshot",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "FM repo-stored Cluster Config Backup metadata update snapshot details",
+      "since": "FM 3.2",
+      "required": [
+        "backupId"
+      ],
+      "properties": {
+        "backupId": {
+          "type": "string",
+          "readonly": true,
+          "description": "Unique identifier of the cluster config snapshot for a given cluster"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 0,
+          "description": "User-entered alias for this snapshot"
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 0,
+          "description": "User-entered comments for this snapshot"
+        },
+        "doNotPurge": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates whether this snapshot should not be auto-aged/purged"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Tags associated with this file"
+        }
+      }
+    },
+    "StoredClusterConfigBackupSnapshot": {
+      "id": "#/definitions/StoredClusterConfigBackupSnapshot",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "FM repo-stored Cluster Config Backup snapshot details",
+      "since": "FM 3.2",
+      "required": [
+        "backupId"
+      ],
+      "properties": {
+        "backupId": {
+          "type": "string",
+          "readonly": true,
+          "description": "Unique identifier of the cluster config snapshot for a given cluster"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 0,
+          "description": "User-entered alias for this snapshot"
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 0,
+          "description": "User-entered comments for this snapshot"
+        },
+        "swVersion": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Software version of the device this snapshot was taken from"
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "format of the Backup file"
+        },
+        "backupTime": {
+          "type": "string",
+          "format": "date-time",
+          "readonly": true,
+          "description": "Configuration file backup time"
+        },
+        "doNotPurge": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates whether this snapshot should not be auto-aged/purged"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Tags associated with this file"
+        },
+        "restoreLogs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "restoreLogs associated with this file"
+        },
+        "clusterName": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Name of the cluster"
+        },
+        "clusterVip": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Virtual Ip of the cluster"
+        },
+        "deviceIp": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Device Ip of the hosting node"
+        },
+        "deviceHostName": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Device HostName of the hosting node"
+        },
+        "deviceGlobalId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Device Global Id of the hosting node"
+        },
+        "fileMetaData": {
+          "$ref": "#/definitions/fileMetaDataConfig"
+        }
+      }
+    },
+    "fileMetaDataConfig": {
+      "id": "#/definitions/fileMetaDataConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fileName": {
+          "type": "string",
+          "readonly": true,
+          "description": "Config file name"
+        },
+        "deviceIp": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Device Ip of the hosting node"
+        },
+        "deviceHostName": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Device HostName of the hosting node"
+        },
+        "deviceGlobalId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Device Global Id of the hosting node"
+        },
+        "deviceModel": {
+          "$ref": "../schemas-common/common.json#/definitions/GigaDeviceModel",
+          "readonly": true,
+          "description": "Device model of the hosting node"
+        },
+        "deviceVersion": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Device's current Software version"
+        },
+        "doNotPurge": {
+          "type": "boolean",
+          "default": false,
+          "description": "Indicates whether this snapshot should not be auto-aged/purged"
+        },
+        "memberInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterMemberInfo"
+          },
+          "readonly": true
+        }
+      }
+    },
+    "ClusterMemberInfo": {
+      "id": "#/definitions/ClusterMemberInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "boxId": {
+          "type": "string",
+          "readonly": true,
+          "description": "Cluster BoxId of the node"
+        },
+        "hostName": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Device HostName of the hosting node"
+        },
+        "role": {
+          "deprecated": true,
+          "type": "string",
+          "readonly": true,
+          "description": "Role of the node. (deprecated: use roleAlias)"
+        },
+        "roleAlias": {
+          "type": "string",
+          "readonly": true,
+          "description": "Role of the node"
+        }
+      }
+    },
+    "StoredClusterConfigBackupSnapshots": {
+      "id": "#/definitions/StoredClusterConfigBackupSnapshots",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "",
+      "since": "FM 3.2",
+      "required": [
+        "clusterId",
+        "entries"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Id of the cluster"
+        },
+        "clusterName": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Name of the cluster"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StoredClusterConfigBackupSnapshot"
+          },
+          "readonly": true
+        }
+      }
+    },
+    "DeviceConfigFilesQueryResponse": {
+      "id": "#/definitions/DeviceConfigFilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configFiles"
+      ],
+      "properties": {
+        "configFiles": {
+          "$ref": "#/definitions/DeviceConfigFiles"
+        }
+      }
+    },
+    "ConfigFiles": {
+      "id": "#/definitions/ConfigFiles",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configFiles"
+      ],
+      "properties": {
+        "configFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/fileMetaDataConfig"
+          }
+        }
+      }
+    },
+    "StoredClusterConfigBackupSnapshotsQueryResponse": {
+      "id": "#/definitions/StoredClusterConfigBackupSnapshotsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clusterConfigBackups"
+      ],
+      "properties": {
+        "clusterConfigBackups": {
+          "$ref": "#/definitions/StoredClusterConfigBackupSnapshots"
+        }
+      }
+    },
+    "StoredClustersConfigBackupSnapshotsQueryResponse": {
+      "id": "#/definitions/StoredClustersConfigBackupSnapshotsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clustersConfigBackups"
+      ],
+      "properties": {
+        "clustersConfigBackups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StoredClusterConfigBackupSnapshots"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

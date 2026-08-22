@@ -1,0 +1,116 @@
+{
+  "id": "http://gigamon.com/schemas-fm/tagResourceSpecs.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "tag resource download spec schema",
+  "definitions": {
+    "TagResourceDownloadSpec": {
+      "id": "#/definitions/tagResourceDownloadSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tagPresent": {
+          "type": "boolean",
+          "default": false,
+          "description": " if enabled only the resources with tags would be present in the downloaded file"
+        },
+        "clusterNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": " list of ClusterIds to download the resources, if not specified all the supported resources from the clusters would be downloaded"
+        },
+        "tagResourceTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Cluster",
+              "Map",
+              "Port"
+            ]
+          },
+          "description": "list of TagResourceType to filter by, if not specified all the supported resources (port, map, cluster) would be downloaded"
+        }
+      }
+    },
+    "bulkTagResult": {
+      "id": "#/definitions/bulkTagResult",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "startTime": {
+          "type": "integer",
+          "format": "utc-millisecond",
+          "minimum": 0,
+          "readOnly": true,
+          "description": "Operation start timestamp in UTC milliseconds"
+        },
+        "endTime": {
+          "type": "integer",
+          "format": "utc-millisecond",
+          "minimum": 0,
+          "readOnly": true,
+          "description": "Operation end timestamp in UTC milliseconds"
+        },
+        "operationType": {
+          "type": "string",
+          "enum": [
+            "append",
+            "delete",
+            "replace"
+          ]
+        },
+        "fileType": {
+          "type": "string",
+          "enum": [
+            "tags",
+            "tags_resources"
+          ],
+          "description": "type of the file imported"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "InProgress",
+            "Completed"
+          ],
+          "description": "operation status"
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "total number of operations"
+        },
+        "completed": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "number of operations completed"
+        },
+        "errorsCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "number of operations failed"
+        },
+        "skippedCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "number of operations skipped"
+        }
+      }
+    },
+    "BulkTagResultQueryResponse": {
+      "id": "#/definitions/BulkTagResultQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tag"
+      ],
+      "properties": {
+        "bulkTagResult": {
+          "$ref": "#/definitions/bulkTagResult"
+        }
+      }
+    }
+  }
+}

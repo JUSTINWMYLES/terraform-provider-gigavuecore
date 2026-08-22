@@ -1,0 +1,23 @@
+{
+  "id": "http://gigamon.com/schemas-fm/integrityCheck.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device Email Notifications",
+  "definitions": {
+    "IntegrityCheck": {
+      "id": "#/definitions/IntegrityCheck",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Crypto Configuration",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Alias for self test status message"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of FM Integrity check"
+        }
+      }
+    }
+  }
+}

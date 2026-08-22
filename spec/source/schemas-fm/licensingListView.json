@@ -1,0 +1,126 @@
+{
+  "id": "http://gigamon.com/schemas-fm/licensingListView.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Licensing List View schema",
+  "definitions": {
+    "FmLicense": {
+      "id": "#/definitions/FmLicense",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon Licensing List View schema",
+      "since": "FM 3.1",
+      "required": [
+        "nodeId",
+        "hostName",
+        "model",
+        "deviceSwVersion",
+        "slotId",
+        "clusterName",
+        "boxId",
+        "serialNumber",
+        "hwType",
+        "feature",
+        "licenseType",
+        "startDate",
+        "endDate",
+        "notifPeriod",
+        "gracePeriod",
+        "floated",
+        "chassisSerialNumber",
+        "licenseStatus"
+      ],
+      "properties": {
+        "nodeId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "hostName": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "deviceSwVersion": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "slotId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "clusterName": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "boxId": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "serialNumber": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "hwType": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "feature": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "cups"
+          }
+        },
+        "licenseType": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "floated": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "chassisSerialNumber": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "licenseStatus": {
+          "type": "string",
+          "minLength": 1,
+          "readOnly": true
+        },
+        "startDate": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "endDate": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "notifPeriod": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "gracePeriod": {
+          "type": "integer",
+          "readOnly": true
+        }
+      }
+    }
+
+  }
+}

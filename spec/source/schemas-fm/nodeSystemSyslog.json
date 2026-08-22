@@ -1,0 +1,260 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemSyslog.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device Syslog schema",
+  "definitions": {
+    "ClusterSyslogConfig": {
+      "id": "#/definitions/ClusterSyslogConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clusterName",
+        "syslogConfigList"
+      ],
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "description": "Name of the cluster",
+          "since": "H 5.3"
+        },
+        "syslogConfigList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeSyslogConfig"
+          },
+          "description": "List of the syslog configuration specification for every node in the cluster"
+        }
+      }
+    },
+    "NodeSyslogConfig": {
+      "id": "#/definitions/NodeSyslogConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "logSeverity",
+        "deviceIp"
+      ],
+      "description": "Syslog configuration specification for a device",
+      "properties": {
+        "logSeverity": {
+          "type": "string",
+          "enum": [
+            "none",
+            "emergency",
+            "alert",
+            "critical",
+            "error",
+            "warning",
+            "notice",
+            "info"
+          ],
+          "default": "notice",
+          "description": "Minimum syslog logging severity level"
+        },
+        "deviceIp": {
+          "type": "string",
+          "description": "IP address of the device",
+          "since": "H 5.3"
+        },
+        "targetHosts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SyslogRemoteTarget"
+          },
+          "description": "List of syslog targets the device is streaming to"
+        }
+      }
+    },
+    "SyslogRemoteTarget": {
+      "id": "#/definitions/SyslogRemoteTarget",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Syslog Remote Target Server",
+      "required": [
+        "server",
+        "logSeverity",
+        "port",
+        "streamingEnabled"
+      ],
+      "properties": {
+        "server": {
+          "type": "string",
+          "description": "ipv4 or ipv6 or hostname"
+        },
+        "logSeverity": {
+          "type": "string",
+          "enum": [
+            "none",
+            "emergency",
+            "alert",
+            "critical",
+            "error",
+            "warning",
+            "notice",
+            "info"
+          ],
+          "default": "warning",
+          "description": "Minimum logging severity level the device will stream for this target"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "0 represents UDP and non zero is TCP",
+          "since": "H 4.4"
+        },
+        "sshEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Is Syslog target configured to receive logs via SSH",
+          "since": "H 4.4"
+        },
+        "streamingEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Is Syslog Streaming enabled",
+          "since": "H 5.3"
+        },
+        "username": {
+          "type": "string",
+          "description": "For syslog over UDP there won't be any user. Only valid for SSH type",
+          "since": "H 4.4"
+        }
+      }
+    },
+    "GigaSyslog": {
+      "id": "#/definitions/GigaSyslog",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Gigamon Syslog entry",
+      "since": "FM 5.3",
+      "required": [
+        "deviceIp",
+        "hostname",
+        "timestampUtcString",
+        "severity",
+        "process",
+        "structuredData",
+        "pid",
+        "customerId",
+        "source",
+        "category",
+        "type",
+        "resourceId",
+        "resourceType",
+        "description",
+        "syslogVersion",
+        "syslogPriority"
+      ],
+      "properties": {
+        "deviceIp": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Device IP address"
+        },
+        "hostname": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Device host name"
+        },
+        "timestampUtcString": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "description": "Log timestamp in UTC represented in ISO 8601 format"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "EMERG",
+            "ALERT",
+            "CRIT",
+            "ERR",
+            "WARNING",
+            "INFO",
+            "DEBUG"
+          ],
+          "description": "Severity of the event"
+        },
+        "process": {
+          "type": "string",
+          "minLength": 1,
+          "description": "System process generating the log"
+        },
+        "pid": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Process Id of the process generating the log"
+        },
+        "structuredData": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Additional information about the log. Example: link speed=10000, portID=1/1/x1 for linkChangeNotify event"
+        },
+        "customerId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Customer Id of the log. Gigamon reserved customerId is 26866"
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Log Type identifier. Example linkChangeNotify"
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Log Source. Control Card or GigaSmart"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "LINK",
+            "RESOURCE-UTIL",
+            "PACKETDROP",
+            "HIGH-TEMPERATURE"
+          ],
+          "readonly": true,
+          "description": "Category of the log"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Log description"
+        },
+        "resourceType": {
+          "type": "string",
+          "enum": [
+            "Cpu",
+            "Memory",
+            "Port",
+            "Optics"
+          ],
+          "readonly": true,
+          "description": "Affected Entity Type of the log"
+        },
+        "resourceId": {
+          "type": "string",
+          "readonly": true,
+          "description": "Affected Entity of the log"
+        },
+        "syslogPriority": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Syslog Priority as per RFC 5424"
+        },
+        "syslogVersion": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "Syslog Version as per RFC 5424"
+        }
+      }
+    }
+  }
+}

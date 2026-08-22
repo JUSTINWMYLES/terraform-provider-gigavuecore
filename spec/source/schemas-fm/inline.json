@@ -1,0 +1,1962 @@
+{
+  "id": "http://gigamon.com/schemas-fm/inline.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Inline Configuration schema",
+  "definitions": {
+    "InlineHbProfile": {
+      "id": "#/definitions/InlineHbProfile",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Heartbeat Profile definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Heartbeat Profile alias. Unique within a cluster"
+        },
+        "packetFormat": {
+          "type": "string",
+          "enum": [
+            "arp",
+            "custom"
+          ],
+          "default": "arp"
+        },
+        "customPacket": {
+          "type": "string",
+          "description": "Base64-encoded custom pcap packet. If omitted, a standard ICMP ARP packet will be used as a heartbeat packet. Custom heartbeat packets can be ICMP/IPv4 or ICMPv6/IPv6"
+        },
+        "customPacketAlias": {
+          "type": "string",
+          "description": "(deprecated) Alias of referenced 'custom heartbeat packet' entry. Used for 'inline heartbeat profile' creation"
+        },
+        "customPacketFileName": {
+          "type": "string",
+          "description": "File name of referenced 'custom heartbeat packet' entry"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "aToB",
+            "bToA",
+            "both"
+          ],
+          "default": "both"
+        },
+        "period": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 5000,
+          "default": 1000,
+          "description": "number of milliseconds between sending subsequent heartbeat packets"
+        },
+        "recoveryTime": {
+          "type": "integer",
+          "format": "byte",
+          "minimum": 5,
+          "maximum": 60,
+          "default": 30,
+          "description": " the minimum number of seconds with successfully received packet to declare that the inline tool is up"
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 20,
+          "maximum": 1000,
+          "default": 500,
+          "description": "number of milliseconds allowed for a heartbeat packet between sending and receiving"
+        },
+        "retries": {
+          "type": "integer",
+          "format": "byte",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 3,
+          "description": "number of consecutive timed-out heartbeat packets at which the system will trigger a failover condition"
+        }
+      }
+    },
+    "InlineNegativeHbProfile": {
+      "id": "#/definitions/InlineNegativeHbProfile",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Negative Heartbeat Profile definition",
+      "since": "H 4.7",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Negative Heartbeat Profile alias. Unique within a cluster"
+        },
+        "customPacket": {
+          "type": "string",
+          "default": "none",
+          "description": "Base64-encoded custom pcap packet. Custom negative heartbeat packets can be ICMP/IPv4 or ICMPv6/IPv6"
+        },
+        "customPacketFileName": {
+          "type": "string",
+          "description": "File name of referenced 'custom negative heartbeat packet' entry. Used for 'inline negative heartbeat profile' creation"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "aToB",
+            "bToA",
+            "both"
+          ],
+          "default": "both"
+        },
+        "period": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 5000,
+          "default": 1000,
+          "description": "number of milliseconds between sending subsequent heartbeat packets"
+        },
+        "recoveryTime": {
+          "type": "integer",
+          "format": "byte",
+          "minimum": 5,
+          "maximum": 60,
+          "default": 30,
+          "description": " the minimum number of seconds with successfully received packet to declare that the inline tool is up"
+        }
+      }
+    },
+    "InlineHbPacketRepo": {
+      "id": "#/definitions/InlineHbPacketRepo",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Heartbeat Custom Packet Repository",
+      "required": [
+        "customPackets"
+      ],
+      "properties": {
+        "customPackets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineHbPacket"
+          },
+          "description": "Heartbeat Profile alias. Unique within a cluster"
+        }
+      }
+    },
+    "InlineHbPacket": {
+      "id": "#/definitions/InlineHbPacket",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Heartbeat Custom Packet definition",
+      "required": [
+        "alias",
+        "customPacket"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Heartbeat Custom Packet alias. Maps directly (foreign key) into InlineHbProfile alias"
+        },
+        "customPacket": {
+          "type": "string",
+          "description": "Base64-encoded custom pcap packet"
+        }
+      }
+    },
+    "InlineNetwork": {
+      "id": "#/definitions/InlineNetwork",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Network definition",
+      "required": [
+        "alias",
+        "portA",
+        "portB"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Network alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "portA": {
+          "type": "string",
+          "description": "portId of side A inline network port",
+          "minLength": 1
+        },
+        "portB": {
+          "type": "string",
+          "description": "portId of side B inline network port",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "protected",
+            "unprotected"
+          ],
+          "readonly": true
+        },
+        "physicalBypass": {
+          "type": "boolean",
+          "default": true,
+          "description": "only applicable for 'protected' inline networks"
+        },
+        "redundancyProfile": {
+          "type": "string",
+          "description": "Alias of one of the pre-defined Redundancy Profiles. only applicable for 'protected' inline networks",
+          "since": "H 4.4"
+        },
+        "redundancyControlState": {
+          "type": "string",
+          "enum": [
+            "neutral",
+            "suspended",
+            "primaryForwarding",
+            "secondaryForwarding",
+            "secondaryBypass"
+          ],
+          "description": "Redundancy Control State. For 'protected' inline networks",
+          "readonly": true,
+          "since": "H 4.4"
+        },
+        "lfp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Link Failure Propagation. Controls whether the inline network link failure on one side of the inline network gets propagated to the other side"
+        },
+        "trafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "bypassWithMonitoring",
+            "toInlineTool"
+          ],
+          "default": "drop"
+        },
+        "forwardingState": {
+          "type": "string",
+          "enum": [
+            "physicalBypass",
+            "forcedBypass",
+            "forcedBypassMonitoring",
+            "disabled",
+            "disconnected",
+            "failureIntroducedBypass",
+            "failureIntroducedDrop",
+            "failureIntroducedForcedown",
+            "normal",
+            "abnormal",
+            "absent"
+          ],
+          "readonly": true,
+          "since": "H 4.3.01"
+        },
+        "heartbeat": {
+          "$ref": "#/definitions/InlineNetworkHeartbeat"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "InlineNetworkPatch": {
+      "id": "#/definitions/InlineNetworkPatch",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Network definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Network alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "portA": {
+          "type": "string",
+          "description": "portId of side A inline network port",
+          "minLength": 1
+        },
+        "portB": {
+          "type": "string",
+          "description": "portId of side B inline network port",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "protected",
+            "unprotected"
+          ],
+          "readonly": true
+        },
+        "physicalBypass": {
+          "type": "boolean",
+          "default": true,
+          "description": "only applicable for 'protected' inline networks"
+        },
+        "redundancyProfile": {
+          "type": "string",
+          "description": "Alias of one of the pre-defined Redundancy Profiles. only applicable for 'protected' inline networks",
+          "since": "H 4.4"
+        },
+        "redundancyControlState": {
+          "type": "string",
+          "enum": [
+            "neutral",
+            "suspended",
+            "primaryForwarding",
+            "secondaryForwarding",
+            "secondaryBypass"
+          ],
+          "description": "Redundancy Control State. For 'protected' inline networks",
+          "readonly": true,
+          "since": "H 4.4"
+        },
+        "lfp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Link Failure Propagation. Controls whether the inline network link failure on one side of the inline network gets propagated to the other side"
+        },
+        "trafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "bypassWithMonitoring",
+            "toInlineTool"
+          ],
+          "default": "drop"
+        },
+        "forwardingState": {
+          "type": "string",
+          "enum": [
+            "physicalBypass",
+            "forcedBypass",
+            "forcedBypassMonitoring",
+            "disabled",
+            "disconnected",
+            "failureIntroducedBypass",
+            "failureIntroducedDrop",
+            "failureIntroducedForcedown",
+            "normal",
+            "abnormal",
+            "absent"
+          ],
+          "readonly": true,
+          "since": "H 4.3.01"
+        },
+        "heartbeat": {
+          "$ref": "#/definitions/InlineNetworkHeartbeat"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "InlineNetworkHeartbeat": {
+      "id": "#/definitions/InlineNetworkHeartbeat",
+      "type": "object",
+      "description": "Embedded Heartbeat configuration for an Inline Network.",
+      "since": "H 5.11",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "InlineNetworkRedundancyProfile": {
+      "id": "#/definitions/InlineNetworkRedundancyProfile",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Network Redundancy Profile definition",
+      "required": [
+        "alias",
+        "signalingPort"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Network alias. Unique within a cluster"
+        },
+        "signalingPort": {
+          "type": "string",
+          "description": "only applicable for 'protected' inline networks",
+          "since": "H 4.4"
+        },
+        "protectionRole": {
+          "type": "string",
+          "enum": [
+            "suspended",
+            "primary",
+            "secondary"
+          ],
+          "default": "suspended",
+          "description": "only applicable for 'protected' inline networks",
+          "since": "H 4.4"
+        }
+      }
+    },
+    "InlineNetworkRedundancyProfilePatch": {
+      "id": "#/definitions/InlineNetworkRedundancyProfilePatch",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Network Redundancy Profile definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Network alias. Unique within a cluster"
+        },
+        "signalingPort": {
+          "type": "string",
+          "description": "only applicable for 'protected' inline networks",
+          "since": "H 4.4"
+        },
+        "protectionRole": {
+          "type": "string",
+          "enum": [
+            "suspended",
+            "primary",
+            "secondary"
+          ],
+          "default": "suspended",
+          "description": "only applicable for 'protected' inline networks",
+          "since": "H 4.4"
+        }
+      }
+    },
+    "InlineTool": {
+      "id": "#/definitions/InlineTool",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Tool definition",
+      "required": [
+        "alias",
+        "portA",
+        "portB"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Tool alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "portA": {
+          "type": "string",
+          "description": "portId of side A inline tool port",
+          "minLength": 1
+        },
+        "portB": {
+          "type": "string",
+          "description": "portId of side B inline tool port",
+          "minLength": 1
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "failoverAction": {
+          "type": "string",
+          "enum": [
+            "toolBypass",
+            "toolDrop",
+            "networkBypass",
+            "networkDrop",
+            "networkPortForcedDown"
+          ],
+          "default": "networkBypass"
+        },
+        "shared": {
+          "type": "boolean",
+          "default": "false",
+          "since": "H 5.0",
+          "description": "inline tool sharing mode"
+        },
+        "heartbeat": {
+          "$ref": "#/definitions/InlineToolHeartbeat"
+        },
+        "negativeHeartbeat": {
+          "$ref": "#/definitions/InlineToolNegativeHeartbeat"
+        },
+        "combinedHeartBeatStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readonly": true,
+          "description": "combined Heartbeat status"
+        },
+        "recoveryMode": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "automatic"
+          ],
+          "default": "automatic",
+          "since": "H 4.4"
+        },
+        "portAStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readonly": true,
+          "description": "port A status"
+        },
+        "portBStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readonly": true,
+          "description": "port B status"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "operationalState": {
+          "type": "string",
+          "enum": [
+            "disable",
+            "up",
+            "down",
+            "ready"
+          ],
+          "readonly": true,
+          "since": "H 4.4",
+          "description": "Operational State"
+        },
+        "flexStatus": {
+          "type": "string",
+          "readonly": true,
+          "enum": [
+            "forwarding",
+            "forcedBypassing",
+            "failoverBypassing",
+            "forcedDropping",
+            "failoverDropping",
+            "monitoring",
+            "networkFailover",
+            "undefined"
+          ],
+          "since": "H 5.2"
+        },
+        "flexTrafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "monitoring",
+            "toInlineTool"
+          ],
+          "since": "H 5.2"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date-time of stats collection in RFC 3339 format"
+        },
+        "inlineToolType": {
+          "type": "string",
+          "enum": [
+            "external",
+            "gmon"
+          ],
+          "description": "inlineTool type",
+          "since": "H 5.11"
+        }
+      }
+    },
+    "InlineToolPatch": {
+      "id": "#/definitions/InlineToolPatch",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Tool definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Tool alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "portA": {
+          "type": "string",
+          "description": "portId of side A inline tool port",
+          "minLength": 1
+        },
+        "portB": {
+          "type": "string",
+          "description": "portId of side B inline tool port",
+          "minLength": 1
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "failoverAction": {
+          "type": "string",
+          "enum": [
+            "toolBypass",
+            "toolDrop",
+            "networkBypass",
+            "networkDrop",
+            "networkPortForcedDown"
+          ],
+          "default": "networkBypass"
+        },
+        "shared": {
+          "type": "boolean",
+          "default": "false",
+          "since": "H 5.0",
+          "description": "inline tool sharing mode"
+        },
+        "heartbeat": {
+          "$ref": "#/definitions/InlineToolHeartbeat"
+        },
+        "negativeHeartbeat": {
+          "$ref": "#/definitions/InlineToolNegativeHeartbeat"
+        },
+        "combinedHeartBeatStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readonly": true,
+          "description": "combined Heartbeat status"
+        },
+        "recoveryMode": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "automatic"
+          ],
+          "default": "automatic",
+          "since": "H 4.4"
+        },
+        "portAStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readonly": true,
+          "description": "port A status"
+        },
+        "portBStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readonly": true,
+          "description": "port B status"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "operationalState": {
+          "type": "string",
+          "enum": [
+            "disable",
+            "up",
+            "down",
+            "ready"
+          ],
+          "readonly": true,
+          "since": "H 4.4",
+          "description": "Operational State"
+        },
+        "flexStatus": {
+          "type": "string",
+          "readonly": true,
+          "enum": [
+            "forwarding",
+            "forcedBypassing",
+            "failoverBypassing",
+            "forcedDropping",
+            "failoverDropping",
+            "monitoring",
+            "networkFailover",
+            "undefined"
+          ],
+          "since": "H 5.2"
+        },
+        "flexTrafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "monitoring",
+            "toInlineTool"
+          ],
+          "since": "H 5.2"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date-time of stats collection in RFC 3339 format"
+        },
+        "inlineToolType": {
+          "type": "string",
+          "enum": [
+            "external",
+            "gmon"
+          ],
+          "description": "inlineTool type",
+          "since": "H 5.11"
+        }
+      }
+    },
+    "InlineToolHeartbeat": {
+      "id": "#/definitions/InlineToolHeartbeat",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Embedded Heartbeat configuration for an Inline Tool. Private class",
+      "required": [
+        "enabled",
+        "profile",
+        "ipAddressA",
+        "ipAddressB"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "profile": {
+          "type": "string",
+          "description": "Alias of referenced Heartbeat Profile. the default is the heartbeat profile named 'default'",
+          "default": "default"
+        },
+        "ipAddressA": {
+          "type": "string",
+          "description": "the destination IP address to be used in heartbeat packets send from side A to side B (the default is N.N.N.N where N is the port number within the chassis as shown on the face plate)"
+        },
+        "ipAddressB": {
+          "type": "string",
+          "description": "the destination IP address to be used in heartbeat packets send from side B to side A (the default is N.N.N.N where N is the port number within the chassis as shown on the face plate)"
+        },
+        "status": {
+          "$ref": "#/definitions/InlineToolHeartbeatStatus",
+          "readonly": true,
+          "description": "status of the InlineTool construct"
+        }
+      }
+    },
+    "InlineToolNegativeHeartbeat": {
+      "id": "#/definitions/InlineToolNegativeHeartbeat",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Embedded Heartbeat configuration for an Inline Tool. Private class",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "profile": {
+          "type": "string",
+          "description": "Alias of referenced Negative Heartbeat Profile"
+        },
+        "status": {
+          "$ref": "#/definitions/InlineToolHeartbeatStatus",
+          "readonly": true,
+          "description": "status of the InlineTool construct"
+        }
+      }
+    },
+    "InlineToolHeartbeatStatus": {
+      "id": "#/definitions/InlineToolHeartbeatStatus",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Embedded Heartbeat configuration for an Inline Tool. Private class",
+      "required": [
+        "statsAtoB",
+        "statsBtoA"
+      ],
+      "properties": {
+        "heartbeatPassing": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down",
+            "unknown"
+          ],
+          "readonly": true,
+          "description": "indicates whether heartbeat packets from portA are reaching portB and vice versa"
+        },
+        "statsAtoB": {
+          "$ref": "#/definitions/InlineToolHeartbeatStatistics",
+          "readonly": true,
+          "description": "heartbeat packet counters as seen on the port A side"
+        },
+        "statsBtoA": {
+          "$ref": "#/definitions/InlineToolHeartbeatStatistics",
+          "readonly": true,
+          "description": "heartbeat packet counters as seen on the port B side"
+        }
+      }
+    },
+    "InlineToolHeartbeatStatistics": {
+      "id": "#/definitions/InlineToolHeartbeatStatistics",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Embedded Heartbeat configuration for an Inline Tool. Private class",
+      "required": [
+        "txCount",
+        "rxCount"
+      ],
+      "properties": {
+        "txCount": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 0,
+          "readonly": true,
+          "description": "number of heartbeat packets sent"
+        },
+        "rxCount": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 0,
+          "readonly": true,
+          "description": "number of heartbeat packets received"
+        }
+      }
+    },
+    "InlineToolGroup": {
+      "id": "#/definitions/InlineToolGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Tool Group definition",
+      "required": [
+        "alias",
+        "inlineTools",
+        "failoverMode",
+        "failoverAction"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Tool Group alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "setting to false is equivalent to forcing the inline tool group failure (useful for taking the inline tool group out of commission for maintenance or other purposes)"
+        },
+        "inlineTools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "If no spare inline tool configured, list of aliases of inline tools participating in hash-based traffic distribution. If the spare inline tool is configured, list of aliases of primary inline tools to which traffic is forwarded as long as all of them are healthy. The number of inline tools in the list must be between 1 and 64 if the spare inline tool is configured or between 2 and 64 otherwise"
+        },
+        "spareInlineTool": {
+          "type": "string",
+          "description": "alias of an inline tool to which traffic is forwarded when the first failure occurs in the set of primary inline tools"
+        },
+        "releaseSpareIfPossible": {
+          "type": "boolean",
+          "default": false,
+          "description": "when set to true, if the spare inline tool became active it remains active regardless of the health state of the originally failed primary inline tool"
+        },
+        "hash": {
+          "type": "string",
+          "enum": [
+            "advanced",
+            "a-srcip-b-dstip",
+            "b-srcip-a-dstip"
+          ],
+          "default": "advanced"
+        },
+        "failoverMode": {
+          "type": "string",
+          "enum": [
+            "disabled",
+            "next",
+            "spread"
+          ],
+          "default": "spread",
+          "description": "the way of handling a failure of an individual member of the inline tool list when no spare inline tool is configured or if the spare inline tool is failed"
+        },
+        "minGroupSize": {
+          "type": "integer",
+          "format": "byte",
+          "minimum": 1,
+          "maximum": 24,
+          "default": 1,
+          "description": " the minimum number of inline tools (the inline tools in the list plus spare if configured) that must be up so that the entire inline-tool-group is considered up"
+        },
+        "failoverAction": {
+          "type": "string",
+          "enum": [
+            "toolBypass",
+            "toolDrop",
+            "networkBypass",
+            "networkDrop",
+            "networkPortForcedDown"
+          ],
+          "default": "networkBypass"
+        },
+        "currentState": {
+          "$ref": "#/definitions/InlineToolGroupCurrentState",
+          "description": "Current state of inline tool group with presence of spare",
+          "readonly": true,
+          "since": "H 4.4"
+        },
+        "flexStatus": {
+          "type": "string",
+          "readonly": true,
+          "enum": [
+            "forwarding",
+            "forcedBypassing",
+            "failoverBypassing",
+            "forcedDropping",
+            "failoverDropping",
+            "monitoring",
+            "networkFailover",
+            "undefined"
+          ],
+          "since": "H 5.2"
+        },
+        "flexTrafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "monitoring",
+            "toInlineTool"
+          ],
+          "since": "H 5.2"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "operStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readonly": true
+        }
+      }
+    },
+    "InlineToolGroupPatch": {
+      "id": "#/definitions/InlineToolGroupPatch",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Tool Group definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Tool Group alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "setting to false is equivalent to forcing the inline tool group failure (useful for taking the inline tool group out of commission for maintenance or other purposes)"
+        },
+        "inlineTools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "If no spare inline tool configured, list of aliases of inline tools participating in hash-based traffic distribution. If the spare inline tool is configured, list of aliases of primary inline tools to which traffic is forwarded as long as all of them are healthy. The number of inline tools in the list must be between 1 and 64 if the spare inline tool is configured or between 2 and 64 otherwise"
+        },
+        "spareInlineTool": {
+          "type": "string",
+          "description": "alias of an inline tool to which traffic is forwarded when the first failure occurs in the set of primary inline tools"
+        },
+        "releaseSpareIfPossible": {
+          "type": "boolean",
+          "default": false,
+          "description": "when set to true, if the spare inline tool became active it remains active regardless of the health state of the originally failed primary inline tool"
+        },
+        "hash": {
+          "type": "string",
+          "enum": [
+            "advanced",
+            "a-srcip-b-dstip",
+            "b-srcip-a-dstip"
+          ],
+          "default": "advanced"
+        },
+        "failoverMode": {
+          "type": "string",
+          "enum": [
+            "disabled",
+            "next",
+            "spread"
+          ],
+          "default": "spread",
+          "description": "the way of handling a failure of an individual member of the inline tool list when no spare inline tool is configured or if the spare inline tool is failed"
+        },
+        "minGroupSize": {
+          "type": "integer",
+          "format": "byte",
+          "minimum": 1,
+          "maximum": 16,
+          "default": 1,
+          "description": " the minimum number of inline tools (the inline tools in the list plus spare if configured) that must be up so that the entire inline-tool-group is considered up"
+        },
+        "failoverAction": {
+          "type": "string",
+          "enum": [
+            "toolBypass",
+            "toolDrop",
+            "networkBypass",
+            "networkDrop",
+            "networkPortForcedDown"
+          ],
+          "default": "networkBypass"
+        },
+        "currentState": {
+          "$ref": "#/definitions/InlineToolGroupCurrentState",
+          "description": "Current state of inline tool group with presence of spare",
+          "readonly": true,
+          "since": "H 4.4"
+        },
+        "flexStatus": {
+          "type": "string",
+          "readonly": true,
+          "enum": [
+            "forwarding",
+            "forcedBypassing",
+            "failoverBypassing",
+            "forcedDropping",
+            "failoverDropping",
+            "monitoring",
+            "networkFailover",
+            "undefined"
+          ],
+          "since": "H 5.2"
+        },
+        "flexTrafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "monitoring",
+            "toInlineTool"
+          ],
+          "since": "H 5.2"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "operStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readonly": true
+        }
+      }
+    },
+    "InlineToolGroupCurrentState": {
+      "id": "#/definitions/InlineToolGroupCurrentState",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Tool Group Smart Load Balancing definition",
+      "since": "H 4.4",
+      "properties": {
+        "spareTool": {
+          "type": "string",
+          "description": "Current spare tool"
+        },
+        "spareToolStatus": {
+          "type": "string",
+          "description": "Current spare tool status",
+          "enum": [
+            "down",
+            "available",
+            "inUse"
+          ]
+        },
+        "switchedInlineTool": {
+          "type": "string",
+          "description": "Current switched inlineTool"
+        },
+        "inlineTools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Current list of inlineTools"
+        }
+      }
+    },
+    "InlineSerialToolGroup": {
+      "id": "#/definitions/InlineSerialToolGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Serial Tool Group definition",
+      "required": [
+        "alias",
+        "inlineTools",
+        "failoverAction"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Tool Group alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "setting to false is equivalent to forcing the inline serial tool failure (useful for taking the inline serial tool out of commission for maintenance or other purposes)"
+        },
+        "perDirectionOrder": {
+          "type": "string",
+          "enum": [
+            "reverse",
+            "forward"
+          ],
+          "default": "reverse",
+          "description": "direction of traffic flow in reference to the order that the inline-tools are configured"
+        },
+        "inlineTools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "a list of aliases of the inline tools or inline tool groups that participate in the series"
+        },
+        "failoverAction": {
+          "type": "string",
+          "enum": [
+            "toolBypass",
+            "toolDrop",
+            "networkBypass",
+            "networkDrop",
+            "networkPortForcedDown",
+            "perTool"
+          ],
+          "default": "toolBypass"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "InlineSerialToolGroupPatch": {
+      "id": "#/definitions/InlineSerialToolGroupPatch",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Serial Tool Group definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Tool Group alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "setting to false is equivalent to forcing the inline serial tool failure (useful for taking the inline serial tool out of commission for maintenance or other purposes)"
+        },
+        "perDirectionOrder": {
+          "type": "string",
+          "enum": [
+            "reverse",
+            "forward"
+          ],
+          "default": "reverse",
+          "description": "direction of traffic flow in reference to the order that the inline-tools are configured"
+        },
+        "inlineTools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "a list of aliases of the inline tools or inline tool groups that participate in the series"
+        },
+        "failoverAction": {
+          "type": "string",
+          "enum": [
+            "toolBypass",
+            "toolDrop",
+            "networkBypass",
+            "networkDrop",
+            "networkPortForcedDown",
+            "perTool"
+          ],
+          "default": "toolBypass"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "InlineNetworkGroup": {
+      "id": "#/definitions/InlineNetworkGroup",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Network Group definition",
+      "required": [
+        "alias",
+        "inlineNetworks"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Tool Group alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "inlineNetworks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "list of inline-network aliases"
+        },
+        "bundled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Bundled: an inline tool or group of inline tools is injected into a link bundle between two networks; Distinct: an inline tool or group of inline tools is shared by a number of pairs of networks"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "InlineNetworkGroupPatch": {
+      "id": "#/definitions/InlineNetworkGroupPatch",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Network Group definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Tool Group alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "inlineNetworks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "list of inline-network aliases"
+        },
+        "bundled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Bundled: an inline tool or group of inline tools is injected into a link bundle between two networks; Distinct: an inline tool or group of inline tools is shared by a number of pairs of networks"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "InlineIbPathway": {
+      "id": "#/definitions/InlineIbPathway",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Inline inter-broker pathway definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Inline resilient inter-broker pathway alias"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of local network ports with same speed"
+        },
+        "minPortsUp": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 24,
+          "default": 1,
+          "description": "minimum number of ports in the 'up' state needed to declare the ib-pathway to be in the 'up' state."
+        },
+        "trafficPath": {
+          "type": "string",
+          "enum": [
+            "bypass",
+            "monitor",
+            "toInlineTool"
+          ],
+          "default": "toInlineTool"
+        },
+        "operationalState": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readOnly": true
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "InlineNetworkLag": {
+      "id": "#/definitions/InlineNetworkLag",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Network LAG definition",
+      "required": [
+        "alias",
+        "inlineNetworks"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Network LAG alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "inlineNetworks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "list of inline-network-lag aliases"
+        },
+        "physicalBypass": {
+          "type": "boolean",
+          "default": true,
+          "description": "changes will be pushed down to all inline-network members"
+        },
+        "redundancyProfile": {
+          "type": "string",
+          "description": "Alias of one of the pre-defined Redundancy Profiles. only applicable for 'protected' inline networks"
+        },
+        "redundancyControlState": {
+          "type": "string",
+          "enum": [
+            "neutral",
+            "suspended",
+            "primaryForwarding",
+            "secondaryForwarding",
+            "secondaryBypass"
+          ],
+          "description": "For Redundancy Control State. From 'protected' inline networks",
+          "readonly": true
+        },
+        "lfp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Link Failure Propagation. Controls whether the inline network link failure on one side of the inline network gets propagated to the other side. Changes will be pushed down to all inline-network members"
+        },
+        "lacp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable or Disable Link Aggregation Control Protocol"
+        },
+        "cdp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable or Disable Cisco Discovery Protocol"
+        },
+        "trafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "bypassWithMonitoring",
+            "toInlineTool"
+          ],
+          "default": "drop"
+        },
+        "forwardingState": {
+          "type": "string",
+          "enum": [
+            "physicalBypass",
+            "forcedBypass",
+            "forcedBypassMonitoring",
+            "disabled",
+            "disconnected",
+            "failureIntroducedBypass",
+            "failureIntroducedDrop",
+            "failureIntroducedForcedown",
+            "normal",
+            "abnormal",
+            "absent"
+          ],
+          "readonly": true
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        }
+      }
+    },
+    "InlineNetworkLagPatch": {
+      "id": "#/definitions/InlineNetworkLagPatch",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Inline Network LAG definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Inline Network LAG alias. Unique within a cluster"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "inlineNetworks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "list of inline-network-lag aliases"
+        },
+        "physicalBypass": {
+          "type": "boolean",
+          "default": true,
+          "description": "changes will be pushed down to all inline-network members"
+        },
+        "redundancyProfile": {
+          "type": "string",
+          "description": "Alias of one of the pre-defined Redundancy Profiles. only applicable for 'protected' inline networks"
+        },
+        "lfp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Link Failure Propagation. Controls whether the inline network link failure on one side of the inline network gets propagated to the other side. Changes will be pushed down to all inline-network members"
+        },
+        "trafficPath": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "bypass",
+            "bypassWithMonitoring",
+            "toInlineTool"
+          ],
+          "default": "drop"
+        }
+      }
+    },
+    "InlineNetworkQueryResponse": {
+      "id": "#/definitions/InlineNetworkQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineNetwork"
+      ],
+      "properties": {
+        "inlineNetwork": {
+          "$ref": "#/definitions/InlineNetwork"
+        }
+      }
+    },
+    "InlineNetworksQueryResponse": {
+      "id": "#/definitions/InlineNetworksQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineNetworks"
+      ],
+      "properties": {
+        "inlineNetworks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineNetwork"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineToolQueryResponse": {
+      "id": "#/definitions/InlineToolQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineTool"
+      ],
+      "properties": {
+        "inlineTool": {
+          "$ref": "#/definitions/InlineTool"
+        }
+      }
+    },
+    "InlineToolsQueryResponse": {
+      "id": "#/definitions/InlineToolsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineTools"
+      ],
+      "properties": {
+        "inlineTools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineTool"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineToolGroupQueryResponse": {
+      "id": "#/definitions/InlineToolGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineToolGroup"
+      ],
+      "properties": {
+        "inlineToolGroup": {
+          "$ref": "#/definitions/InlineToolGroup"
+        }
+      }
+    },
+    "InlineToolGroupsQueryResponse": {
+      "id": "#/definitions/InlineToolGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineToolGroups"
+      ],
+      "properties": {
+        "inlineToolGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineToolGroup"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineSerialToolGroupQueryResponse": {
+      "id": "#/definitions/InlineSerialToolGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineSerialToolGroup"
+      ],
+      "properties": {
+        "inlineSerialToolGroup": {
+          "$ref": "#/definitions/InlineSerialToolGroup"
+        }
+      }
+    },
+    "InlineSerialToolGroupsQueryResponse": {
+      "id": "#/definitions/InlineSerialToolGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineSerialToolGroups"
+      ],
+      "properties": {
+        "inlineSerialToolGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineSerialToolGroup"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineNetworkGroupQueryResponse": {
+      "id": "#/definitions/InlineNetworkGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineNetworkGroup"
+      ],
+      "properties": {
+        "inlineNetworkGroup": {
+          "$ref": "#/definitions/InlineNetworkGroup"
+        }
+      }
+    },
+    "InlineNetworkGroupsQueryResponse": {
+      "id": "#/definitions/InlineNetworkGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineNetworkGroups"
+      ],
+      "properties": {
+        "inlineNetworkGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineNetworkGroup"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineHbProfileQueryResponse": {
+      "id": "#/definitions/InlineHbProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "heartbeatProfile"
+      ],
+      "properties": {
+        "heartbeatProfile": {
+          "$ref": "#/definitions/InlineHbProfile"
+        }
+      }
+    },
+    "InlineNegativeHbProfileQueryResponse": {
+      "id": "#/definitions/InlineNegativeHbProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "negativeHeartbeatProfile"
+      ],
+      "properties": {
+        "negativeHeartbeatProfile": {
+          "$ref": "#/definitions/InlineNegativeHbProfile"
+        }
+      }
+    },
+    "InlineHbProfilesQueryResponse": {
+      "id": "#/definitions/InlineHbProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "heartbeatProfiles"
+      ],
+      "properties": {
+        "heartbeatProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineHbProfile"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineNegativeHbProfilesQueryResponse": {
+      "id": "#/definitions/InlineNegativeHbProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "negativeHeartbeatProfiles"
+      ],
+      "properties": {
+        "negativeHeartbeatProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineNegativeHbProfile"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineHbPacketQueryResponse": {
+      "id": "#/definitions/InlineHbPacketQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "hbCustomPacket"
+      ],
+      "properties": {
+        "hbCustomPacket": {
+          "$ref": "#/definitions/InlineHbPacket"
+        }
+      }
+    },
+    "InlineHbPacketsQueryResponse": {
+      "id": "#/definitions/InlineHbPacketsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "hbCustomPackets"
+      ],
+      "properties": {
+        "hbCustomPackets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineHbPacket"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineHbPacketRepoQueryResponse": {
+      "id": "#/definitions/InlineHbPacketRepoQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "hbCustomPacketRepo"
+      ],
+      "properties": {
+        "hbCustomPacketRepo": {
+          "$ref": "#/definitions/InlineHbPacketRepo"
+        }
+      }
+    },
+    "InlineHbPacketReposQueryResponse": {
+      "id": "#/definitions/InlineHbPacketReposQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "hbCustomPacketRepos"
+      ],
+      "properties": {
+        "hbCustomPacketRepos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineHbPacketRepo"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineNetworkRedundancyProfileQueryResponse": {
+      "id": "#/definitions/InlineNetworkRedundancyProfileQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "redundancyProfile"
+      ],
+      "properties": {
+        "redundancyProfile": {
+          "$ref": "#/definitions/InlineNetworkRedundancyProfile"
+        }
+      }
+    },
+    "InlineNetworkRedundancyProfilesQueryResponse": {
+      "id": "#/definitions/InlineNetworkRedundancyProfilesQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "redundancyProfiles"
+      ],
+      "properties": {
+        "redundancyProfiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineNetworkRedundancyProfile"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineIbPathwayQueryResponse": {
+      "id": "#/definitions/InlineIbPathwayQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ibPathway"
+      ],
+      "properties": {
+        "ibPathway": {
+          "$ref": "#/definitions/InlineIbPathway"
+        }
+      }
+    },
+    "InlineIbPathwaysQueryResponse": {
+      "id": "#/definitions/InlineIbPathwaysQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ibPathways"
+      ],
+      "properties": {
+        "ibPathways": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineIbPathway"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "InlineNetworkLagQueryResponse": {
+      "id": "#/definitions/InlineNetworkLagQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineNetworkLag"
+      ],
+      "properties": {
+        "inlineNetworkLag": {
+          "$ref": "#/definitions/InlineNetworkLag"
+        }
+      }
+    },
+    "InlineNetworkLagsQueryResponse": {
+      "id": "#/definitions/InlineNetworkLagsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "inlineNetworkLags"
+      ],
+      "properties": {
+        "inlineNetworkLags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InlineNetworkLag"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GigaFlexInlineNRTStats": {
+      "id": "#/definitions/GigaFlexInlineNRTStats",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "realTimeStats": {
+          "$ref": "#/definitions/FlexInlineRealTimeStats"
+        }
+      }
+    },
+    "FlexInlineRealTimeStats": {
+      "id": "#/definitions/FlexInlineRealTimeStats",
+      "type": "object",
+      "properties": {
+        "rateAtoB": {
+          "$ref": "#/definitions/FlexInlineRateTraffic"
+        },
+        "rateBtoA": {
+          "$ref": "#/definitions/FlexInlineRateTraffic"
+        }
+      }
+    },
+    "FlexInlineRateTraffic": {
+      "id": "#/definitions/FlexInlineRateTraffic",
+      "type": "object",
+      "properties": {
+        "Rx": {
+          "type": "integer"
+        },
+        "Tx": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

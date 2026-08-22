@@ -1,0 +1,30 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmConfigThreshold.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Configure Threshold",
+  "definitions": {
+    "ConfigThreshold": {
+      "id": "#/definitions/ConfigThreshold",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Configure Disk Usage Threshold to any value between 60 and 80, the default value is 75",
+      "required": [
+        "user",
+        "diskThreshold"
+      ],
+      "properties": {
+        "user": {
+          "type": "string",
+          "description": "User name"
+        },
+        "diskThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 60,
+          "default": 75,
+          "maximum": 80
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "id": "http://gigamon.com/schemas-fm/appsPortThrottle.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Apps Port Throttle Configuration schema",
+  "definitions": {
+    "PortThrottle": {
+      "id": "#/definitions/PortThrottle",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "portsThrottles"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "alias of port throttle"
+        },
+        "portsThrottles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortsThrottle"
+          }
+        }
+      }
+    },
+    "PortsThrottle": {
+      "id": "#/definitions/PortsThrottle",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "port",
+        "type",
+        "value"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32",
+          "readonly": true,
+          "description": "readonly"
+        },
+        "port": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ports or gigastreams"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "pps"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 33,
+          "maximum": 10000000,
+          "description": "Port throttle value"
+        }
+      }
+    },
+    "PortThrottleQueryResponse": {
+      "id": "#/definitions/PortThrottleQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "portThrottle"
+      ],
+      "properties": {
+        "portThrottle": {
+          "$ref": "#/definitions/PortThrottle"
+        }
+      }
+    },
+    "PortThrottlesQueryResponse": {
+      "id": "#/definitions/PortThrottlesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "portThrottles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortThrottle"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

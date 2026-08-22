@@ -1,0 +1,154 @@
+{
+  "id": "http://gigamon.com/schemas-fm/users.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "User Management schema",
+  "definitions": {
+    "User": {
+      "id": "#/definitions/User",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "username",
+        "password",
+        "emailId"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "username"
+        },
+        "password": {
+          "type": "string",
+          "minLength": 8,
+          "description": "password"
+        },
+        "emailId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "email ID"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "fullName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "user's full name"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ActiveUser": {
+      "id": "#/definitions/User",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "username",
+        "password",
+        "authMethod"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "username"
+        },
+        "password": {
+          "type": "string",
+          "minLength": 8,
+          "description": "password"
+        },
+        "authMethod": {
+          "type": "string",
+          "description": "authentication method"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "fullName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "user's full name"
+        },
+        "fmAuthorizedRoles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ActiveUserQueryResponse": {
+      "id": "#/definitions/ActiveUsersQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activeuser"
+      ],
+      "properties": {
+        "activeuser": {
+          "$ref": "#/definitions/ActiveUser"
+        }
+      }
+    },
+    "ActiveUsersQueryResponse": {
+      "id": "#/definitions/UsersQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ActiveUsers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ActiveUser"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "UserQueryResponse": {
+      "id": "#/definitions/UsersQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "user"
+      ],
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "UsersQueryResponse": {
+      "id": "#/definitions/UsersQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

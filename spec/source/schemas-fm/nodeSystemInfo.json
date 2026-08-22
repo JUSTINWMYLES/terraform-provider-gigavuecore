@@ -1,0 +1,459 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemInfo.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Device System Information",
+  "definitions": {
+    "NodeSystemInfosQueryResponse": {
+      "id": "#/definitions/NodeSystemInfosQueryResponse",
+      "type": "object",
+      "required": [
+        "systemInfos"
+      ],
+      "properties": {
+        "systemInfos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeSystemInfo"
+          }
+        }
+      }
+    },
+    "NodeSystemInfo": {
+      "id": "#/definitions/NodeSystemInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Information",
+      "properties": {
+        "bootTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "the time system booted up. In ISO-8601 date format 'yyyy-MM-dd'T'HH:mm:ssZ'"
+        },
+        "hostId": {
+          "type": "string"
+        },
+        "buildDate": {
+          "type": "string"
+        },
+        "productModel": {
+          "type": "string"
+        },
+        "versionSummary": {
+          "type": "string"
+        },
+        "productName": {
+          "type": "string"
+        },
+        "deviceName": {
+          "type": "string"
+        },
+        "buildId": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "memory": {
+          "$ref": "#/definitions/MemorySpec",
+          "description": "System Memory"
+        },
+        "cpuLoadAvg": {
+          "$ref": "#/definitions/CpuLoadAvg",
+          "description": "Cpu Load Average"
+        }
+      }
+    },
+    "MemorySpec": {
+      "id": "#/definitions/MemorySpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "System Memory",
+      "properties": {
+        "used": {
+          "type": "integer",
+          "description": "MB"
+        },
+        "free": {
+          "type": "integer",
+          "description": "MB"
+        },
+        "total": {
+          "type": "integer",
+          "description": "MB"
+        }
+      }
+    },
+    "CpuLoadAvg": {
+      "id": "#/definitions/CpuLoadAvg",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Cpu Load Average",
+      "properties": {
+        "load1": {
+          "type": "number",
+          "format": "float",
+          "description": "cpu load averages for past 1 minute"
+        },
+        "load5": {
+          "type": "number",
+          "format": "float",
+          "description": "cpu load averages for past 5 minutes"
+        },
+        "load15": {
+          "type": "number",
+          "format": "float",
+          "description": "cpu load averages for past 15 minutes"
+        }
+      }
+    },
+    "BannerQueryResponse": {
+      "id": "#/definitions/BannerQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 4.8",
+      "description": "Banner information",
+      "properties": {
+        "banner": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "SystemInterfacesQueryResponse": {
+      "id": "#/definitions/SystemInterfacesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 4.8",
+      "description": "System Interfaces information",
+      "required": [
+        "interfaces"
+      ],
+      "properties": {
+        "interfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeSystemInterface"
+          }
+        }
+      }
+    },
+    "NodeSystemInterface": {
+      "id": "#/definitions/NodeSystemInterface",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 4.8",
+      "description": "System Interface Status",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        },
+        "name": {
+          "type": "string",
+          "description": "Interface name"
+        },
+        "adminStatus": {
+          "type": "boolean"
+        },
+        "linkStatus": {
+          "type": "boolean"
+        },
+        "dhcpEnabled": {
+          "type": "boolean"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "ipv4"
+        },
+        "netmask": {
+          "type": "string"
+        },
+        "ipv6Enabled": {
+          "type": "boolean"
+        },
+        "autoconfEnabled": {
+          "type": "boolean"
+        },
+        "autoconfRoute": {
+          "type": "boolean"
+        },
+        "autoconfPrivacy": {
+          "type": "boolean"
+        },
+        "dhcpv6Enabled": {
+          "type": "boolean"
+        },
+        "ipv6Addresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "speed": {
+          "type": "string"
+        },
+        "duplex": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "ifIndex": {
+          "type": "integer"
+        },
+        "ifSource": {
+          "type": "string"
+        },
+        "mtu": {
+          "type": "integer"
+        },
+        "hwAddress": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "NodeSystemInterfaceMgmt": {
+      "id": "#/definitions/NodeSystemInterfaceMgmt",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boxId",
+        "interfaceName",
+        "gArp",
+        "discoveryProtocol"
+      ],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        },
+        "boxId": {
+          "type": "integer"
+        },
+        "interfaceName": {
+          "type": "string",
+          "description": "Management Interface Name"
+        },
+        "gArp": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable or disable Gratuitous ARP"
+        },
+        "discoveryProtocol": {
+          "type": "string",
+          "default": "None",
+          "enum": [
+            "lldp",
+            "cdp",
+            "all",
+            "none"
+          ]
+        }
+      }
+    },
+    "SystemInterfacesMgmtQueryResponse": {
+      "id": "#/definitions/SystemInterfacesMgmtQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mgmtInterfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeSystemInterfaceMgmt"
+          }
+        }
+      }
+    },
+    "MgmtInterfaceNeighbors": {
+      "id": "#/definitions/MgmtInterfaceNeighbors",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "discovered Management Interface Neighbors",
+      "required": [
+        "boxId",
+        "interfaceName"
+      ],
+      "properties": {
+        "boxId": {
+          "type": "integer"
+        },
+        "interfaceName": {
+          "type": "string",
+          "description": "Management Interface Name"
+        },
+        "lldpNeighbors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MgmtInterfaceLldpNeighbor"
+          }
+        },
+        "cdpNeighbors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MgmtInterfaceCdpNeighbor"
+          }
+        }
+      }
+    },
+    "MgmtInterfaceLldpNeighbor": {
+      "id": "#/definitions/MgmtInterfaceLldpNeighbor",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Management Interface Neighbor discovered over LLDP",
+      "required": [
+        "chassisId",
+        "portId",
+        "ttl"
+      ],
+      "properties": {
+        "chassisId": {
+          "type": "string"
+        },
+        "portId": {
+          "type": "string"
+        },
+        "portDescr": {
+          "type": "string"
+        },
+        "sysName": {
+          "type": "string"
+        },
+        "sysDescr": {
+          "type": "string"
+        },
+        "sysCapAvailable": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sysCapEnabled": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "mgmtAddr": {
+          "type": "string",
+          "description": "ipv4 or ipv6"
+        },
+        "vlanName": {
+          "type": "string"
+        },
+        "portVlanId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "mgmtVlanId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "linkAggPortId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "linkAggStatus": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "mtu": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "lastUpdate": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Timestamp of the last update. In UTC milliseconds"
+        }
+      }
+    },
+    "MgmtInterfaceCdpNeighbor": {
+      "id": "#/definitions/MgmtInterfaceCdpNeighbor",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Management Interface Neighbor discovered over CDP",
+      "required": [
+        "portId",
+        "deviceId"
+      ],
+      "properties": {
+        "deviceId": {
+          "type": "string"
+        },
+        "portId": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "swVersion": {
+          "type": "string"
+        },
+        "portVlanId": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "sysCapAvailable": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ifaceAddr": {
+          "type": "string",
+          "description": "ipv4"
+        },
+        "mgmtAddr": {
+          "type": "string",
+          "description": "ipv4"
+        },
+        "netPrefixAddr": {
+          "type": "string",
+          "description": "ipv4"
+        },
+        "netPrefixMask": {
+          "type": "string",
+          "description": "ipv4"
+        },
+        "lastUpdate": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Timestamp of the last update. In UTC milliseconds"
+        }
+      }
+    },
+    "SystemInterfaceMgmtNeighborsQueryResponse": {
+      "id": "#/definitions/SystemInterfaceMgmtNeighborsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mgmtInterfaceNeighbors"
+      ],
+      "properties": {
+        "mgmtInterfaceNeighbors": {
+          "$ref": "#/definitions/MgmtInterfaceNeighbors"
+        }
+      }
+    }
+  }
+}

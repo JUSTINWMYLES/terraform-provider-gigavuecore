@@ -1,0 +1,160 @@
+{
+  "id": "http://gigamon.com/schemas-fm/headerStrip.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Header Strip Configuration schema",
+  "definitions": {
+    "HeaderStripDef": {
+      "id": "#/definitions/HeaderStripDef",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boxId"
+      ],
+      "properties": {
+        "boxId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "device box id. valid range 1 - 64."
+        },
+        "mplsLabels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minimum": 2,
+            "maximum": 1048575
+          },
+          "description": "mpls ids, valid and required. Range can be specified. Example:1..200"
+        }
+      }
+    },
+    "HeaderStripLabelsDef": {
+      "id": "#/definitions/HeaderStripLabelsDef",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boxId"
+      ],
+      "properties": {
+        "boxId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "device box id. valid range 1 - 64."
+        },
+        "addLabels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minimum": 2,
+            "maximum": 1048575
+          },
+          "description": "mpls ids, valid and required. Range can be specified. Example:1..200 "
+        },
+        "deleteLabels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minimum": 2,
+            "maximum": 1048575
+          },
+          "description": "mpls ids, valid and required. Range can be specified. Example:1..200 "
+        }
+      }
+    },
+    "HeaderStripQueryResponse": {
+      "id": "#/definitions/HeaderStripQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "headerStripDef"
+      ],
+      "properties": {
+        "headerStripDef": {
+          "$ref": "#/definitions/HeaderStripDef"
+        }
+      }
+    },
+    "HeaderStripsQueryResponse": {
+      "id": "#/definitions/HeaderStripsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "headerStripsDef": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HeaderStripDef"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "HeaderStripAgingDef": {
+      "id": "#/definitions/HeaderStripAgingDef",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boxId"
+      ],
+      "properties": {
+        "boxId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "device box id. valid range 1 - 64. all is applicable only for post request."
+        },
+        "protocolType": {
+          "type": "string",
+          "description": "protocol type",
+          "enum": [
+            "none",
+            "vxlan"
+          ],
+          "default": "none"
+        },
+        "agingInterval": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 300,
+          "maximum": 1000000,
+          "description": "Interval in sec. Valid range 300-1000000. Enter 0 to disable."
+        },
+        "dstPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "L4 destination port number.Valid value is between 0 to 65535."
+        }
+      }
+    },
+    "HeaderStripAgingQueryResponse": {
+      "id": "#/definitions/HeaderStripAgingQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "headerStripAgingDef"
+      ],
+      "properties": {
+        "headerStripAgingDef": {
+          "$ref": "#/definitions/HeaderStripAgingDef"
+        }
+      }
+    },
+    "HeaderStripsAgingQueryResponse": {
+      "id": "#/definitions/HeaderStripsAgingQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "headerStripsAgingDef": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HeaderStripAgingDef"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

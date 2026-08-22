@@ -1,0 +1,3160 @@
+{
+  "id": "http://gigamon.com/schemas-fm/unifiedResources.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Unified Resource Management schema",
+  "definitions": {
+    "Environment": {
+      "id": "#/definitions/Environment",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Environment",
+      "required": [
+        "id",
+        "type",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "additionalProperties": false,
+          "enum": [
+            "aws",
+            "azure",
+            "vmwareEsxi",
+            "vmwareNsxt",
+            "openStack"
+          ],
+          "description": "Unified Environment platform types"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Environments": {
+      "id": "#/definitions/Environments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of Environments",
+      "properties": {
+        "env": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Environment"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "UnifiedResourcesEnvGetQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesEnvGetQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GET query response for unified environment",
+      "properties": {
+        "env": {
+          "$ref": "#/definitions/Environment"
+        }
+      }
+    },
+    "UnifiedResourcesEnvListQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesEnvListQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List query response for unified environment",
+      "properties": {
+        "env": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Environments"
+          }
+        }
+      }
+    },
+    "UnifiedResourcesEnvPostQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesEnvPostQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Post query response for unified environment",
+      "properties": {
+        "env": {
+          "$ref": "#/definitions/Environment"
+        }
+      }
+    },
+    "UnifiedResourcesEnvPatchQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesEnvPatchQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Post query response for unified environment",
+      "properties": {
+        "env": {
+          "$ref": "#/definitions/Environment"
+        }
+      }
+    },
+    "AwsConnection": {
+      "id": "#/definitions/AwsConnection",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment AWS connection",
+      "required": [
+        "authType",
+        "regionName",
+        "vpcs",
+        "secureMirrorTraffic",
+        "tappingMethod",
+        "accessKey",
+        "secretKey"
+      ],
+      "properties": {
+        "authType": {
+          "type": "string",
+          "enum": [
+            "basicCredentials",
+            "ec2InstanceRole"
+          ]
+        },
+        "regionName": {
+          "type": "string"
+        },
+        "vpcs": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "ownerId": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "proxyServerId": {
+          "type": "string"
+        },
+        "secureMirrorTraffic": {
+          "type": "boolean"
+        },
+        "tappingMethod": {
+          "type": "string"
+        },
+        "accessKey": {
+          "type": "string"
+        },
+        "secretKey": {
+          "type": "string"
+        }
+      }
+    },
+    "AwsConnections": {
+      "id": "#/definitions/AwsConnections",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of connections for environment",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AwsConnection"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "AzureConnection": {
+      "id": "#/definitions/AzureConnection",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment Azure connection",
+      "required": [
+        "authType",
+        "regionName",
+        "vnets",
+        "resourceGroupNames",
+        "secureMirrorTraffic",
+        "tappingMethod"
+      ],
+      "properties": {
+        "authType": {
+          "type": "string",
+          "enum": [
+            "clientSecret",
+            "managedServiceIdentity"
+          ]
+        },
+        "regionName": {
+          "type": "string"
+        },
+        "vnets": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "proxyServerId": {
+          "type": "string"
+        },
+        "secureMirrorTraffic": {
+          "type": "boolean"
+        },
+        "tappingMethod": {
+          "type": "string"
+        },
+        "subscriptionId": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "applicationClientId": {
+          "type": "string"
+        },
+        "applicationSecretKey": {
+          "type": "string"
+        },
+        "resourceGroupNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "AzureConnections": {
+      "id": "#/definitions/AzureConnections",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of connections for environment",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AzureConnection"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "NsxtConnection": {
+      "id": "#/definitions/NsxtConnection",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment VMware NSX-t connection",
+      "required": [
+        "vcenterAddr",
+        "hostname",
+        "username",
+        "password",
+        "nsxtManagerIp",
+        "nsxtUsername",
+        "nsxtPassword",
+        "imageUrl",
+        "fmusername",
+        "fmpasswordEncrypted"
+      ],
+      "properties": {
+        "vcenterAddr": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "nsxtManagerIp": {
+          "type": "string"
+        },
+        "nsxtUsername": {
+          "type": "string"
+        },
+        "nsxtPassword": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "fmusername": {
+          "type": "string"
+        },
+        "fmpasswordEncrypted": {
+          "type": "string"
+        }
+      }
+    },
+    "NsxtConnections": {
+      "id": "#/definitions/NsxtConnections",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of connections for VMware NSX-t",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NsxtConnection"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "EsxiConnection": {
+      "id": "#/definitions/EsxiConnection",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment VMware ESXi connection",
+      "required": [
+        "vcenterAddr",
+        "username",
+        "password"
+      ],
+      "properties": {
+        "vcenterAddr": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "EsxiConnections": {
+      "id": "#/definitions/EsxiConnections",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of connections for VMware ESXi",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EsxiConnection"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "OpenStackConnection": {
+      "id": "#/definitions/OpenStackConnection",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment OpenStack Connection",
+      "required": [
+        "accessUrl",
+        "domainName",
+        "userDomainName",
+        "projectName",
+        "region",
+        "username",
+        "encryptedPassword",
+        "tappingMethod"
+      ],
+      "properties": {
+        "accessUrl": {
+          "type": "string"
+        },
+        "domainName": {
+          "type": "string"
+        },
+        "userDomainName": {
+          "type": "string"
+        },
+        "projectName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OpenStack project name (or tenant name for Identity V2)"
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "encryptedPassword": {
+          "type": "string"
+        },
+        "secureMirrorTraffic": {
+          "type": "boolean"
+        },
+        "tappingMethod": {
+          "type": "string",
+          "enum": [
+            "uctv",
+            "taas",
+            "ovs",
+            "ovsdpdk",
+            "customerOrchestratedSource"
+          ],
+          "description": "OpenStack tapping method. One of ['uctv', 'taas','ovs','ovsdpdk','customerOrchestratedSource']"
+        },
+        "projectNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of OpenStack project names that contain VMs to be monitored. Required if tap method is ovs or ovsdpdk. The string could have * to indicate a regex expansion. Maximum of 128 project names can be provided"
+        },
+        "monitoredProjectIds": {
+          "type": "object",
+          "properties": {
+            "prop1": {
+              "type": "string"
+            },
+            "prop2": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "OpenStackConnections": {
+      "id": "#/definitions/OpenStackConnections",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of connections for OpenStack environment",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackConnection"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "Connection": {
+      "id": "#/definitions/Connection",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource connection",
+      "required": [
+        "id",
+        "platformType",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "platformType": {
+          "type": "string",
+          "enum": [
+            "aws",
+            "azure",
+            "vmwareEsxi",
+            "vmwareNsxt",
+            "openStack"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "env": {
+          "$ref": "#/definitions/Environment"
+        },
+        "unifiedMonitoringDomainId": {
+          "type": "string"
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/AwsConnection"
+        },
+        {
+          "$ref": "#/definitions/AzureConnection"
+        },
+        {
+          "$ref": "#/definitions/NsxtConnection"
+        },
+        {
+          "$ref": "#/definitions/EsxiConnection"
+        },
+        {
+          "$ref": "#/definitions/OpenStackConnection"
+        }
+      ]
+    },
+    "Connections": {
+      "id": "#/definitions/Connections",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource connections",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/AwsConnections"
+        },
+        {
+          "$ref": "#/definitions/AzureConnections"
+        },
+        {
+          "$ref": "#/definitions/NsxtConnections"
+        },
+        {
+          "$ref": "#/definitions/EsxiConnections"
+        },
+        {
+          "$ref": "#/definitions/OpenStackConnection"
+        }
+      ]
+    },
+    "MonitoringDomain": {
+      "id": "#/definitions/MonitoringDomain",
+      "type": "string",
+      "additionalProperties": false,
+      "description": "monitoring domain of underlying connection"
+    },
+    "ConnectionStatus": {
+      "id": "#/definitions/ConnectionStatus",
+      "type": "string",
+      "additionalProperties": false,
+      "description": "connection status of underlying connection"
+    },
+    "EsxiDeploymentHostSpec": {
+      "id": "#/definitions/EsxiDeploymentHostSpec",
+      "type": "object",
+      "properties": {
+        "hostSpecs": {
+          "type": "object",
+          "properties": {
+            "diskFormat": {
+              "type": "string"
+            },
+            "datastoreRef": {
+              "type": "object",
+              "properties": {
+                "vcKey": {
+                  "type": "string"
+                }
+              }
+            },
+            "intfMgmt": {
+              "type": "object",
+              "properties": {
+                "ipType": {
+                  "type": "string"
+                },
+                "intfRef": {
+                  "type": "object",
+                  "properties": {
+                    "vcKey": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "intfTunnel": {
+              "type": "object",
+              "properties": {
+                "gatewayIp": {
+                  "type": "string"
+                },
+                "mtu": {
+                  "type": "string"
+                },
+                "cidr": {
+                  "type": "string"
+                },
+                "ipType": {
+                  "type": "string"
+                },
+                "intfRef": {
+                  "type": "object",
+                  "properties": {
+                    "vcKey": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "vmFolder": {
+              "type": "string"
+            },
+            "adminPassword": {
+              "type": "string"
+            },
+            "hostRef": {
+              "type": "object",
+              "properties": {
+                "vcKey": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            },
+            "vmNodeName": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "AwsDeployment": {
+      "id": "#/definitions/AwsDeployment",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment AWS deployment",
+      "required": [
+        "awsUctVControllerConfig",
+        "awsVSeriesNodeConfig"
+      ],
+      "properties": {
+        "awsUctVControllerConfig": {
+          "type": "object",
+          "properties": {
+            "ebsVolumeType": {
+              "type": "string"
+            },
+            "sshKeyPairName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "properties": {
+                "subnetId": {
+                  "type": "string"
+                },
+                "securityGroups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "usePublicIps": {
+              "type": "boolean"
+            },
+            "agentTunnelType": {
+              "type": "string"
+            },
+            "mtu": {
+              "type": "integer"
+            },
+            "fabricNodeConfigs": {
+              "type": "object",
+              "properties": {
+                "imageId": {
+                  "type": "string"
+                },
+                "instanceType": {
+                  "type": "string"
+                },
+                "numOfInstancesToLaunch": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "awsVSeriesNodeConfig": {
+          "type": "object",
+          "properties": {
+            "imageId": {
+              "type": "string"
+            },
+            "instanceType": {
+              "type": "string"
+            },
+            "ebsVolumeType": {
+              "type": "string"
+            },
+            "sshKeyPairName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "properties": {
+                "subnetId": {
+                  "type": "string"
+                },
+                "securityGroups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "elasticIps": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "dataSubnetsSpec": {
+              "type": "object",
+              "properties": {
+                "subnetId": {
+                  "type": "string"
+                },
+                "securityGroups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "minInstancesToLaunch": {
+              "type": "integer"
+            },
+            "maxInstancesToLaunch": {
+              "type": "integer"
+            },
+            "mtu": {
+              "type": "integer"
+            },
+            "shared": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "AwsGvTapDeployment": {
+      "id": "#/definitions/AwsGvTapDeployment",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment AWS deployment",
+      "required": [
+        "awsGvTapControllerConfig",
+        "awsVSeriesNodeConfig"
+      ],
+      "properties": {
+        "awsGvTapControllerConfig": {
+          "type": "object",
+          "properties": {
+            "ebsVolumeType": {
+              "type": "string"
+            },
+            "sshKeyPairName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "properties": {
+                "subnetId": {
+                  "type": "string"
+                },
+                "securityGroups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "usePublicIps": {
+              "type": "boolean"
+            },
+            "agentTunnelType": {
+              "type": "string"
+            },
+            "mtu": {
+              "type": "integer"
+            },
+            "fabricNodeConfigs": {
+              "type": "object",
+              "properties": {
+                "imageId": {
+                  "type": "string"
+                },
+                "instanceType": {
+                  "type": "string"
+                },
+                "numOfInstancesToLaunch": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "awsVSeriesNodeConfig": {
+          "type": "object",
+          "properties": {
+            "imageId": {
+              "type": "string"
+            },
+            "instanceType": {
+              "type": "string"
+            },
+            "ebsVolumeType": {
+              "type": "string"
+            },
+            "sshKeyPairName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "properties": {
+                "subnetId": {
+                  "type": "string"
+                },
+                "securityGroups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "elasticIps": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "dataSubnetsSpec": {
+              "type": "object",
+              "properties": {
+                "subnetId": {
+                  "type": "string"
+                },
+                "securityGroups": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "minInstancesToLaunch": {
+              "type": "integer"
+            },
+            "maxInstancesToLaunch": {
+              "type": "integer"
+            },
+            "mtu": {
+              "type": "integer"
+            },
+            "shared": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "AwsDeployments": {
+      "id": "#/definitions/AwsDeployments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of deployments for AWS",
+      "properties": {
+        "deployments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AwsDeployment"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "AwsGvTapDeployments": {
+      "id": "#/definitions/AwsGvTapDeployments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of deployments for AWS",
+      "properties": {
+        "deployments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AwsGvTapDeployment"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "AzureDeployment": {
+      "id": "#/definitions/AzureDeployment",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment Azure deployment",
+      "required": [
+        "azureUctVControllerConfig",
+        "azureVSeriesNodeConfig"
+      ],
+      "properties": {
+        "azureUctVControllerConfig": {
+          "type": "object",
+          "required": [
+            "connId",
+            "virtualNetworkId",
+            "fabricNodeConfigs",
+            "mgmtSubnetSpec",
+            "mtu"
+          ],
+          "properties": {
+            "connId": {
+              "type": "string"
+            },
+            "authenticationType": {
+              "type": "string",
+              "enum": [
+                "sshPublicKey",
+                "password"
+              ],
+              "default": "sshPublicKey"
+            },
+            "sshPublicKey": {
+              "type": "string",
+              "description": "UCT-V controller SSH public key. Required if authentication type is sshPublicKey"
+            },
+            "password": {
+              "type": "string",
+              "description": "UCT-V controller user password. Required if authentication type is password"
+            },
+            "diskType": {
+              "type": "string",
+              "enum": [
+                "SSD",
+                "HDD"
+              ],
+              "default": "SSD"
+            },
+            "virtualNetworkId": {
+              "type": "string"
+            },
+            "resourceGroupName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "$ref": "#/definitions/AzureSubnetSpec"
+            },
+            "additionalSubnetsSpec": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AzureSubnetSpec"
+              }
+            },
+            "usePublicIps": {
+              "type": "boolean",
+              "default": "false",
+              "description": "For cases where GigaVUE-FM is residing outside of the domain being monitored, this indicates whether to use public ips"
+            },
+            "agentTunnelType": {
+              "type": "string",
+              "enum": [
+                "vxlan"
+              ],
+              "default": "vxlan",
+              "description": "Tunnel protocol between UCT-V and V Series node"
+            },
+            "mtu": {
+              "type": "integer"
+            },
+            "tags": {
+              "type": "string",
+              "description": "Tags to be attached to the launched instances. Enter the keys and values as a Map"
+            },
+            "fabricNodeConfigs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AzureFabricControllerConfig"
+              }
+            }
+          }
+        },
+        "azureVSeriesControllerConfig": {
+          "type": "object",
+          "required": [
+            "connId",
+            "imageId",
+            "size",
+            "virtualNetworkId",
+            "mgmtSubnetSpec"
+          ],
+          "properties": {
+            "connId": {
+              "type": "string"
+            },
+            "authenticationType": {
+              "type": "string",
+              "enum": [
+                "sshPublicKey",
+                "password"
+              ],
+              "default": "sshPublicKey"
+            },
+            "sshPublicKey": {
+              "type": "string",
+              "description": "V Series proxy SSH public key. Required if authentication type is sshPublicKey"
+            },
+            "password": {
+              "type": "string",
+              "description": "V Series proxy user password. Required if authentication type is password"
+            },
+            "diskType": {
+              "type": "string",
+              "enum": [
+                "SSD",
+                "HDD"
+              ],
+              "default": "SSD"
+            },
+            "virtualNetworkId": {
+              "type": "string"
+            },
+            "imageId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "V Series proxy image id"
+            },
+            "imageName": {
+              "type": "string",
+              "minLength": 1,
+              "description": "V Series proxy image name"
+            },
+            "size": {
+              "type": "string",
+              "minLength": 1,
+              "description": "V Series proxy VM size"
+            },
+            "numOfInstancesToLaunch": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Number of V Series Proxy instances to launch"
+            },
+            "resourceGroupName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "$ref": "#/definitions/AzureSubnetSpec"
+            },
+            "additionalSubnetsSpec": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AzureSubnetSpec"
+              }
+            },
+            "usePublicIps": {
+              "type": "boolean",
+              "default": "false",
+              "description": "For cases where GigaVUE-FM is residing outside of the domain being monitored, this indicates whether to use public ips"
+            },
+            "tags": {
+              "type": "string",
+              "description": "Tags to be attached to the launched instances. Enter the keys and values as a Map"
+            }
+          }
+        },
+        "azureVSeriesNodeConfig": {
+          "type": "object",
+          "required": [
+            "connId",
+            "imageId",
+            "size",
+            "virtualNetworkId",
+            "mgmtSubnetSpec",
+            "dataSubnetsSpec",
+            "mtu"
+          ],
+          "properties": {
+            "connId": {
+              "type": "string"
+            },
+            "imageId": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "authenticationType": {
+              "type": "string",
+              "enum": [
+                "sshPublicKey"
+              ],
+              "default": "sshPublicKey"
+            },
+            "sshKeyPairName": {
+              "type": "string"
+            },
+            "diskType": {
+              "type": "string",
+              "enum": [
+                "SSD"
+              ],
+              "default": "SSD"
+            },
+            "virtualNetworkId": {
+              "type": "string"
+            },
+            "resourceGroupName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "$ref": "#/definitions/AzureSubnetSpec"
+            },
+            "dataSubnetsSpec": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AzureDataSubnetSpec"
+              }
+            },
+            "minInstancesToLaunch": {
+              "type": "integer"
+            },
+            "maxInstancesToLaunch": {
+              "type": "integer"
+            },
+            "mtu": {
+              "type": "integer"
+            },
+            "shared": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "AzureGvTapDeployment": {
+      "id": "#/definitions/AzureGvTapDeployment",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment Azure deployment",
+      "required": [
+        "azureGvTapControllerConfig",
+        "azureVSeriesNodeConfig"
+      ],
+      "properties": {
+        "azureGvTapControllerConfig": {
+          "type": "object",
+          "required": [
+            "connId",
+            "virtualNetworkId",
+            "fabricNodeConfigs",
+            "mgmtSubnetSpec",
+            "mtu"
+          ],
+          "properties": {
+            "connId": {
+              "type": "string"
+            },
+            "authenticationType": {
+              "type": "string",
+              "enum": [
+                "sshPublicKey",
+                "password"
+              ],
+              "default": "sshPublicKey"
+            },
+            "sshPublicKey": {
+              "type": "string",
+              "description": "G-vTAP controller SSH public key. Required if authentication type is sshPublicKey"
+            },
+            "password": {
+              "type": "string",
+              "description": "G-vTAP controller user password. Required if authentication type is password"
+            },
+            "diskType": {
+              "type": "string",
+              "enum": [
+                "SSD",
+                "HDD"
+              ],
+              "default": "SSD"
+            },
+            "virtualNetworkId": {
+              "type": "string"
+            },
+            "resourceGroupName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "$ref": "#/definitions/AzureSubnetSpec"
+            },
+            "additionalSubnetsSpec": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AzureSubnetSpec"
+              }
+            },
+            "usePublicIps": {
+              "type": "boolean",
+              "default": "false",
+              "description": "For cases where GigaVUE-FM is residing outside of the domain being monitored, this indicates whether to use public ips"
+            },
+            "agentTunnelType": {
+              "type": "string",
+              "enum": [
+                "vxlan"
+              ],
+              "default": "vxlan",
+              "description": "Tunnel protocol between UCT-V and V Series node"
+            },
+            "mtu": {
+              "type": "integer"
+            },
+            "tags": {
+              "type": "string",
+              "description": "Tags to be attached to the launched instances. Enter the keys and values as a Map"
+            },
+            "fabricNodeConfigs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AzureFabricGvTapControllerConfig"
+              }
+            }
+          }
+        },
+        "azureVSeriesControllerConfig": {
+          "type": "object",
+          "required": [
+            "connId",
+            "imageId",
+            "size",
+            "virtualNetworkId",
+            "mgmtSubnetSpec"
+          ],
+          "properties": {
+            "connId": {
+              "type": "string"
+            },
+            "authenticationType": {
+              "type": "string",
+              "enum": [
+                "sshPublicKey",
+                "password"
+              ],
+              "default": "sshPublicKey"
+            },
+            "sshPublicKey": {
+              "type": "string",
+              "description": "V Series proxy SSH public key. Required if authentication type is sshPublicKey"
+            },
+            "password": {
+              "type": "string",
+              "description": "V Series proxy user password. Required if authentication type is password"
+            },
+            "diskType": {
+              "type": "string",
+              "enum": [
+                "SSD",
+                "HDD"
+              ],
+              "default": "SSD"
+            },
+            "virtualNetworkId": {
+              "type": "string"
+            },
+            "imageId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "V Series proxy image id"
+            },
+            "imageName": {
+              "type": "string",
+              "minLength": 1,
+              "description": "V Series proxy image name"
+            },
+            "size": {
+              "type": "string",
+              "minLength": 1,
+              "description": "V Series proxy VM size"
+            },
+            "numOfInstancesToLaunch": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Number of V Series Proxy instances to launch"
+            },
+            "resourceGroupName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "$ref": "#/definitions/AzureSubnetSpec"
+            },
+            "additionalSubnetsSpec": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AzureSubnetSpec"
+              }
+            },
+            "usePublicIps": {
+              "type": "boolean",
+              "default": "false",
+              "description": "For cases where GigaVUE-FM is residing outside of the domain being monitored, this indicates whether to use public ips"
+            },
+            "tags": {
+              "type": "string",
+              "description": "Tags to be attached to the launched instances. Enter the keys and values as a Map"
+            }
+          }
+        },
+        "azureVSeriesNodeConfig": {
+          "type": "object",
+          "required": [
+            "connId",
+            "imageId",
+            "size",
+            "virtualNetworkId",
+            "mgmtSubnetSpec",
+            "dataSubnetsSpec",
+            "mtu"
+          ],
+          "properties": {
+            "connId": {
+              "type": "string"
+            },
+            "imageId": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "authenticationType": {
+              "type": "string",
+              "enum": [
+                "sshPublicKey"
+              ],
+              "default": "sshPublicKey"
+            },
+            "sshKeyPairName": {
+              "type": "string"
+            },
+            "diskType": {
+              "type": "string",
+              "enum": [
+                "SSD"
+              ],
+              "default": "SSD"
+            },
+            "virtualNetworkId": {
+              "type": "string"
+            },
+            "resourceGroupName": {
+              "type": "string"
+            },
+            "mgmtSubnetSpec": {
+              "type": "object",
+              "$ref": "#/definitions/AzureSubnetSpec"
+            },
+            "dataSubnetsSpec": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AzureDataSubnetSpec"
+              }
+            },
+            "minInstancesToLaunch": {
+              "type": "integer"
+            },
+            "maxInstancesToLaunch": {
+              "type": "integer"
+            },
+            "mtu": {
+              "type": "integer"
+            },
+            "shared": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "AzureSecurityGroupSpec": {
+      "id": "#/definitions/AzureSecurityGroupSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Azure Network Security Groups Spec",
+      "since": "5.14",
+      "required": [
+        "networkSecurityGroupId"
+      ],
+      "properties": {
+        "networkSecurityGroupId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Network security group id"
+        },
+        "networkSecurityGroupName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Network security group name"
+        }
+      }
+    },
+    "AzureSubnetSpec": {
+      "id": "#/definitions/AzureSubnetSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Azure Subnet specification",
+      "since": "5.14",
+      "required": [
+        "subnetId",
+        "networkSecurityGroups"
+      ],
+      "properties": {
+        "subnetId": {
+          "type": "string",
+          "description": "Subnet id"
+        },
+        "subnetName": {
+          "type": "string",
+          "description": "Subnet name"
+        },
+        "networkSecurityGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AzureSecurityGroupSpec"
+          },
+          "description": "List of network security groups that needs to be associated with this NIC"
+        },
+        "acceleratedNetworking": {
+          "type": "boolean",
+          "default": "false",
+          "description": "Accelerated Networking supported or not"
+        }
+      }
+    },
+    "AzureDataSubnetSpec": {
+      "id": "#/definitions/AzureDataSubnetSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Azure Subnet specification",
+      "since": "5.14",
+      "required": [
+        "subnetId",
+        "networkSecurityGroups"
+      ],
+      "properties": {
+        "subnetId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Subnet id"
+        },
+        "subnetName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Subnet name"
+        },
+        "networkSecurityGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AzureSecurityGroupSpec"
+          },
+          "minLength": 1,
+          "description": "List of network security groups that needs to be associated with this NIC"
+        },
+        "acceleratedNetworking": {
+          "type": "boolean",
+          "default": "false",
+          "readOnly": false,
+          "description": "Accelerated Networking supported or not"
+        },
+        "toolSubnet": {
+          "type": "boolean",
+          "default": "false",
+          "readOnly": false,
+          "description": "Whether this subnet can be used to egress to the tool endpoint"
+        }
+      }
+    },
+    "AzureFabricControllerConfig": {
+      "id": "#/definitions/AzureFabricControllerConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Azure Fabric Controller Configuration",
+      "since": "5.14",
+      "required": [
+        "imageId",
+        "size",
+        "numOfInstancesToLaunch"
+      ],
+      "properties": {
+        "imageId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "UCT-V controller image id"
+        },
+        "imageName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "UCT-V controller image name"
+        },
+        "size": {
+          "type": "string",
+          "minLength": 1,
+          "description": "UCT-V controller VM size"
+        },
+        "numOfInstancesToLaunch": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Number of UCT-V controller instances to launch"
+        }
+      }
+    },
+    "AzureFabricGvTapControllerConfig": {
+      "id": "#/definitions/AzureFabricGvTapControllerConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Azure Fabric Controller Configuration",
+      "since": "5.14",
+      "required": [
+        "imageId",
+        "size",
+        "numOfInstancesToLaunch"
+      ],
+      "properties": {
+        "imageId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "G-vTAP controller image id"
+        },
+        "imageName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "G-vTAP controller image name"
+        },
+        "size": {
+          "type": "string",
+          "minLength": 1,
+          "description": "G-vTAP controller VM size"
+        },
+        "numOfInstancesToLaunch": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Number of G-vTAP controller instances to launch"
+        }
+      }
+    },
+    "AzureDeployments": {
+      "id": "#/definitions/AzureDeployments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of deployments for Azure",
+      "properties": {
+        "deployments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AzureDeployment"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "AzureGvTapDeployments": {
+      "id": "#/definitions/AzureGvTapDeployments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of deployments for Azure",
+      "properties": {
+        "deployments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AzureGvTapDeployment"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "EsxiDeployment": {
+      "id": "#/definitions/EsxiDeployment",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment AWS deployment",
+      "required": [
+        "dcRef",
+        "imageName",
+        "hostSpecs",
+        "formFactor"
+      ],
+      "properties": {
+        "dcRef": {
+          "type": "object",
+          "properties": {
+            "vcKey": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "imageName": {
+          "type": "string"
+        },
+        "hostSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EsxiDeploymentHostSpec"
+          },
+          "uniqueItems": true
+        },
+        "formFactor": {
+          "type": "string"
+        }
+      }
+    },
+    "EsxiDeployments": {
+      "id": "#/definitions/EsxiDeployments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of deployments for VMware ESXi",
+      "properties": {
+        "deployments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EsxiDeployment"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "NsxtDeployment": {
+      "id": "#/definitions/NsxtDeployment",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource environment VMware NSX-t deployment",
+      "required": [
+        "adminPassword",
+        "nsxtServerHostname",
+        "datacenterId",
+        "computeCollectionId",
+        "datastoreId",
+        "formFactor",
+        "deploymentType",
+        "deploymentCount",
+        "serviceAttachmentId",
+        "managementIntfSpec",
+        "tunnelIntfSpec"
+      ],
+      "properties": {
+        "adminPassword": {
+          "type": "string"
+        },
+        "nsxtServerHostname": {
+          "type": "string"
+        },
+        "datacenterId": {
+          "type": "string"
+        },
+        "computeCollectionId": {
+          "type": "string"
+        },
+        "datastoreId": {
+          "type": "string"
+        },
+        "formFactor": {
+          "type": "string"
+        },
+        "deploymentType": {
+          "type": "string"
+        },
+        "deploymentCount": {
+          "type": "string"
+        },
+        "serviceAttachmentId": {
+          "type": "string"
+        },
+        "managementIntfSpec": {
+          "type": "object",
+          "properties": {
+            "managementNetworkId": {
+              "type": "string"
+            },
+            "ipType": {
+              "type": "string"
+            }
+          }
+        },
+        "tunnelIntfSpec": {
+          "type": "object",
+          "properties": {
+            "tunnelNetworkId": {
+              "type": "string"
+            },
+            "ipType": {
+              "type": "string"
+            },
+            "gatewayIp": {
+              "type": "string"
+            },
+            "mtu": {
+              "type": "string"
+            },
+            "cidr": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "NsxtDeployments": {
+      "id": "#/definitions/NsxtDeployments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of deployments for VMware NSX-t",
+      "properties": {
+        "deployments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NsxtDeployment"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "OpenStackDeployment": {
+      "id": "#/definitions/OpenStackDeployment",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "OpenStack Fabric Node Config Group",
+      "required": [
+        "openStackUctVControllerConfig",
+        "openStackVSeriesNodeConfig"
+      ],
+      "properties": {
+        "openStackUctVControllerConfig": {
+          "$ref": "#/definitions/OpenStackUctVControllerConfig",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "OpenStack UCT-V Controller Configuration"
+        },
+        "openStackVSeriesControllerConfig": {
+          "$ref": "#/definitions/OpenStackVSeriesControllerConfig",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "OpenStack V Series Controller Configuration"
+        },
+        "openStackVSeriesNodeConfig": {
+          "$ref": "#/definitions/OpenStackVSeriesNodeConfig",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "OpenStack V Series Node Configuration"
+        }
+      }
+    },
+    "OpenStackDeployments": {
+      "id": "#/definitions/OpenStackDeployments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of deployments for OpenStack",
+      "properties": {
+        "deployments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackDeployment"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "OpenStackFlavorSpec": {
+      "id": "#/definitions/OpenStackFlavorSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Flavor reference",
+      "required": [
+        "flavorId"
+      ],
+      "properties": {
+        "flavorId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Flavor id"
+        },
+        "flavorName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Flavor name"
+        }
+      }
+    },
+    "OpenStackGvTapDeployment": {
+      "id": "#/definitions/OpenStackGvTapDeployment",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "OpenStack Fabric Node Config Group",
+      "required": [
+        "openStackGvTapControllerConfig",
+        "openStackVSeriesNodeConfig"
+      ],
+      "properties": {
+        "openStackGvTapControllerConfig": {
+          "$ref": "#/definitions/OpenStackGvTapControllerConfig",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "OpenStack G-vTAP Controller Configuration"
+        },
+        "openStackVSeriesControllerConfig": {
+          "$ref": "#/definitions/OpenStackVSeriesControllerConfig",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "OpenStack V Series Controller Configuration"
+        },
+        "openStackVSeriesNodeConfig": {
+          "$ref": "#/definitions/OpenStackVSeriesNodeConfig",
+          "minLength": 1,
+          "readOnly": true,
+          "description": "OpenStack V Series Node Configuration"
+        }
+      }
+    },
+    "OpenStackGvTapDeployments": {
+      "id": "#/definitions/OpenStackGvTapDeployments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List of deployments for OpenStack",
+      "properties": {
+        "deployments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackGvTapDeployment"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+
+    "OpenStackSecurityGroupSpec": {
+      "id": "#/definitions/OpenStackSecurityGroupSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Security group reference",
+      "required": [
+        "securityGroupId"
+      ],
+      "properties": {
+        "securityGroupId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Security group id"
+        },
+        "securityGroupName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Security group name"
+        }
+      }
+    },
+    "OpenStackNetworkSpec": {
+      "id": "#/definitions/OpenStackNetworkSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Network specification",
+      "required": [
+        "networkId"
+      ],
+      "properties": {
+        "networkId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Network id"
+        },
+        "networkName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Network name"
+        },
+        "floatingIps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minLength": 1,
+          "description": "List of Floating Ips to be attached to the Fabric nodes. For UCT-V and V Series Controllers, floating ips will be used for cases where GigaVUE-FM is residing outside of the domain being monitored. For V Series Nodes, floating ips will be used if monitored traffic cannot reach the private subnet of a V Series Node."
+        }
+      }
+    },
+    "OpenStackDataNetworkSpec": {
+      "id": "#/definitions/OpenStackDataNetworkSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Network specification",
+      "required": [
+        "networkId"
+      ],
+      "properties": {
+        "networkId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Network id"
+        },
+        "networkName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Network name"
+        },
+        "floatingIps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minLength": 1,
+          "description": "List of Floating Ips to be attached to the Fabric nodes. For UCT-V and V Series Controllers, floating ips will be used for cases where GigaVUE-FM is residing outside of the domain being monitored. For V Series Nodes, floating ips will be used if monitored traffic cannot reach the private subnet of a V Series Node."
+        },
+        "toolSubnet": {
+          "type": "boolean",
+          "default": "false",
+          "readOnly": false,
+          "description": "Network that will be used to egress traffic"
+        }
+      }
+    },
+    "OpenStackFabricControllerConfig": {
+      "id": "#/definitions/OpenStackFabricControllerConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Fabric Controller Configuration",
+      "since": "5.11",
+      "required": [
+        "imageId",
+        "flavorId",
+        "numOfInstancesToLaunch"
+      ],
+      "properties": {
+        "imageId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Controller Image Id"
+        },
+        "imageName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Controller Image name"
+        },
+        "flavorId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Controller instance flavor Id"
+        },
+        "flavorName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Controller instance flavor Name"
+        },
+        "numOfInstancesToLaunch": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Number of Controller instances to launch"
+        }
+      }
+    },
+    "OpenStackUctVControllerConfig": {
+      "id": "#/definitions/OpenStackUctVControllerConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "OpenStack UCT-V Controller launch specification",
+      "since": "v5.12",
+      "required": [
+        "connId",
+        "sshKeyPairName",
+        "mgmtNetworkSpec",
+        "securityGroups",
+        "fabricNodeConfigs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "UCT-V Controller launch specification id"
+        },
+        "connId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OpenStack connection id"
+        },
+        "connAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OpenStack connection alias"
+        },
+        "securityGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackSecurityGroupSpec"
+          },
+          "minLength": 1,
+          "description": "UCT-V Controller security groups"
+        },
+        "sshKeyPairName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "UCT-V Controller SSH KeyPair"
+        },
+        "mgmtNetworkSpec": {
+          "$ref": "#/definitions/OpenStackNetworkSpec",
+          "minLength": 1,
+          "description": "UCT-V Controller management network specification"
+        },
+        "additionalNetworksSpec": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackNetworkSpec"
+          },
+          "minLength": 1,
+          "description": "UCT-V Controller list of additional networks specification"
+        },
+        "agentTunnelType": {
+          "type": "string",
+          "enum": [
+            "l2gre",
+            "vxlan"
+          ],
+          "default": "vxlan",
+          "description": "Tunnel protocol between UCT-V and V Series node"
+        },
+        "mtu": {
+          "type": "integer",
+          "minimum": 14,
+          "maximum": 9600,
+          "description": "UCT-V tunnel MTU size"
+        },
+        "tags": {
+          "type": "string",
+          "description": "Tags to be attached to the launched instances. Enter the keys and values as a Map"
+        },
+        "fabricNodeConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackFabricControllerConfig"
+          }
+        },
+        "cloudInitUserData": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User data configuration for cloud-init. This is a string that can be formatted as YAML,JSON, or a shell script."
+        }
+      }
+    },
+    "OpenStackGvTapControllerConfig": {
+      "id": "#/definitions/OpenStackGvTapControllerConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "OpenStack G-vTAP Controller launch specification",
+      "since": "v5.12",
+      "required": [
+        "connId",
+        "sshKeyPairName",
+        "mgmtNetworkSpec",
+        "securityGroups",
+        "fabricNodeConfigs"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "G-vTAP Controller launch specification id"
+        },
+        "connId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OpenStack connection id"
+        },
+        "connAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OpenStack connection alias"
+        },
+        "securityGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackSecurityGroupSpec"
+          },
+          "minLength": 1,
+          "description": "G-vTAP Controller security groups"
+        },
+        "sshKeyPairName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "G-vTAP Controller SSH KeyPair"
+        },
+        "mgmtNetworkSpec": {
+          "$ref": "#/definitions/OpenStackNetworkSpec",
+          "minLength": 1,
+          "description": "G-vTAP Controller management network specification"
+        },
+        "additionalNetworksSpec": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackNetworkSpec"
+          },
+          "minLength": 1,
+          "description": "G-vTAP Controller list of additional networks specification"
+        },
+        "agentTunnelType": {
+          "type": "string",
+          "enum": [
+            "l2gre",
+            "vxlan"
+          ],
+          "default": "vxlan",
+          "description": "Tunnel protocol between G-vTAP and V Series node"
+        },
+        "mtu": {
+          "type": "integer",
+          "minimum": 14,
+          "maximum": 9600,
+          "description": "G-vTAP tunnel MTU size"
+        },
+        "tags": {
+          "type": "string",
+          "description": "Tags to be attached to the launched instances. Enter the keys and values as a Map"
+        },
+        "fabricNodeConfigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackFabricControllerConfig"
+          }
+        },
+        "cloudInitUserData": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User data configuration for cloud-init. This is a string that can be formatted as YAML,JSON, or a shell script."
+        }
+      }
+    },
+    "OpenStackVSeriesControllerConfig": {
+      "id": "#/definitions/OpenStackVSeriesControllerConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "OpenStack V Series Controller Configuration",
+      "since": "v5.12",
+      "required": [
+        "connId",
+        "imageId",
+        "sshKeyPairName",
+        "mgmtNetworkSpec",
+        "securityGroups",
+        "flavorId"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Controller Config id"
+        },
+        "connId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OpenStack connection id"
+        },
+        "connAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OpenStack connection alias"
+        },
+        "imageId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Controller image Id"
+        },
+        "imageName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Controller image name"
+        },
+        "flavorId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Controller instance flavor Id"
+        },
+        "flavorName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Controller instance flavor Name"
+        },
+        "securityGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackSecurityGroupSpec"
+          },
+          "minLength": 1,
+          "description": "V Series Controller security groups"
+        },
+        "sshKeyPairName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Controller SSH KeyPair"
+        },
+        "mgmtNetworkSpec": {
+          "$ref": "#/definitions/OpenStackNetworkSpec",
+          "minLength": 1,
+          "description": "V Series Controller management network specification"
+        },
+        "additionalNetworksSpec": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackNetworkSpec"
+          },
+          "minLength": 1,
+          "description": "V Series Controller list of additional networks specification"
+        },
+        "numOfInstancesToLaunch": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Number of V Series Controller instances to launch"
+        },
+        "tags": {
+          "type": "string",
+          "description": "Tags to be attached to the launched instances. Enter the keys and values as a Map"
+        },
+        "cloudInitUserData": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User data configuration for cloud-init. This is a string that can be formatted as YAML,JSON, or a shell script."
+        }
+      }
+    },
+    "OpenStackVSeriesNodeConfig": {
+      "id": "#/definitions/OpenStackVSeriesNodeConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "OpenStack V Series Node launch specification",
+      "since": "v5.12",
+      "required": [
+        "connId",
+        "imageId",
+        "sshKeyPairName",
+        "mgmtNetworkSpec",
+        "dataNetworksSpec",
+        "securityGroups",
+        "flavorId",
+        "mtu"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Node launch specification id"
+        },
+        "connId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OpenStack connection id"
+        },
+        "connAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "OpenStack connection alias"
+        },
+        "imageId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Node image id"
+        },
+        "imageName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Node image name"
+        },
+        "flavorId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Node instance flavor Id"
+        },
+        "flavorName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Node instance flavor Name"
+        },
+        "securityGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackSecurityGroupSpec"
+          },
+          "minLength": 1,
+          "description": "V Series Node security groups"
+        },
+        "sshKeyPairName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "V Series Node SSH KeyPair"
+        },
+        "mgmtNetworkSpec": {
+          "$ref": "#/definitions/OpenStackNetworkSpec",
+          "minLength": 1,
+          "description": "V Series Node management network specification"
+        },
+        "dataNetworksSpec": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OpenStackDataNetworkSpec"
+          },
+          "minLength": 1,
+          "description": "V Series Node list of data networks spec"
+        },
+        "minInstancesToLaunch": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Minimum number of V Series Nodes to launch"
+        },
+        "maxInstancesToLaunch": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Maximum number of V Series Nodes to launch"
+        },
+        "mtu": {
+          "type": "integer",
+          "minimum": 14,
+          "maximum": 9600,
+          "description": "Maximum Transmission Unit MTU"
+        },
+        "tags": {
+          "type": "string",
+          "description": "Tags to be attached to the launched instances. Enter the keys and values as a Map"
+        },
+        "cloudInitUserData": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User data configuration for cloud-init. This is a string that must be formatted as a shell script."
+        },
+        "shared": {
+          "type": "boolean",
+          "default": "false",
+          "readOnly": false,
+          "description": "Whether V Series Nodes will be shared with other connections in the monitoring domain"
+        }
+      }
+    },
+    "DataSubnet": {
+      "id": "#/definitions/DataSubnet",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "V Series 2.0 Data Subnet List",
+      "required": [
+        "subnetName",
+        "subnetId"
+      ],
+      "properties": {
+        "subnetName": {
+          "type": "string",
+          "description": "Data Subnet Name"
+        },
+        "subnetId": {
+          "type": "string",
+          "description": "Data Subnet Id"
+        },
+        "toolSubnet": {
+          "type": "boolean",
+          "default": "false",
+          "readOnly": false,
+          "description": "Subnet that will be used to egress traffic"
+        }
+      }
+    },
+    "Deployment": {
+      "id": "#/definitions/Deployment",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource deployment",
+      "required": [
+        "id",
+        "platformType",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "platformType": {
+          "type": "string",
+          "enum": [
+            "aws",
+            "vmwareEsxi",
+            "vmwareNsxt",
+            "openStack"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/AwsDeployment"
+        },
+        {
+          "$ref": "#/definitions/AzureDeployment"
+        },
+        {
+          "$ref": "#/definitions/NsxtDeployment"
+        },
+        {
+          "$ref": "#/definitions/EsxiDeployment"
+        },
+        {
+          "$ref": "#/definitions/OpenStackDeployment"
+        }
+      ]
+    },
+    "GvTapDeployment": {
+      "id": "#/definitions/Deployment",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource deployment",
+      "required": [
+        "id",
+        "platformType",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "platformType": {
+          "type": "string",
+          "enum": [
+            "aws",
+            "vmwareEsxi",
+            "vmwareNsxt",
+            "openStack"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/AwsGvTapDeployment"
+        },
+        {
+          "$ref": "#/definitions/AzureGvTapDeployment"
+        },
+        {
+          "$ref": "#/definitions/NsxtDeployment"
+        },
+        {
+          "$ref": "#/definitions/EsxiDeployment"
+        },
+        {
+          "$ref": "#/definitions/OpenStackGvTapDeployment"
+        }
+      ]
+    },
+    "Deployments": {
+      "id": "#/definitions/Deployments",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource deployments",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/AwsDeployments"
+        },
+        {
+          "$ref": "#/definitions/AzureDeployments"
+        },
+        {
+          "$ref": "#/definitions/NsxtDeployments"
+        },
+        {
+          "$ref": "#/definitions/EsxiDeployments"
+        },
+        {
+          "$ref": "#/definitions/OpenStackDeployments"
+        }
+      ]
+    },
+    "VirtDomainId": {
+      "id": "#/definitions/VirtDomainId",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Virtual Domain Id for cloud resources",
+      "required": [
+        "type",
+        "id",
+        "name"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "aws",
+            "vmwareEsxi",
+            "vmwareNsxt",
+            "openStack"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "VSeriesNodeInterface": {
+      "id": "#/definitions/VSeriesNodeInterface",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Cloud V Series node interface object",
+      "required": [
+        "ipAddress",
+        "publicIpAddress",
+        "macAddress",
+        "name",
+        "subnetId",
+        "subnetCidr"
+      ],
+      "properties": {
+        "ipAddress": {
+          "type": "string"
+        },
+        "publicIpAddress": {
+          "type": "string"
+        },
+        "macAddress": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "subnetId": {
+          "type": "string"
+        },
+        "subnetCidr": {
+          "type": "string"
+        }
+      }
+    },
+    "Interface": {
+      "id": "#/definitions/Interface",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource node interface",
+      "required": [
+        "fabricNodeId",
+        "virtDomainId",
+        "networkId",
+        "mgmtIp",
+        "vSeriesNodeInterface"
+      ],
+      "properties": {
+        "fabricNodeId": {
+          "type": "string"
+        },
+        "virtDomainId": {
+          "$ref": "#/definitions/VirtDomainId"
+        },
+        "networkId": {
+          "type": "string"
+        },
+        "mgmtIp": {
+          "type": "string"
+        },
+        "vSeriesNodeInterface": {
+          "$ref": "#/definitions/VSeriesNodeInterface"
+        }
+      }
+    },
+    "Interfaces": {
+      "id": "#/definitions/Interfaces",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource interfaces",
+      "properties": {
+        "env": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Interface"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "Node": {
+      "id": "#/definitions/Node",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource deploy node",
+      "required": [
+        "id",
+        "unificationConnId",
+        "env",
+        "fabricNodeId",
+        "mgmtIp",
+        "domainId",
+        "interfaces"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "unificationConnId": {
+          "type": "string"
+        },
+        "env": {
+          "$ref": "#/definitions/Environment"
+        },
+        "fabricNodeId": {
+          "type": "string"
+        },
+        "mgmtIp": {
+          "type": "string"
+        },
+        "domainId": {
+          "$ref": "#/definitions/Environment"
+        },
+        "interfaces": {
+          "$ref": "#/definitions/Interfaces"
+        }
+      }
+    },
+    "NodeStatus": {
+      "id": "#/definitions/NodeStatus",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource node status",
+      "required": [
+        "fabricNodeId",
+        "virtDomainId",
+        "status"
+      ],
+      "properties": {
+        "fabricNodeId": {
+          "type": "string"
+        },
+        "virtDomainId": {
+          "$ref": "#/definitions/VirtDomainId"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "Nodes": {
+      "id": "#/definitions/Nodes",
+      "type": "object",
+      "description": "list of unified deployment nodes",
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Node"
+          }
+        }
+      }
+    },
+    "NodeVersion": {
+      "id": "#/definitions/NodeVersion",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Node version of a node in unified deployment",
+      "required": [
+        "version",
+        "buildInfo",
+        "platform",
+        "state",
+        "mgmtIf",
+        "hostname",
+        "uuid"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "buildInfo": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "mgmtIf": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      }
+    },
+    "NodeSysStatsStructHosts": {
+      "id": "#/definitions/NodeSysStatsStructHosts",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Node sysstat hosts struct of a node in unified deployment",
+      "required": [
+        "nodename",
+        "sysname",
+        "release",
+        "machine",
+        "number-of-cpus",
+        "number-of-avail-cpus",
+        "date"
+      ],
+      "properties": {
+        "nodename": {
+          "type": "string"
+        },
+        "sysname": {
+          "type": "string"
+        },
+        "release": {
+          "type": "string"
+        },
+        "machine": {
+          "type": "string"
+        },
+        "number-of-cpus": {
+          "type": "integer"
+        },
+        "number-of-avail-cpus": {
+          "type": "integer"
+        },
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "NodeSysStatsStruct": {
+      "id": "#/definitions/NodeSysStatsStruct",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Node sysstats struct of a node in unified deployment",
+      "required": [
+        "hosts"
+      ],
+      "properties": {
+        "hosts": {
+          "$ref": "#/definitions/NodeSysStatsStructHosts"
+        }
+      }
+    },
+    "NodeSysStats": {
+      "id": "#/definitions/NodeSysStats",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Node sysstats of a node in unified deployment",
+      "required": [
+        "sysstat"
+      ],
+      "properties": {
+        "sysstat": {
+          "$ref": "#/definitions/NodeSysStatsStruct"
+        }
+      }
+    },
+    "NodesStatus": {
+      "id": "#/definitions/NodesStatus",
+      "type": "object",
+      "description": "list status of all unified deployment nodes",
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeStatus"
+          }
+        }
+      }
+    },
+    "AppSpecificMemScaleInfo": {
+      "id": "#/definitions/AppSpecificMemScaleInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "app specific memory footprint scale info",
+      "required": [
+        "item",
+        "memory",
+        "shared"
+      ],
+      "properties": {
+        "item": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "integer"
+        },
+        "shared": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AppSpecificMemFootprintsInfo": {
+      "id": "#/definitions/AppSpecificMemFootprintsInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "app specific memory footprint info",
+      "required": [
+        "base",
+        "scale"
+      ],
+      "properties": {
+        "base": {
+          "type": "integer"
+        },
+        "scale": {
+          "$ref": "#/definitions/AppSpecificMemScaleInfo"
+        }
+      }
+    },
+    "AppSpecificInfo": {
+      "id": "#/definitions/AppSpecificInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource app info for specific app",
+      "required": [
+        "name",
+        "maxNrAeps",
+        "packet_permission",
+        "memFootprints"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "maxNrAeps": {
+          "type": "string"
+        },
+        "packet_permission": {
+          "type": "string"
+        },
+        "memFootprints": {
+          "$ref": "#/definitions/AppSpecificMemFootprintsInfo"
+        }
+      }
+    },
+    "AppInfo": {
+      "id": "#/definitions/AppInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource appinfo",
+      "required": [
+        "name",
+        "type",
+        "vendor",
+        "majorVersion",
+        "minorVersion",
+        "path",
+        "serialNum",
+        "platformType",
+        "eventDev",
+        "dpType",
+        "apps"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "majorVersion": {
+          "type": "integer"
+        },
+        "minorVersion": {
+          "type": "integer"
+        },
+        "path": {
+          "type": "string"
+        },
+        "serialNum": {
+          "type": "integer"
+        },
+        "platformType": {
+          "type": "string"
+        },
+        "eventDev": {
+          "type": "string"
+        },
+        "dpType": {
+          "type": "string"
+        },
+        "apps": {
+          "$ref": "#/definitions/AppSpecificInfo"
+        }
+      }
+    },
+    "AppInfos": {
+      "id": "#/definitions/AppInfos",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Unified Resource appinfo for all apps",
+      "properties": {
+        "env": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppInfo"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "AppIntelInfoMetadataApplicationTemplateAttribute": {
+      "id": "#/definitions/AppIntelInfoMetadataApplicationTemplateAttribute",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "app intel info metadata template attribute",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "AppIntelInfoMetadataApplicationTemplateAttributes": {
+      "id": "#/definitions/AppIntelInfoMetadataApplicationTemplateAttributes",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "app intel info metadata template attributes",
+      "properties": {
+        "env": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppIntelInfoMetadataApplicationTemplateAttribute"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "AppIntelInfoMetadataApplicationTemplate": {
+      "id": "#/definitions/AppIntelInfoMetadataApplicationTemplate",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "app intel info metadata application templates for one app",
+      "required": [
+        "name",
+        "family",
+        "id",
+        "description",
+        "metaDataTemplateVersion",
+        "attributes"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "metaDataTemplateVersion": {
+          "type": "string"
+        },
+        "attributes": {
+          "$ref": "#/definitions/AppIntelInfoMetadataApplicationTemplateAttributes"
+        }
+      }
+    },
+    "AppIntelInfoMetadataApplicationTemplates": {
+      "id": "#/definitions/AppIntelInfoMetadataApplicationTemplates",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "app intel info metadata application templates for all apps",
+      "properties": {
+        "env": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppIntelInfoMetadataApplicationTemplate"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "AppIntelInfo": {
+      "id": "#/definitions/AppIntelInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "app intel info for all apps",
+      "required": [
+        "version",
+        "metadataApplicationTemplates"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "metadataApplicationTemplates": {
+          "$ref": "#/definitions/AppIntelInfoMetadataApplicationTemplates"
+        }
+      }
+    },
+    "UnifiedResourcesConnectionListQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesConnectionListQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List query response for unified environment connections",
+      "$ref": "#/definitions/Connections"
+    },
+    "UnifiedResourcesConnectionGetQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesConnectionGetQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Get query response for unified environment connections",
+      "$ref": "#/definitions/Connection"
+    },
+    "UnifiedResourcesConnectionPostQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesConnectionPostQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Post query response for unified connection",
+      "$ref": "#/definitions/Connection"
+    },
+    "UnifiedResourcesConnectionPatchQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesConnectionPatchQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Patch query response for unified connection",
+      "$ref": "#/definitions/Connection"
+    },
+    "UnifiedResourcesDeployGetQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesDeployGetQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Get query response for unified deployment",
+      "$ref": "#/definitions/Deployment"
+    },
+    "UnifiedResourcesDeployGetGvTapQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesDeployGetGvTapQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Get query response for unified deployment",
+      "$ref": "#/definitions/GvTapDeployment"
+    },
+    "UnifiedResourcesDeployPostQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesDeployPostQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Post query response for unified deployment",
+      "$ref": "#/definitions/Deployment"
+    },
+    "UnifiedResourcesDeployPostGvTapQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesDeployPostGvTapQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Post query response for unified deployment",
+      "$ref": "#/definitions/GvTapDeployment"
+    },
+    "UnifiedResourcesDeployGetNodesQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesDeployGetNodesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Get query response for unified deployment nodes",
+      "$ref": "#/definitions/Nodes"
+    },
+    "UnifiedResourcesGetNodeVersionQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesGetNodeVersionQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Obtain a node version of unified deployment node via environment, connection and node id",
+      "$ref": "#/definitions/NodeVersion"
+    },
+    "UnifiedResourcesGetNodeSysStatsQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesGetNodeSysStatsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Obtain a node sysStats of unified deployment node via environment, connection and node id",
+      "$ref": "#/definitions/NodeSysStats"
+    },
+    "UnifiedResourcesDeployGetNodesStatusQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesDeployGetNodesStatusQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Obtain node statuses of all unified nodes deployment nodes by environment and connection id",
+      "$ref": "#/definitions/NodesStatus"
+    },
+    "UnifiedResourcesConnectionReloadInventoryResponse": {
+      "id": "#/definitions/UnifiedResourcesConnectionReloadInventoryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Reload inventory of all cloud object for unified connection",
+      "$ref": "#/definitions/Connections"
+    },
+    "UnifiedResourcesGetMonitoringDomainQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesGetMonitoringDomainQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Obtain the monitoring domain for underlying unified environment and unified resource id",
+      "$ref": "#/definitions/MonitoringDomain"
+    },
+    "UnifiedResourcesGetConnectionStatusQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesGetConnectionStatusQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Obtain the connection status for underlying unified environment and unified resource id",
+      "$ref": "#/definitions/ConnectionStatus"
+    },
+    "UnifiedResourcesGetInterfacesQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesGetInterfacesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List all interfaces for unified resource deployment nodes via environment and connection id",
+      "$ref": "#/definitions/Interfaces"
+    },
+    "UnifiedResourcesGetNodeInterfaceQueryResponse": {
+      "id": "#/definitions/UnifiedResourcesGetNodeInterfaceQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Get an interface of an unified resource deployment nodes via environment and connection id",
+      "$ref": "#/definitions/Interface"
+    },
+    "UnifiedResourcesGetAppInfoResponse": {
+      "id": "#/definitions/UnifiedResourcesGetAppInfoResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Get an appInfo for unified deployment via environment and connection id",
+      "$ref": "#/definitions/AppInfo"
+    },
+    "UnifiedResourcesGetAppInfosResponse": {
+      "id": "#/definitions/UnifiedResourcesGetAppInfosResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List all appInfo for unified deployment via environment and connection id",
+      "$ref": "#/definitions/AppInfos"
+    },
+    "UnifiedResourcesGetAppIntelTemplateResponse": {
+      "id": "#/definitions/UnifiedResourcesGetAppIntelTemplateResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "List all appIntel template info for unified deployment via environment and connection id",
+      "$ref": "#/definitions/AppIntelInfo"
+    }
+  }
+}

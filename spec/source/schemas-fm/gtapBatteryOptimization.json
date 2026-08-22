@@ -1,0 +1,90 @@
+{
+  "id": "http://gigamon.com/schemas-fm/gtapBatteryOptimization.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "GTAP battery optimization configuration schema",
+  "definitions": {
+    "BatteryOptimization": {
+      "id": "#/definitions/BatteryOptimization",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cpuHibernation": {
+          "$ref": "#/definitions/CpuHibernation",
+          "description": "CPU hibernation battery optimization"
+        },
+        "unusedPort": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortBatteryOptimization"
+          },
+          "description": "Unused port off battery optimization"
+        },
+        "monitorPort": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortBatteryOptimization"
+          },
+          "description": "Monitor port off battery optimization"
+        }
+      }
+    },
+    "CpuHibernation": {
+      "id": "#/definitions/CpuHibernation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable cpu hibernation battery optimization"
+        },
+        "thresholdLevel": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 25,
+          "maximum": 85,
+          "default": 85,
+          "description": "Apply cpu hibernation battery optimization at this battery level"
+        },
+        "sleepInMins": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 6,
+          "maximum": 30,
+          "default": 6,
+          "description": "Apply cpu hibernation battery optimization for this configured sleep time"
+        }
+      }
+    },
+    "PortBatteryOptimization": {
+      "id": "#/definitions/PortBatteryOptimization",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "portGroupId"
+      ],
+      "properties": {
+        "portGroupId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Port group Id"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable port battery optimization"
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "alarm",
+            "warning",
+            "normal"
+          ],
+          "default": "alarm",
+          "description": "Apply port battery optimization at this battery level"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,592 @@
+{
+  "id": "http://gigamon.com/schemas-fm/nodeSystemNotifications.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Notifications schema",
+  "definitions": {
+    "SnmpThrottleStatus": {
+      "id": "#/definitions/SnmpThrottleStatus",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SNMP Throttle Status",
+      "properties": {
+        "event": {
+          "$ref": "#/definitions/SnmpEvents"
+        },
+        "entityId": {
+          "type": "string",
+          "description": "Entity ID"
+        },
+        "interval": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Interval (in seconds)"
+        },
+        "triggerCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Trigger count"
+        },
+        "lastTimeTriggered": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date and time of last time the event has been triggered"
+        },
+        "elapsedTime": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Elapsed Time"
+        }
+      }
+    },
+    "SnmpServerConfig": {
+      "id": "#/definitions/SnmpServerConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node SNMP Server config",
+      "properties": {
+        "systemConfig": {
+          "$ref": "#/definitions/SnmpServerSystemConfig",
+          "description": "settings for SNMP Server System level config for his node/cluster"
+        },
+        "communityConfig": {
+          "$ref": "#/definitions/SnmpServerCommunityConfig",
+          "description": "settings for SNMP Server Community Strings config for his node/cluster"
+        },
+        "snmpV3Config": {
+          "$ref": "#/definitions/SnmpServerV3Config",
+          "description": "settings for SNMP Server v3 config for his node/cluster"
+        },
+        "notifyConfig": {
+          "$ref": "#/definitions/SnmpNotificationConfig",
+          "description": "settings for SNMP Informs and Traps notification for his node/cluster"
+        },
+        "snmpThrottleConfig": {
+          "$ref": "#/definitions/SnmpThrottleConfig",
+          "description": "settings for SNMP Throttle notifications for his node/cluster"
+        }
+      }
+    },
+    "SnmpThrottleStatusResponse": {
+      "id": "#/definitions/SnmpThrottleStatusResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "snmpThrottleStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SnmpThrottleStatus"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SnmpServerSystemConfig": {
+      "id": "#/definitions/SnmpServerSystemConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SNMP Server System level config",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enables SNMP Server on the node"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 161
+        },
+        "sysDescr": {
+          "type": "string",
+          "description": "MIB-II 'sysDescr'"
+        },
+        "sysContact": {
+          "type": "string",
+          "description": "MIB-II 'sysContact'"
+        },
+        "sysName": {
+          "type": "string",
+          "description": "MIB-II 'sysName'"
+        },
+        "sysLocation": {
+          "type": "string",
+          "description": "MIB-II 'sysLocation'"
+        },
+        "engineId": {
+          "type": "string",
+          "readonly": true,
+          "description": "local EngineID"
+        }
+      }
+    },
+    "SnmpServerCommunityConfig": {
+      "id": "#/definitions/SnmpServerCommunityConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SNMP Server Community Strings config",
+      "properties": {
+        "enableCommunityAuth": {
+          "type": "boolean",
+          "default": true,
+          "description": "turn on community-based authentication for the system"
+        },
+        "enableMultiCommunity": {
+          "type": "boolean",
+          "default": false,
+          "description": "allow configuration of multiple communities"
+        },
+        "enableCommunityAuthV1": {
+          "type": "boolean",
+          "default": false,
+          "description": "turn on community-based authentication for the SNMP v1"
+        },
+        "communityStrings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "community string[s] used to connect to this node using SNMP. The default value is 'public'. If 'enableMultiCommunity' is enabled, multiple community strings for the node are allowed"
+        }
+      }
+    },
+    "SnmpThrottleConfig": {
+      "id": "#/definitions/SnmpThrottleConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SNMP Throttle Configuration",
+      "properties": {
+        "throttleConfigDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ThrottleConfig"
+          },
+          "description": "list of SNMP Throttle Config Details on the node"
+        }
+      }
+    },
+    "ThrottleConfig": {
+      "id": "#/definitions/ThrottleConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "notifySet": {
+          "type": "string",
+          "enum": [
+            "all",
+            "none",
+            "select"
+          ],
+          "default": "none",
+          "description": "When 'notifySet' is 'select', throttleEvents represents the subset of event types for SNMP throttling. When set to 'none', effectively disables SNMP throttle from the node."
+        },
+        "throttleEvents": {
+          "$ref": "#/definitions/SnmpEvents"
+        },
+        "interval": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 86400,
+          "description": "Time interval at which the throttle should occur (in seconds)"
+        },
+        "reportThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Minimum count threshold to send the throttle report"
+        }
+      }
+    },
+    "SnmpServerV3Config": {
+      "id": "#/definitions/SnmpServerV3Config",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "SNMP Server v3 config",
+      "properties": {
+        "snmpV3Users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SnmpV3User"
+          },
+          "description": "list of SNMPv3 users on the node"
+        }
+      }
+    },
+    "SnmpNotificationConfig": {
+      "id": "#/definitions/SnmpNotificationConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node SNMP Server Notification settings",
+      "required": [
+        "targets",
+        "notifySet"
+      ],
+      "properties": {
+        "targets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SnmpNotifTarget"
+          },
+          "description": "list of notification destinations"
+        },
+        "notifySet": {
+          "type": "string",
+          "enum": [
+            "all",
+            "none",
+            "select"
+          ],
+          "default": "none",
+          "description": "When 'notifySet' is 'select', notifyEvents represents the subset of notification event types activated for dispatch. When set to 'none', effectively disables SNMP notifications from the node"
+        },
+        "notifyEvents": {
+          "$ref": "#/definitions/SnmpEvents"
+        }
+      }
+    },
+    "SnmpNotificationConfigUpdateSpec": {
+      "id": "#/definitions/SnmpNotificationConfigUpdateSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node SNMP Server Notification settings update spec",
+      "properties": {
+        "notifySet": {
+          "type": "string",
+          "enum": [
+            "all",
+            "none",
+            "select"
+          ],
+          "default": "none",
+          "description": "when 'notifySet' is 'select', notifyEvents represents the subset of notification event types activated for dispatch. When set to 'none', effectively disables SNMP notifications from the node"
+        },
+        "notifyEvents": {
+          "$ref": "#/definitions/SnmpEvents"
+        }
+      }
+    },
+    "SnmpNotifTarget": {
+      "id": "#/definitions/SnmpNotifTarget",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node SNMP Server Notification target",
+      "required": [
+        "host"
+      ],
+      "properties": {
+        "host": {
+          "type": "string",
+          "description": "ipv4 or ipv6 or domain name"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "temporarily enable/disable the notification destination"
+        },
+        "notifyType": {
+          "type": "string",
+          "enum": [
+            "trap",
+            "inform"
+          ],
+          "default": "trap",
+          "description": "SNMP notification type to use"
+        },
+        "notifyConfig": {
+          "$ref": "#/definitions/SnmpNotificationTypeTargetConfig",
+          "description": "notification configuration for this target"
+        }
+      }
+    },
+    "SnmpNotificationTypeTargetConfig": {
+      "id": "#/definitions/SnmpNotificationTypeTargetConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Notification Target configuration for specific Notification type (Trap/Inform)",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 162
+        },
+        "version": {
+          "type": "string",
+          "enum": [
+            "v1",
+            "v2c",
+            "v3"
+          ],
+          "default": "v2c",
+          "description": "SNMP version to use. v1 is only valid for traps. for v3, user name should be provided"
+        },
+        "community": {
+          "type": "string",
+          "default": "public",
+          "description": "required when when 'version' is 'v2c'"
+        },
+        "v3user": {
+          "type": "string",
+          "description": "required when when 'version' is 'v3'"
+        },
+        "authProtocol": {
+          "type": "string",
+          "enum": [
+            "md5",
+            "sha1"
+          ],
+          "description": "authentication hash algorithm. required with 'v3user'"
+        },
+        "authKey": {
+          "type": "string",
+          "minLength": 8,
+          "description": "authentication password. required with 'v3user'"
+        },
+        "privProtocol": {
+          "type": "string",
+          "enum": [
+            "des",
+            "aes128"
+          ],
+          "default": "aes128",
+          "description": "privacy encryption"
+        },
+        "privKey": {
+          "type": "string",
+          "minLength": 8,
+          "description": "privacy password"
+        },
+        "engineId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "remote engineID. only valid with notifyType 'inform' and 'version' v3"
+        }
+      }
+    },
+    "SnmpV3User": {
+      "id": "#/definitions/SnmpV3User",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Node SNMPv3 User",
+      "required": [
+        "username"
+      ],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "authProtocol": {
+          "type": "string",
+          "enum": [
+            "md5",
+            "sha1"
+          ],
+          "default": "md5"
+        },
+        "authKey": {
+          "type": "string"
+        },
+        "privProtocol": {
+          "type": "string",
+          "enum": [
+            "des",
+            "aes128"
+          ],
+          "default": "des"
+        },
+        "privKey": {
+          "type": "string"
+        },
+        "readOnly": {
+          "type": "boolean",
+          "description": "This property is introduced for GUI's purpose to restrict the edit/delete on the SNMPv3 user used by FM. If this property doesn't exist, consider it false. And this property is ignored if it exists in the create/update spec."
+        }
+      }
+    },
+    "SnmpV3UserSupportedProtocols" :{
+     "id": "#/definitions/SnmpV3UserSupportedProtocols",
+      "type": "object",
+      "additionalProperties": false,
+       "properties": {
+         "swVersion": {
+           "type": "string",
+           "description": "Device SW Version"
+         },
+        "authProtocol": {
+         "type": "string",
+         "enum": [
+           "md5",
+           "sha1",
+           "sha256",
+           "sha384",
+           "sha512"
+         ]
+       },
+       "privProtocol": {
+         "type": "string",
+         "enum": [
+           "des",
+           "aes128",
+           "aes256"
+         ]
+       }
+     }
+   },
+    "SnmpNotifTargetQueryResponse": {
+      "id": "#/definitions/SnmpNotifTargetQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "notifTarget"
+      ],
+      "properties": {
+        "notifTarget": {
+          "$ref": "#/definitions/SnmpNotifTarget"
+        }
+      }
+    },
+    "SnmpNotifTargetsQueryResponse": {
+      "id": "#/definitions/SnmpNotifTargetsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "notifTargets"
+      ],
+      "properties": {
+        "notifTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SnmpNotifTarget"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SnmpV3UserQueryResponse": {
+      "id": "#/definitions/SnmpV3UserQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "v3User"
+      ],
+      "properties": {
+        "v3User": {
+          "$ref": "#/definitions/SnmpV3User"
+        }
+      }
+    },
+    "SnmpV3UsersQueryResponse": {
+      "id": "#/definitions/SnmpV3UsersQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "v3Users"
+      ],
+      "properties": {
+        "v3Users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SnmpV3User"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "SnmpEvents": {
+      "id": "#/definitions/SnmpEvents",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "The set of notification event types",
+      "items": {
+        "type": "string",
+        "enum": [
+          "secondflashboot",
+          "bufferoverusage",
+          "gigasmartcputemp",
+          "configsave",
+          "cputemp",
+          "evallicensereminder",
+          "exhausttemp",
+          "fanchange",
+          "firmwarechange",
+          "gscpuutilization",
+          "ibstatechange",
+          "inlinetoolrecovery",
+          "linkspeedstatuschange",
+          "lowportutilization",
+          "modulechange",
+          "operationmode",
+          "opticstemp",
+          "packetdrop",
+          "portutilization",
+          "powerchange",
+          "rxtxerror",
+          "switchcputemp",
+          "systemreset",
+          "unexpectedshutdown",
+          "userauthfail",
+          "watchdogreset",
+          "policytrigger",
+          "eporttemp",
+          "gdpupdate",
+          "sublicensereminder",
+          "processcputhreshold",
+          "processmemthreshold",
+          "syscputhreshold",
+          "sysmemthreshold",
+          "gspacketdrop",
+          "tunnelstatus",
+          "tunneldeststatus",
+          "fipstest",
+          "ipgatewaystatus",
+          "clusterrolechange",
+          "clusternodejoin",
+          "clusternodeleave",
+          "clusternodejoinfailure",
+          "throttlereport",
+          "gsIsslResourceUtilization",
+          "vportStatusChange",
+          "batterypresence",
+          "batterychargelevel",
+          "batterybetcomplete",
+          "batterytemperature",
+          "gsportlowutilz",
+          "gsportutilz",
+          "sfpincompatible",
+          "powersourcechange",
+          "sfppowerchange",
+          "bcmsoctemp",
+          "bottomswitchtemp",
+          "topswitchtemp",
+          "sfpcagetemp",
+          "rearpaneltemp",
+          "qsfpcagetemp",
+          "nearcputemp",
+          "cpusoctemp",
+          "inlinetoolhbchange",
+          "sysdumpstatus",
+          "cpuhibernationstatus",
+          "gsmobtunnelutilization",
+          "gsmobsessionutilization",
+          "gsmobpersistencefailure",
+          "gsmobpacketbufferutilization",
+          "gsmobcpuutilization"
+        ]
+      }
+    }
+  }
+}

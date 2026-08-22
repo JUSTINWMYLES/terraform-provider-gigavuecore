@@ -1,0 +1,58 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmImageUgrade.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM Image Upgrade schema",
+  "definitions": {
+    "FmImageUpgradeResult": {
+      "id": "#/definitions/FmImageUpgradeResult",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.3",
+      "required": [
+        "outcome"
+      ],
+      "properties": {
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "success",
+            "failed",
+            "interrupted"
+          ],
+          "description": "enum values are self explanatory. The description property will provide detailed information"
+        },
+        "description": {
+          "type": "string",
+          "description": "descriptive message of the operation outcome"
+        }
+      }
+    },
+    "FmImageUpgradeSpec": {
+      "id": "#/definitions/FmImageUpgradeSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "since": "FM 3.3",
+      "required": [
+        "imageServer",
+        "filePath",
+        "reboot"
+      ],
+      "properties": {
+        "imageServer": {
+          "type": "string",
+          "minLength": 1,
+          "description": "alias of an image file server. has to reference one of the existing image file server profiles"
+        },
+        "filePath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "image file path on the image server"
+        },
+        "reboot": {
+          "type": "boolean",
+          "description": "indicates whether nodes should reboot after image upgrade"
+        }
+      }
+    }
+  }
+}

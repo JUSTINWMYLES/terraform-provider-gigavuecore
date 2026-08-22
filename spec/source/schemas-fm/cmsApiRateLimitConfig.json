@@ -1,0 +1,33 @@
+{
+  "id": "http://gigamon.com/schemas-fm/cmsApiRateLimitConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM API Limit Config",
+  "definitions": {
+    "CmsApiRateLimitConfig": {
+      "id": "#/definitions/CmsApiRateLimitConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "FM API Limit Configuration",
+      "required": [
+        "requestLimitCount",
+        "requestLimitDuration"
+      ],
+      "properties": {
+        "requestLimitCount": {
+          "type": "integer",
+          "description": "FM API Request Limit Count",
+          "default": 1000,
+          "minValue": 100,
+          "maxValue": 1000
+        },
+        "requestLimitDuration": {
+          "type": "integer",
+          "description": "FM API Request Limit Duration in seconds",
+          "default": 60,
+          "minValue": 30,
+          "maxValue": 60
+        }
+      }
+    }
+  }
+}

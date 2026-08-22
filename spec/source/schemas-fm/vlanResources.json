@@ -1,0 +1,152 @@
+{
+  "id": "http://gigamon.com/schemas-fm/vlanResources.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Vlan Resources Configuration schema",
+  "definitions": {
+    "VlanResourcesDef": {
+      "id": "#/definitions/VlanResourcesDef",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "usedCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Number of Vlan Ids being used on this box"
+        },
+        "unusedCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Number of Vlan Ids available as unused on this box"
+        },
+        "totalCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Total number of Vlan Ids on this box"
+        },
+        "usedVlanIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VlanRange"
+          },
+          "minLength": 1,
+          "description": "VlanIds that are being used on this box"
+        },
+        "availableVlanIds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VlanRange"
+          },
+          "minLength": 1,
+          "description": "VlanIds that are available to be used on this box"
+        },
+        "usedVlanIdsCommaSeparated": {
+          "type": "string",
+          "description": "comma separated VLAN string"
+        },
+        "availableVlanIdsCommaSeparated": {
+          "type": "string",
+          "description": "comma separated VLAN string"
+        },
+        "pVlanCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Total number of Port Vlan Ids used on this box"
+        },
+        "ipInterfaceCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Total number of Vlan Ids used by IP Interface on this box"
+        },
+        "circuitTunnelCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Total number of Vlan Ids used by Circuit Tunnel on this box"
+        },
+        "flexInlineCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Total number of Vlan Ids used by Flexible Inline Maps on this box"
+        },
+        "gsMobilityCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Total number of Vlan Ids used by Mobility on this box"
+        },
+        "secureTunnelCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Total number of Vlan Ids used by Secure Tunnel on this box"
+        },
+        "advVlanManipCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Total number of Vlan Ids used by Advanced VLAN Manipulation on this box"
+        },
+        "otherFeatureCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3999,
+          "description": "Total number of Vlan Ids used by Other Features on this box"
+        }
+      }
+    },
+    "VlanRange": {
+      "id": "#/definitions/VlanRange",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 2,
+          "maximum": 4000,
+          "description": "Represents Vlan ID value"
+        },
+        "valueMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 4,
+          "maximum": 4000,
+          "description": "Represents maximum Vlan ID in a range and If present, value must be greater than 'value'"
+        }
+      }
+    },
+    "VlanResourceQueryResponse": {
+      "id": "#/definitions/VlanResourcesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vlanResourcesDef"
+      ],
+      "properties": {
+        "vlanResourcesDef": {
+          "$ref": "#/definitions/VlanResourcesDef"
+        }
+      }
+    }
+  }
+}

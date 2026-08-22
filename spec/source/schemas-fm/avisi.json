@@ -1,0 +1,464 @@
+{
+  "id": "http://gigamon.com/schemas-fm/avisi.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Active Visibility Service Configuration schema",
+  "definitions": {
+    "AvPolicyBulkEnableSpec": {
+      "id": "#/definitions/AvActionTemplate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "enabled"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "all",
+            "select"
+          ],
+          "description": "Enable all policies or by policy Ids"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "enable/disable policies"
+        },
+        "policyIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "list of policy Ids"
+        }
+      }
+    },
+    "AvActionTemplate": {
+      "id": "#/definitions/AvActionTemplate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "templateDesc"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "AV Action template ID"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User-friendly AV Action template name"
+        },
+        "templateDesc": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User-friendly Action template with associated named placeholders"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "AvConditionTemplate": {
+      "id": "#/definitions/AvConditionTemplate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "templateDesc"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "AV Condition template ID"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User-friendly AV Condition template name"
+        },
+        "templateDesc": {
+          "type": "string",
+          "minLength": 1,
+          "description": "User-friendly Condition template with associated named placeholders"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "AvCondition": {
+      "id": "#/definitions/AvCondition",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "condition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "unique Condition Criteria ID in parent Policy"
+        },
+        "condition": {
+          "type": "string",
+          "minLength": 1,
+          "description": "reference to a pre-defined condition template "
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Param"
+          },
+          "description": "key/value criteria parameters to instantiate the referenced template"
+        }
+      }
+    },
+    "AvAction": {
+      "id": "#/definitions/AvAction",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "action"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "unique Action ID in parent Policy"
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "description": "reference to a pre-defined action template "
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Param"
+          },
+          "description": "key/value criteria parameters to instantiate the referenced template"
+        }
+      }
+    },
+    "AvPolicy": {
+      "id": "#/definitions/AvPolicy",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "whenCondition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "AV Policy ID"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "AV Policy name"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "whenCondition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvCondition"
+          },
+          "description": "AND-joined list of instantiated criteria conditions to trigger this policy"
+        },
+        "thenDo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvAction"
+          },
+          "description": "AND-joined list of instantiated actions to execute when this policy triggers"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Param": {
+      "id": "#/definitions/Param",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "AvPolicySpec": {
+      "id": "#/definitions/AvPolicySpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "whenCondition"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "whenCondition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvCondition"
+          },
+          "description": "AND-joined list of instantiated criteria conditions to trigger this policy"
+        },
+        "thenDo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvAction"
+          },
+          "description": "AND-joined list of instantiated actions to execute when this policy triggers"
+        }
+      }
+    },
+    "AvConditionSpec": {
+      "id": "#/definitions/AvConditionSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "condition"
+      ],
+      "properties": {
+        "condition": {
+          "type": "string",
+          "description": "reference to a pre-defined condition template"
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Param"
+          },
+          "description": "key/value criteria parameters to instantiate the referenced template"
+        }
+      }
+    },
+    "AvActionSpec": {
+      "id": "#/definitions/AvActionSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "reference to a pre-defined action template"
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Param"
+          },
+          "description": "key/value criteria parameters to instantiate the referenced template"
+        }
+      }
+    },
+    "AvPolicyQueryResponse": {
+      "id": "#/definitions/AvPolicyQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "avPolicy": {
+          "$ref": "#/definitions/AvPolicy"
+        }
+      }
+    },
+    "AvPoliciesQueryResponse": {
+      "id": "#/definitions/AvPoliciesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "active visibility policies",
+      "properties": {
+        "avPolicies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvPolicy"
+          }
+        }
+      }
+    },
+    "AvPolicyTriggerReport": {
+      "id": "#/definitions/AvPolicyTriggerReport",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "active visibility trigger report",
+      "required": [
+        "policyId",
+        "triggerTime",
+        "outcome"
+      ],
+      "properties": {
+        "policyId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "reference to the triggering Policy"
+        },
+        "policyName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "triggering Policy name. Included for readability to provide Policy context"
+        },
+        "triggerTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "policy trigger time. In ISO-8601 date format 'yyyy-MM-dd'T'HH:mm:ssZ'",
+          "readonly": true
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "success",
+            "failure"
+          ],
+          "description": " 'success' is reported when all actions completed successfully, otherwise 'failure' is reported"
+        },
+        "conditionStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvPolicyTriggerConditionReport"
+          },
+          "description": "Triggering Conditions report. If none of the conditions are parameterizable, this status field can be omitted"
+        },
+        "actionStatus": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvPolicyTriggerActionReport"
+          },
+          "description": "Execution report for all associated Policy Actions. On Policy 'success', could be left out since success of every action is implied."
+        }
+      }
+    },
+    "AvPolicyTriggerConditionReport": {
+      "id": "#/definitions/AvPolicyTriggerConditionReport",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conditionId"
+      ],
+      "properties": {
+        "conditionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Condition ID in the parent Policy"
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Param"
+          },
+          "description": "key/value criteria parameters under which this Condition was satisfied for a given Policy triggering instance. This map should have an entry for each Parameter required for the corresponding condition type. If corresponding Condition does not take parameters, this field can be omitted"
+        }
+      }
+    },
+    "AvPolicyTriggerActionReport": {
+      "id": "#/definitions/AvPolicyTriggerActionReport",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actionId",
+        "actionType",
+        "outcome"
+      ],
+      "properties": {
+        "actionId": {
+          "type": "string",
+          "description": "Action ID in the parent Policy"
+        },
+        "actionType": {
+          "type": "string",
+          "description": "Action Type (Source Action Template). Included for readability to provide Action context"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "success",
+            "failure"
+          ]
+        },
+        "failureReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of the reasons that resulted in the failed Action execution. Empty or omitted on success"
+        }
+      }
+    },
+    "AvActionTemplatesQueryResponse": {
+      "id": "#/definitions/AvActionTemplatesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "active visibility action templates",
+      "properties": {
+        "avActionTemplates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvActionTemplate"
+          }
+        }
+      }
+    },
+    "AvConditionTemplatesQueryResponse": {
+      "id": "#/definitions/AvConditionTemplatesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "active visibility condition templates",
+      "properties": {
+        "avConditionTemplates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvConditionTemplate"
+          }
+        }
+      }
+    },
+    "AvPolicyTriggerReportsQueryResponse": {
+      "id": "#/definitions/AvPolicyTriggerReportsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "active visibility trigger reports",
+      "properties": {
+        "avPolicyTriggerReports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AvPolicyTriggerReport"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

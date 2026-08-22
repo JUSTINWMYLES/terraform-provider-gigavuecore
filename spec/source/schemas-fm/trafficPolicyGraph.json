@@ -1,0 +1,624 @@
+{
+  "id": "http://gigamon.com/schemas-fm/trafficPolicyGraph.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Traffic Policy Graph schema",
+  "definitions": {
+    "TrafficPolicyGraph": {
+      "id": "#/definitions/TrafficPolicyGraph",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "TrafficPolicyGraph definition",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Traffic Policy Graph alias. Uniquely identifies a TrafficPolicyGraph"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "endPoints": {
+          "$ref": "#/definitions/EndPoints",
+          "description": "Traffic Policy Graph Endpoints, i.e. Sources, Applications and Destinations"
+        },
+        "trafficFlows": {
+          "$ref": "#/definitions/TrafficFlows",
+          "description": "Traffic Policy Graph Flows, marking the traffic flow from one endPoint to the other one"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "trafficHealthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      }
+    },
+    "SimpleTrafficPolicyGraph": {
+      "id": "#/definitions/SimpleTrafficPolicyGraph",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Simple Traffic Policy Graph for post and patch",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Traffic Policy Graph id"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Traffic Policy Graph alias"
+        },
+        "description": {
+          "type": "string",
+          "description": "Traffic Policy Graph description"
+        }
+      }
+    },
+    "EndPoints": {
+      "id": "#/definitions/EndPoints",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "End Points Container.",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EndPoint"
+          },
+          "uniqueItems": true
+        },
+        "destinations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EndPoint"
+          },
+          "uniqueItems": true
+        },
+        "maps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EndPoint"
+          },
+          "uniqueItems": true
+        },
+        "applications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EndPoint"
+          },
+          "uniqueItems": true
+        },
+        "tunnels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EndPoint"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "PhysicalPorts": {
+      "id": "#/definitions/PhysicalPorts",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Physical Port List for Source or Destination End Point.",
+      "properties": {
+        "portList": {
+          "type": "string"
+        }
+      }
+    },
+    "SourceSelector": {
+      "id": "#/definitions/SourceSelector",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Source Selection Criteria for Source End Point.",
+      "properties": {
+        "srcSelectors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "SourceEndPointProperties": {
+      "id": "#/definitions/SourceEndPointProperties",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Source End Point Parameters.",
+      "properties": {
+        "source": {
+          "type": "object",
+          "required": [
+            "entityType",
+            "subEntityType"
+          ],
+          "oneOf": [
+            {
+              "$ref": "#/definitions/PhysicalPorts"
+            },
+            {
+              "$ref": "tunnels.json#/definitions/TunnelSpec"
+            },
+            {
+              "$ref": "#/definitions/SourceSelector"
+            },
+            {
+              "$ref": "../schemas-vmm/cloudMonitoringSession.json#/definitions/RawSpec"
+            }
+          ],
+          "description": "Physical ports, half tunnel or Source Selector as Source",
+          "properties": {
+            "entityType": {
+              "type": "string",
+              "enum": [
+                "physicalPorts",
+                "tunnel",
+                "sourceSelector",
+                "rawEndPoint"
+              ],
+              "description": "entity type"
+            },
+            "subEntityType": {
+              "type": "string",
+              "enum": [
+                "physicalPorts",
+                "tunnel",
+                "sourceSelector",
+                "rawEndPoint"
+              ],
+              "description": "sub-entity type"
+            }
+          }
+        }
+      }
+    },
+    "DestinationEndPointProperties": {
+      "id": "#/definitions/DestinationEndPointProperties",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Destination End Point Parameters.",
+      "properties": {
+        "destination": {
+          "type": "object",
+          "required": [
+            "entityType",
+            "subEntityType"
+          ],
+          "oneOf": [
+            {
+              "$ref": "#/definitions/PhysicalPorts"
+            },
+            {
+              "$ref": "tunnels.json#/definitions/TunnelSpec"
+            },
+            {
+              "$ref": "../schemas-vmm/cloudMonitoringSession.json#/definitions/RawSpec"
+            }
+          ],
+          "description": "Physical ports,or half tunnel as destination",
+          "properties": {
+            "entityType": {
+              "type": "string",
+              "enum": [
+                "physicalPorts",
+                "tunnel",
+                "rawEndPoint"
+              ],
+              "description": "entity type"
+            },
+            "subEntityType": {
+              "type": "string",
+              "enum": [
+                "physicalPorts",
+                "tunnel",
+                "rawEndPoint"
+              ],
+              "description": "sub-entity type"
+            }
+          }
+        }
+      }
+    },
+    "TunnelEndPointProperties": {
+      "id": "#/definitions/TunnelEndPointProperties",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tunnel End Point Parameters.",
+      "properties": {
+        "tunnel": {
+          "$ref": "tunnels.json#/definitions/TunnelSpec",
+          "description": "Tunnel Spec"
+        }
+      }
+    },
+    "MapEndPointProperties": {
+      "id": "#/definitions/MapEndPointProperties",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Map End Point Parameters.",
+      "properties": {
+        "map": {
+          "$ref": "flowMaps.json#/definitions/VmMap",
+          "description": "Map rule sets bases on VmMap"
+        }
+      }
+    },
+    "ApplicationEndPointProperties": {
+      "id": "#/definitions/ApplicationEndPointProperties",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Application End Point Parameters.",
+      "properties": {
+        "resourceRef": {
+          "type": "string",
+          "description": "Resource reference returned by Resource Manager"
+        },
+        "applicationRef": {
+          "type": "string",
+          "description": "Application reference returned by Application Manager"
+        }
+      }
+    },
+    "EndPoint": {
+      "id": "#/definitions/EndPoint",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "End Point Definition",
+      "required": [
+        "endPointId",
+        "endPointType"
+      ],
+      "properties": {
+        "endPointId": {
+          "type": "string"
+        },
+        "endPointType": {
+          "type": "string",
+          "enum": [
+            "source",
+            "destination",
+            "map",
+            "application",
+            "tunnel"
+          ],
+          "description": "End Point type"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "endPointUniverse": {
+          "type": "string",
+          "description": "End Point Universe"
+        },
+        "endPointNode": {
+          "type": "string",
+          "description": "End Point Node"
+        },
+        "endPointResource": {
+          "type": "string",
+          "description": "End Point Resource by Resource Manager"
+        },
+        "endPointTemplate": {
+          "type": "string",
+          "description": "End Point Template"
+        },
+        "endPointEntryReferences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "End Point entry references"
+        },
+        "endPointExitReferences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "End Point exit references"
+        },
+        "endPointProperties": {
+          "type": "object",
+          "required": [
+            "entityType"
+          ],
+          "oneOf": [
+            {
+              "$ref": "#/definitions/SourceEndPointProperties"
+            },
+            {
+              "$ref": "#/definitions/DestinationEndPointProperties"
+            },
+            {
+              "$ref": "#/definitions/MapEndPointProperties"
+            },
+            {
+              "$ref": "#/definitions/ApplicationEndPointProperties"
+            },
+            {
+              "$ref": "#/definitions/TunnelEndPointProperties"
+            }
+          ],
+          "description": "End Point Properties",
+          "properties": {
+            "entityType": {
+              "type": "string",
+              "enum": [
+                "source",
+                "destination",
+                "map",
+                "application",
+                "tunnel"
+              ],
+              "description": "entity type"
+            }
+          }
+        }
+      }
+    },
+    "TrafficFlows": {
+      "id": "#/definitions/TrafficFlows",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Traffic Flows Container",
+      "properties": {
+        "trafficFlows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TrafficFlow"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "TrafficFlow": {
+      "id": "#/definitions/TrafficFlow",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Traffic Flow Definition - this is directional",
+      "properties": {
+        "flowId": {
+          "type": "string",
+          "description": "Unique id for Traffic Flow"
+        },
+        "flowSource": {
+          "type": "string",
+          "description": "Traffic Flow Source Endpoint"
+        },
+        "flowSourceReference": {
+          "type": "string",
+          "description": "Reference point at Traffic Flow Source"
+        },
+        "flowDestination": {
+          "type": "string",
+          "description": "Traffic Flow Destination Endpoint"
+        },
+        "flowDestinationReference": {
+          "type": "string",
+          "description": "Reference point at Traffic Flow Source"
+        }
+      }
+    },
+    "TrafficPolicyGraphQueryResponse": {
+      "id": "#/definitions/TrafficPolicyGraphQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "trafficPolicyGraph"
+      ],
+      "properties": {
+        "trafficPolicyGraph": {
+          "$ref": "#/definitions/TrafficPolicyGraph"
+        }
+      }
+    },
+    "TrafficPolicyGraphsQueryResponse": {
+      "id": "#/definitions/TrafficPolicyGraphsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "trafficPolicyGraphs"
+      ],
+      "properties": {
+        "trafficPolicyGraphs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TrafficPolicyGraph"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "TrafficPolicyGraphTunnelIfaceMappingsQueryResponse": {
+      "id": "#/definitions/TrafficPolicyGraphTunnelIfaceMappingsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "trafficPolicyGraphEndpointInterfaceMappings"
+      ],
+      "properties": {
+        "trafficPolicyGraphEndpointInterfaceMappings": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-vmm/cloudMonitoringSessionEndpointInfo.json#/definitions/MonitoringSessionEndpointIfaceMappingsQueryResponse"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "DeploymentIds": {
+      "id": "#/definitions/DeploymentIds",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "requests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of deployment Ids"
+        }
+      }
+    },
+    "policyGraphDeployStatus": {
+      "id": "#/definitions/policyGraphDeployStatus",
+      "type": "object",
+      "additionalProperties": true,
+      "policyGraphId": {
+        "type:": "string"
+      },
+      "alias": {
+        "type:": "string"
+      },
+      "cloudDeployStatus": {
+        "$ref": "../schemas-vmm/cloudMonitoringSession.json#/definitions/MonitoringSessionStatusQueryResponse",
+        "description": "Cloud Deploy Status"
+      }
+    },
+    "BatchRequest": {
+      "id": "#/definitions/BatchRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "requests": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/EndPointRequest"
+              },
+              {
+                "$ref": "#/definitions/FlowRequest"
+              },
+              {
+                "$ref": "#/definitions/TagRequest"
+              }
+            ]
+          },
+          "description": "A list of request"
+        }
+      }
+    },
+    "EndPointRequest": {
+      "id": "#/definitions/EndPointRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entityType",
+        "operation",
+        "endPoint"
+      ],
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "source",
+            "destination",
+            "map",
+            "application",
+            "tunnel"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "referenceId": {
+          "type": "string"
+        },
+        "endPoint": {
+          "$ref": "#/definitions/EndPoint",
+          "description": "Only EndPoint id or alias is required for 'delete' operation"
+        }
+      }
+    },
+    "FlowRequest": {
+      "id": "#/definitions/FlowRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entityType",
+        "operation",
+        "flow"
+      ],
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "flow"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "referenceId": {
+          "type": "string"
+        },
+        "flow": {
+          "$ref": "#/definitions/TrafficFlow",
+          "description": "Only flow id or alias is required for 'delete' operation. Only flow transformations can be updated using 'update' operation. Flow update for modifying source or destination is not allowed"
+        }
+      }
+    },
+    "TagRequest": {
+      "id": "#/definitions/TagRequest",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entityType",
+        "operation",
+        "tag"
+      ],
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "tag"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "referenceId": {
+          "type": "string"
+        },
+        "tag": {
+          "$ref": "../schemas-common/common.json#/definitions/ResourceTag",
+          "description": ""
+        }
+      }
+    }
+  }
+}

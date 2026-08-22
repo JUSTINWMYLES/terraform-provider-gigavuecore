@@ -1,0 +1,107 @@
+{
+  "id": "http://gigamon.com/schemas-fm/ipResolvers.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "IP Resolvers schema",
+  "definitions": {
+    "FmIpResolverNameServer": {
+      "id": "#/definitions/FmIpResolverNameServer",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Nameserver definition",
+      "required": [
+        "interfaceName",
+        "servers"
+      ],
+      "properties": {
+        "interfaceName": {
+          "type": "string",
+          "description": "Interface in which the nameserver resides"
+        },
+        "servers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "inetAddress"
+          },
+          "description": "List of name server address"
+        }
+      }
+    },
+    "FmIpResolverNameServersQueryResponse": {
+      "id": "#/definitions/FmIpResolverNameServersQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nameServers"
+      ],
+      "properties": {
+        "nameServers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmIpResolverNameServer"
+          }
+        }
+      }
+    },
+    "FmIpResolverNameServerQueryResponse": {
+      "id": "#/definitions/FmIpResolverNameServerQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nameServer"
+      ],
+      "properties": {
+        "nameServer": {
+          "$ref": "#/definitions/FmIpResolverNameServer"
+        }
+      }
+    },
+    "FmIpResolverSearchDomain": {
+      "id": "#/definitions/FmIpResolverSearchDomain",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Default search domain definition",
+      "required": [
+        "domainNames"
+      ],
+      "properties": {
+        "domainNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of search domains"
+        }
+      }
+    },
+    "FmIpResolverSearchDomainsQueryResponse": {
+      "id": "#/definitions/FmIpResolverSearchDomainsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "searchDomains"
+      ],
+      "properties": {
+        "searchDomains": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmIpResolverSearchDomain"
+          }
+        }
+      }
+    },
+    "FmIpResolverSearchDomainQueryResponse": {
+      "id": "#/definitions/FmIpResolverSearchDomainQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "searchDomain"
+      ],
+      "properties": {
+        "searchDomain": {
+          "$ref": "#/definitions/FmIpResolverSearchDomain"
+        }
+      }
+    }
+  }
+}

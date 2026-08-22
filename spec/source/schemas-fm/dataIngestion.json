@@ -1,0 +1,72 @@
+{
+  "id": "http://gigamon.com/schemas-fm/dataIngestion.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "External export target server details",
+  "definitions": {
+    "ExternalExportServerResponse": {
+      "id": "#/definitions/ExternalExportServerResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "externalExportTargets"
+        ],
+        "properties": {
+          "externalExportTargets": {
+            "type": "array",
+            "items" : {
+              "$ref": "#/definitions/ExternalExportsTarget"
+            }
+          }
+        }
+    },
+    "ExternalExportsTarget": {
+      "id": "#/definitions/ExternalExportsTarget",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "brokerType",
+        "host",
+        "port",
+        "authType"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias for external export target server",
+          "readonly": true
+        },
+        "brokerType": {
+          "type": "string",
+          "description": "Broker Type for external export target server",
+          "readonly": true
+        },
+        "host": {
+          "type": "string",
+          "description": "Host for external export target server",
+          "readonly": true
+        },
+        "port": {
+          "type": "string",
+          "description": "Port for external export target server",
+          "readonly": true
+        },
+        "authType": {
+          "type": "string",
+          "description": "Auth Type for external export target server",
+          "readonly": true
+        },
+        "userName": {
+          "type": "string",
+          "description": "Username for external export target server",
+          "readonly": true
+        },
+        "password": {
+          "type": "string",
+          "description": "Password for external export target server",
+          "readonly": true
+        }
+      }
+    }
+  }
+}

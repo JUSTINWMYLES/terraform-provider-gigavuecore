@@ -1,0 +1,75 @@
+{
+  "id": "http://gigamon.com/schemas-fm/snmpV3UsersConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM SnmpV3 Users Configuration schema",
+  "definitions": {
+    "snmpV3UsersConfig": {
+      "id": "#/definitions/snmpV3UsersConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Contains list of FM's snmpv3 users",
+      "required": [
+        "snmpV3User"
+      ],
+      "properties": {
+        "snmpV3User": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/snmpV3User"
+          }
+        }
+      }
+    },
+    "snmpV3User": {
+      "id": "#/definitions/snmpV3User",
+      "type": "object",
+      "required": [
+        "username",
+        "authProtocol",
+        "authKey",
+        "privProtocol",
+        "privKey"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "snmpv3 username"
+        },
+        "previousUsername": {
+          "type": "string",
+          "description": "When the username is changed, the username prior changing is sent in this property. Based on this application handles the username update logic. Not found error is returned when this property is not sent during the username change"
+        },
+        "authProtocol": {
+          "type": "string",
+          "enum": [
+            "md5",
+            "sha1",
+            "sha256",
+            "sha384",
+            "sha512"
+          ]
+        },
+        "authKey": {
+          "type": "string",
+          "description": "auth key/passphrase"
+        },
+        "privProtocol": {
+          "type": "string",
+          "enum": [
+            "des",
+            "aes128",
+            "aes256"
+          ]
+        },
+        "privKey": {
+          "type": "string",
+          "description": "privacy key/passphrase"
+        },
+        "minSwVersion": {
+          "type": "string",
+          "description": "minimum software version of the device"
+        }
+      }
+    }
+  }
+}

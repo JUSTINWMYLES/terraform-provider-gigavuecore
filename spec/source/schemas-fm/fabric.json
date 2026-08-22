@@ -1,0 +1,75 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fabric.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Fabric Configuration schema",
+  "definitions": {
+    "FabricAdvHash": {
+      "id": "#/definitions/FabricAdvHash",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Fabric Advanced Hash definition",
+      "required": [
+        "boxId",
+        "type"
+      ],
+      "properties": {
+        "boxId": {
+          "type": "integer",
+          "description": "box id"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "all",
+            "default",
+            "none",
+            "fields"
+          ]
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "ethertype",
+              "macsrc",
+              "macdst",
+              "ipdst",
+              "ipsrc",
+              "ip6src",
+              "ip6dst",
+              "ip6nextHeader",
+              "protocol",
+              "portsrc",
+              "portdst",
+              "port6src",
+              "port6dst",
+              "mpls",
+              "gtpteid",
+              "ingressport"
+            ]
+          },
+          "description": "Required when 'type' == 'fields'. 'gtpteid' requires fields (portsrc and portdst) or (port6src and port6dst)"
+        }
+      }
+    },
+    "FabricAdvHashQueryResponse": {
+      "id": "#/definitions/FabricAdvHashQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fabricAdvHash"
+      ],
+      "properties": {
+        "fabricAdvHash": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FabricAdvHash"
+          }
+        }
+      }
+    }
+  }
+}

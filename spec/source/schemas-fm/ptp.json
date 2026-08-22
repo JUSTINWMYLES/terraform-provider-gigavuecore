@@ -1,0 +1,847 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "PtpDelayMechanism": {
+      "description": "The propagation delay measuring option used by the port in computing mean path delay",
+      "enum": [
+        "endToEnd",
+        "peerToPeer",
+        "disabled"
+      ],
+      "type": "string"
+    },
+    "PtpMode": {
+      "enum": [
+        "ordinary",
+        "boundary"
+      ],
+      "type": "string"
+    },
+    "PtpStepType": {
+      "enum": [
+        "oneStep"
+      ],
+      "type": "string"
+    },
+    "PtpConfigQueryResponse": {
+      "additionalProperties": false,
+      "required": [
+        "ptpConfig"
+      ],
+      "properties": {
+        "ptpConfig": {
+          "$ref": "#/definitions/TimeStampingPtpConfig"
+        }
+      },
+      "type": "object"
+    },
+    "PtpConfigsQueryResponse": {
+      "additionalProperties": false,
+      "required": [
+        "ptpConfigs"
+      ],
+      "properties": {
+        "ptpConfigs": {
+          "items": {
+            "$ref": "#/definitions/TimeStampingPtpConfig"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "TimeStampingPtpConfig": {
+      "additionalProperties": false,
+      "description": "PTP configuration per node",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "alias of the time stamping ptp configuration",
+          "minLength": 1
+        },
+        "boxId": {
+          "description": "device id",
+          "type": "integer"
+        },
+        "domain": {
+          "type": "integer",
+          "description": "Values supported for domain are 0 and range of values from 24 to 43"
+        },
+        "mode": {
+          "$ref": "#/definitions/PtpMode"
+        },
+        "localPriority": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "priority2": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "stepType": {
+          "$ref": "#/definitions/PtpStepType"
+        }
+      },
+      "required": [
+        "alias",
+        "boxId"
+      ],
+      "type": "object"
+    },
+    "TimeStampingPtpConfigPatch": {
+      "$ref": "#/definitions/TimeStampingPtpConfig"
+    },
+    "PtpClockStatesQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clockStates"
+      ],
+      "properties": {
+        "clockStates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpClockStateObj"
+          }
+        }
+      }
+    },
+    "PtpClockStateQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clockState"
+      ],
+      "properties": {
+        "clockState": {
+          "$ref": "#/definitions/PtpClockStateObj"
+        }
+      }
+    },
+    "PtpClockStateObj": {
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "boxId": {
+          "description": "device id",
+          "type": "string"
+        },
+        "clockIdentity": {
+          "description": "Clock Identifier as per the IEEE 1588 standard which is represented by an integer 8-octet array",
+          "type": "string"
+        },
+        "clockQuality": {
+          "$ref": "#/definitions/PtpClockQuality"
+        },
+        "domain": {
+          "maximum": 128,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "localClockTime": {
+          "description": "[RFC 3339](https://tools.ietf.org/html/rfc3339) format",
+          "format": "date-time",
+          "type": "string"
+        },
+        "meanPathDelay": {
+          "description": "Represents current value of the mean propagation time between source and receiver clock as computed by the slave. format hh:mm:ss.secfrac",
+          "type": "string",
+          "format": "partial-time"
+        },
+        "mode": {
+          "$ref": "#/definitions/PtpMode"
+        },
+        "offsetFromMaster": {
+          "deprecated": true,
+          "description": "Represents current value of time difference between master and a slave as computed by the slave. format hh:mm:ss. (deprecated: use offsetFromSource)",
+          "type": "string",
+          "format": "partial-time"
+        },
+        "offsetFromSource": {
+          "description": "Represents current value of time difference between source and a receiver as computed by the receiver. format hh:mm:ss",
+          "type": "string",
+          "format": "partial-time"
+        },
+        "localPriority": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "priority2": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "portPtpCount": {
+          "description": "Total number of PTP ports per node",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "PtpTime": {
+          "type": "string"
+        },
+        "stepType": {
+          "$ref": "#/definitions/PtpStepType"
+        },
+        "stepsRemoved": {
+          "description": "Represents the number of communication paths traversed between the local clock and the primary source clock",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "alias",
+        "boxId"
+      ],
+      "type": "object"
+    },
+    "PtpForeignMastersStatesQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "foreignMasters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpForeignMasterStatesQueryResponse"
+          }
+        }
+      }
+    },
+    "PtpForeignSourcesStatesQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "foreignSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpForeignSourceStatesQueryResponse"
+          }
+        }
+      }
+    },
+    "PtpForeignMasterStatesQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "foreignMasters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpForeignMasterState"
+          }
+        },
+        "bestMaster": {
+          "type": "integer"
+        },
+        "portId": {
+          "type": "string"
+        }
+      }
+    },
+    "PtpForeignSourceStatesQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "foreignSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpForeignSourceState"
+          }
+        },
+        "bestSource": {
+          "type": "integer"
+        },
+        "portId": {
+          "type": "string"
+        }
+      }
+    },
+    "PtpForeignMasterState": {
+      "properties": {
+        "portIdentity": {
+          "type": "string"
+        },
+        "ptpProtocol": {
+          "type": "string"
+        },
+        "clockAddress": {
+          "type": "string"
+        },
+        "grandmasterPriority1": {
+          "type": "integer"
+        },
+        "grandmasterPriority2": {
+          "type": "integer"
+        },
+        "lastSync": {
+          "type": "string"
+        },
+        "lastFollowUp": {
+          "type": "string"
+        },
+        "lastDelayResponse": {
+          "type": "string"
+        },
+        "announceMsgCount": {
+          "description": "Number of Announce messages from the foreign master that have been received within a time window",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "mtsdScaledAvar": {
+          "type": "integer"
+        },
+        "stepsRemoved": {
+          "type": "integer"
+        },
+        "grandmasterClockIdentity": {
+          "description": "grandmaster's Clock Identifier as per the IEEE 1588 standard which is represented by an integer 8-octet array",
+          "type": "string"
+        },
+        "portModuleNumber": {
+          "type": "integer"
+        },
+        "portNumber": {
+          "type": "integer"
+        },
+        "quality": {
+          "$ref": "#/definitions/PtpClockQuality_grandmaster"
+        }
+      },
+      "type": "object",
+      "additionalProperties": false
+    },
+    "PtpForeignSourceState": {
+      "properties": {
+        "portIdentity": {
+          "type": "string"
+        },
+        "ptpProtocol": {
+          "type": "string"
+        },
+        "clockAddress": {
+          "type": "string"
+        },
+        "primarySourcePriority1": {
+          "type": "integer"
+        },
+        "primarySourcePriority2": {
+          "type": "integer"
+        },
+        "lastSync": {
+          "type": "string"
+        },
+        "lastFollowUp": {
+          "type": "string"
+        },
+        "lastDelayResponse": {
+          "type": "string"
+        },
+        "announceMsgCount": {
+          "description": "Number of Announce messages from the foreign source that have been received within a time window",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "mtsdScaledAvar": {
+          "type": "integer"
+        },
+        "stepsRemoved": {
+          "type": "integer"
+        },
+        "primarySourceClockIdentity": {
+          "description": "primary source's Clock Identifier as per the IEEE 1588 standard which is represented by an integer 8-octet array",
+          "type": "string"
+        },
+        "portModuleNumber": {
+          "type": "integer"
+        },
+        "portNumber": {
+          "type": "integer"
+        },
+        "quality": {
+          "$ref": "#/definitions/PtpClockQuality"
+        }
+      },
+      "type": "object",
+      "additionalProperties": false
+    },
+    "PtpClockQuality_grandmaster": {
+      "deprecated": true,
+      "properties": {
+        "accuracy": {
+          "description": "Indicates the expected accuracy of a clock when it is the grandmaster or in the event it becomes the grandmaster",
+          "type": "string"
+        },
+        "class": {
+          "description": "Denotes the traceability of the time or frequency distributed by the grandmaster clock",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "description": "Indicates the estimate of the variations of the local clock from a linear timescale when it is not synchronized to another clock using the protocol",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "type": "object",
+      "description": "Clock Quality determines the quality of a clock based on class and accuracy. Used to select master clock in Best Master Clock Algorithm. (deprecated: use primarySourceClockQuality instead of grandmasterClockQuality)"
+    },
+    "PtpClockQuality": {
+      "properties": {
+        "accuracy": {
+          "description": "Indicates the expected accuracy of a clock when it is the primary source or in the event it becomes the primary source",
+          "type": "string"
+        },
+        "class": {
+          "description": "Denotes the traceability of the time or frequency distributed by the primary source clock",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "description": "Indicates the estimate of the variations of the local clock from a linear timescale when it is not synchronized to another clock using the protocol",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "type": "object",
+      "description": "Clock Quality determines the quality of a clock based on class and accuracy. Used to select source clock in Best Source Clock Algorithm"
+    },
+    "PtpParentClockStateObj": {
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "boxId": {
+          "type": "string"
+        },
+        "clockIdentity": {
+          "description": "Parent Clock Identifier as per the IEEE 1588 standard which is represented by an integer 8-octet array",
+          "type": "string"
+        },
+        "clockPortId": {
+          "description": "Port Identity of the port on the source that issues the Sync message used in synchronizing this clock",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "grandmasterClockIdentity": {
+          "deprecated": true,
+          "description": "grandmaster's Clock Identifier as per the IEEE 1588 standard which is represented by an integer 8-octet array. (deprecated: use primarySourceClockIdentity)",
+          "type": "string"
+        },
+        "primarySourceClockIdentity": {
+          "description": "primary source's Clock Identifier as per the IEEE 1588 standard which is represented by an integer 8-octet array",
+          "type": "string"
+        },
+        "grandmasterClockQuality": {
+          "$ref": "#/definitions/PtpClockQuality_grandmaster"
+        },
+        "primarySourceClockQuality": {
+          "$ref": "#/definitions/PtpClockQuality"
+        },
+        "grandmasterPriority1": {
+          "deprecated": true,
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer",
+          "description": "deprecated: use primarySourcePriority1"
+        },
+        "primarySourcePriority1": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "grandmasterPriority2": {
+          "deprecated": true,
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer",
+          "description": "deprecated: use primarySourcePriority1"
+        },
+        "primarySourcePriority2": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "observedOffset": {
+          "description": "Estimate of the parent's clock PTP variance as observed by the receiver clock",
+          "minimum": 65535,
+          "type": "integer"
+        },
+        "observedPhaseChangeRate": {
+          "description": "Estimate of the parent's clock phase rate change as observed by the receiver clock",
+          "minimum": 2147483647,
+          "type": "integer"
+        },
+        "stats": {
+          "type": "boolean",
+          "description": "indicates whether the values of observedOffset and observedPhaseChangeRate have been measured and are valid"
+        }
+      },
+      "type": "object"
+    },
+    "PtpParentsQueryResponse": {
+      "type": "object",
+      "properties": {
+        "parents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpParentClockStateObj"
+          }
+        }
+      }
+    },
+    "PtpParentQueryResponse": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "$ref": "#/definitions/PtpParentClockStateObj"
+        }
+      }
+    },
+    "PtpCounters": {
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "boxId": {
+          "type": "string"
+        },
+        "txPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "rxPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "discardedPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "RcpuEncapRxPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Ipv4PtpRxPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Ipv6PtpRxPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "L2PtpRxPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "UdpPtpRxPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "QueueOverflowRxPackets": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "PtpCountersQueryResponse": {
+      "type": "object",
+      "properties": {
+        "counters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpCounters"
+          }
+        }
+      }
+    },
+    "PtpCounterQueryResponse": {
+      "type": "object",
+      "properties": {
+        "counters": {
+          "$ref": "#/definitions/PtpCounters"
+        }
+      }
+    },
+    "PtpPortStateObj": {
+      "properties": {
+        "announceInterval": {
+          "description": "Logarithm to the base 2 of the mean announce Interval",
+          "maximum": 4,
+          "minimum": -3,
+          "type": "integer"
+        },
+        "announceReceiptTimeout": {
+          "description": "Specify the number of announceInterval that has to pass without receipt of an Announce message before the occurrence of the expire event",
+          "maximum": 255,
+          "minimum": 2,
+          "type": "integer"
+        },
+        "clockIdentity": {
+          "description": "Clock Identifier as per the IEEE 1588 standard which is represented by an integer 8-octet array",
+          "type": "string"
+        },
+        "clockPortId": {
+          "description": "The value of the portNumber for a port on a PTP node supporting a single PTP port shall be 1. The values of the port numbers for the N ports on a PTP node supporting N PTP ports shall be 1, 2, ...N, respectively. The all-zeros and all-ones portNumber values are reserved.",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "clockPortState": {
+          "deprecated": true,
+          "description": "Value of the current state of the protocol engine associated with the given PTP port. (deprecated: use clockPortStateAlias)",
+          "enum": [
+            "initializing",
+            "faulty",
+            "disabled",
+            "listening",
+            "pre_master",
+            "master",
+            "passive",
+            "uncalibrated",
+            "slave"
+          ],
+          "type": "string"
+        },
+        "clockPortStateAlias": {
+          "description": "Value of the current state of the protocol engine associated with the given PTP port",
+          "enum": [
+            "initializing",
+            "faulty",
+            "disabled",
+            "listening",
+            "pre_source",
+            "source",
+            "passive",
+            "uncalibrated",
+            "receiver"
+          ],
+          "type": "string"
+        },
+        "delayMechanism": {
+          "$ref": "#/definitions/PtpDelayMechanism"
+        },
+        "delayRequestInterval": {
+          "description": "Logarithm to the base 2 of the permitted mean time interval between successive Delay_req messages",
+          "maximum": 4,
+          "minimum": -7,
+          "type": "integer"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "localPriority": {
+          "type": "integer"
+        },
+        "peerDelayRequestInterval": {
+          "description": "Logarithm to the base 2 of the delayReqInterval",
+          "maximum": 5,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "peerMeanPathDelay": {
+          "description": "If the value of the delay Mechanism member is peer-to-peer (P2P), the value of peerMeanPathDelay shall be an estimate of the current one-way propagation delay on the link, i.e.,meanPathDelay, attached to this port computed using the peer delay mechanism",
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "portId": {
+          "description": "Port ID in [box/slot/portid] format",
+          "minLength": 1,
+          "type": "string"
+        },
+        "ptpVersion": {
+          "description": "Indicates the version of the PTP standard implemented on the port. IEEE Std 1588-2008 corresponds to PTP version 2 whereas 1588-2002 is PTP version 1. For this implementation, PTPv2 will be supported",
+          "enum": [
+            "v2"
+          ],
+          "type": "string"
+        },
+        "syncInterval": {
+          "description": "Logarithm to the base 2 of the mean SyncInterval for multicast messages",
+          "maximum": 4,
+          "minimum": -7,
+          "type": "integer"
+        },
+        "vlanId": {
+          "type": "integer",
+          "minimum": 4080,
+          "maximum": 4089
+        }
+      },
+      "required": [
+        "portId"
+      ],
+      "type": "object"
+    },
+    "PtpPortStatesQueryResponse": {
+      "type": "object",
+      "properties": {
+        "portStates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpPortStateObj"
+          }
+        }
+      }
+    },
+    "PtpPortStateQueryResponse": {
+      "type": "object",
+      "properties": {
+        "portState": {
+          "$ref": "#/definitions/PtpPortStateObj"
+        }
+      }
+    },
+    "PtpPortCounters": {
+      "type": "object",
+      "properties": {
+        "portId": {
+          "description": "Port ID in [box/slot/portid] format",
+          "minLength": 1,
+          "type": "string"
+        },
+        "txPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "rxPackets": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "discardedPackets": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "PtpPortsCountersQueryResponse": {
+      "type": "object",
+      "properties": {
+        "ports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpPortCounters"
+          }
+        }
+      }
+    },
+    "PtpPortCountersQueryResponse": {
+      "type": "object",
+      "properties": {
+        "port": {
+          "$ref": "#/definitions/PtpPortCounters"
+        }
+      }
+    },
+    "PtpTimePropertyObj": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "boxId"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "boxId": {
+          "type": "integer"
+        },
+        "currentUtcOffset": {
+          "type": "integer"
+        },
+        "leap59": {
+          "type": "integer"
+        },
+        "leap61": {
+          "type": "integer"
+        },
+        "timeTraceable": {
+          "type": "integer"
+        },
+        "frequencyTraceable": {
+          "type": "integer"
+        },
+        "timeSource": {
+          "type": "string"
+        },
+        "PtpTimeScale": {
+          "type": "integer"
+        }
+      }
+    },
+    "PtpTimePropertiesQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "timeProperties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpTimePropertyObj"
+          }
+        }
+      }
+    },
+    "PtpTimePropertyQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "timeProperty": {
+          "$ref": "#/definitions/PtpTimePropertyObj"
+        }
+      }
+    },
+    "PtpTimestampBriefQueryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "timestamps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PtpTimestampBrief"
+          }
+        }
+      }
+    },
+    "PtpTimestampBrief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "portId"
+      ],
+      "properties": {
+        "portId": {
+          "type": "string"
+        },
+        "admin": {
+          "type": "boolean"
+        },
+        "ingressTimestamp": {
+          "type": "boolean"
+        },
+        "ingressSrcId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "egressTimestamp": {
+          "type": "boolean"
+        },
+        "egressSrcId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535
+        }
+      }
+    }
+  }
+}

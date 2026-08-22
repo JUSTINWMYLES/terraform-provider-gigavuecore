@@ -1,0 +1,97 @@
+{
+  "id": "http://gigamon.com/schemas-fm/groups.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "User Group Management schema",
+  "definitions": {
+    "Group": {
+      "id": "#/definitions/Group",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "scope"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "name"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 8,
+          "description": "description"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserTags"
+          }
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "UserTags": {
+      "id": "#/definitions/Group",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tagKey",
+        "tagValues"
+      ],
+      "properties": {
+        "tagKey": {
+          "type": "string"
+        },
+        "tagValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "overrideUser": {
+          "type": "boolean",
+          "default": false
+        },
+        "multiValued": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "GroupQueryResponse": {
+      "id": "#/definitions/GroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "group"
+      ],
+      "properties": {
+        "group": {
+          "$ref": "#/definitions/Group"
+        }
+      }
+    },
+    "GroupsQueryResponse": {
+      "id": "#/definitions/GroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Group"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,480 @@
+{
+  "id": "http://gigamon.com/schemas-fm/filterTemplates.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Filter Template schema",
+  "since": "H 5.0",
+  "definitions": {
+    "FilterTemplate": {
+      "id": "#/definitions/FilterTemplate",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Filter Template alias"
+        },
+        "qualifiers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ipsrc",
+              "ipdst",
+              "ip6src",
+              "ip6dst",
+              "innervlan",
+              "macsrc",
+              "macdst",
+              "uda1",
+              "uda2",
+              "vlan",
+              "circuit-id",
+              "portsrc",
+              "portdst",
+              "ethertype",
+              "protocol",
+              "qset1",
+              "qset2",
+              "ip6fl",
+              "ipfrag",
+              "tcpctl",
+              "tos",
+              "ttl",
+              "innerEtherType",
+              "innerIp6Src",
+              "innerIp6Dst",
+              "innerIpFrag",
+              "innerIpDst",
+              "innerIpSrc",
+              "innerIpver",
+              "innerPortDst",
+              "innerPortSrc",
+              "innerProtocol",
+              "innerUda1",
+              "innerUda2"
+            ]
+          },
+          "description": " 'ip6fl', 'ipfrag', 'tcpctl', 'tos', 'ttl' are available only for default filter templates. 'circuit-id' is readonly and will be available on all filter templates by default"
+        },
+        "qualifierSet": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "mplsLabelTtl",
+              "mplsLabelId",
+              "mplsLabelExp",
+              "mplsLabelBos",
+              "mplsLabel"
+            ]
+          },
+          "comment": {
+            "type": "string"
+          },
+          "slotsApplied": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "clusterId": {
+            "type": "string",
+            "minLength": 1,
+            "readonly": true,
+            "description": "id of the defining cluster"
+          }
+        }
+      },
+      "PlatformsFilterLimits": {
+        "id": "#/definitions/PlatformsFilterLimits",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "platformsFilterLimits"
+        ],
+        "properties": {
+          "platformsFilterLimits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/PlatformFilterLimit"
+            }
+          },
+          "context": {
+            "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+          }
+        }
+      },
+      "PlatformFilterLimit": {
+        "id": "#/definitions/PlatformFilterLimit",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "alias",
+          "platformLimits"
+        ],
+        "properties": {
+          "alias": {
+            "type": "string",
+            "description": "alias of filter template"
+          },
+          "platformLimits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/PlatformLimits"
+            }
+          },
+          "clusterId": {
+            "type": "string",
+            "minLength": 1,
+            "readonly": true,
+            "description": "id of the defining cluster"
+          }
+        }
+      },
+      "PlatformLimits": {
+        "id": "#/definitions/PlatformLimits",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "platform",
+          "cardLimits"
+        ],
+        "properties": {
+          "platform": {
+            "type": "string"
+          },
+          "cardLimits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/CardLimits"
+            }
+          }
+        }
+      },
+      "CardLimits": {
+        "id": "#/definitions/CardLimits",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "card",
+          "limit"
+        ],
+        "properties": {
+          "card": {
+            "type": "string",
+            "description": "Card Type"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "FilterTemplateLimitsQueryResponse": {
+        "id": "#/definitions/FilterTemplateLimitsQueryResponse",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "filterTemplatesLimits"
+        ],
+        "properties": {
+          "filterTemplatesLimits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/FilterTemplateLimit"
+            }
+          },
+          "context": {
+            "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+          }
+        }
+      },
+      "FilterTemplateLimitQueryResponse": {
+        "id": "#/definitions/FilterTemplateLimitQueryResponse",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "filterTemplateLimit"
+        ],
+        "properties": {
+          "filterTemplateLimit": {
+            "$ref": "#/definitions/FilterTemplateLimit"
+          }
+        }
+      },
+      "FilterTemplateLimit": {
+        "id": "#/definitions/FilterTemplateLimit",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "slotId",
+          "filterLimits"
+        ],
+        "properties": {
+          "slotId": {
+            "type": "string"
+          },
+          "filterLimits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/FilterLimit"
+            }
+          },
+          "clusterId": {
+            "type": "string",
+            "minLength": 1,
+            "readonly": true,
+            "description": "id of the defining cluster"
+          }
+        }
+      },
+      "FilterLimit": {
+        "id": "#/definitions/FilterLimit",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "alias",
+          "limit"
+        ],
+        "properties": {
+          "alias": {
+            "type": "string",
+            "description": "alias of filter template"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "qualifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "FilterResourceQueryResponse": {
+        "id": "#/definitions/FilterResourceQueryResponse",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "filterResource"
+        ],
+        "properties": {
+          "filterResource": {
+            "$ref": "#/definitions/FilterResource"
+          }
+        }
+      },
+      "FilterResource": {
+        "id": "#/definitions/FilterResource",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "slotId"
+        ],
+        "properties": {
+          "filterTemplate": {
+            "type": "string",
+            "description": "alias of filter template",
+            "readonly": true
+          },
+          "slotId": {
+            "type": "string",
+            "description": "Device card slot id",
+            "readonly": true
+          },
+          "mapRulesUsed": {
+            "type": "integer",
+            "format": "int32",
+            "readonly": true
+          },
+          "mapRulesLimit": {
+            "type": "integer",
+            "format": "int32",
+            "readonly": true
+          },
+          "toolPortFilterUsed": {
+            "type": "integer",
+            "format": "int32",
+            "readonly": true
+          },
+          "toolPortFilterLimit": {
+            "type": "integer",
+            "format": "int32",
+            "readonly": true
+          },
+          "lookupResourceUsed": {
+            "type": "integer",
+            "format": "int32",
+            "readonly": true
+          },
+          "lookupResourceLimit": {
+            "type": "integer",
+            "format": "int32",
+            "readonly": true
+          },
+          "qualifiers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "in use qualifiers",
+            "readonly": true
+          },
+          "clusterId": {
+            "type": "string",
+            "minLength": 1,
+            "readonly": true,
+            "description": "id of the defining cluster"
+          }
+        }
+      },
+      "FilterTemplatesQueryResponse": {
+        "id": "#/definitions/FilterTemplatesQueryResponse",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "filterTemplates"
+        ],
+        "properties": {
+          "filterTemplates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/FilterTemplate"
+            }
+          },
+          "context": {
+            "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+          }
+        }
+      },
+      "FilterTemplateQueryResponse": {
+        "id": "#/definitions/FilterTemplateQueryResponse",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "filterTemplate"
+        ],
+        "properties": {
+          "filterTemplate": {
+            "$ref": "#/definitions/FilterTemplate"
+          }
+        }
+      },
+      "FilterResourcesQueryResponse": {
+        "id": "#/definitions/FilterResourcesQueryResponse",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "filterResources"
+        ],
+        "properties": {
+          "filterResources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/FilterResource"
+            }
+          },
+          "context": {
+            "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+          }
+        }
+      },
+      "AppFilterResource": {
+        "id": "#/definitions/AppFilterResource",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "app",
+          "rsvd",
+          "rsvdUsed",
+          "freePoolUsed"
+        ],
+        "properties": {
+          "app": {
+            "type": "string",
+            "enum": [
+              "gsd",
+              "mapSrc",
+              "mapRule",
+              "discovery",
+              "ipInterface"
+            ],
+            "description": "vfp client application"
+          },
+          "rsvd": {
+            "type": "integer",
+            "format": "int32",
+            "description": "vfp resource reserved for app"
+          },
+          "rsvdUsed": {
+            "type": "integer",
+            "format": "int32",
+            "description": "resource used from 'rsvd'"
+          },
+          "freePoolUsed": {
+            "type": "integer",
+            "format": "int32",
+            "description": "vfp resource used from free pool"
+          }
+        }
+      },
+      "AppFilterRsc": {
+        "id": "#/definitions/AppFilterRsc",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "slotId",
+          "appFilterResources"
+        ],
+        "properties": {
+          "slotId": {
+            "type": "string"
+          },
+          "appFilterResources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/AppFilterResource"
+            }
+          }
+        }
+      },
+      "AppFilterRscQueryResponse": {
+        "id": "#/definitions/AppFilterRscQueryResponse",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "appFilterRsc"
+        ],
+        "properties": {
+          "appFilterRsc": {
+            "$ref": "#/definitions/AppFilterRsc"
+          }
+        }
+      },
+      "AppFilterRscsQueryResponse": {
+        "id": "#/definitions/AppFilterRscsQueryResponse",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "appFilterRscs"
+        ],
+        "properties": {
+          "appFilterRscs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/AppFilterRsc"
+            }
+          },
+          "context": {
+            "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+          }
+        }
+      }
+    }
+  }
+}

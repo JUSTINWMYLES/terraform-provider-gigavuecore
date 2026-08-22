@@ -1,0 +1,271 @@
+{
+  "id": "http://gigamon.com/schemas-fmInternal/fabricCounters.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon Fabric Statistics Counters schema",
+  "properties": {},
+  "definitions": {
+    "FabricMapsCounters": {
+      "id": "#/definitions/FabricMapsCounters",
+      "type": "object",
+      "description": "Fabric Maps counters",
+      "required": [
+        "sysUpTime",
+        "maps"
+      ],
+      "properties": {
+        "sysUpTime": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "description": "Device sysUpTime. The time (in hundredths of a second) since the network management portion of the system was last re-initialized"
+        },
+        "maps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FabricMapCounters"
+          },
+          "readOnly": true
+        }
+      }
+    },
+    "FabricMapCounters": {
+      "id": "#/definitions/FabricMapCounters",
+      "type": "object",
+      "description": "Fabric Map counters",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Fabric Map alias"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "regular",
+            "inline",
+            "firstLevel",
+            "secondLevel",
+            "inlineFirstLevel",
+            "inlineSecondLevel",
+            "flexInline"
+          ],
+          "description": "'regular' maps are from network/hybrid ports to tool/hybrid/gigastream; 'inline' maps are from inline ports to inline/tool/hybrid/gigastream; 'firstLevel' are from network/hybrid ports to vPorts; 'secondLevel' maps are from vPorts to tool/hybrid/gigastream;"
+        },
+        "subType": {
+          "type": "string",
+          "enum": [
+            "byRule",
+            "passAll",
+            "collector",
+            "flowFilter",
+            "flowSample",
+            "flowSampleOverlap",
+            "flowWhitelist",
+            "flowWhitelistOverlap",
+            "ingressToVp",
+            "egressFromVp",
+            "oobFromVp",
+            "flowSampleSip",
+            "flowWhitelistSip"
+          ],
+          "default": "byRule",
+          "description": "'byRule' is applicable to all map types; 'passAll' and 'collector' are applicable to 'regular', 'inline', 'flexInline' and 'secondLevel' maps; 'flowFilter' and 'flowSample' are applicable to 'secondLevel' maps"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MapRuleCounters"
+          },
+          "readOnly": true,
+          "description": "Only applicable for 'byRule' Map subTypes"
+        },
+        "octets": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "Only applicable for 'passAll' and 'collector' Map subTypes"
+        },
+        "packets": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "Only applicable for 'passAll' and 'collector' Map subTypes"
+        },
+        "flexDir": {
+          "type": "string",
+          "enum": [
+            "aTob",
+            "bToa"
+          ],
+          "description": "only applicable for flexInline maps"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Counter collection date and time in ISO 8601 format",
+          "since": "H 5.0"
+        }
+      }
+    },
+    "MapRuleCounters": {
+      "id": "#/definitions/MapRuleCounters",
+      "type": "object",
+      "description": "Map Rule counters",
+      "required": [
+        "ruleId"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "integer",
+          "minimum": 1,
+          "readOnly": true,
+          "description": "Map Rule Id"
+        },
+        "mapAlias": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Map Alias"
+        },
+        "ruleType": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "drop"
+          ]
+        },
+        "octets": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true
+        },
+        "packets": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true
+        },
+        "ipCanBearer": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/flowFilter, flowWhitelist only"
+        },
+        "rules": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/flowSample only"
+        },
+        "accepted": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/flowSample only"
+        },
+        "acceptedPkts": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/flowSample only"
+        },
+        "acceptedBytes": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/flowSample only"
+        },
+        "rejected": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/flowSample only"
+        },
+        "rejectedPkts": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/flowSample only"
+        },
+        "rejectedBytes": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/flowSample only"
+        },
+        "matched": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/flowSample only"
+        },
+        "entries": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/whitelist only"
+        },
+        "matchedPkts": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/whitelist only"
+        },
+        "matchedBytes": {
+          "type": "integer",
+          "format": "counter64",
+          "readOnly": true,
+          "description": "SecondLevel/whitelist only"
+        },
+        "fsIntervalType": {
+          "$ref": "#/definitions/FsIntervalType",
+          "readOnly": true
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "readOnly": true
+        }
+      }
+    },
+    "FsIntervalType": {
+      "id": "#/definitions/FsIntervalType",
+      "type": "object",
+      "properties": {
+        "currentInterval": {
+          "$ref": "#/definitions/FsIntervalTypeCounters"
+        },
+        "priorIntervals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FsIntervalTypeCounters"
+          }
+        },
+        "futureIntervals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FsIntervalTypeCounters"
+          }
+        }
+      }
+    },
+    "FsIntervalTypeCounters": {
+      "id": "#/definitions/FsIntervalTypeCounters",
+      "type": "object",
+      "properties": {
+        "intervalStart": {
+          "type": "string"
+        },
+        "sampleRange": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

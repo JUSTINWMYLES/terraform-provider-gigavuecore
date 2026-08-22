@@ -1,0 +1,244 @@
+{
+  "id": "http://gigamon.com/schemas-fm/trafficFlowTroubleShootConfigs.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Schema for TroubleshootSummary and its response wrappers.",
+  "definitions": {
+    "TroubleshootSummary": {
+      "id": "#/definitions/TroubleshootSummary",
+      "type": "object",
+      "properties": {
+        "clusterLinks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TroubleshootLink"
+          }
+        },
+        "clusterConfigSummaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TroubleshootClusterConfigSummary"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TroubleshootLink": {
+      "id": "#/definitions/TroubleshootLink",
+      "type": "object",
+      "properties": {
+        "sourceCluster": {
+          "type": "string"
+        },
+        "destinationCluster": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TroubleshootClusterConfigSummary": {
+      "id": "#/definitions/TroubleshootClusterConfigSummary",
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "mapCount": {
+          "type": "integer"
+        },
+        "tunnelCount": {
+          "type": "integer"
+        },
+        "greenMapHealthCount": {
+          "type": "integer"
+        },
+        "yellowMapHealthCount": {
+          "type": "integer"
+        },
+        "redMapHealthCount": {
+          "type": "integer"
+        },
+        "greenTunnelHealthCount": {
+          "type": "integer"
+        },
+        "yellowTunnelHealthCount": {
+          "type": "integer"
+        },
+        "redTunnelHealthCount": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TroubleshootSummaryListQueryResponse": {
+      "id": "#/definitions/TroubleshootSummaryListQueryResponse",
+      "type": "object",
+      "properties": {
+        "troubleshootSummaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TroubleshootSummary"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TroubleshootSummarySingleQueryResponse": {
+      "id": "#/definitions/TroubleshootSummarySingleQueryResponse",
+      "type": "object",
+      "properties": {
+        "troubleshootSummary": {
+          "$ref": "#/definitions/TroubleshootSummary"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TroubleshootMap": {
+      "id": "#/definitions/TroubleshootMap",
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/aliasMetadata.json#/definitions/GigaAliasesMetaData"
+          }
+        },
+        "destinations": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/aliasMetadata.json#/definitions/GigaAliasesMetaData"
+          }
+        },
+        "map": {
+          "$ref": "../schemas-fm/map.json#/definitions/Map"
+        },
+        "tunnels": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/circuitTunnel.json#/definitions/CircuitTunnel"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "sources",
+        "destinations",
+        "map",
+        "tunnels"
+      ],
+      "additionalProperties": false
+    },
+    "TroubleshootMapWithMetaData": {
+      "id": "#/definitions/TroubleshootMapWithMetaData",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/aliasMetadata.json#/definitions/GigaAliasesMetaData"
+          }
+        },
+        "destinations": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/aliasMetadata.json#/definitions/GigaAliasesMetaData"
+          }
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        },
+        "trafficHealthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "trafficHealthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "TroubleshootClusterConfigMetaData": {
+      "id": "#/definitions/TroubleshootClusterConfigMetaData",
+      "description": "Schema for TroubleshootClusterConfigMetaData containing nested troubleshootMaps and tunnels.",
+      "type": "object",
+      "properties": {
+        "maps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TroubleshootMapWithMetaData"
+          }
+        },
+        "tunnels": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/circuitTunnel.json#/definitions/CircuitTunnel"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TroubleshootClusterConfig": {
+      "id": "#/definitions/TroubleshootClusterConfig",
+      "description": "Schema for TroubleshootClusterConfig containing list of maps and tunnels.",
+      "type": "object",
+      "properties": {
+        "maps": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/map.json#/definitions/Map"
+          }
+        },
+        "tunnels": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-fm/circuitTunnel.json#/definitions/CircuitTunnel"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TroubleShootConnectedMaps": {
+      "id": "#/definitions/TroubleshootConnectedMaps",
+      "description": "Schema for TroubleshootConnectedMaps containing nested troubleshootMaps with sources, destinations, map, and tunnels.",
+      "type": "object",
+      "properties": {
+        "troubleshootMaps": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/TroubleshootMap"
+            }
+          }
+        }
+      },
+      "required": [
+        "troubleshootMaps"
+      ],
+      "additionalProperties": false
+    },
+    "FilterInfo": {
+      "id": "#/definitions/FilterInfo",
+      "type": "object",
+      "description": "Rule Filter Info",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}
+

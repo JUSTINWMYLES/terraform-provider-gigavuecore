@@ -1,0 +1,4590 @@
+{
+  "id": "http://gigamon.com/schemas-fm/smart.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "GigaSMART Configuration schema",
+  "definitions": {
+    "GsGroup": {
+      "id": "#/definitions/GsGroup",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART Port group",
+      "required": [
+        "alias",
+        "ports"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "GS Group alias"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of the member GigaSMART e-ports"
+        },
+        "hash": {
+          "type": "string",
+          "enum": [
+            "advanced",
+            "ipsrcIpdst"
+          ],
+          "default": "advanced",
+          "description": "gsgroup hashing parameters"
+        },
+        "params": {
+          "$ref": "#/definitions/GsGroupParams"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "GsGroupCreateSpec": {
+      "id": "#/definitions/GsGroupCreateSpec",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "GigaSMART Port group",
+      "required": [
+        "alias",
+        "ports"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "GS Group alias"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of the member GigaSMART e-ports"
+        },
+        "hash": {
+          "type": "string",
+          "enum": [
+            "advanced",
+            "ipsrcIpdst"
+          ],
+          "default": "advanced",
+          "description": "gsgroup hashing parameters"
+        }
+      }
+    },
+    "GsGroupParams": {
+      "id": "#/definitions/GsGroupParams",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Parameters",
+      "properties": {
+        "dedup": {
+          "$ref": "#/definitions/GsGroupParamsDedup"
+        },
+        "flowSampling": {
+          "$ref": "#/definitions/GsGroupParamsFlowSampling"
+        },
+        "gtpWhitelist": {
+          "$ref": "#/definitions/GsGroupParamsGtpWhitelist",
+          "since": "H 4.4"
+        },
+        "portThrottleSip": {
+          "$ref": "#/definitions/GsGroupParamsPortThrottleSip",
+          "since": "H 5.4"
+        },
+        "appTcp": {
+          "$ref": "#/definitions/GsGroupParamsTcp",
+          "since": "H 5.10"
+        },
+        "eflow": {
+          "$ref": "#/definitions/GsGroupParamsEflow",
+          "since": "H 5.14"
+        },
+        "sipWhitelist": {
+          "$ref": "#/definitions/GsGroupParamsSipWhitelist",
+          "since": "H 5.2"
+        },
+        "sipSession": {
+          "$ref": "#/definitions/GsGroupParamsSipSession",
+          "since": "H 5.2"
+        },
+        "sipMedia": {
+          "$ref": "#/definitions/GsGroupParamsSipMedia",
+          "since": "H 5.2"
+        },
+        "sipPorts": {
+          "$ref": "#/definitions/GsGroupParamsSipPorts",
+          "since": "H 5.2"
+        },
+        "sipTcpIdleTimeout": {
+          "$ref": "#/definitions/GsGroupParamsSipTcpIdleTimeout",
+          "since": "H 5.2"
+        },
+        "rtpPorts": {
+          "$ref": "#/definitions/GsGroupParamsRtpPorts",
+          "since": "H 5.2"
+        },
+        "gtpFlow": {
+          "$ref": "#/definitions/GsGroupParamsGtpFlow"
+        },
+        "gtpPersistence": {
+          "$ref": "#/definitions/GsGroupParamsGtpPersistence"
+        },
+        "gtpControlSampling": {
+          "$ref": "#/definitions/GsGroupParamsGtpControlSampling",
+          "since": "H 4.5"
+        },
+        "gtpRandomSampling": {
+          "$ref": "#/definitions/GsGroupParamsGtpRandomSampling",
+          "since": "H 5.7"
+        },
+        "hsmGroup": {
+          "$ref": "#/definitions/GsGroupParamsHsmGroup",
+          "since": "H 5.3"
+        },
+        "ipFrag": {
+          "$ref": "#/definitions/GsGroupParamsIpFrag"
+        },
+        "loadBalance": {
+          "$ref": "#/definitions/GsGroupParamsLoadBalance"
+        },
+        "netflow": {
+          "$ref": "#/definitions/GsGroupParamsNetflow"
+        },
+        "sslDecrypt": {
+          "$ref": "#/definitions/GsGroupParamsSslDecrypt"
+        },
+        "gsGroupSystem": {
+          "$ref": "#/definitions/GsGroupParamsSystem"
+        },
+        "saApf": {
+          "$ref": "#/definitions/GsGroupParamsSaApf",
+          "description": "deprecated. Use resource/bufferAsfSize instead"
+        },
+        "resource": {
+          "$ref": "#/definitions/GsGroupParamsResource"
+        },
+        "erspan3": {
+          "$ref": "#/definitions/GsGroupParamsErspan3",
+          "since": "H 4.5"
+        },
+        "flowMask": {
+          "$ref": "#/definitions/GsGroupParamsFlowMask",
+          "since": "H 4.6"
+        },
+        "engineWatchdogTimer": {
+          "$ref": "#/definitions/GsGroupParamsEngineWatchdogTimer",
+          "since": "H 4.7"
+        },
+        "genericSessionTimeout": {
+          "$ref": "#/definitions/GsGroupParamsGenericSessionTimeout",
+          "since": "H 5.1"
+        },
+        "healthCheck": {
+          "$ref": "#/definitions/GsGroupParamsHealthCheck",
+          "since": "H 5.3"
+        },
+        "xpktMatch": {
+          "$ref": "#/definitions/GsGroupParamsXpktMatch",
+          "since": "H 5.4"
+        },
+        "sessionLogging": {
+          "$ref": "#/definitions/GsGroupParamsSessionLogging"
+        },
+        "diameterS6aSession": {
+          "$ref": "#/definitions/GsGroupParamsDiameterS6aSession",
+          "since": "H 5.5"
+        },
+        "diameterPacket": {
+          "$ref": "#/definitions/GsGroupParamsDiameterPacket",
+          "since": "H 5.5"
+        },
+        "diameterWhitelist": {
+          "$ref": "#/definitions/GsGroupParamsDiameterWhitelist",
+          "since": "H 5.5"
+        },
+        "gtaProfiles": {
+          "$ref": "#/definitions/GsGroupParamsGtaProfiles",
+          "since": "H 5.6"
+        },
+        "nodeRole": {
+          "$ref": "#/definitions/GsGroupParamsNodeRole",
+          "since": "H 5.6"
+        },
+        "sffpProfiles": {
+          "$ref": "#/definitions/GsGroupParamsSffpProfiles",
+          "since": "H 5.8"
+        },
+        "gpfcpProfiles": {
+          "$ref": "#/definitions/GsGroupParamsGpfcpProfiles",
+          "since": "H 6.8"
+        },
+        "gtpGpfcpDelay": {
+          "$ref": "#/definitions/GsGroupParamsGtpGpfcpDelay",
+          "since": "H 6.8"
+        }
+      }
+    },
+    "GsGroupParamsXpktMatch": {
+      "id": "#/definitions/GsGroupParamsXpktMatch",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "cross packet match configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "GsGroupParamsGtaProfiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "3GPP CUPS gta profile aliases",
+      "properties": {
+        "gtaProfiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GsGroupParamsNodeRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "control",
+            "control_5g",
+            "user",
+            "disabled"
+          ]
+        },
+        "mobLteLimit": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 12000,
+          "default": 5000,
+          "description": "Number of sessions to allocate for LTE CPN / UPN Node"
+        },
+        "mob5gLimit": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 12000,
+          "default": 5000,
+          "description": "Number of sessions to allocate for Control 5G Node"
+        },
+        "standAloneMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables UPN Stand-alone mode"
+        }
+      }
+    },
+    "GsGroupParamsHealthCheck": {
+      "id": "#/definitions/GsGroupParamsHealthCheck",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "health check configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "icmp",
+            "udp"
+          ],
+          "default": "icmp"
+        },
+        "interval": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 5,
+          "maximum": 600,
+          "default": 600
+        },
+        "retries": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 5,
+          "default": 5
+        },
+        "srcPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "default": 54321
+        },
+        "dstPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "default": 54321
+        },
+        "rcvPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535,
+          "default": 54321
+        },
+        "action": {
+          "type": "string",
+          "default": "pass",
+          "enum": [
+            "pass",
+            "drop"
+          ]
+        },
+        "roundTripTime": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 4,
+          "default": 1
+        }
+      }
+    },
+    "GsGroupParamsSipSession": {
+      "id": "#/definitions/GsGroupParamsSipSession",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Sip Session Parameters",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 300,
+          "default": 30,
+          "description": "Sip session inactivity timer, value in seconds .Valid values: 30-300."
+        }
+      }
+    },
+    "GsGroupParamsSipMedia": {
+      "id": "#/definitions/GsGroupParamsSipMedia",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Sip Media Parameters",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 300,
+          "default": 30,
+          "description": "Sip media timeout value in seconds .Valid values: 30-300."
+        }
+      }
+    },
+    "GsGroupParamsSipTcpIdleTimeout": {
+      "id": "#/definitions/GsGroupParamsSipTcpIdleTimeout",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Sip Tcp Idle Parameters",
+      "properties": {
+        "time": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 20,
+          "maximum": 600,
+          "default": 20,
+          "description": "Sip tcp idle timeout value in seconds .Valid values: 20-600."
+        }
+      }
+    },
+    "GsGroupParamsSipPorts": {
+      "id": "#/definitions/GsGroupParamsSipPorts",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Sip Ports Parameters",
+      "properties": {
+        "ports": {
+          "type": "array",
+          "maxItems": 10,
+          "items": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "description": "list of TCP/UDP ports. Valid ports 1 - 65535. maximum 10 ports"
+        }
+      }
+    },
+    "GsGroupParamsRtpPorts": {
+      "id": "#/definitions/GsGroupParamsRtpPorts",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Rtp Ports Parameters",
+      "properties": {
+        "range": {
+          "$ref": "#/definitions/GsGroupRtpPortRange",
+          "description": "Rtp ports range"
+        }
+      }
+    },
+    "GsGroupParamsSffpProfiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "3GPP CUPS sffp profile aliases",
+      "properties": {
+        "sffpProfiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GsGroupParamsGpfcpProfiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Enriched CUPS Gpfcp profile aliases",
+      "properties": {
+        "gPfcpProfiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GsGroupParamsGtpGpfcpDelay": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Gtp GPFCP Delay time",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 1000
+        }
+      }
+    },
+    "GsGroupRtpPortRange": {
+      "id": "#/definitions/GsGroupRtpPortRange",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Rtp Port Range Parameters",
+      "required": [
+        "port"
+      ],
+      "properties": {
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "portMax": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "If specified should be greater than 'port'"
+        }
+      }
+    },
+    "GsGroupParamsTcp": {
+      "id": "#/definitions/GsGroupParamsTcp",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup TCP Parameters",
+      "properties": {
+        "loadBalance": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables TCP loadbalancing for the Tool Ports. Supports SIP & N11 only"
+        },
+        "application": {
+          "type": "string",
+          "enum": [
+            "broadcast",
+            "drop",
+            "enhanced"
+          ],
+          "default": "broadcast",
+          "description": "To choose the action on Unknown Application Data"
+        },
+        "tcpControl": {
+          "type": "string",
+          "enum": [
+            "broadcast",
+            "drop",
+            "enhanced"
+          ],
+          "default": "broadcast",
+          "description": "To choose the action on TCP Control messages"
+        }
+      }
+    },
+    "GsGroupParamsEflow": {
+      "id": "#/definitions/GsGroupParamsEflow",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Eflow Parameters",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/Disable elephant flow detection and handling"
+        },
+        "logEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/Disable logging of elephant flow parameters into gs logs"
+        },
+        "interval": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 0,
+          "maximum": 3600,
+          "description": "time interval in seconds"
+        },
+        "packetCount": {
+          "type": "integer",
+          "default": 10000,
+          "description": "Number of packets to be received by a flow"
+        },
+        "packetRatio": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Percentage of packets in a flow vs overall packet count"
+        }
+      }
+    },
+    "GsGroupParamsSipWhitelist": {
+      "id": "#/definitions/GsGroupParamsSipWhitelist",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "whitelist"
+      ],
+      "description": "GsGroup SIP Whitelist Parameters",
+      "since": "H 5.1",
+      "properties": {
+        "whitelist": {
+          "type": "string",
+          "description": "Alias of referenced SIP Whitelist"
+        }
+      }
+    },
+    "GsGroupParamsHsmGroup": {
+      "id": "#/definitions/GsGroupParamsHsmGroup",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Hsm Group Parameters",
+      "properties": {
+        "hsmGroup": {
+          "type": "string",
+          "description": "alias of Hsm Group"
+        }
+      }
+    },
+    "GsGroupParamsResource": {
+      "id": "#/definitions/GsGroupParamsResource",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Resource Parameters",
+      "properties": {
+        "bufferAsfSize": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Session aware APF buffer. Valid values: 2-5: in million sessions (0 = disabled). Changes take effect after card or system reboot"
+        },
+        "packetBuffer": {
+          "$ref": "#/definitions/PacketBuffer"
+        },
+        "cpu": {
+          "$ref": "#/definitions/Cpu"
+        },
+        "sessionOverload": {
+          "$ref": "#/definitions/Session"
+        },
+        "tunnelOverload": {
+          "$ref": "#/definitions/Tunnel"
+        },
+        "hsmSsl": {
+          "$ref": "#/definitions/GsGroupParamsResourcecHsmSsl",
+          "description": "Resource hsm ssl params"
+        },
+        "metadata": {
+          "type": "integer",
+          "format": "int32",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 12,
+          "description": "flows in millions, how many flows to support for metadata. 0 to disable"
+        },
+        "xpktMatch": {
+          "$ref": "#/definitions/GsGroupParamsResourceXpktMatch",
+          "description": "Resource xpkt-match params"
+        },
+        "inlineSsl": {
+          "$ref": "#/definitions/GsGroupParamsResourceInlineSsl",
+          "description": "Resource inline ssl params. Applicable only for HC1"
+        }
+      }
+    },
+    "GsGroupParamsResourceInlineSsl": {
+      "id": "#/definitions/GsGroupParamsResourceInlineSsl",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Used to configure other GS apps in addition to Inline SSL on a HC1 box",
+      "properties": {
+        "standalone": {
+          "type": "boolean",
+          "default": true,
+          "description": "If enabled , behaves in a normal way. If disabled, can configure other GS apps along side Inline ssl with Inline ssl occupying only 50% of the memory"
+        }
+      }
+    },
+    "GsGroupParamsResourceXpktMatch": {
+      "id": "#/definitions/GsGroupParamsResourceXpktMatch",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Resource Cross Packet Match Parameters",
+      "properties": {
+        "flows": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 0,
+          "description": "num in 100K flows. 0 is disable"
+        }
+      }
+    },
+    "PacketBuffer": {
+      "id": "#/definitions/PacketBuffer",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overloadThreshold": {
+          "type": "integer",
+          "default": 80,
+          "minimum": 0,
+          "maximum": 80,
+          "description": "Valid values 50 - 80%. 0 is disabled. Changes take effect after card or system reboot"
+        }
+      }
+    },
+    "Cpu": {
+      "id": "#/definitions/Cpu",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overloadThreshold": {
+          "type": "integer",
+          "default": 90,
+          "minimum": 0,
+          "maximum": 90,
+          "description": "Valid values 50 - 90%. 0 is disabled. Changes take effect after card or system reboot"
+        }
+      }
+    },
+    "Session": {
+      "id": "#/definitions/Session",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overloadThreshold": {
+          "type": "integer",
+          "default": 90,
+          "minimum": 0,
+          "maximum": 90,
+          "description": "Session overload threshold value , Default value is 90 and 0 is disabled."
+        }
+      }
+    },
+    "Tunnel": {
+      "id": "#/definitions/Tunnel",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overloadThreshold": {
+          "type": "integer",
+          "default": 90,
+          "minimum": 0,
+          "maximum": 90,
+          "description": "Tunnel overload threshold value , Default value is 90 and 0 is disabled."
+        }
+      }
+    },
+    "GsGroupParamsEngineWatchdogTimer": {
+      "id": "#/definitions/GsGroupParamsEngineWatchdogTimer",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup EngineWatchdogTimer Parameters",
+      "properties": {
+        "time": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 600,
+          "default": 60,
+          "description": "Engine Watchdog Timer value, time to restart in seconds .Valid values: 60-600. 0 is disable"
+        }
+      }
+    },
+    "GsGroupParamsGenericSessionTimeout": {
+      "id": "#/definitions/GsGroupParamsGenericSessionTimeout",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Generic Session Timeout Parameters",
+      "properties": {
+        "time": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 5,
+          "maximum": 600,
+          "default": 5,
+          "description": "Maximum timeout for session entry"
+        }
+      }
+    },
+    "GsGroupParamsDiameterS6aSession": {
+      "id": "#/definitions/GsGroupParamsDiameterS6aSession",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Diameter s6a Session Timeout Parameters",
+      "since": "H 5.5",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 300,
+          "default": 30,
+          "description": "timeout in seconds used to clean inactive sessions"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 10000,
+          "default": 10000,
+          "description": "Number of sessions to allocate for Diameter S6A"
+        }
+      }
+    },
+    "GsGroupParamsDiameterPacket": {
+      "id": "#/definitions/GsGroupParamsDiameterPacket",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Diameter Packet Timeout Parameters",
+      "since": "H 5.5",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 5,
+          "default": 2,
+          "description": "timeout in seconds to remove OOO or fragmented packet"
+        }
+      }
+    },
+    "GsGroupParamsDiameterWhitelist": {
+      "id": "#/definitions/GsGroupParamsDiameterWhitelist",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "whitelist"
+      ],
+      "description": "GsGroup Diameter Whitelist Parameters",
+      "since": "H 5.5",
+      "properties": {
+        "whitelist": {
+          "type": "string",
+          "description": "Alias of referenced diameter Whitelist"
+        }
+      }
+    },
+    "GsGroupParamsDedup": {
+      "id": "#/definitions/GsGroupParamsDedup",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Dedup Parameters",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "count",
+            "drop"
+          ],
+          "default": "drop"
+        },
+        "ipTclass": {
+          "type": "string",
+          "enum": [
+            "include",
+            "ignore"
+          ],
+          "default": "include"
+        },
+        "ipTos": {
+          "type": "string",
+          "enum": [
+            "include",
+            "ignore"
+          ],
+          "default": "include"
+        },
+        "tcpSeq": {
+          "type": "string",
+          "enum": [
+            "include",
+            "ignore"
+          ],
+          "default": "include"
+        },
+        "vlan": {
+          "type": "string",
+          "enum": [
+            "include",
+            "ignore"
+          ],
+          "default": "ignore"
+        },
+        "timer": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 10,
+          "maximum": 500000,
+          "default": 50000,
+          "description": "in microseconds"
+        }
+      }
+    },
+    "GsGroupParamsFlowSampling": {
+      "id": "#/definitions/GsGroupParamsFlowSampling",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Flow Sampling Parameters",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "deviceIp",
+            "deviceIpInGtp"
+          ],
+          "default": "deviceIp"
+        },
+        "ipRanges": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "../schemas-common/common.json#/definitions/Ipv4AddressWithMask"
+              },
+              {
+                "$ref": "../schemas-common/common.json#/definitions/Ipv6AddressWithMask"
+              }
+            ]
+          }
+        },
+        "rate": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 5,
+          "maximum": 95,
+          "default": 5,
+          "description": "in percent"
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1,
+          "maximum": 60,
+          "default": 1,
+          "description": "in minutes"
+        }
+      }
+    },
+    "GsGroupParamsGtpFlow": {
+      "id": "#/definitions/GsGroupParamsGtpFlow",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Gtp Flow Parameters",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1,
+          "maximum": 6000,
+          "default": 48,
+          "description": "Session Timeout. in units of 10 minutes. Default of 48 is 8 hours"
+        }
+      }
+    },
+    "GsGroupParamsPortThrottleSip": {
+      "id": "#/definitions/GsGroupParamsPortThrottleSip",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup SIP Port Throttle Parameters",
+      "since": "H 5.4",
+      "properties": {
+        "portThrottle": {
+          "type": "string",
+          "description": "Alias of referenced Port Throttle"
+        }
+      }
+    },
+    "GsGroupParamsGtpPersistence": {
+      "id": "#/definitions/GsGroupParamsGtpPersistence",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Gtp Persistence Parameters",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "GTP Persistence Status"
+        },
+        "interval": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 10,
+          "maximum": 1440,
+          "default": 10,
+          "description": "GTP Persistence Interval(mins)"
+        },
+        "restartAgeTime": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 10,
+          "maximum": 1440,
+          "default": 30,
+          "description": "GTP Persistence Restart Age Time(mins)"
+        },
+        "fileAgeTimeout": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 10,
+          "maximum": 1440,
+          "default": 30,
+          "description": "GTP Persistence File Age Timeout(mins)"
+        }
+      }
+    },
+    "GsGroupParamsGtpControlSampling": {
+      "id": "#/definitions/GsGroupParamsGtpControlSampling",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Gtp Control Sampling Parameters",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "When enabled, GTP Control plane traffic for the subscribers contained within the subscriber sample defined in GTP flowsample maps will be sent to tools. When disabled, all GTP Control plane traffic for all subscribers in GTP flowsample maps will be sent to tools."
+        }
+      }
+    },
+    "GsGroupParamsGtpRandomSampling": {
+      "id": "#/definitions/GsGroupParamsGtpRandomSampling",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Gtp Random Sampling Parameters",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled, sampling of subscriber's sessions happens in random fashion"
+        },
+        "interval": {
+          "type": "integer",
+          "default": 12,
+          "minimum": 12,
+          "maximum": 48,
+          "description": "Rotation Interval in multiples of 12 (hrs)"
+        }
+      }
+    },
+    "GsGroupParamsGtpWhitelist": {
+      "id": "#/definitions/GsGroupParamsGtpWhitelist",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "whitelist"
+      ],
+      "description": "GsGroup GTP Whitelist Parameters",
+      "since": "H 4.4",
+      "properties": {
+        "whitelist": {
+          "type": "string",
+          "description": "Alias of referenced GTP Whitelist.Deprecated since H 5.12"
+        },
+        "multiWhitelists": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Alias/Aliases of referenced GTP Whitelists.",
+          "since": "H 5.12"
+        }
+      }
+    },
+    "GsGroupParamsIpFrag": {
+      "id": "#/definitions/GsGroupParamsIpFrag",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup IP Fragmentation Parameters",
+      "properties": {
+        "forward": {
+          "type": "boolean",
+          "default": true
+        },
+        "timeout": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 5,
+          "maximum": 180,
+          "default": 10,
+          "description": "in seconds"
+        },
+        "headSessionTimeout": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 15,
+          "maximum": 240,
+          "default": 30,
+          "description": "in seconds"
+        }
+      }
+    },
+    "GsGroupParamsLoadBalance": {
+      "id": "#/definitions/GsGroupParamsLoadBalance",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Load Balancing Parameters",
+      "properties": {
+        "failover": {
+          "$ref": "#/definitions/GsGroupParamsLoadBalanceFailoverConfig",
+          "description": "Load Balancing Failover settings"
+        },
+        "replicateGtpc": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables replication of GTP control packets (GTP-c)"
+        },
+        "linkWeightType": {
+          "type": "string",
+          "enum": [
+            "speed",
+            "assigned"
+          ],
+          "default": "assigned",
+          "description": "Controls LB port weight resolution for 'weighted' load balancing (wtRoundRobin, wtLeastBw, wtLeastPktRate, wtLeastConn, wtLeastTotalTraffic,wtImsi, wtSupi). For 'assigned', explicit user-configured port weights on the port group are used. For 'speed', link speed is used and user-assigned port weights are ignored. Ex: if a port group consists of four tool ports, and one of them is 100G and the others are 10G, the 100G link will be selected about 10 times more than the 10G links"
+        }
+      }
+    },
+    "GsGroupParamsLoadBalanceFailoverConfig": {
+      "id": "#/definitions/GsGroupParamsLoadBalanceFailoverConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Private class. Failover part of the GsGroup Load Balancing Parameters",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables or disables failover when tool ports are down or thresholds to other tool ports in the load balancing port group are exceeded. A GigaSMART application failover will occur no more than once in 30 seconds"
+        },
+        "thresholdLtBw": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 50,
+          "maximum": 90,
+          "default": 80,
+          "description": "Mutually exclusive with 'thresholdLtPktRate'. Failover threshold for Least Bandwidth. In percent's of the maximum bandwidth of a tool port. Ex: for a 1G port, a failover threshold of 90% means that failover to another tool port occurs when the bandwidth reaches 900Mbps. The default is 80%"
+        },
+        "thresholdLtPktRate": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 500,
+          "maximum": 5000,
+          "default": 1000,
+          "description": "Mutually exclusive with 'thresholdLtBw'. Failover threshold for Least Packet Rate. In In kilo-packets-per-second: [500k..5M] pps. A tool port will failover to another tool port when the packet rate is over the specified threshold, in packets per second. The default is 1M"
+        }
+      }
+    },
+    "GsGroupParamsNetflow": {
+      "id": "#/definitions/GsGroupParamsNetflow",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Netflow Parameters",
+      "properties": {
+        "monitor": {
+          "type": "string",
+          "description": "Alias of referenced Netflow Monitor"
+        }
+      }
+    },
+    "GsGroupParamsSslDecrypt": {
+      "id": "#/definitions/GsGroupParamsSslDecrypt",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup SSL Decrypt Parameters",
+      "required": [
+        "keyMap"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "keyMap": {
+          "type": "string",
+          "description": "references one of the pre-defined 'SslDecryptionKeyMap' groups"
+        },
+        "sessionTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 3600,
+          "description": "in seconds",
+          "default": 300
+        },
+        "pendingSessionTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 30,
+          "maximum": 120,
+          "description": "in seconds",
+          "default": 60
+        },
+        "tcpSynTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 20,
+          "maximum": 600,
+          "description": "in seconds",
+          "default": 20
+        },
+        "decryptFailAction": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "passTool"
+          ],
+          "default": "drop"
+        },
+        "keyCacheTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 86400,
+          "default": 10800,
+          "description": "in seconds"
+        },
+        "ticketCacheTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 86400,
+          "default": 10800,
+          "description": "in seconds"
+        },
+        "hsmTimeout": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 2,
+          "maximum": 5000,
+          "default": 50,
+          "description": "in milliseconds"
+        },
+        "hsmPkcs11": {
+          "$ref": "#/definitions/GsGroupParamsSslDecryptHsmPkcs11",
+          "description": "SSL decryption hsm pkcs11 params"
+        },
+        "nonSslTraffic": {
+          "type": "string",
+          "enum": [
+            "drop",
+            "pass"
+          ],
+          "default": "drop",
+          "since": "H 4.4"
+        }
+      }
+    },
+    "GsGroupParamsResourcecHsmSsl": {
+      "id": "#/definitions/GsGroupParamsResourcecHsmSsl",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Resource Hsm Ssl Parameters",
+      "properties": {
+        "buffer": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 1,
+          "description": "resource for application hsm-ssl buffer in MB. 0 to disable"
+        },
+        "packetBuffer": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 20,
+          "maximum": 1000,
+          "default": 20,
+          "description": "resource for application hsm-ssl packet-buffer per connection"
+        },
+        "sessionCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 3,
+          "default": 1,
+          "description": "resource for application hsm-ssl buffer session count in million, 0 to disable"
+        }
+      }
+    },
+    "GsGroupParamsSslDecryptHsmPkcs11": {
+      "id": "#/definitions/GsGroupParamsSslDecryptHsmPkcs11",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Ssl Decrypt Hsm Pkcs11 Parameters",
+      "properties": {
+        "debugLevel": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 11,
+          "default": 0,
+          "description": "hsm pkcs11 debug level"
+        },
+        "dynamicObject": {
+          "type": "boolean",
+          "default": true,
+          "description": "hsm pkcs11 dynamic object"
+        },
+        "loadSharing": {
+          "type": "boolean",
+          "default": true,
+          "description": "hsm pkcs11 load sharing"
+        }
+      }
+    },
+    "GsGroupParamsSystem": {
+      "id": "#/definitions/GsGroupParamsSystem",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup System Monitoring Parameters",
+      "properties": {
+        "cpuLoadAlarmThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 20,
+          "maximum": 99,
+          "default": 80,
+          "description": "CPU rising threshold percentage 20-99%. Once this threshold is crossed for 5 seconds, an alarm is generated"
+        }
+      }
+    },
+    "GsGroupParamsSaApf": {
+      "id": "#/definitions/GsGroupParamsSaApf",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Session Aware APF Parameters",
+      "properties": {
+        "bufferSize": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 0,
+          "description": "Session aware APF buffer. Valid values: 2-5: in million sessions (0 = disabled). Changes take effect after card or system reboot"
+        }
+      }
+    },
+    "GsGroupParamsErspan3": {
+      "id": "#/definitions/GsGroupParamsErspan3",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup ERSPAN III Parameters",
+      "properties": {
+        "timestampFormat": {
+          "type": "string",
+          "enum": [
+            "gigasmart",
+            "x12Ts",
+            "none"
+          ],
+          "default": "none",
+          "description": "erspan III tunnelDecap timestamp format"
+        }
+      }
+    },
+    "GsGroupParamsFlowMask": {
+      "id": "#/definitions/GsGroupParamsFlowMask",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 4.6",
+      "description": "GsGroup Flow Mask Parameters",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 111,
+          "default": 14
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 112,
+          "default": 28
+        }
+      }
+    },
+    "GsGroupParamsSessionLogging": {
+      "id": "#/definitions/GsGroupParamsSessionLogging",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GsGroup Session Logging Configuration",
+      "properties": {
+        "logLevel": {
+          "type": "string",
+          "enum": [
+            "err",
+            "warning",
+            "notice",
+            "info",
+            "debug",
+            "none"
+          ],
+          "default": "none",
+          "description": "Log Level"
+        },
+        "remoteSyslogIp": {
+          "type": "string",
+          "description": "Remote Syslog IP"
+        },
+        "remoteSyslogPort": {
+          "type": "integer",
+          "default": 514,
+          "description": "Remote Syslog Port Number"
+        },
+        "interface": {
+          "type": "string",
+          "description": "Associated IP Interface"
+        }
+      }
+    },
+    "GigasmartOp": {
+      "id": "#/definitions/GigasmartOp",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART Operation",
+      "required": [
+        "alias",
+        "gsGroup",
+        "gsApps"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "gsGroup": {
+          "type": "string",
+          "description": "Alias of referenced managing GsGroup"
+        },
+        "gsApps": {
+          "$ref": "#/definitions/GigasmartApps",
+          "description": "GS Apps in the context of this GSOP"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "GigasmartApps": {
+      "id": "#/definitions/GigasmartApps",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "GigaSMART Applications for a GSOP. At least one GsApp must be defined for the config to be valid",
+      "properties": {
+        "dedup": {
+          "$ref": "#/definitions/GigasmartAppEmptyConfig"
+        },
+        "masking": {
+          "$ref": "#/definitions/GigasmartAppMaskingConfig"
+        },
+        "slicing": {
+          "$ref": "#/definitions/GigasmartAppSlicingConfig"
+        },
+        "headerAdd": {
+          "$ref": "#/definitions/GigasmartAppHeaderAddConfig"
+        },
+        "headerRemove": {
+          "$ref": "#/definitions/GigasmartAppHeaderRemoveConfig"
+        },
+        "trailerAdd": {
+          "$ref": "#/definitions/GigasmartAppTrailerAddConfig"
+        },
+        "trailerRemove": {
+          "$ref": "#/definitions/GigasmartAppEmptyConfig"
+        },
+        "tunnelDecap": {
+          "$ref": "#/definitions/GigasmartAppTunnelDecapConfig"
+        },
+        "tunnelEncap": {
+          "$ref": "#/definitions/GigasmartAppTunnelEncapConfig"
+        },
+        "apf": {
+          "$ref": "#/definitions/GigasmartAppEmptyConfig",
+          "description": "Only applicable for H-series"
+        },
+        "saApf": {
+          "$ref": "#/definitions/GigasmartAppEmptyConfig",
+          "description": "Deprecated (functionality will not be supported from 5.4 release onwards); Only applicable for H-series"
+        },
+        "flowFilter": {
+          "$ref": "#/definitions/GigasmartAppFlowFilterConfig",
+          "description": "Only applicable for H-series"
+        },
+        "flowSampling": {
+          "$ref": "#/definitions/GigasmartAppFlowSamplingConfig",
+          "description": "Only applicable for H-series"
+        },
+        "gtpWhitelist": {
+          "$ref": "#/definitions/GigasmartAppEmptyConfig",
+          "description": "Only applicable for H-series",
+          "since": "H 4.4"
+        },
+        "sipWhitelist": {
+          "$ref": "#/definitions/GigasmartAppEmptyConfig",
+          "description": "Only applicable for H-series",
+          "since": "H 5.1"
+        },
+        "diameterWhitelist": {
+          "$ref": "#/definitions/GigasmartAppEmptyConfig",
+          "description": "Only applicable for H-series",
+          "since": "H 5.5"
+        },
+        "loadBalance": {
+          "$ref": "#/definitions/GigasmartAppLoadBalanceConfig",
+          "description": "Only applicable for H-series"
+        },
+        "netflow": {
+          "$ref": "#/definitions/GigasmartAppEmptyConfig",
+          "description": "Only applicable for H-series"
+        },
+        "sslDecrypt": {
+          "$ref": "#/definitions/GigasmartAppSslDecryptConfig",
+          "description": "Only applicable for H-series"
+        },
+        "inlineSsl": {
+          "$ref": "#/definitions/GigasmartAppInlineSslConfig",
+          "description": "Only applicable for H-series",
+          "since": "H 5.0"
+        },
+        "gseriesHeaderAdd": {
+          "$ref": "#/definitions/GigasmartAppGseriesHeaderAddConfig",
+          "description": "Only applicable for G-series"
+        },
+        "gseriesHeaderRemove": {
+          "$ref": "#/definitions/GigasmartAppEmptyConfig",
+          "description": "Only applicable for G-series"
+        },
+        "gseriesLoadBalance": {
+          "$ref": "#/definitions/GigasmartAppGseriesLoadBalanceConfig",
+          "description": "Only applicable for G-series on a per-rule basis"
+        },
+        "gseriesPatternMatch": {
+          "$ref": "#/definitions/GigasmartAppGseriesPatternMatchConfig",
+          "description": "Only applicable for G-series on a per-rule basis"
+        },
+        "metadataExport": {
+          "$ref": "#/definitions/GigasmartAppMetadataExportConfig",
+          "description": "Only applicable for H-series",
+          "since": "H 5.4"
+        },
+        "icap": {
+          "$ref": "#/definitions/GigasmartAppICAPConfig",
+          "description": "Only applicable for H-series",
+          "since": "H 6.3"
+        }
+      }
+    },
+    "GigasmartAppEmptyConfig": {
+      "id": "#/definitions/GigasmartAppEmptyConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "string",
+          "enum": [
+            "enabled"
+          ],
+          "default": "enabled"
+        }
+      }
+    },
+    "GigasmartAppMaskingConfig": {
+      "id": "#/definitions/GigasmartAppMaskingConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART 'Masking' Application Configuration",
+      "required": [
+        "protocol"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "none",
+            "ipv4",
+            "ipv6",
+            "udp",
+            "tcp",
+            "ftp-data",
+            "https",
+            "ssh",
+            "gtp",
+            "gtp-ipv4",
+            "gtp-udp",
+            "gtp-tcp",
+            "sip"
+          ]
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 9000,
+          "description": "min offset is 0 for 'none'; 1 for protocol-referenced offsets, not applicable for protocol 'sip' valid and required otherwise"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^(0x)?[0-9a-fA-F]{1,2}$",
+          "description": "1-byte hex mask, not applicable for protocol 'sip' valid and required otherwise"
+        },
+        "length": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 9600,
+          "description": "max length is 9600 on H-series; 9000 on G-series, not applicable for protocol 'sip' valid and required otherwise"
+        },
+        "contentType": {
+          "type": "string",
+          "enum": [
+            "message_cpim"
+          ],
+          "description": "content type that will trigger masking, only valid and required for protocol 'sip'"
+        }
+      }
+    },
+    "GigasmartAppSlicingConfig": {
+      "id": "#/definitions/GigasmartAppSlicingConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART 'Slicing' Application Configuration",
+      "required": [
+        "protocol",
+        "offset"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "none",
+            "ipv4",
+            "ipv6",
+            "udp",
+            "tcp",
+            "ftp-data",
+            "https",
+            "ssh",
+            "gtp",
+            "gtp-ipv4",
+            "gtp-udp",
+            "gtp-tcp"
+          ],
+          "description": "required property till H 5.6"
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 4,
+          "maximum": 9000,
+          "description": "min offset is 64 for 'none'; 4 for protocol-referenced offsets. required property till H 5.6"
+        },
+        "enhanced": {
+          "type": "string",
+          "description": "enhanced-slicing apps alias"
+        }
+      }
+    },
+    "GigasmartAppHeaderAddConfig": {
+      "id": "#/definitions/GigasmartAppHeaderAddConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART 'Add Header' Application Configuration",
+      "required": [
+        "vlan"
+      ],
+      "properties": {
+        "vlan": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 4095
+        }
+      }
+    },
+    "GigasmartAppHeaderRemoveConfig": {
+      "id": "#/definitions/GigasmartAppHeaderRemoveConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART 'Remove Header' Application Configuration",
+      "required": [
+        "protocol"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "gtp",
+            "isl",
+            "mpls",
+            "mplsPlusVlan",
+            "vlan",
+            "vntag",
+            "vxlan",
+            "gre",
+            "fabricPath",
+            "fm6000Ts",
+            "erspan",
+            "generic"
+          ],
+          "description": "'gre' and 'fabricPath' are only applicable for H-series"
+        },
+        "vxlanId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16777215,
+          "default": 0,
+          "description": "24-bit value. Only valid when protocol is 'vxlan'. Specifies the vxlan id to strip. Value of '0' will strip all vxlan ids"
+        },
+        "vlanHeader": {
+          "type": "string",
+          "enum": [
+            "all",
+            "outer"
+          ],
+          "default": "outer",
+          "description": "Only valid when protocol is 'vlan'. Specifies the target vlan header to strip. Defaults to 'outer'"
+        },
+        "fpSrcSwitchId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095,
+          "description": "Only valid and required for 'fabricPath', 12 bit source switch id"
+        },
+        "fpDstSwitchId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095,
+          "description": "Only valid and required for 'fabricPath', 12 bit destination switch id"
+        },
+        "timestampFormat": {
+          "type": "string",
+          "enum": [
+            "gigasmart",
+            "x12Ts",
+            "none"
+          ],
+          "description": "Timestamp format. Only valid and required for 'fm6000Ts'"
+        },
+        "erspanFlowId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1023,
+          "since": "H4.7",
+          "description": "only applicable for 'erspan', specifies the flow id to strip. Value of 0 will strip all flow ids"
+        },
+        "ah1": {
+          "type": "string",
+          "enum": [
+            "none",
+            "eth",
+            "vlan",
+            "mpls",
+            "ipv4",
+            "ipv6"
+          ],
+          "description": "only valid and required for 'generic'. First anchor header, from which the header to be stripped is occurred."
+        },
+        "offset": {
+          "type": "string",
+          "enum": [
+            "start",
+            "end",
+            "offsetRange"
+          ],
+          "description": "only valid and required for 'generic'.'start': strip from start of ah1, 'end': strip from end of ah1 or any other offset in the range of length of ah1, 'offsetRangeValue' is required if offset is 'offsetRange'."
+        },
+        "offsetRangeValue": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 1500,
+          "description": "only valid and required when offset is 'offsetRange', integer within range of size of header"
+        },
+        "headerCount": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 32,
+          "description": "only valid for 'generic'. Number of headers to be stripped."
+        },
+        "customLen": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 1500,
+          "description": "only valid for 'generic'. length of unknown header."
+        },
+        "ah2": {
+          "type": "string",
+          "enum": [
+            "none",
+            "eth",
+            "vlan",
+            "mpls",
+            "ipv4",
+            "ipv6",
+            "tcp",
+            "udp",
+            "any"
+          ],
+          "description": "only valid and required for 'generic'. next anchor header."
+        }
+      }
+    },
+    "GigasmartAppTrailerAddConfig": {
+      "id": "#/definitions/GigasmartAppTrailerAddConfig",
+      "type": "object",
+      "description": "GigaSMART 'Add Trailer' Application Configuration",
+      "additionalProperties": false,
+      "required": [
+        "types"
+      ],
+      "properties": {
+        "types": {
+          "type": "array",
+          "additionalItems": false,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "crc",
+              "srcid"
+            ]
+          },
+          "description": "'crc' is not applicable for G-series"
+        }
+      }
+    },
+    "GigasmartAppTunnelDecapConfig": {
+      "id": "#/definitions/GigasmartAppTunnelDecapConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART 'Decapsulate Tunnel' Application Configuration",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gmip",
+            "erspan",
+            "l2gre",
+            "custom",
+            "vxlan",
+            "tls-pcapng"
+          ]
+        },
+        "tlsPcapng": {
+          "$ref": "#/definitions/GigasmartAppTunnelDecapTLSPcapng",
+          "description": "only applicable for 'tls-pcapng', in which case it is required"
+        },
+        "erspanFlowId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1023,
+          "default": 0,
+          "description": "only applicable for 'erspan', A Flow ID of 0 decapsulates all ERSPAN tunnel traffic regardless of Flow ID"
+        },
+        "gmipPort": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "only applicable for 'gmip', in which case it is required. Specifies the UDP port on which the Tunnel Network port on the receiving GigaVUE H Series is listening. Must match the configuration of the portdst configured on the sending end of the tunnel"
+        },
+        "l2GreKey": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 0,
+          "maximum": 4294967295,
+          "description": "only applicable for 'l2gre', in which case it is required.",
+          "since": "H 4.5"
+        },
+        "custom": {
+          "$ref": "#/definitions/GigasmartAppTunnelDecapCustom",
+          "description": "only applicable for 'custom', in which case it is required."
+        },
+        "vxlan": {
+          "$ref": "#/definitions/GigasmartAppTunnelDecapVxlan",
+          "description": "only applicable for 'vxlan', in which case it is required."
+        }
+      }
+    },
+    "GigasmartAppTunnelDecapCustom": {
+      "type": "object",
+      "required": [
+        "portSrc",
+        "portDst"
+      ],
+      "properties": {
+        "portSrc": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "when specified as 0, no validation will be done in the packet."
+        },
+        "portDst": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "when specified as 0, no validation will be done in the packet."
+        }
+      }
+    },
+    "GigasmartAppTunnelDecapVxlan": {
+      "type": "object",
+      "required": [
+        "portSrc",
+        "portDst",
+        "vni"
+      ],
+      "properties": {
+        "portSrc": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535,
+          "description": "when specified as 0, no validation will be done in the packet."
+        },
+        "portDst": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "vni": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 16777215
+        }
+      }
+    },
+    "GigasmartAppTunnelDecapTLSPcapng": {
+      "type": "object",
+      "properties": {
+        "decapKey": {
+          "type": "string"
+        },
+        "listener": {
+          "type": "string"
+        }
+      }
+    },
+    "GigasmartAppTunnelEncapConfig": {
+      "id": "#/definitions/GigasmartAppTunnelEncapConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART 'Encapsulate Tunnel' Application Configuration",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gmip",
+            "l2gre",
+            "vxlan",
+            "tls-pcapng"
+          ]
+        },
+        "gmipConfig": {
+          "$ref": "#/definitions/GigasmartAppTunnelEncapGmipConfig",
+          "description": "only applicable for 'gmip', in which case it is required."
+        },
+        "l2GreConfig": {
+          "$ref": "#/definitions/GigasmartAppTunnelEncapL2GreConfig",
+          "description": "only applicable for 'l2gre', in which case it is required.",
+          "since": "H 4.5"
+        },
+        "vxlanConfig": {
+          "$ref": "#/definitions/GigasmartAppTunnelEncapVxlanConfig",
+          "description": "only applicable for 'vxlan', in which case it is required.",
+          "since": "H 5.11"
+        },
+        "tlsPcapng": {
+          "$ref": "#/definitions/GigasmartAppTunnelEncapTLSPcapng",
+          "description": "only applicable for 'tls-pcapng', in which case it is required"
+        }
+      }
+    },
+    "GigasmartAppTunnelEncapGmipConfig": {
+      "id": "#/definitions/GigasmartAppTunnelEncapGmipConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Configuration for GMIP Tunnel Encapsulate GigaSmaprt App",
+      "required": [
+        "dstIp",
+        "dstPort",
+        "srcPort"
+      ],
+      "properties": {
+        "dstIp": {
+          "type": "string",
+          "description": "IP Destination. IPv4 or IPv6."
+        },
+        "dstPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "srcPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "dscp": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 63,
+          "default": 0
+        },
+        "flowLabel": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 1048575
+        },
+        "prec": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 7,
+          "default": 0,
+          "description": "decimal Precedence value from 0-7 to be used in the ToS byte of the outer headers of tunneled packets"
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 255,
+          "default": 255
+        }
+      }
+    },
+    "GigasmartAppTunnelEncapL2GreConfig": {
+      "id": "#/definitions/GigasmartAppTunnelEncapL2GreConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Configuration for l2GRE Tunnel Encapsulate GigaSmaprt App",
+      "required": [
+        "key"
+      ],
+      "properties": {
+        "dstIp": {
+          "type": "string",
+          "description": "ip destination, mutually exclusive with 'pgDst'. IPv4 or IPv6."
+        },
+        "pgDst": {
+          "type": "string",
+          "description": "port group destination alias, mutually exclusive with 'dstIp'"
+        },
+        "key": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "dscp": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 63,
+          "default": 0
+        },
+        "prec": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 7,
+          "default": 0,
+          "description": "decimal Precedence value from 0-7 to be used in the ToS byte of the outer headers of tunneled packets"
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 255,
+          "default": 255
+        },
+        "sessionField": {
+          "type": "string",
+          "enum": [
+            "fiveTupleIpv4",
+            "fiveTupleIpv6",
+            "fiveTupleAny",
+            "threeTupleIpv4",
+            "threeTupleIpv6",
+            "threeTupleAny",
+            "ipv4Only",
+            "ipv6Only",
+            "ipAny"
+          ],
+          "description": "required with stateful loadBalance when 'appType' is 'tunnel'"
+        },
+        "sessionPos": {
+          "type": "string",
+          "enum": [
+            "inner",
+            "outer"
+          ],
+          "description": "required if 'sessionField' is specified"
+        },
+        "flowLabel": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 1048575
+        }
+      }
+    },
+    "GigasmartAppTunnelEncapVxlanConfig": {
+      "id": "#/definitions/GigasmartAppTunnelEncapVxlanConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Configuration for Vxlan Tunnel Encapsulate GigaSmaprt App",
+      "required": [
+        "dstIp",
+        "dstPort",
+        "srcPort",
+        "vni"
+      ],
+      "properties": {
+        "dstIp": {
+          "type": "string",
+          "description": "IP Destination. IPv4 or IPv6."
+        },
+        "dstPort": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            4789,
+            8472,
+            48879
+          ]
+        },
+        "srcPort": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "dscp": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 63,
+          "default": 0
+        },
+        "vni": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 16777215
+        },
+        "ttl": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1,
+          "maximum": 255,
+          "default": 255
+        }
+      }
+    },
+    "GigasmartAppTunnelEncapTLSPcapng": {
+      "type": "object",
+      "properties": {
+        "exporter": {
+          "type": "string"
+        },
+        "exporterGroup": {
+          "type": "string"
+        }
+      }
+    },
+    "GigasmartAppInlineSslConfig": {
+      "id": "#/definitions/GigasmartAppInlineSslConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "description": "GigaSMART Inline SSL Profile Configuration",
+      "required": [
+        "inlineSslProfile"
+      ],
+      "properties": {
+        "inlineSslProfile": {
+          "type": "string",
+          "description": "Alias of referenced Inline SSL Profile"
+        }
+      }
+    },
+    "GigasmartAppMetadataExportConfig": {
+      "id": "#/definitions/GigasmartAppMetadataExportConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.4",
+      "properties": {
+        "cache": {
+          "type": "string",
+          "description": "metadata cache alias. cache should have exporters defined, and the exporters should have applicationProfiles defined"
+        }
+      }
+    },
+    "GigasmartAppICAPConfig": {
+      "id": "#/definitions/GigasmartAppICAPConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 6.3",
+      "description": "GigaSMART ICAP Configuration",
+      "required": [
+        "icapProfile"
+      ],
+      "properties": {
+        "icapProfile": {
+          "type": "string",
+          "description": "Alias of referenced ICAP Profile"
+        }
+      }
+    },
+    "GigasmartAppFlowFilterConfig": {
+      "id": "#/definitions/GigasmartAppFlowFilterConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART 'Flow Filter' Application Configuration",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gtp"
+          ]
+        }
+      }
+    },
+    "GigasmartAppFlowSamplingConfig": {
+      "id": "#/definitions/GigasmartAppFlowSamplingConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART 'Flow Sampling' Application Configuration",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "ip",
+            "gtp",
+            "sip",
+            "diameter"
+          ],
+          "default": "ip"
+        }
+      }
+    },
+    "GigasmartAppLoadBalanceConfig": {
+      "id": "#/definitions/GigasmartAppLoadBalanceConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "maxProperties": 1,
+      "description": "GigaSMART 'Load Balancing' Application Configuration",
+      "properties": {
+        "stateful": {
+          "$ref": "#/definitions/GigasmartAppLoadBalanceStatefulConfig",
+          "description": "stateful load balancing metrics. mutually exclusive with 'stateless' and 'enhanced'"
+        },
+        "stateless": {
+          "$ref": "#/definitions/GigasmartAppLoadBalanceStatelessConfig",
+          "description": "stateless load balancing metrics. mutually exclusive with 'stateful'and 'enhanced'"
+        },
+        "enhanced": {
+          "$ref": "#/definitions/GigasmartAppLoadBalanceEnhancedConfig",
+          "description": "enhanced load balancing metrics. mutually exclusive with 'stateful' and 'stateless'"
+        }
+      }
+    },
+    "GigasmartAppMobilityLoadBalanceConfig": {
+      "id": "#/definitions/GigasmartAppMobilityLoadBalanceConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "maxProperties": 1,
+      "description": "GigaSMART 'Load Balancing' Application Configuration",
+      "properties": {
+        "stateful": {
+          "$ref": "#/definitions/GigasmartAppLoadBalanceStatefulConfig",
+          "description": "stateful load balancing metrics. mutually exclusive with 'stateless' and 'enhanced'"
+        }
+      }
+    },
+    "GigasmartAppLoadBalanceStatefulConfig": {
+      "id": "#/definitions/GigasmartAppLoadBalanceStatefulConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Private class. Stateful part of the GigaSMART 'Load Balancing' Application Configuration",
+      "required": [
+        "appType",
+        "lbType"
+      ],
+      "properties": {
+        "appType": {
+          "type": "string",
+          "enum": [
+            "gtp",
+            "sapf",
+            "sip",
+            "tunnel",
+            "diameter"
+          ],
+          "description": "'sapf' option is added in release H 4.3.01. 'sip' and 'tunnel' added in release H 5.1. 'diameter' is added in release H 5.5"
+        },
+        "lbType": {
+          "type": "string",
+          "enum": [
+            "leastBw",
+            "leastPktRate",
+            "leastConn",
+            "leastTotalTraffic",
+            "roundRobin",
+            "wtLeastBw",
+            "wtLeastPktRate",
+            "wtLeastConn",
+            "wtLeastTotalTraffic",
+            "wtRoundRobin",
+            "wtImsi",
+            "wtSupi",
+            "gtpKeyHash",
+            "sipKeyHash",
+            "diameterKeyHash",
+            "diameterKeyMultiHash"
+          ],
+          "description": "'gtpKeyHash' is only applicable when 'appType' == 'gtp'. 'sipKeyHash' is only applicable when 'appType' == 'sip'"
+        },
+        "gtpKeyHashType": {
+          "type": "string",
+          "enum": [
+            "imsi",
+            "imei",
+            "msisdn"
+          ],
+          "description": "required when 'appType' == 'gtp' and 'lbType' == 'gtpKeyHash'. ignored otherwise"
+        },
+        "sipKeyHashType": {
+          "type": "string",
+          "enum": [
+            "callerId"
+          ],
+          "description": "required when 'appType' == 'sip' and 'lbType' == 'sipKeyHash'. ignored otherwise"
+        },
+        "diameterKeyHashType": {
+          "type": "string",
+          "enum": [
+            "sessionId",
+            "userName",
+            "commandCode"
+          ],
+          "description": "required when 'appType' == 'diameter' and 'lbType' == 'diameterKeyHash'"
+        },
+        "diameterKeyMultiHashType": {
+          "type": "array",
+          "description": "required when 'appType' == 'diameter' and 'lbType' == 'diameterKeyMultiHash'",
+          "items": {
+            "$ref": "#/definitions/DiameterMultiHashSpec"
+          },
+          "since": "H 5.7",
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+    "DiameterMultiHashSpec": {
+      "id": "#/definitions/DiameterMultiHashSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "enum": [
+            "sessionId",
+            "userName",
+            "avpCode",
+            "commandCode",
+            "endToEnd",
+            "hopByHop",
+            "applicationId"
+          ]
+        },
+        "avpCodevalue": {
+          "type": "integer",
+          "description": "required when 'key' == 'avpCode'"
+        }
+      }
+    },
+    "GigasmartAppLoadBalanceStatelessConfig": {
+      "id": "#/definitions/GigasmartAppLoadBalanceStatelessConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Private class. Stateless part of the GigaSMART 'Load Balancing' Application Configuration",
+      "required": [
+        "hashFields"
+      ],
+      "properties": {
+        "hashFields": {
+          "type": "string",
+          "enum": [
+            "ipOnly",
+            "ipAndPort",
+            "fiveTuple",
+            "gtpuTeid"
+          ]
+        },
+        "fieldLocation": {
+          "type": "string",
+          "enum": [
+            "inner",
+            "outer"
+          ],
+          "default": "outer",
+          "description": "Ignored when 'hashFields' == 'gtpuTeid'. Required otherwise"
+        }
+      }
+    },
+    "GigasmartAppLoadBalanceEnhancedConfig": {
+      "id": "#/definitions/GigasmartAppLoadBalanceEnhancedConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Private class. Enhanced part of the GigaSMART 'Load Balancing' Application Configuration",
+      "required": [
+        "elbAlias"
+      ],
+      "properties": {
+        "elbAlias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "elb app alias"
+        }
+      }
+    },
+    "GigasmartAppSslDecryptConfig": {
+      "id": "#/definitions/GigasmartAppSslDecryptConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART 'SSL Decrypt' Application Configuration",
+      "properties": {
+        "inPort": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 0,
+          "description": "Port number of 0 represents 'any' port"
+        },
+        "outPort": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 0,
+          "description": "Port number of 0 represents 'auto' port"
+        }
+      }
+    },
+    "GigasmartAppGseriesHeaderAddConfig": {
+      "id": "#/definitions/GigasmartAppGseriesHeaderAddConfig",
+      "type": "object",
+      "description": "Only applicable for G-series",
+      "additionalProperties": false,
+      "required": [
+        "types"
+      ],
+      "properties": {
+        "types": {
+          "type": "array",
+          "additionalItems": false,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "srcid",
+              "timestamp"
+            ]
+          }
+        }
+      }
+    },
+    "GigasmartAppGseriesLoadBalanceConfig": {
+      "id": "#/definitions/GigasmartAppGseriesLoadBalanceConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Only applicable for G-series per-rule GSOP",
+      "properties": {
+        "fixedOffset": {
+          "$ref": "#/definitions/GigasmartAppGseriesLoadBalanceFixedOffsetConfig"
+        },
+        "variableOffset": {
+          "$ref": "#/definitions/GigasmartAppGseriesLoadBalanceVariableOffsetConfig"
+        }
+      }
+    },
+    "GigasmartAppGseriesLoadBalanceFixedOffsetConfig": {
+      "id": "#/definitions/GigasmartAppGseriesLoadBalanceFixedOffsetConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Per-rule Fixed Offset Load Balancing config for G-seres devices",
+      "required": [
+        "offset",
+        "length",
+        "hash"
+      ],
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0
+        },
+        "length": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1
+        },
+        "hash": {
+          "type": "string",
+          "enum": [
+            "checksum",
+            "xor",
+            "crc"
+          ]
+        }
+      }
+    },
+    "GigasmartAppGseriesLoadBalanceVariableOffsetConfig": {
+      "id": "#/definitions/GigasmartAppGseriesLoadBalanceVariableOffsetConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Per-rule Variable Offset Load Balancing config for G-seres devices",
+      "required": [
+        "startField",
+        "startDelim",
+        "endDelim",
+        "hash"
+      ],
+      "properties": {
+        "startField": {
+          "type": "string",
+          "minLength": 1
+        },
+        "startDelim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "endDelim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hash": {
+          "type": "string",
+          "enum": [
+            "checksum",
+            "xor",
+            "crc"
+          ]
+        }
+      }
+    },
+    "GigasmartAppGseriesPatternMatchConfig": {
+      "id": "#/definitions/GigasmartAppGseriesPatternMatchConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Only applicable for G-series per-rule GSOP",
+      "properties": {
+        "fixedOffset": {
+          "$ref": "#/definitions/GigasmartAppGseriesPatternMatchFixedOffsetConfig"
+        },
+        "variableOffset": {
+          "$ref": "#/definitions/GigasmartAppGseriesPatternMatchVariableOffsetConfig"
+        }
+      }
+    },
+    "GigasmartAppGseriesPatternMatchFixedOffsetConfig": {
+      "id": "#/definitions/GigasmartAppGseriesPatternMatchFixedOffsetConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Per-rule Fixed Offset Pattern Match config for G-seres devices",
+      "required": [
+        "offset",
+        "length"
+      ],
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0
+        },
+        "length": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 1
+        }
+      }
+    },
+    "GigasmartAppGseriesPatternMatchVariableOffsetConfig": {
+      "id": "#/definitions/GigasmartAppGseriesPatternMatchVariableOffsetConfig",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Per-rule Variable Offset Pattern Match config for G-seres devices",
+      "required": [
+        "startDelim",
+        "endDelim"
+      ],
+      "properties": {
+        "startDelim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "endDelim": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "Vport": {
+      "id": "#/definitions/Vport",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART vPort",
+      "required": [
+        "alias",
+        "gsGroup"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "gsGroup": {
+          "type": "string",
+          "description": "Alias of referenced managing GsGroup"
+        },
+        "saApfProfile": {
+          "type": "string",
+          "description": "ASF session profile"
+        },
+        "metadataMonitoring": {
+          "$ref": "#/definitions/VportMetadataMonitoring"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "gtp-overlap"
+          ],
+          "default": "none"
+        },
+        "failOverAction": {
+          "type": "string",
+          "enum": [
+            "vport-bypass",
+            "vport-drop",
+            "network-bypass",
+            "network-drop",
+            "network-port-forced-down"
+          ],
+          "default": "vport-bypass",
+          "since": "H 5.0"
+        },
+        "inlineStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "since": "H 5.0"
+        },
+        "deferredBinding": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable/disable deferred-binding",
+          "since": "H 5.5"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState"
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons"
+        },
+        "innerTrafficPath": {
+          "type": "string",
+          "enum": [
+            "to-inline-tool",
+            "bypass",
+            "drop",
+            "monitor"
+          ],
+          "default": "to-inline-tool",
+          "description": "Similar to inline-network traffic-path, applicable for inner map",
+          "since": "H 5.6"
+        },
+        "outerTrafficPath": {
+          "type": "string",
+          "enum": [
+            "to-inline-tool",
+            "bypass",
+            "drop",
+            "monitor"
+          ],
+          "default": "to-inline-tool",
+          "description": "Similar to inline-tool/inline-tool-group flex-traffic path, applicable for outer map",
+          "since": "H 5.6"
+        }
+      }
+    },
+    "VportMetadataMonitoring": {
+      "id": "#/definitions/VportMetadataMonitoring",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "default": "disable",
+          "description": "metadata monitoring action"
+        },
+        "exporters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": ""
+        }
+      }
+    },
+    "GsGroupQueryResponse": {
+      "id": "#/definitions/GsGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gsGroup"
+      ],
+      "properties": {
+        "gsGroup": {
+          "$ref": "#/definitions/GsGroup"
+        }
+      }
+    },
+    "GsGroupsQueryResponse": {
+      "id": "#/definitions/GsGroupsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gsGroups"
+      ],
+      "properties": {
+        "gsGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsGroup"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GigasmartOpQueryResponse": {
+      "id": "#/definitions/GigasmartOpQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gsop"
+      ],
+      "properties": {
+        "gsop": {
+          "$ref": "#/definitions/GigasmartOp"
+        }
+      }
+    },
+    "GigasmartOpsQueryResponse": {
+      "id": "#/definitions/GigasmartOpsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gsops"
+      ],
+      "properties": {
+        "gsops": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GigasmartOp"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "VportQueryResponse": {
+      "id": "#/definitions/VportQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "vport"
+      ],
+      "properties": {
+        "vport": {
+          "$ref": "#/definitions/Vport"
+        }
+      }
+    },
+    "VportsQueryResponse": {
+      "id": "#/definitions/VportsQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "vports"
+      ],
+      "properties": {
+        "vports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Vport"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GtpPersistantBackupRestoreInfoQueryResponse": {
+      "id": "#/definitions/GtpPersistantBackupRestoreInfoQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H4.8",
+      "required": [
+        "gtpPersistantBackupRestoreInfo"
+      ],
+      "properties": {
+        "gtpPersistantBackupRestoreInfo": {
+          "$ref": "#/definitions/GtpPersistantBackupRestoreInfo"
+        }
+      }
+    },
+    "GtpPersistantBackupRestoreInfo": {
+      "id": "#/definitions/GtpPersistantBackupRestoreInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H4.8",
+      "required": [
+        "alias",
+        "backupInfo",
+        "restoreInfo"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Gs Group alias"
+        },
+        "backupInfo": {
+          "$ref": "#/definitions/BackupInfo"
+        },
+        "restoreInfo": {
+          "$ref": "#/definitions/RestoreInfo"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "GtpPersistantBackupRestoreInfosQueryResponse": {
+      "id": "#/definitions/GtpPersistantBackupRestoreInfosQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H4.8",
+      "required": [
+        "gtpPersistantBackupRestoreInfos"
+      ],
+      "properties": {
+        "gtpPersistantBackupRestoreInfos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpPersistantBackupRestoreInfo"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "BackupInfo": {
+      "id": "#/definitions/BackupInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H4.8",
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "The internal name of the backup file"
+        },
+        "lastSucessfulTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the last successful backup. In ISO-8601 date format 'yyyy-MM-dd'T'HH:mm:ssZ'"
+        },
+        "lastFailTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the last failed backup. In ISO-8601 date format 'yyyy-MM-dd'T'HH:mm:ssZ'"
+        },
+        "controlTunnels": {
+          "type": "integer",
+          "description": "The number of control tunnels backed up"
+        },
+        "userTunnels": {
+          "type": "integer",
+          "description": "The number of user tunnels backed up"
+        },
+        "sessions": {
+          "type": "integer",
+          "description": "The number of sessions tunnels backed up"
+        },
+        "success": {
+          "type": "integer",
+          "description": "The number of successful backups"
+        },
+        "failed": {
+          "type": "integer",
+          "description": "The number of failed backups"
+        },
+        "configStatus": {
+          "type": "string",
+          "enum": [
+            "enable",
+            "disable"
+          ],
+          "description": "The status of a backup"
+        },
+        "inProgress": {
+          "type": "boolean"
+        }
+      }
+    },
+    "RestoreInfo": {
+      "id": "#/definitions/RestoreInfo",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H4.8",
+      "properties": {
+        "restoreTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the last restore. In ISO-8601 date format 'yyyy-MM-dd'T'HH:mm:ssZ'"
+        },
+        "tunnels": {
+          "type": "integer",
+          "description": "The number of tunnels restored"
+        },
+        "sessions": {
+          "type": "integer",
+          "description": "The number of sessions restored"
+        }
+      }
+    },
+    "GtpBackupFilesQueryResponse": {
+      "id": "#/definitions/GtpBackupFilesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H4.8",
+      "description": "Available gtp backup files",
+      "required": [
+        "gtpBackupFiles"
+      ],
+      "properties": {
+        "gtpBackupFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpBackupFile"
+          },
+          "readonly": true
+        }
+      }
+    },
+    "GtpBackupFile": {
+      "id": "#/definitions/GtpBackupFile",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H4.8",
+      "required": [
+        "filename",
+        "timestamp",
+        "size"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "File creation date and time in ISO 8601 format"
+        },
+        "size": {
+          "type": "integer",
+          "description": "Size of file in bytes"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "GsGroupEngineReload": {
+      "id": "#/definitions/GsGroupEngineReload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ports"
+      ],
+      "properties": {
+        "ports": {
+          "description": "List of GigaSMART engine port(s) to reload",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "FlowOpsReportQueryResponse": {
+      "id": "#/definitions/FlowOpsReportQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flowOpsReport"
+      ],
+      "properties": {
+        "flowOpsReport": {
+          "$ref": "#/definitions/FlowOpsReport"
+        }
+      }
+    },
+    "FlowOpsReport": {
+      "id": "#/definitions/FlowOpsReport",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "report": {
+          "type": "string"
+        }
+      }
+    },
+    "FlowOpsReportUploadSpec": {
+      "id": "#/definitions/FlowOpsReportUploadSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flowOpsReportType",
+        "uploadDestination"
+      ],
+      "properties": {
+        "flowOpsReportType": {
+          "type": "string",
+          "enum": [
+            "inlineSsl",
+            "flowSip",
+            "sslDecryption"
+          ]
+        },
+        "uploadDestination": {
+          "$ref": "../schemas-common/common.json#/definitions/RemoteFileSpec",
+          "description": "Remote location to upload report"
+        },
+        "callerIdPattern": {
+          "type": "string",
+          "format": "regex",
+          "pattern": "^[a-zA-Z0-9@#$*-_.!~()&=+,;?/]{1,64}$",
+          "description": "valid only if 'flowOpsReportType' is 'flowSip'."
+        }
+      }
+    },
+    "ArpQueryResponses": {
+      "id": "#/definitions/ArpQueryResponses",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "arpResponses"
+      ],
+      "properties": {
+        "arpResponses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ArpResponse"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "ArpQueryResponse": {
+      "id": "#/definitions/ArpQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "arpResponse"
+      ],
+      "properties": {
+        "arpResponse": {
+          "$ref": "#/definitions/ArpResponse"
+        }
+      }
+    },
+    "ArpResponse": {
+      "id": "#/definitions/ArpResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "eport",
+        "arp"
+      ],
+      "properties": {
+        "eport": {
+          "type": "string",
+          "description": "GigaSMART engine port"
+        },
+        "arp": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Arp"
+          }
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "Arp": {
+      "id": "#/definitions/Arp",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "ipAddress",
+        "hwAddress"
+      ],
+      "properties": {
+        "ipAddress": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "hwAddress": {
+          "type": "string"
+        }
+      }
+    },
+    "GsEngineCounters": {
+      "id": "#/definitions/GsEngineCounters",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "gsEngineCounters"
+      ],
+      "properties": {
+        "gsEngineCounters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GsEngineCounter"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "GsEngineCounter": {
+      "id": "#/definitions/GsEngineCounter",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "eport",
+        "txPkts",
+        "rxPkts",
+        "txBytes",
+        "rxBytes",
+        "txPktsDrop",
+        "rxPktsDrop"
+      ],
+      "properties": {
+        "eport": {
+          "type": "string",
+          "description": "GigaSMART engine port"
+        },
+        "txPkts": {
+          "type": "integer",
+          "format": "counter64",
+          "readonly": true
+        },
+        "rxPkts": {
+          "type": "integer",
+          "format": "counter64",
+          "readonly": true
+        },
+        "txBytes": {
+          "type": "integer",
+          "format": "counter64",
+          "readonly": true
+        },
+        "rxBytes": {
+          "type": "integer",
+          "format": "counter64",
+          "readonly": true
+        },
+        "txPktsDrop": {
+          "type": "integer",
+          "format": "counter64",
+          "readonly": true
+        },
+        "rxPktsDrop": {
+          "type": "integer",
+          "format": "counter64",
+          "readonly": true
+        }
+      }
+    },
+    "GsEngineInterfacesQueryResponse": {
+      "id": "#/definitions/GsEngineInterfacesQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "gsEngineInterfaces"
+      ],
+      "properties": {
+        "gsEngineInterfaces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "since": "H 5.0",
+            "required": [
+              "eport"
+            ],
+            "properties": {
+              "eport": {
+                "type": "string",
+                "description": "GigaSMART engine port"
+              },
+              "ipAddress": {
+                "type": "string",
+                "format": "ipv4",
+                "description": "Only valid and required when 'dhcp' is false"
+              },
+              "ipMask": {
+                "type": "string",
+                "format": "ipv4",
+                "description": "Only valid and required when 'dhcp' is false"
+              },
+              "gateway": {
+                "type": "string",
+                "format": "ipv4",
+                "description": "Only valid and required when 'dhcp' is false"
+              },
+              "dns": {
+                "type": "string",
+                "format": "ipv4",
+                "description": "Only valid and required when 'dhcp' is false"
+              },
+              "mtu": {
+                "type": "integer",
+                "format": "int32",
+                "minimum": 68,
+                "maximum": 1500,
+                "default": 1500,
+                "description": "Only valid when 'dhcp' is false"
+              },
+              "dhcp": {
+                "type": "boolean",
+                "default": false
+              },
+              "hwAddress": {
+                "type": "string",
+                "readonly": true
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "up",
+                  "down"
+                ],
+                "readonly": true
+              },
+              "clusterId": {
+                "type": "string",
+                "minLength": 1,
+                "readonly": true,
+                "description": "id of the defining cluster"
+              },
+              "vlan": {
+                "type": "integer",
+                "format": "int32",
+                "minimum": 20,
+                "maximum": 4094
+              },
+              "interface": {
+                "type": "string",
+                "enum": [
+                  "eth2",
+                  "eth3"
+                ]
+              },
+              "proxyServerProfile": {
+                "type": "string"
+              },
+              "proxyServerPingStatus": {
+                "type": "string",
+                "enum": [
+                  "NotEnabled",
+                  "DomainNameFailedResolve",
+                  "ConnectionFailure",
+                  "AuthFailure",
+                  "Success"
+                ]
+              }
+            }
+          }
+        }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      },
+    "GsEngineInterfaceQueryResponse": {
+      "id": "#/definitions/GsEngineInterfaceQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "gsEngineInterface"
+      ],
+      "properties": {
+        "gsEngineInterface": {
+          "$ref": "#/definitions/GsEngineInterface"
+        }
+      }
+    },
+    "GsEngineInterface": {
+      "id": "#/definitions/GsEngineInterface",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "eport"
+      ],
+      "properties": {
+        "eport": {
+          "type": "string",
+          "description": "GigaSMART engine port"
+        },
+        "ipAddress": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Only valid and required when 'dhcp' is false"
+        },
+        "ipMask": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Only valid and required when 'dhcp' is false"
+        },
+        "gateway": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Only valid and required when 'dhcp' is false"
+        },
+        "dns": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "Only valid and required when 'dhcp' is false"
+        },
+        "mtu": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 68,
+          "maximum": 1500,
+          "default": 1500,
+          "description": "Only valid when 'dhcp' is false"
+        },
+        "dhcp": {
+          "type": "boolean",
+          "default": false
+        },
+        "hwAddress": {
+          "type": "string",
+          "readonly": true
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "readonly": true
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        },
+        "vlan": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 20,
+          "maximum": 4094
+        },
+        "interface": {
+          "type": "string",
+          "enum": [
+            "eth2",
+            "eth3"
+          ]
+        },
+        "proxyServerProfile": {
+          "type": "string"
+        }
+      }
+    },
+    "GsEnginePingQueryResponse": {
+      "id": "#/definitions/GsEnginePingQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.0",
+      "required": [
+        "pingResponse"
+      ],
+      "properties": {
+        "pingResponse": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "FlowFilteringReportsSummaryQueryResponse": {
+      "id": "#/definitions/FlowFilteringReportsSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "required": [
+        "flowFilteringReportsSummary"
+      ],
+      "properties": {
+        "flowFilteringReportsSummary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FlowFilteringReportSummary"
+          }
+        }
+      }
+    },
+    "FlowFilteringReportSummaryQueryResponse": {
+      "id": "#/definitions/FlowFilteringReportSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "required": [
+        "flowFilteringReportSummary"
+      ],
+      "properties": {
+        "flowFilteringReportSummary": {
+          "$ref": "#/definitions/FlowFilteringReportSummary"
+        }
+      }
+    },
+    "FlowFilteringReportSummary": {
+      "id": "#/definitions/FlowFilteringReportSummary",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "required": [
+        "gsgroup"
+      ],
+      "properties": {
+        "gsgroup": {
+          "type": "string",
+          "description": "alias of gsgroup",
+          "readonly": true
+        },
+        "controlTunnels": {
+          "type": "integer",
+          "format": "int32",
+          "readonly": true,
+          "description": "total number of control tunnels"
+        },
+        "controlUserTunnels": {
+          "type": "integer",
+          "format": "int32",
+          "readonly": true,
+          "description": "total number of control and user tunnels"
+        },
+        "gtpSessionStatistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpSessionStatistics"
+          }
+        },
+        "gtpInterfaceStatistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpInterfaceStatistics"
+          },
+          "description": "number of sessions and tunnels by interface"
+        },
+        "gtpCorelationStatistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpCorelationStatistics"
+          },
+          "description": "control messages and user data message counters"
+        },
+        "gtpPfcpStatistics": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "heartBeatReq": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "heartBeatRsp": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "pfdMgmtReq": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "pfdMgmtRsp": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "assoSetupReq": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "assoSetupRsp": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "assoUpdReq": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "assoUpdRsp": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "assoRelReq": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "assoRelRsp": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "verNotSuppRsp": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "nodeRptReq": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "nodeRptRsp": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "sessSetDelReq": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "sessSetDelRsp": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "resMsgType16to49": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "resMsgType58to255": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            },
+            "bundleMsg": {
+              "type": "integer",
+              "format": "int64",
+              "readonly": true
+            }
+          },
+          "description": "PFCP message stats"
+        },
+        "pendingSession": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "number of sessions waiting for control message response"
+        },
+        "controlOnlySession": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "number of sessions without user bearers"
+        }
+      }
+    },
+    "GtpSessionStatistics": {
+      "id": "#/definitions/GtpSessionStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "properties": {
+        "interfaceType": {
+          "type": "string",
+          "description": "interface type",
+          "readonly": true
+        },
+        "sessions": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "tunnels": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "GtpInterfaceStatistics": {
+      "id": "#/definitions/GtpInterfaceStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "properties": {
+        "interfaceType": {
+          "type": "string",
+          "description": "interface type",
+          "readonly": true
+        },
+        "rxPkts": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "rxBytes": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "txPkts": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "txBytes": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "droppedPkts": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "droppedBytes": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "gtpCPackets": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "GtpCorelationStatistics": {
+      "id": "#/definitions/GtpCorelationStatistics",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "properties": {
+        "gtpControlMessageStats": {
+          "$ref": "#/definitions/GtpControlMessageStats"
+        },
+        "gtpUserMessageStats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpUStats"
+          }
+        }
+      }
+    },
+    "GtpControlMessageStats": {
+      "id": "#/definitions/GtpControlMessageStats",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "description": "Statistics for Control Messages GTP-C",
+      "properties": {
+        "gtpVersion": {
+          "type": "string"
+        },
+        "gtpCStats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GtpCStats"
+          }
+        }
+      }
+    },
+    "GtpCStats": {
+      "id": "#/definitions/GtpCStats",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "description": "Statistics for Control Messages GTP-C",
+      "properties": {
+        "controlMessage": {
+          "type": "string"
+        },
+        "toolPass": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "colNoSession": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "colNoTnlx": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "colParseEr": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "colNoRule": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "colOther": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "GtpUStats": {
+      "id": "#/definitions/GtpUStats",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.2",
+      "description": "Statistics for User Messages GTP-U",
+      "properties": {
+        "toolPass": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "collector": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "drop": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "PortThrottleReport": {
+      "id": "#/definitions/PortThrottleReport",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.4",
+      "required": [
+        "alias"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "description": "port throttle alias"
+        },
+        "portThrottlesReport": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortThrottleSessions"
+          }
+        }
+      }
+    },
+    "PortThrottleSessions": {
+      "id": "#/definitions/PortThrottleSessions",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.4",
+      "required": [
+        "portId"
+      ],
+      "properties": {
+        "portId": {
+          "type": "string"
+        },
+        "configuredPps": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "in kpps"
+        },
+        "currentPps": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "in kpps"
+        },
+        "sessionCountAccepted": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "in kpps"
+        },
+        "sessionCountRejected": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "in kpps"
+        },
+        "currentActiveSessions": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true,
+          "description": "in kpps"
+        },
+        "lastSessionAccepted": {
+          "type": "boolean",
+          "readonly": true,
+          "description": "last session accepted or rejected"
+        }
+      }
+    },
+    "FlowSipReportSummary": {
+      "id": "#/definitions/FlowSipReportSummary",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gsgroup"
+      ],
+      "properties": {
+        "gsgroup": {
+          "type": "string",
+          "description": "alias of gsgroup",
+          "readonly": true
+        },
+        "sipMessagesStats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SipMessageStats"
+          }
+        },
+        "sipResourceSummary": {
+          "$ref": "#/definitions/SipResourceSummary"
+        },
+        "rtpResourceSummary": {
+          "$ref": "#/definitions/RtpResourceSummary"
+        },
+        "sipSessions": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "rtpSessions": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "SipMessageStats": {
+      "id": "#/definitions/SipMessageStats",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sipMessage": {
+          "type": "string"
+        },
+        "toolPass": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "noSession": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "noRule": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "noMatch": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "drop": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "other": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "RtpResourceSummary": {
+      "id": "#/definitions/RtpResourceSummary",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dataPoolsInUse": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "dataPoolsAvail": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "SipResourceSummary": {
+      "id": "#/definitions/SipResourceSummary",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "numSessions": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "sessionAvail": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "sipParseErrors": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "FlowDiameterS6aReportSummary": {
+      "id": "#/definitions/FlowDiameterS6aReportSummary",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gsgroup"
+      ],
+      "properties": {
+        "gsgroup": {
+          "type": "string",
+          "description": "alias of gsgroup",
+          "readonly": true
+        },
+        "s6aMessagesStats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/S6aMessageStats"
+          }
+        },
+        "s6aResourceSummary": {
+          "$ref": "#/definitions/S6aResourceSummary"
+        },
+        "s6aSessions": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "S6aMessageStats": {
+      "id": "#/definitions/S6aMessageStats",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "s6aMessage": {
+          "type": "string"
+        },
+        "toolPass": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "noSession": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "noRule": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "noMatch": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "drop": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "other": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "S6aResourceSummary": {
+      "id": "#/definitions/SipResourceSummary",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "numSessions": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "sessionAvail": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "FlowSamplingReportSummary": {
+      "id": "#/definitions/FlowSamplingReportSummary",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gsgroup"
+      ],
+      "properties": {
+        "gsgroup": {
+          "type": "string",
+          "description": "alias of gsgroup",
+          "readonly": true
+        },
+        "numDevices": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "numDevicesInSample": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "SslDecryptionReportSummary": {
+      "id": "#/definitions/SslDecryptionReportSummary",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gsgroup"
+      ],
+      "properties": {
+        "gsgroup": {
+          "type": "string",
+          "description": "alias of gsgroup",
+          "readonly": true
+        },
+        "totalSession": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "ssl30Session": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "tls10Session": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "tls11Session": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "tls12Session": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "sessionIds": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        },
+        "tickets": {
+          "type": "integer",
+          "format": "int64",
+          "readonly": true
+        }
+      }
+    },
+    "SslDecryptionReportSummaryQueryResponse": {
+      "id": "#/definitions/SslDecryptionReportSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.4",
+      "required": [
+        "sslDecryptionReportSummary"
+      ],
+      "properties": {
+        "sslDecryptionReportSummary": {
+          "$ref": "#/definitions/SslDecryptionReportSummary"
+        }
+      }
+    },
+    "SslDecryptionReportsSummaryQueryResponse": {
+      "id": "#/definitions/SslDecryptionReportsSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.4",
+      "required": [
+        "sslDecryptionReportsSummary"
+      ],
+      "properties": {
+        "sslDecryptionReportsSummary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SslDecryptionReportSummary"
+          }
+        }
+      }
+    },
+    "SslDecryptionSessionDetails": {
+      "id": "#/definitions/SslDecryptionReportStats",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.11",
+      "properties": {
+        "serverIp": {
+          "type": "string"
+        },
+        "serverPort": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "clientIp": {
+          "type": "string"
+        },
+        "clientPort": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "version": {
+          "type": "string"
+        },
+        "firstError": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "inPkts": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "outPkts": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "sni": {
+          "type": "string"
+        },
+        "decryptionStatus": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "fingerprint": {
+          "type": "string"
+        },
+        "cipherSuite": {
+          "type": "string"
+        },
+        "firstErrorReason": {
+          "type": "string"
+        }
+      }
+    },
+    "SslDecryptionReportStats": {
+      "id": "#/definitions/SslDecryptionReportStats",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.11",
+      "required": [
+        "gsgroup"
+      ],
+      "properties": {
+        "gsgroup": {
+          "type": "string",
+          "description": "alias of gsgroup",
+          "readOnly": true
+        },
+        "sslDecryptionSessionDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SslDecryptionSessionDetails"
+          }
+        }
+      }
+    },
+    "SslDecryptionReportStatisticsQueryResponse": {
+      "id": "#/definitions/SslDecryptionReportStatisticsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.11",
+      "required": [
+        "sslDecryptionReportStats"
+      ],
+      "properties": {
+        "sslDecryptionReportStats": {
+          "$ref": "#/definitions/SslDecryptionReportStats"
+        }
+      }
+    },
+    "FlowSipReportSummaryQueryResponse": {
+      "id": "#/definitions/FlowSipReportSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.3",
+      "required": [
+        "flowSipReportSummary"
+      ],
+      "properties": {
+        "flowSipReportSummary": {
+          "$ref": "#/definitions/FlowSipReportSummary"
+        }
+      }
+    },
+    "FlowSipReportsSummaryQueryResponse": {
+      "id": "#/definitions/FlowSipReportsSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.3",
+      "required": [
+        "flowSipReportsSummary"
+      ],
+      "properties": {
+        "flowSipReportsSummary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FlowSipReportSummary"
+          }
+        }
+      }
+    },
+    "FlowDiameterS6aReportSummaryQueryResponse": {
+      "id": "#/definitions/FlowDiameterS6aReportSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.3",
+      "required": [
+        "flowDiameterS6aReportSummary"
+      ],
+      "properties": {
+        "flowDiameterS6aReportSummary": {
+          "$ref": "#/definitions/FlowDiameterS6aReportSummary"
+        }
+      }
+    },
+    "FlowDiameterS6aReportsSummaryQueryResponse": {
+      "id": "#/definitions/FlowDiameterS6aReportsSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.6",
+      "required": [
+        "flowDiameterS6aReportsSummary"
+      ],
+      "properties": {
+        "flowDiameterS6aReportsSummary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FlowDiameterS6aReportSummary"
+          }
+        }
+      }
+    },
+    "FlowSamplingReportSummaryQueryResponse": {
+      "id": "#/definitions/FlowSamplingReportSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.3",
+      "required": [
+        "flowSamplingReportSummary"
+      ],
+      "properties": {
+        "flowSamplingReportSummary": {
+          "$ref": "#/definitions/FlowSamplingReportSummary"
+        }
+      }
+    },
+    "FlowSamplingReportsSummaryQueryResponse": {
+      "id": "#/definitions/FlowSamplingReportsSummaryQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.3",
+      "required": [
+        "flowSamplingReportsSummary"
+      ],
+      "properties": {
+        "flowSamplingReportsSummary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FlowSamplingReportSummary"
+          }
+        }
+      }
+    },
+    "PortThrottleReportQueryResponse": {
+      "id": "#/definitions/PortThrottleReportQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.4",
+      "required": [
+        "portThrottleReport"
+      ],
+      "properties": {
+        "portThrottleReport": {
+          "$ref": "#/definitions/PortThrottleReport"
+        }
+      }
+    },
+    "PortThrottleReportsQueryResponse": {
+      "id": "#/definitions/PortThrottleReportsQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "since": "H 5.4",
+      "properties": {
+        "portThrottleReports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PortThrottleReport"
+          }
+        }
+      }
+    },
+    "GsGroupSpec": {
+      "id": "#/definitions/GsGroupSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART Port group",
+      "required": [
+        "alias",
+        "ports"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "GS Group alias"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of the member GigaSMART e-ports"
+        },
+        "hash": {
+          "type": "string",
+          "enum": [
+            "advanced",
+            "ipsrcIpdst"
+          ],
+          "default": "advanced",
+          "description": "gsgroup hashing parameters"
+        },
+        "params": {
+          "$ref": "#/definitions/GsGroupParams"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "GigasmartOpSpec": {
+      "id": "#/definitions/GigasmartOpSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART Operation",
+      "required": [
+        "alias",
+        "gsGroup",
+        "gsApps"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "gsGroup": {
+          "type": "string",
+          "description": "Alias of referenced managing GsGroup"
+        },
+        "gsApps": {
+          "$ref": "#/definitions/GigasmartApps",
+          "description": "GS Apps in the context of this GSOP"
+        },
+        "clusterId": {
+          "type": "string",
+          "minLength": 1,
+          "readonly": true,
+          "description": "id of the defining cluster"
+        }
+      }
+    },
+    "VportSpec": {
+      "id": "#/definitions/VportSpec",
+      "type": "object",
+      "additionalProperties": false,
+      "description": "GigaSMART vPort",
+      "required": [
+        "alias",
+        "gsGroup"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "gsGroup": {
+          "type": "string",
+          "description": "Alias of referenced managing GsGroup"
+        },
+        "saApfProfile": {
+          "type": "string",
+          "description": "ASF session profile"
+        },
+        "metadataMonitoring": {
+          "$ref": "#/definitions/VportMetadataMonitoring"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "gtp-overlap"
+          ],
+          "default": "none"
+        },
+        "failOverAction": {
+          "type": "string",
+          "enum": [
+            "vport-bypass",
+            "vport-drop",
+            "network-bypass",
+            "network-drop",
+            "network-port-forced-down"
+          ],
+          "default": "vport-bypass",
+          "since": "H 5.0"
+        },
+        "inlineStatus": {
+          "type": "string",
+          "enum": [
+            "up",
+            "down"
+          ],
+          "since": "H 5.0"
+        },
+        "deferredBinding": {
+          "type": "boolean",
+          "default": false,
+          "description": "enable/disable deferred-binding",
+          "since": "H 5.5"
+        },
+        "innerTrafficPath": {
+          "type": "string",
+          "enum": [
+            "to-inline-tool",
+            "bypass",
+            "drop",
+            "monitor"
+          ],
+          "default": "to-inline-tool",
+          "description": "Similar to inline-network traffic-path, applicable for inner map",
+          "since": "H 5.6"
+        },
+        "outerTrafficPath": {
+          "type": "string",
+          "enum": [
+            "to-inline-tool",
+            "bypass",
+            "drop",
+            "monitor"
+          ],
+          "default": "to-inline-tool",
+          "description": "Similar to inline-tool/inline-tool-group flex-traffic path, applicable for outer map",
+          "since": "H 5.6"
+        }
+      }
+    }
+  }
+}
+

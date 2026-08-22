@@ -1,0 +1,114 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmApiTokenManagement.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Token Management schema",
+  "definitions": {
+    "FmUserTokenEntity": {
+      "id": "#/definitions/FmUserTokenEntity",
+      "type": "object",
+      "since": "FM 6.6",
+      "additionalProperties": true,
+      "required": [
+        "tokenName",
+        "username",
+        "groups",
+        "expiryTime"
+      ],
+      "properties": {
+        "tokenName": {
+          "type": "string",
+          "description": "User defined token name"
+        },
+        "username": {
+          "type": "string",
+          "description": "FM Username"
+        },
+        "token": {
+          "type": "string",
+          "readOnly": true,
+          "description": "FM generated JWT token for FM REST API access"
+        },
+        "authenticationType": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Authentication Type local/radius/tacacs+/external"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "FM User Groups"
+        },
+        "expiryTime": {
+          "type": "string",
+          "description": "Expiry Time in number of days. Default would be 30 and Maximum of 105 days."
+        },
+        "expiryTs": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Expiry Timestamp"
+        },
+        "tokenId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Random alpha-numeric 64 digit string"
+        },
+        "createdBy": {
+          "type": "string",
+          "readOnly": true,
+          "description": "FM user who has created the token"
+        },
+        "createdTs": {
+          "type": "long",
+          "description": "Token creation timestamp"
+        },
+        "usageCount": {
+          "type": "long",
+          "readOnly": true,
+          "description": "Token Tracking count. Usagecount keep track of number times token was used to access API's "
+        }
+      }
+    },
+    "FmUserTokenEntitiesQueryResponse": {
+      "id": "#/definitions/FmUserTokenEntitiesQueryResponse",
+      "type": "object",
+      "since": "FM 6.6",
+      "additionalProperties": true,
+      "required": [
+        "fmUserTokenEntities"
+      ],
+      "properties": {
+        "fmUserTokenEntities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmUserTokenEntity"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "FmUserTokenEntitySpec": {
+      "id": "#/definitions/FmUserTokenEntitySpec",
+      "type": "object",
+      "since": "FM 6.6",
+      "additionalProperties": true,
+      "required": [
+        "fmApiTokenUserEntities"
+      ],
+      "properties": {
+        "fmApiTokenUserEntities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FmUserTokenEntity"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    }
+  }
+}

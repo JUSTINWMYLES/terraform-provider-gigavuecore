@@ -1,0 +1,199 @@
+{
+  "id": "http://gigamon.com/schemas-vmm/GvTapTrafficPolicies.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Schema for UCT-V Traffic Policies",
+  "definitions": {
+    "policyNameList": {
+      "id": "#/definitions/policyNameList",
+      "type": "object",
+      "description": "Delete Selected TrafficPolicy",
+      "since": "FM 6.2",
+      "required": [
+        "policyNameList"
+      ],
+      "properties": {
+        "policyNameList": {
+          "type": "array",
+          "description": "Deleting the selected policies",
+          "items": {}
+        }
+      }
+    },
+    "UctVTrafficPolicy": {
+      "id": "#/definitions/UctVTrafficPolicy",
+      "type": "object",
+      "description": "UCT-V Traffic Policy",
+      "since": "FM 6.2",
+      "required": [
+        "name",
+        "rules"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique name of this traffic policy. It can be between 1 and 32 characters long and may contain only alpha numeric characters, underscores and dashes.",
+          "readOnly": true
+        },
+        "rules": {
+          "description": "Rules defined for this traffic policy. At least one rule has to be specified and a maximum of 16 rules could be specified.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UctVTrafficPolicyRule"
+          }
+        }
+      }
+    },
+    "UctVTrafficPolicyRule": {
+      "id": "#/definitions/UctVTrafficPolicyRule",
+      "type": "object",
+      "required": [
+        "ruleName",
+        "action",
+        "direction",
+        "priority",
+        "filters"
+      ],
+      "properties": {
+        "ruleName": {
+          "type": "string",
+          "description": "Name of the traffic policy rule. It can be between 1 and 20 characters long and may contain only alpha numeric characters, underscores and dashes."
+        },
+        "action": {
+          "type": "string",
+          "description": "Action associated with the rule.",
+          "enum": [
+            "pass",
+            "drop"
+          ]
+        },
+        "direction": {
+          "type": "string",
+          "description": "Direction associated with the rule.",
+          "enum": [
+            "bidi",
+            "ingress",
+            "egress"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "format": "int32",
+          "description": "Priority of the rule. Range 1-8, 1 being highest priority. Cannot be null."
+        },
+        "filters": {
+          "type": "array",
+          "description": "A non-empty list of filters associated with the rule.  At least one filter has to be specified and a maximum of 5 filters could be specified.",
+          "items": {
+            "$ref": "#/definitions/UctVTrafficPolicyFilter"
+          }
+        }
+      }
+    },
+    "UctVTrafficPolicyFilter": {
+      "id": "#/definitions/UctVTrafficPolicyFilter",
+      "type": "object",
+      "required": [
+        "name",
+        "relation",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the filter.",
+          "enum": [
+            "portSrc",
+            "portDst",
+            "ip4Src",
+            "ip4Dst",
+            "ip6Src",
+            "ip6Dst",
+            "proto"
+          ]
+        },
+        "relation": {
+          "type": "string",
+          "description": "Type of the relation.",
+          "enum": [
+            "EQUAL_TO",
+            "NOT_EQUAL_TO"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "description": "Value of the filter."
+        }
+      }
+    },
+    "GvTapTrafficPolicy": {
+      "id": "#/definitions/GvTapTrafficPolicy",
+      "type": "object",
+      "description": "G-vTAP Traffic Policy",
+      "since": "FM 6.2",
+      "required": [
+        "name",
+        "rules"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique name of this traffic policy. It can be between 1 and 32 characters long and may contain only alpha numeric characters, underscores and dashes.",
+          "readOnly": true
+        },
+        "rules": {
+          "description": "Rules defined for this traffic policy. At least one rule has to be specified and a maximum of 16 rules could be specified.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UctVTrafficPolicyRule"
+          }
+        }
+      }
+    },
+    "UctVTrafficPolicyRule": {
+      "id": "#/definitions/UctVTrafficPolicyRule",
+      "type": "object",
+      "required": [
+        "ruleName",
+        "action",
+        "direction",
+        "priority",
+        "filters"
+      ],
+      "properties": {
+        "ruleName": {
+          "type": "string",
+          "description": "Name of the traffic policy rule. It can be between 1 and 20 characters long and may contain only alpha numeric characters, underscores and dashes."
+        },
+        "action": {
+          "type": "string",
+          "description": "Action associated with the rule.",
+          "enum": [
+            "pass",
+            "drop"
+          ]
+        },
+        "direction": {
+          "type": "string",
+          "description": "Direction associated with the rule.",
+          "enum": [
+            "bidi",
+            "ingress",
+            "egress"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "format": "int32",
+          "description": "Priority of the rule. Range 1-8, 1 being highest priority. Cannot be null."
+        },
+        "filters": {
+          "type": "array",
+          "description": "A non-empty list of filters associated with the rule.  At least one filter has to be specified and a maximum of 5 filters could be specified.",
+          "items": {
+            "$ref": "#/definitions/UctVTrafficPolicyFilter"
+          }
+        }
+      }
+    }
+  }
+}

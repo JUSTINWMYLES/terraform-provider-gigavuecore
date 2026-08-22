@@ -1,0 +1,863 @@
+{
+  "id": "http://gigamon.com/schemas-fm/fmHa.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "FM HA",
+  "definitions": {
+    "FmHaRole": {
+      "id": "#/definitions/FmHaRole",
+      "type": "object",
+      "description": "Current role of fmHa",
+      "required": [
+        "role"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "description": "for single nodes the role is standby and for clustered nodes the role is active or standalone"
+        }
+      }
+    },
+    "FmHaGroup": {
+      "id": "#/definitions/FmHaGroup",
+      "type": "object",
+      "description": "HA group details",
+      "required": [
+        "name",
+        "fmHaTunnel",
+        "haStatus",
+        "nodes",
+        "hostname",
+        "fipsEnabled"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name of the HA group"
+        },
+        "fmHaTunnel": {
+          "type": "object",
+          "$ref": "#/definitions/FmHaCsTunnel"
+        },
+        "haStatus": {
+          "type": "object",
+          "$ref": "#/definitions/HaStatus"
+        },
+        "nodes": {
+          "type": "array",
+          "description": "Nodes of HA group",
+          "$ref": "#/definitions/FmHaNode"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "DNS Name or IP Address of HA group"
+        },
+        "fipsEnabled": {
+          "type": "boolean",
+          "description": "fips enabled"
+        }
+      }
+    },
+    "CreateFmHaClusterSpec": {
+      "id": "#/definitions/CreateFmHaClusterSpec",
+      "type": "object",
+      "description": "Specifications for creating a new FMHA cluster",
+      "required": [
+        "name",
+        "fmHaTunnel",
+        "nodes"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the new FMHA cluster"
+        },
+        "fmHaTunnel": {
+          "type": "object",
+          "description": "Auth mode for creating tunnels in new FMHA cluster",
+          "$ref": "#/definitions/FmHaTunnel"
+        },
+        "nodes": {
+          "type": "array",
+          "description": "Nodes of the new FMHA cluster",
+          "$ref": "#/definitions/FmHaNode"
+        }
+      }
+    },
+    "FmHaAddNodeSpec": {
+      "id": "#/definitions/FmHaAddNodeSpec",
+      "type": "object",
+      "description": "HA group node specifications",
+      "required": [
+        "name",
+        "nodes",
+        "hostName",
+        "managementIpAddress",
+        "publicIpAddress",
+        "eligibleNodeRole",
+        "nodeRoles",
+        "username",
+        "password",
+        "entityId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name of the HA group"
+        },
+        "nodes": {
+          "type": "object",
+          "$ref": "#/definitions/FmHaNode"
+        },
+        "hostName": {
+          "type": "string",
+          "description": "DNS Name or IP Address of the HA group"
+        },
+        "managementIpAddress": {
+          "type": "string",
+          "description": "Management Ip Address of the HA group"
+        },
+        "publicIpAddress": {
+          "type": "string",
+          "description": "Public Ip Address of the HA group"
+        },
+        "eligibleNodeRole": {
+          "type": "string",
+          "description": "Eligible Node Role of the HA group"
+        },
+        "nodeRoles": {
+          "type": "object",
+          "$ref": "#/definitions/NodeRoles"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username of the HA group"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password of the HA group"
+        },
+        "entityId": {
+          "type": "string",
+          "description": "Entity ID of the HA group"
+        }
+      }
+    },
+    "FmHaGroupCreateResult": {
+      "id": "#/definitions/FmHaGroupCreateResult",
+      "type": "object",
+      "description": "FM HA group result",
+      "required": [
+        "groupName",
+        "fmHaTunnel",
+        "fmNodes"
+      ],
+      "properties": {
+        "groupName": {
+          "type": "string",
+          "description": "HA group name"
+        },
+        "fmHaTunnel": {
+          "type": "object",
+          "$ref": "#/definitions/FmHaTunnel"
+        },
+        "fmNodes": {
+          "type": "object",
+          "$ref": "#/definitions/FmHaAddFmInstanceResult"
+        }
+      }
+    },
+    "FmHaClusterStatus": {
+      "id": "#/definitions/FmHaClusterStatus",
+      "type": "object",
+      "description": "FM HA cluster status",
+      "required": [
+        "status",
+        "isReady"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "HA cluster status"
+        },
+        "isReady": {
+          "type": "boolean",
+          "description": "Is HA cluster ready"
+        }
+      }
+    },
+    "FmHaAddFmInstanceResult": {
+      "id": "#/definitions/FmHaAddFmInstanceResult",
+      "type": "object",
+      "description": "FM HA add FM instance result",
+      "required": [
+        "groupName",
+        "success",
+        "message",
+        "fmNode"
+      ],
+      "properties": {
+        "groupName": {
+          "type": "string",
+          "description": "HA group name"
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Success status"
+        },
+        "message": {
+          "type": "string",
+          "description": "Result message"
+        },
+        "fmNode": {
+          "type": "object",
+          "$ref": "#/definitions/FmHaNode"
+        }
+      }
+    },
+    "FmHaBuildInfo": {
+      "id": "#/definitions/FmHaBuildInfo",
+      "type": "object",
+      "description": "HA group build info",
+      "required": [
+        "version",
+        "mac",
+        "buildDate",
+        "fmTime",
+        "fmUptime",
+        "primaryIp",
+        "primaryIpMask",
+        "primaryIpMaskLen",
+        "defaultGateway",
+        "primaryIpv6",
+        "primaryIpv6Mask",
+        "defaultIpv6Gateway",
+        "managementIpAddress",
+        "primaryDns",
+        "domainName",
+        "additionalDns",
+        "additionalDomainName",
+        "ntpIp",
+        "hostId",
+        "hostname",
+        "productName",
+        "bootImage",
+        "buildId",
+        "role",
+        "fipsEnabled"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "version of the HA group"
+        },
+        "mac": {
+          "type": "string",
+          "description": "mac of the HA group"
+        },
+        "buildDate": {
+          "type": "string",
+          "description": "Build Date of the HA group"
+        },
+        "fmTime": {
+          "type": "string",
+          "description": "Fm Time of the HA group"
+        },
+        "fmUptime": {
+          "type": "string",
+          "description": "Fm Up time of the HA group"
+        },
+        "primaryIp": {
+          "type": "string",
+          "description": "primary Ip of the HA group"
+        },
+        "primaryIpMask": {
+          "type": "string",
+          "description": "Primary Ip Mask of the HA group"
+        },
+        "primaryIpMaskLen": {
+          "type": "string",
+          "description": "Primary Ip Mask Len of the HA group"
+        },
+        "defaultGateway": {
+          "type": "string",
+          "description": "default Gateway of the HA group"
+        },
+        "primaryIpv6": {
+          "type": "string",
+          "description": "Primary Ipv6 of the HA group"
+        },
+        "primaryIpv6Mask": {
+          "type": "string",
+          "description": "Primary Ipv6 Mask of the HA group"
+        },
+        "defaultIpv6Gateway": {
+          "type": "string",
+          "description": "Default Ipv6 Gateway of the HA group"
+        },
+        "managementIpAddress": {
+          "type": "string",
+          "description": "Management Ip Address of the HA group"
+        },
+        "primaryDns": {
+          "type": "string",
+          "description": "Primary Dns of the HA group"
+        },
+        "domainName": {
+          "type": "string",
+          "description": "Domain Name of the HA group"
+        },
+        "additionalDns": {
+          "type": "string",
+          "description": "Additional Dns of the HA group"
+        },
+        "additionalDomainName": {
+          "type": "string",
+          "description": "Additional Domain Name of the HA group"
+        },
+        "ntpIp": {
+          "type": "string",
+          "description": "ntp Ip of the HA group"
+        },
+        "hostId": {
+          "type": "string",
+          "description": "Host Id of the HA group"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "DNS name or IP address of the HA group"
+        },
+        "productName": {
+          "type": "string",
+          "description": "Product Name of the HA group"
+        },
+        "bootImage": {
+          "type": "string",
+          "description": "Boot Image of the HA group"
+        },
+        "buildId": {
+          "type": "string",
+          "description": "Build Id of the HA group"
+        },
+        "role": {
+          "type": "string",
+          "description": "Role of the HA group"
+        },
+        "fipsEnabled": {
+          "type": "boolean",
+          "description": "Is fips Enabled"
+        }
+      }
+    },
+    "CmsBuildInfo": {
+      "id": "#/definitions/CmsBuildInfo",
+      "type": "object",
+      "description": "Cms build info",
+      "required": [
+        "version",
+        "mac",
+        "buildDate",
+        "fmTime",
+        "fmUptime",
+        "primaryIp",
+        "primaryIpMask",
+        "primaryIpMaskLen",
+        "defaultGateway",
+        "primaryIpv6",
+        "primaryIpv6Mask",
+        "defaultIpv6Gateway",
+        "primaryDns",
+        "domainName",
+        "dnsName",
+        "additionalDns",
+        "additionalDomainName",
+        "ntpIp",
+        "hostId",
+        "hostname",
+        "productName",
+        "bootImage",
+        "buildId",
+        "platform",
+        "systemTimestamp",
+        "systemTimestampUtc"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Version of build"
+        },
+        "mac": {
+          "type": "string",
+          "description": "Mac of build"
+        },
+        "buildDate": {
+          "type": "string",
+          "description": "Build Date of build"
+        },
+        "fmTime": {
+          "type": "string",
+          "description": "FM time of build"
+        },
+        "fmUptime": {
+          "type": "string",
+          "description": "FM Up time of build"
+        },
+        "primaryIp": {
+          "type": "string",
+          "description": "Primary Ip of build"
+        },
+        "primaryIpMask": {
+          "type": "string",
+          "description": "Primary Ip Mask of build"
+        },
+        "primaryIpMaskLen": {
+        "type": "string",
+        "description": "Primary Ip Mask Len of build"
+      },
+        "defaultGateway": {
+          "type": "string",
+          "description": "Default Gateway of build"
+        },
+        "primaryIpv6": {
+          "type": "string",
+          "description": "Primary Ipv6 of build"
+        },
+        "primaryIpv6Mask": {
+          "type": "string",
+          "description": "Primary Ipv6 Mask of build"
+        },
+        "defaultIpv6Gateway": {
+          "type": "string",
+          "description": "Default Ipv6 Gateway of build"
+        },
+        "primaryDns": {
+          "type": "string",
+          "description": "Primary Dns of build"
+        },
+        "domainName": {
+          "type": "string",
+          "description": "Domain Name of build"
+        },
+        "dnsName": {
+          "type": "string",
+          "description": "DNS Name of build"
+        },
+        "additionalDns": {
+          "type": "string",
+          "description": "Additional Dns of build"
+        },
+        "additionalDomainName": {
+          "type": "string",
+          "description": "Additional Domain Name of build"
+        },
+        "ntpIp": {
+          "type": "string",
+          "description": "ntp Ip of build"
+        },
+        "hostId": {
+          "type": "string",
+          "description": "Host Id of build"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "DNS name or IP Address of build"
+        },
+        "productName": {
+          "type": "string",
+          "description": "Product Name of build"
+        },
+        "bootImage": {
+          "type": "string",
+          "description": "Boot Image of build"
+        },
+        "buildId": {
+          "type": "string",
+          "description": "Build Id of build"
+        },
+        "platform": {
+          "type": "string",
+          "description": "Platform of build"
+        },
+        "systemTimestamp": {
+          "type": "integer",
+          "format": "int64",
+          "description": "System time stamp of build"
+        },
+        "systemTimestampUtc": {
+          "type": "string",
+          "description": "System time stamp Utc of build"
+        }
+      }
+    },
+    "FmHaServiceStateChangeSpec": {
+      "id": "#/definitions/FmHaServiceStateChangeSpec",
+      "type": "object",
+      "description": "FM HA service state change",
+      "required": [
+        "hostname",
+        "service",
+        "state"
+      ],
+      "properties": {
+        "hostname": {
+          "type": "string",
+          "description": "DNS name or IP Address of service state"
+        },
+        "service": {
+          "type": "object",
+          "$ref": "#/definitions/Service"
+        },
+        "state": {
+          "type": "object",
+          "$ref": "#definitions/State"
+        }
+      }
+
+    },
+    "FmHaCsVip": {
+      "id": "#/definitions/FmHaCsVip",
+      "type": "object",
+      "description": "FM HA Vip list",
+      "required": [
+        "vips"
+      ],
+      "properties": {
+        "vipList": {
+          "type": "object",
+          "$ref": "#/definitions/FmHaVip"
+        }
+      }
+    },
+    "FmConsul": {
+      "id": "#/definitions/FmConsul",
+      "type": "object",
+      "description": "Fm Consul list",
+      "required": [
+        "lockIndex",
+        "key",
+        "value",
+        "flags",
+        "createIndex",
+        "modifyIndex"
+      ],
+      "properties": {
+        "lockIndex": {
+          "type": "integer",
+          "description": "Lock Index"
+        },
+        "key": {
+          "type": "string",
+          "description": "Key value"
+        },
+        "value": {
+          "type": "string",
+          "description": "Value"
+        },
+        "flags": {
+          "type": "integer",
+          "description": "Flags"
+        },
+        "createIndex": {
+          "type": "integer",
+          "description": "Create index"
+        },
+        "modifyIndex": {
+          "type": "integer",
+          "description": "Modify index"
+        }
+
+      }
+    },
+
+
+
+
+
+
+    "NodeRoles": {
+      "id": "#/definitions/NodeRoles",
+      "type": "object",
+      "properties": {
+        "esNodeRole": {
+          "type": "string",
+          "description": "ES node role"
+        },
+        "mongoNodeRole": {
+          "type": "string",
+          "description": "Mongo node role"
+        }
+      }
+    },
+    "FmHaTunnel": {
+      "id": "#/definitions/FmHaTunnel",
+      "type": "object",
+      "properties": {
+        "tunnelAuthMode": {
+          "type": "string",
+          "enum": [
+            "PSK",
+            "PKI"
+          ],
+          "description": "Auth mode for setting up FMHA tunnel. PSK is Pre Shared Key. PKI is Public Key Infrastructure(Certificate based)"
+        }
+      }
+    },
+    "FmHaCsTunnel": {
+      "id": "#/definitions/FmHaCsTunnel",
+      "type": "object",
+      "properties": {
+        "tunnelAuthMode": {
+          "type": "string",
+          "description": "Auth mode for setting up FMHA tunnel. PSK is Pre Shared Key. PKI is Public Key Infrastructure(Certificate based)",
+          "enum": [
+            "PSK",
+            "PKI"
+          ]
+        },
+        "tunnelStatus": {
+          "type": "object",
+          "description": "Includes details of the configured tunnels and their health status in FMHA cluster",
+          "additionalProperties": false,
+          "properties": {
+            "tunnelHealth": {
+              "type": "string",
+              "description": "Overall health status of all tunnels configured in FMHA cluster",
+              "enum": [
+                "Red",
+                "Green"
+              ]
+            },
+            "unreachableTunnels": {
+              "type": "object",
+              "description": "Lists the unreachable tunnels from a particular FMHA node",
+              "additionalProperties": false,
+              "properties": {
+                "198.51.100.42": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "198.51.100.43",
+                    "198.51.100.44"
+                  ]
+                }
+              }
+            },
+            "totalTunnels": {
+              "type": "object",
+              "description": "Lists all the configured tunnels in each node in a FMHA cluster",
+              "required": [
+                "198.51.100.42",
+                "198.51.100.43",
+                "198.51.100.44"
+              ],
+              "properties": {
+                "198.51.100.42": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "198.51.100.43",
+                    "198.51.100.44"
+                  ]
+                },
+                "198.51.100.43": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "198.51.100.42",
+                    "198.51.100.44"
+                  ]
+                },
+                "198.51.100.44": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "198.51.100.42",
+                    "198.51.100.43"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "HaStatus": {
+      "id": "#/definitions/HaStatus",
+      "type": "object",
+      "properties": {
+        "activeEligible": {
+          "type": "string",
+          "description": "active eligible for ha status"
+        },
+        "support": {
+          "type": "string",
+          "description": "support for ha status"
+        }
+      }
+    },
+    "FmHaVip": {
+      "id": "#/definitions/FmHaVip",
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "direction",
+        "interface",
+        "ipAddress",
+        "netmask"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "name for FmHaVip"
+        },
+        "type": {
+          "type": "string",
+          "description": "type for FmHaVip"
+        },
+        "direction": {
+          "type": "string",
+          "description": "direction for FmHaVip"
+        },
+        "interface": {
+          "type": "string",
+          "description": "interface for FmHaVip"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "IP address for FmHaVip"
+        },
+        "netmask": {
+          "type": "string",
+          "description": "netmasl for FmHaVip"
+        }
+      }
+    },
+    "FmHaNode": {
+      "id": "#/definitions/FmHaNode",
+      "type": "object",
+      "required": [
+        "hostname",
+        "seedNode",
+        "managementIpAddress",
+        "publicIpAddress",
+        "clusterIpAddress",
+        "username",
+        "password",
+        "reachable",
+        "entityId",
+        "idpMetadataUrl"
+      ],
+      "properties": {
+        "hostname": {
+          "type": "string",
+          "description": "DNS Name or IP Address for FM HA node"
+        },
+        "seedNode": {
+          "type": "boolean",
+          "description": "Seed node for FM HA node"
+        },
+        "managementIpAddress": {
+          "type": "string",
+          "description": "Management IP address for FM HA node "
+        },
+        "publicIpAddress": {
+          "type": "string",
+          "description": "Public IP address for FM HA node"
+        },
+        "clusterIpAddress": {
+          "type": "string",
+          "description": "Cluster IP address for FM HA node"
+        },
+        "username": {
+          "type": "string",
+          "description": "username for FM HA node"
+        },
+        "password": {
+        "type": "string",
+        "description": "password for FM HA node"
+      },
+        "reachable": {
+          "type": "boolean",
+          "description": "Reachable for FM HA node"
+        },
+        "entityId": {
+          "type": "string",
+          "description": "Entity Id for FM HA node"
+        },
+        "idpMetaDataUrl": {
+          "type": "string",
+          "description": "IDP Meta data URL for FM HA node"
+        }
+      }
+    },
+    "FmHaEligibleNodeRoleEnum": {
+      "id": "#definitions/FmHaEligibleNodeRoleEnum",
+      "type": "string",
+      "enum": [
+        "activeEligible",
+        "support"
+      ],
+      "description": "Label for FM HA eligible node role enum"
+    },
+    "State": {
+      "id": "#definitions/State",
+      "type": "string",
+      "enum": [
+        "up",
+        "down",
+        "inProgress"
+      ],
+      "description": "up is for turn on, down is for turn off and in progress is for in-progress"
+    },
+    "HaGroupQueryResponse": {
+      "id": "#/definitions/HaGroupQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "gigaFmHaGroup"
+      ],
+      "properties": {
+        "gigaFmHaGroup": {
+          "$ref": "#/definitions/FmHaGroup"
+        }
+      }
+    },
+    "InstanceResultQueryResponse": {
+      "id": "#/definitions/InstanceResultQueryResponse",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fmNodes"
+      ],
+      "properties": {
+        "fmNodes": {
+          "$ref": "#/definitions/FmHaAddFmInstanceResult"
+        }
+      }
+    },
+    "Service": {
+      "id": "#/definitions/Service",
+      "type": "string",
+      "enum": [
+        "application"
+      ],
+      "description": "special service name which contains all the necessary service for REST API access"
+    }
+  }
+
+}
+
+
+
+
+
+
+

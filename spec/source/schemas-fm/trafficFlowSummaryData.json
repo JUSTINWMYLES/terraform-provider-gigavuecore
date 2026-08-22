@@ -1,0 +1,220 @@
+{
+  "id": "http://gigamon.com/schemas-fm/trafficFlowSummaryData.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Schema for TrafficFlowsSummaryData and related response wrappers.",
+  "definitions": {
+    "TrafficFlowsSummaryData": {
+      "id": "#/definitions/TrafficFlowsSummaryData",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "sources": {
+          "$ref": "#/definitions/ComponentSummary"
+        },
+        "sourceRulesSummary": {
+          "type": "object",
+          "description": "Map of RuleType to Counter. eg. ByRule : 2",
+          "propertyNames": {
+            "enum": [
+              "byRule",
+              "passAll",
+              "collector",
+              "flowFilter",
+              "flowSample",
+              "flowSample5g",
+              "flowWhitelist5g",
+              "flowWhitelist",
+              "flowSampleOverlap",
+              "flowWhitelistOverlap",
+              "ingressToVp",
+              "egressFromVp",
+              "oobFromVp",
+              "flowSampleSip",
+              "flowWhitelistSip",
+              "flowSampleDiameter",
+              "flowWhitelistDiameter",
+              "networkEnd",
+              "flowSample5gOverlap",
+              "flowWhitelist5gOverlap",
+              "inlinePair"
+            ]
+          },
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "apps": {
+          "$ref": "#/definitions/ComponentSummary"
+        },
+        "appRulesSummary": {
+          "type": "object",
+          "description": "Map of RuleType to Counter. eg. ByRule : 2",
+          "propertyNames": {
+            "enum": [
+              "byRule",
+              "passAll",
+              "collector",
+              "flowFilter",
+              "flowSample",
+              "flowSample5g",
+              "flowWhitelist5g",
+              "flowWhitelist",
+              "flowSampleOverlap",
+              "flowWhitelistOverlap",
+              "ingressToVp",
+              "egressFromVp",
+              "oobFromVp",
+              "flowSampleSip",
+              "flowWhitelistSip",
+              "flowSampleDiameter",
+              "flowWhitelistDiameter",
+              "networkEnd",
+              "flowSample5gOverlap",
+              "flowWhitelist5gOverlap",
+              "inlinePair"
+            ]
+          },
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "destinations": {
+          "$ref": "#/definitions/ComponentSummary"
+        },
+        "configStatus": {
+          "type": "string"
+        },
+        "hasDraft": {
+          "type": "boolean"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "../schemas-common/common.json#/definitions/ResourceTag"
+          }
+        }
+      },
+      "required": [
+        "alias"
+      ],
+      "additionalProperties": false
+    },
+    "ComponentSummary": {
+      "id": "#/definitions/ComponentSummary",
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "healthState": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthState",
+          "readonly": true
+        },
+        "healthStateReasons": {
+          "$ref": "../schemas-common/common.json#/definitions/EntityHealthStateReasons",
+          "readonly": true
+        }
+      },
+      "required": [
+        "count"
+      ],
+      "additionalProperties": false
+    },
+    "TrafficFlowsSummaryDataSingleQueryResponse": {
+      "id": "#/definitions/TrafficFlowsSummaryDataSingleQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "trafficFlowsSummary"
+      ],
+      "properties": {
+        "trafficFlowsSummary": {
+          "$ref": "#/definitions/TrafficFlowsSummaryData"
+        }
+      }
+    },
+    "TrafficFlowsSummaryDataListQueryResponse": {
+      "id": "#/definitions/TrafficFlowsSummaryDataListQueryResponse",
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "trafficFlowsSummary"
+      ],
+      "properties": {
+        "trafficFlowsSummary": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TrafficFlowsSummaryData"
+          }
+        },
+        "context": {
+          "$ref": "../schemas-common/common.json#/definitions/QueryResultContext"
+        }
+      }
+    },
+    "TrafficFlowsOverviewSingleQueryResponse": {
+      "id": "#/definitions/TrafficFlowsOverviewSingleQueryResponse",
+      "type": "object",
+      "properties": {
+        "trafficFlowsOverview": {
+          "$ref": "#/definitions/TrafficFlowsOverview"
+        }
+      },
+      "required": [
+        "trafficFlowsOverview"
+      ],
+      "additionalProperties": false
+    },
+    "TrafficFlowsOverview": {
+      "id": "#/definitions/TrafficFlowsOverview",
+      "type": "object",
+      "properties": {
+        "undeployed": {
+          "type": "integer"
+        },
+        "success": {
+          "type": "integer"
+        },
+        "failure": {
+          "type": "integer"
+        },
+        "others": {
+          "type": "integer"
+        },
+        "red": {
+          "type": "integer"
+        },
+        "yellow": {
+          "type": "integer"
+        },
+        "green": {
+          "type": "integer"
+        },
+        "total": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "undeployed",
+        "success",
+        "failure",
+        "others",
+        "red",
+        "yellow",
+        "green",
+        "total"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

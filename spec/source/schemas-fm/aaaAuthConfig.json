@@ -1,0 +1,36 @@
+{
+  "id": "http://gigamon.com/schemas-fm/aaaAuthConfig.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Gigamon FM AAA Configuration schema",
+  "definitions": {
+    "AaaAuthConfig": {
+      "id": "#/definitions/AaaAuthConfig",
+      "type": "object",
+      "additionalProperties": true,
+      "description": "FM Global AAA Authentication config to the device's",
+      "required": [
+        "authSequence"
+      ],
+      "properties": {
+        "authSequence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "local",
+              "ldap",
+              "radius",
+              "tacacs"
+            ]
+          },
+          "maxItems": 4,
+          "uniqueItems": true,
+          "description": "Authentication methods order for user login. Valid values are 'local', 'ldap', 'radius', 'tacacs'"
+        },
+        "externalLoginMapping": {
+          "$ref": "nodeSystemAaa.json#/definitions/ExternalLoginMapping"
+        }
+      }
+    }
+  }
+}
