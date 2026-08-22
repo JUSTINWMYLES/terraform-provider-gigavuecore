@@ -1,0 +1,91 @@
+name: Regenerate and Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version tag, e.g. v1.2.3"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-tag:
+    name: Generate provider and push tag
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/signalbreak-labs/eidos:latest
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
+    steps:
+      - name: Install git
+        run: |
+          apt-get update
+          apt-get install -y git
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git safe directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Regenerate provider from spec
+        run: eidos generate --config generator.yaml --skip-build --output . --force
+
+      - name: Build and test
+        run: |
+          go mod tidy
+          go build -buildvcs=false ./...
+          go test -buildvcs=false ./...
+
+      - name: Commit generated code and push tag
+        id: tag
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Generated provider files are not committed on the default branch,
+          # so force-add them to the release tag commit.
+          git add -f go.mod go.sum main.go internal/ docs/ examples/ README.md .eidos-generated.json
+          git commit -m "chore: regenerate provider from spec for ${VERSION}"
+          git tag "${VERSION}"
+          git push origin "${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+  release:
+    name: Release with GoReleaser
+    needs: generate-and-tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.generate-and-tag.outputs.version }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Release
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
