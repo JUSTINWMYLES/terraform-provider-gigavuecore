@@ -1,0 +1,14 @@
+action "gigavuecore_create_flex_inline_config" "example" {
+  config {
+    alias                 = "example"
+    bypass_strategy       = "example"
+    cluster_id            = "example"
+    config_data           = null
+    config_status         = "example"
+    config_status_reasons = [ "example" ]
+    config_type           = "example"
+    health_state          = "example"
+    health_state_reasons  = null
+    solution_alias        = "example"
+  }
+}
