@@ -2,7 +2,19 @@ provider:
   name: gigavuecore
   display_name: terraform-provider-gigavuecore
   version: 0.1.0
-  description: Terraform provider for the Gigamon GigaVUE-FM 6.14.00 Core API
+  description: |+
+    This provider is generated using [eidos](https://github.com/signalbreak-labs/eidos) from the Gigamon GigaVUE-FM [OpenAPI](https://docs.gigamon.com/ref-api/Content/apiref_514onwards/doc/webapp/release/6.14.00%20GigaVUE-FM%20Core/openapi.fm.yaml) specification.
+
+    ## Example Usage
+
+    ```hcl
+    provider "gigavuecore" {
+      endpoint = "https://fm.example.com"
+      username = "admin"
+      password = "changeme"
+    }
+    ```
+
   author: JUSTINWMYLES
   contact_email: opensource@gigamon.com
   license: MPL-2.0
