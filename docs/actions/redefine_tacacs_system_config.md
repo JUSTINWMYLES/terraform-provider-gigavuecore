@@ -1,0 +1,34 @@
+---
+page_title: "gigavuecore_redefine_tacacs_system_config Action - gigavuecore"
+subcategory: ""
+description: |-
+  Redefine TACACS+ system configuration
+---
+
+# gigavuecore_redefine_tacacs_system_config Action
+
+Redefine TACACS+ system configuration
+
+## Example Usage
+
+```terraform
+action "gigavuecore_redefine_tacacs_system_config" "example" {
+  config {
+    accept_user_roles      = true
+    cluster_id             = "example"
+    server_config_defaults = null
+  }
+}
+
+```
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `accept_user_roles` (Boolean, optional) - Enables the GigaVUE H Series node to accept user roles assigned in the TACACS+ server
+* `cluster_id` (String, required) - Target Cluster ID
+* `server_config_defaults` (Dynamic, optional) - Remote TACACS+ Server default config
+
+

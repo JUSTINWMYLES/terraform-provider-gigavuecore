@@ -1,0 +1,53 @@
+---
+page_title: "gigavuecore_get_user_tokens Data Source - gigavuecore"
+subcategory: ""
+description: |-
+  Returns API tokens created for the user
+---
+
+# gigavuecore_get_user_tokens Data Source
+
+Returns API tokens created for the user
+
+## Example Usage
+
+```terraform
+data "gigavuecore_get_user_tokens" "example" {
+}
+```
+
+## Schema
+
+### Attributes
+
+In addition to all arguments above, the following attributes are exported:
+
+* `context` (Attributes, computed) - Gigamon query result context (see [below for nested schema](#nestedatt--context))
+* `fm_user_token_entities` (Attributes List, computed) (see [below for nested schema](#nestedatt--fm_user_token_entities))
+
+<a id="nestedatt--context"></a>
+### Nested Schema for `context`
+
+Read-Only:
+
+* `page_no` (Number) - page number of the returned result set
+* `page_size` (Number) - page size of the returned result set
+* `sort` (List of String) - sorting info of the returned result set. list of fields in the array indicate sorting order
+* `total_items` (Number) - total number of items in the queried entity type
+<a id="nestedatt--fm_user_token_entities"></a>
+### Nested Schema for `fm_user_token_entities`
+
+Read-Only:
+
+* `authentication_type` (String) - Authentication Type local/radius/tacacs+/external
+* `created_by` (String) - FM user who has created the token
+* `created_ts` (Dynamic) - Token creation timestamp
+* `expiry_time` (String) - Expiry Time in number of days. Default would be 30 and Maximum of 105 days.
+* `expiry_ts` (String) - Expiry Timestamp
+* `groups` (List of String) - FM User Groups
+* `token` (String) - FM generated JWT token for FM REST API access
+* `token_id` (String) - Random alpha-numeric 64 digit string
+* `token_name` (String) - User defined token name
+* `usage_count` (Dynamic) - Token Tracking count. Usagecount keep track of number times token was used to access API's
+* `username` (String) - FM Username
+

@@ -1,0 +1,44 @@
+---
+page_title: "gigavuecore_delete_certificate Action - gigavuecore"
+subcategory: ""
+description: |-
+  Push global delete configuration for the selected certificate to all the devices
+---
+
+# gigavuecore_delete_certificate Action
+
+Push global delete configuration for the selected certificate to all the devices
+
+## Example Usage
+
+```terraform
+action "gigavuecore_delete_certificate" "example" {
+  config {
+    config             = null
+    config_level       = "example"
+    config_level_value = [ "example" ]
+    config_type        = "example"
+    modifiable         = true
+    ref_count          = 1
+    template_name      = "example"
+    update_time        = "example"
+  }
+}
+
+```
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `config` (Dynamic, optional)
+* `config_level` (String, optional) - Scope of the applied FM template
+* `config_level_value` (List of String, optional)
+* `config_type` (String, optional) - Configuration Type of the FM template
+* `modifiable` (Boolean, optional)
+* `ref_count` (Number, optional)
+* `template_name` (String, optional)
+* `update_time` (String, optional)
+
+
