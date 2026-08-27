@@ -99,7 +99,6 @@ resource_overrides:
   id_attribute: eport
   import_format: '{eport}'
   computed_attributes:
-  - cluster_id
   - dhcp
   - dns
   - gateway
@@ -325,7 +324,6 @@ resource_overrides:
   - ip_interface
   - gsop_alias
   - gsop_config
-  - cluster_id
   - apf
   - dedup
   - diameter_whitelist
@@ -701,7 +699,6 @@ resource_overrides:
   import_format: '{alias}'
   computed_attributes:
   - alias
-  - cluster_id
   - config_status
   - config_status_reasons
   - decap
@@ -851,7 +848,6 @@ resource_overrides:
   computed_attributes:
   - attach
   - circuit_ids
-  - cluster_id
   - comment
   - dip_address
   - l4_src_port
@@ -960,7 +956,6 @@ resource_overrides:
   - ap_rules
   - drop_rules
   - pass_rules
-  - cluster_id
   - comment
   - egress_gigastream
   - enable
@@ -1108,7 +1103,6 @@ resource_overrides:
   computed_attributes:
   - alias
   - cluster_configs
-  - cluster_id
   - export_criteria
   - lsb
   - export_type
@@ -1144,7 +1138,6 @@ resource_overrides:
   - caching
   - persistence
   - enable
-  - cluster_id
   - dhe_ciphersuit
   - monitor
   - resumption
@@ -1292,7 +1285,6 @@ resource_overrides:
   import_format: '{alias}'
   computed_attributes:
   - alias
-  - cluster_id
   - health_state
   - health_state_reasons
   - message
@@ -1307,7 +1299,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - comment
   - drop_weight
   - failover_status
@@ -1337,7 +1328,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - hash
   - health_state
   - health_state_reasons
@@ -1474,7 +1464,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - apf
   - enabled
   - dedup
@@ -1660,7 +1649,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - exceed_action
   - inactivity_timeout
   - preview
@@ -1673,7 +1661,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - comment
   - options_service_url
   - reqmod_service_url
@@ -1684,7 +1671,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - comment
   - icap_servers
 - schema: image_server
@@ -1819,7 +1805,6 @@ resource_overrides:
   import_format: '{alias}'
   computed_attributes:
   - certificate
-  - cluster_id
   - cn
   - comment
   - expiry
@@ -1861,7 +1846,6 @@ resource_overrides:
   - ap_rules
   - drop_rules
   - pass_rules
-  - cluster_id
   - comment
   - egress_gigastream
   - enable
@@ -1975,7 +1959,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - comment
 - schema: map_template
   operation: createMapTemplate
@@ -1983,7 +1966,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - comment
   - roles
   - editors
@@ -2118,7 +2100,6 @@ resource_overrides:
   - timeout_active
   - timeout_inactive
   - type
-  - cluster_id
   - description
   - records
   - sampling
@@ -2134,7 +2115,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - collect
   - intf_neighbor_width
   - ipv4_addr_dst_mask_len
@@ -2219,7 +2199,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - comment
   - gigastreams
   - health_state
@@ -2238,7 +2217,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - comment
   - config_mismatch
   - health_state
@@ -2281,7 +2259,6 @@ resource_overrides:
   - buffering
   - buffer_count_before_match
   - protocol
-  - cluster_id
   - packet_count
   - pos
   - timeout
@@ -2335,7 +2312,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - endpoint
   - address
   - port
@@ -2347,7 +2323,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - comment
   - health_state
   - health_state_reasons
@@ -2394,7 +2369,6 @@ resource_overrides:
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
-  - cluster_id
   - comment
   - health_state
   - health_state_reasons
@@ -3233,7 +3207,6 @@ resource_overrides:
   id_attribute: slot_id
   import_format: '{slot_id}'
   computed_attributes:
-  - cluster_id
   - fields
 - schema: notif_meta_config
   operation: updateEventNotificationConfiguration
