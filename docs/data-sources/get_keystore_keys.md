@@ -1,0 +1,64 @@
+---
+page_title: "gigavuecore_get_keystore_keys Data Source - gigavuecore"
+subcategory: ""
+description: |-
+  get list of keystore keys
+---
+
+# gigavuecore_get_keystore_keys Data Source
+
+get list of keystore keys
+
+## Example Usage
+
+```terraform
+data "gigavuecore_get_keystore_keys" "example" {
+  cluster_id = null
+  page       = null
+  sort       = null
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `cluster_id` (String, required) - Target Cluster ID
+* `page` (String, optional) - parentheses-enclosed pair of values in a (pageNo:pageSize) format. 'pageNo' is 1-based. If omitted, entire list of entities is returned
+* `sort` (String, optional) - parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)
+
+### Attributes
+
+In addition to all arguments above, the following attributes are exported:
+
+* `items` (Attributes List, computed) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+* `alias` (String)
+* `certificate` (Boolean) - true if a certificate key is configured for this alias; readonly
+* `cluster_id` (String) - id of the defining cluster
+* `cn` (String) - certificate common name
+* `comment` (String)
+* `expiry` (String) - certificate expiry date
+* `health_state` (String) - Read-only. 'green' indicates certificate participating in flow; 'yellow'  indicates certificate installed but not participating in any flow; 'red'  indicates certificate expired;
+* `health_state_reasons` (Attributes List) (see [below for nested schema](#nestedatt--items--health_state_reasons))
+* `installed_on` (String) - certificate installation time
+* `o` (String) - organization name
+* `ou` (String) - organizational unit - the division of organization handling the certificate
+* `private` (Boolean) - true if a private key is configured for this alias; readonly
+* `status` (String)
+* `type` (String) - hsm pkcs11 key; readonly
+<a id="nestedatt--items--health_state_reasons"></a>
+### Nested Schema for `items.health_state_reasons`
+
+Read-Only:
+
+* `message` (String) - Read-only. Describes the reason for component's health state
+* `severity` (String) - Read-only. 'green' indicates certificate participating in flow; 'yellow'  indicates certificate installed but not participating in any flow; 'red'  indicates certificate expired;
+

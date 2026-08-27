@@ -1,0 +1,105 @@
+---
+page_title: "gigavuecore_notif_meta_config Resource - gigavuecore"
+subcategory: ""
+description: |-
+  Get Notification Configuration
+---
+
+# gigavuecore_notif_meta_config Resource
+
+Get Notification Configuration
+
+## Example Usage
+
+```terraform
+resource "gigavuecore_notif_meta_config" "example" {
+  allow_attachment        = null
+  attachment_limit        = null
+  comment                 = null
+  email_subject_prefix    = null
+  enabled                 = null
+  event_details           = []
+  external_trap_receivers = []
+  instant_rate_limit      = null
+  recipients              = []
+  recurring_schedule      = null
+  send_mail_if_empty      = null
+  severity                = []
+  tags                    = []
+  task_id                 = null
+  task_name               = null
+  template_details        = []
+  time_interval           = null
+  time_left               = null
+  type                    = null
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `allow_attachment` (Boolean, optional) - Allow attachment in notification email
+* `attachment_limit` (Number, optional) - Maximum number of events to be included in the attachment
+* `comment` (String, optional) - Comments
+* `email_subject_prefix` (String, optional) - Subject of the notification email
+* `enabled` (Boolean, optional) - Status of the notification task
+* `event_details` (Attributes List, required) - Event Details (see [below for nested schema](#nestedatt--event_details))
+* `external_trap_receivers` (List of String, optional) - List of External Trap Receiver aliases
+* `instant_rate_limit` (Number, optional) - Maximum number of instant emails that can be sent per minute
+* `recipients` (List of String, optional) - List of email recipients
+* `recurring_schedule` (String, optional) - Cron expression
+* `send_mail_if_empty` (Boolean, optional) - Send email if no events are generated within time interval
+* `severity` (List of String, optional) - Event Severities
+* `tags` (Attributes List, optional) - Tags (see [below for nested schema](#nestedatt--tags))
+* `task_id` (String, required) - ID of the notification task
+* `task_name` (String, required) - Name of the task
+* `template_details` (List of String, optional) - List of templates used
+* `time_interval` (Number, optional) - Time interval between two batch emails
+* `time_left` (String, optional) - Time left for the next batch task to execute
+* `type` (String, required) - Type of the event notification task
+
+### Attributes
+
+In addition to all arguments above, the following computed attributes are exported:
+
+* `allow_attachment` (Boolean, computed) - Allow attachment in notification email
+* `attachment_limit` (Number, computed) - Maximum number of events to be included in the attachment
+* `comment` (String, computed) - Comments
+* `email_subject_prefix` (String, computed) - Subject of the notification email
+* `enabled` (Boolean, computed) - Status of the notification task
+* `external_trap_receivers` (List of String, computed) - List of External Trap Receiver aliases
+* `id` (String, computed)
+* `instant_rate_limit` (Number, computed) - Maximum number of instant emails that can be sent per minute
+* `recipients` (List of String, computed) - List of email recipients
+* `recurring_schedule` (String, computed) - Cron expression
+* `send_mail_if_empty` (Boolean, computed) - Send email if no events are generated within time interval
+* `severity` (List of String, computed) - Event Severities
+* `tags` (Attributes List, computed) - Tags (see [below for nested schema](#nestedatt--tags))
+* `template_details` (List of String, computed) - List of templates used
+* `time_interval` (Number, computed) - Time interval between two batch emails
+* `time_left` (String, computed) - Time left for the next batch task to execute
+
+<a id="nestedatt--event_details"></a>
+### Nested Schema for `event_details`
+
+Optional:
+
+* `description` (String) - Event Description
+* `display_name` (String) - Event Display Name
+* `event_type` (String) - Event Type
+* `name` (String) - Event Name
+* `scope` (String) - Event Scope
+* `severity` (List of String) - Event Severity
+* `severity_type` (String) - Event Severity Type
+* `sub_type` (String) - Event Subtype
+<a id="nestedatt--tags"></a>
+### Nested Schema for `tags`
+
+Required:
+
+* `tag_key` (String) - Name of the tag
+* `tag_values` (List of String) - All possible values of the tag
+
