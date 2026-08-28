@@ -1,0 +1,45 @@
+---
+page_title: "gigavuecore_get_all_ptp_ports_counters Data Source - gigavuecore"
+subcategory: ""
+description: |-
+  Reads the get all ptp ports counters data source.
+---
+
+# gigavuecore_get_all_ptp_ports_counters Data Source
+
+Reads the get all ptp ports counters data source.
+
+## Example Usage
+
+```terraform
+data "gigavuecore_get_all_ptp_ports_counters" "example" {
+  box_id     = null
+  cluster_id = null
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `box_id` (Number, optional) - specify the cluster node by boxId. By default all nodes are selected.
+* `cluster_id` (String, required) - Target Cluster ID
+
+### Attributes
+
+In addition to all arguments above, the following attributes are exported:
+
+* `items` (Attributes List, computed) (see [below for nested schema](#nestedatt--items))
+
+<a id="nestedatt--items"></a>
+### Nested Schema for `items`
+
+Read-Only:
+
+* `discarded_packets` (Number)
+* `port_id` (String) - Port ID in \[box/slot/portid\] format
+* `rx_packets` (Number)
+* `tx_packets` (Number)
+

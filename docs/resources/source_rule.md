@@ -1,0 +1,116 @@
+---
+page_title: "gigavuecore_source_rule Resource - gigavuecore"
+subcategory: ""
+description: |-
+  Get source rules for a policy and sourceRulesAlias
+---
+
+# gigavuecore_source_rule Resource
+
+Get source rules for a policy and sourceRulesAlias
+
+## Example Usage
+
+```terraform
+resource "gigavuecore_source_rule" "example" {
+  drop_rules = []
+  pass_rules = []
+  rule_ids   = null
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `drop_rules` (Attributes Set, optional) (see [below for nested schema](#nestedatt--drop_rules))
+* `pass_rules` (Attributes Set, optional) (see [below for nested schema](#nestedatt--pass_rules))
+* `rule_ids` (String, required) - Rule IDs to match
+
+### Attributes
+
+In addition to all arguments above, the following computed attributes are exported:
+
+* `drop_rules` (Attributes Set, computed) (see [below for nested schema](#nestedatt--drop_rules))
+* `id` (String, computed)
+* `pass_rules` (Attributes Set, computed) (see [below for nested schema](#nestedatt--pass_rules))
+
+<a id="nestedatt--drop_rules"></a>
+### Nested Schema for `drop_rules`
+
+Required:
+
+* `matches` (Set of Dynamic) - Set of rule's matching elements. Within a rule, matching elements of the the same type MUST NOT be repeated. The 'position' property of each matching element is not relevant for this rule type as only the outer headers are matched
+* `rule_id` (Number)
+Optional:
+
+* `bidi` (Boolean)
+* `comment` (String)
+* `ip_rewrite` (Attributes) - IpRewrite options on the packets (see [below for nested schema](#nestedatt--drop_rules--ip_rewrite))
+* `rewrite` (Attributes) - Rewrite options on the packets (see [below for nested schema](#nestedatt--drop_rules--rewrite))
+* `vlan_tag` (Attributes) (see [below for nested schema](#nestedatt--drop_rules--vlan_tag))
+<a id="nestedatt--drop_rules--ip_rewrite"></a>
+### Nested Schema for `drop_rules.ip_rewrite`
+
+Optional:
+
+* `dst_ip` (String)
+* `src_ip` (String)
+<a id="nestedatt--drop_rules--rewrite"></a>
+### Nested Schema for `drop_rules.rewrite`
+
+Optional:
+
+* `dst_mac` (String)
+* `src_mac` (String)
+<a id="nestedatt--drop_rules--vlan_tag"></a>
+### Nested Schema for `drop_rules.vlan_tag`
+
+Required:
+
+* `vlan_action` (String)
+Optional:
+
+* `tag_protocol_id` (String)
+* `vlan_id` (Number)
+<a id="nestedatt--pass_rules"></a>
+### Nested Schema for `pass_rules`
+
+Required:
+
+* `matches` (Set of Dynamic) - Set of rule's matching elements. Within a rule, matching elements of the the same type MUST NOT be repeated. The 'position' property of each matching element is not relevant for this rule type as only the outer headers are matched
+* `rule_id` (Number)
+Optional:
+
+* `bidi` (Boolean)
+* `comment` (String)
+* `ip_rewrite` (Attributes) - IpRewrite options on the packets (see [below for nested schema](#nestedatt--pass_rules--ip_rewrite))
+* `rewrite` (Attributes) - Rewrite options on the packets (see [below for nested schema](#nestedatt--pass_rules--rewrite))
+* `vlan_tag` (Attributes) (see [below for nested schema](#nestedatt--pass_rules--vlan_tag))
+<a id="nestedatt--pass_rules--ip_rewrite"></a>
+### Nested Schema for `pass_rules.ip_rewrite`
+
+Optional:
+
+* `dst_ip` (String)
+* `src_ip` (String)
+<a id="nestedatt--pass_rules--rewrite"></a>
+### Nested Schema for `pass_rules.rewrite`
+
+Optional:
+
+* `dst_mac` (String)
+* `src_mac` (String)
+<a id="nestedatt--pass_rules--vlan_tag"></a>
+### Nested Schema for `pass_rules.vlan_tag`
+
+Required:
+
+* `vlan_action` (String)
+Optional:
+
+* `tag_protocol_id` (String)
+* `vlan_id` (Number)
+
