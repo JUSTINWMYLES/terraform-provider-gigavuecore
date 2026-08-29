@@ -1,0 +1,39 @@
+---
+page_title: "gigavuecore_node Resource - gigavuecore"
+subcategory: ""
+description: |-
+  Get tool configuration for a GigaInsight Node
+---
+
+# gigavuecore_node Resource
+
+Get tool configuration for a GigaInsight Node
+
+## Example Usage
+
+```terraform
+resource "gigavuecore_node" "example" {
+  env     = "example"
+  node_id = "example"
+  yaml    = "example"
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `env` (Dynamic, required)
+* `node_id` (String, required) - The unique identifier of the GigaInsight Node
+* `yaml` (Dynamic, required)
+
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+terraform import gigavuecore_node.example {node_id}
+```

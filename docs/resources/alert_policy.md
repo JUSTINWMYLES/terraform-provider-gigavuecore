@@ -1,0 +1,121 @@
+---
+page_title: "gigavuecore_alert_policy Resource - gigavuecore"
+subcategory: ""
+description: |-
+  Load Alert policy
+---
+
+# gigavuecore_alert_policy Resource
+
+Load Alert policy
+
+## Example Usage
+
+```terraform
+resource "gigavuecore_alert_policy" "example" {
+  clear_condition = {
+    interval = {
+      duration = 0
+      unit     = "example"
+    }
+    threshold = {
+      severity  = "example"
+      threshold = 1.0
+    }
+    type = "example"
+  }
+  condition = {
+    interval = {
+      duration = 0
+      unit     = "example"
+    }
+    thresholds = [{
+      severity  = "example"
+      threshold = 1.0
+    }]
+  }
+  description   = "example"
+  enabled       = true
+  metric        = "example"
+  policy_name   = "example"
+  resource_type = "example"
+  resources     = "example"
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `clear_condition` (Attributes, required) (see [below for nested schema](#nestedatt--clear_condition))
+* `condition` (Attributes, required) (see [below for nested schema](#nestedatt--condition))
+* `description` (String, optional) - Description of the alert policy
+* `enabled` (Boolean, optional) - Status of the alert policy
+* `metric` (String, required) - Metric name for which the alert policy is created
+* `policy_name` (String, required) - Name of the alert policy, like an alias
+* `resource_type` (String, optional) - Type of the resource, only tunnelMonitoring is supported in 6.1
+* `resources` (Dynamic, required) - Resources associated to alert policy. Based on source type, the resources structure varies
+
+### Attributes
+
+In addition to all arguments above, the following computed attributes are exported:
+
+* `description` (String, computed) - Description of the alert policy
+* `enabled` (Boolean, computed) - Status of the alert policy
+* `resource_type` (String, computed) - Type of the resource, only tunnelMonitoring is supported in 6.1
+
+<a id="nestedatt--clear_condition"></a>
+### Nested Schema for `clear_condition`
+
+Required:
+
+* `interval` (Attributes) (see [below for nested schema](#nestedatt--clear_condition--interval))
+* `type` (String) - Alert clear type
+Optional:
+
+* `threshold` (Attributes) (see [below for nested schema](#nestedatt--clear_condition--threshold))
+<a id="nestedatt--clear_condition--interval"></a>
+### Nested Schema for `clear_condition.interval`
+
+Required:
+
+* `duration` (Number) - Averaging time duration
+* `unit` (String) - Unit of duration
+<a id="nestedatt--clear_condition--threshold"></a>
+### Nested Schema for `clear_condition.threshold`
+
+Required:
+
+* `severity` (String) - Severity of the alert
+* `threshold` (Number) - Threshold percentage value
+<a id="nestedatt--condition"></a>
+### Nested Schema for `condition`
+
+Required:
+
+* `interval` (Attributes) (see [below for nested schema](#nestedatt--condition--interval))
+* `thresholds` (Attributes List) - Alert threshold definitions (see [below for nested schema](#nestedatt--condition--thresholds))
+<a id="nestedatt--condition--interval"></a>
+### Nested Schema for `condition.interval`
+
+Required:
+
+* `duration` (Number) - Averaging time duration
+* `unit` (String) - Unit of duration
+<a id="nestedatt--condition--thresholds"></a>
+### Nested Schema for `condition.thresholds`
+
+Required:
+
+* `severity` (String) - Severity of the alert
+* `threshold` (Number) - Threshold percentage value
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+terraform import gigavuecore_alert_policy.example {policy_name}
+```
