@@ -1,0 +1,36 @@
+---
+page_title: "gigavuecore_add_map_ap_rule Action - gigavuecore"
+subcategory: ""
+description: |-
+  Add new apRule to a 'secondlevel/byRule' map
+---
+
+# gigavuecore_add_map_ap_rule Action
+
+Add new apRule to a 'secondlevel/byRule' map
+
+## Example Usage
+
+```terraform
+action "gigavuecore_add_map_ap_rule" "example" {
+  config {
+    alias               = "example"
+    application_profile = "example"
+    rule_id             = 0
+    rule_type           = "example"
+  }
+}
+
+```
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `alias` (String, required) - alias of the target map
+* `application_profile` (String, required) - application profile alias
+* `rule_id` (Number, required) - application profile rule Id, should not have same id as gsRules
+* `rule_type` (String, required) - map rule type
+
+

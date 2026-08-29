@@ -1,0 +1,17 @@
+data "gigavuecore_get_alarms_count_by_parameter" "example" {
+  acknowledged     = "example"
+  acknowledgedby   = "example"
+  alias            = "example"
+  cluster_id       = "example"
+  device_ip        = "example"
+  end_time         = "example"
+  group_by         = "example"
+  hostname         = "example"
+  resource_id      = "example"
+  resource_type    = "example"
+  severity         = "example"
+  start_time       = "example"
+  suppressed       = "example"
+  type             = "example"
+  unacknowledgedby = "example"
+}

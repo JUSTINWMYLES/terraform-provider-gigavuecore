@@ -1,0 +1,141 @@
+package provider
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/url"
+	"strings"
+)
+import (
+	client "github.com/gigavuecore/terraform-provider-gigavuecore/internal/client"
+	action "github.com/hashicorp/terraform-plugin-framework/action"
+	schema "github.com/hashicorp/terraform-plugin-framework/action/schema"
+	types "github.com/hashicorp/terraform-plugin-framework/types"
+)
+
+// Compile-time interface assertion for action.Action.
+var _ action.Action = (*UpdateMapChainAction)(nil)
+
+// Compile-time interface assertion for action.ActionWithConfigure.
+var _ action.ActionWithConfigure = (*UpdateMapChainAction)(nil)
+
+// UpdateMapChainAction is the generated Terraform action implementation.
+type UpdateMapChainAction struct {
+	client *client.Client
+}
+
+// UpdateMapChainActionModel describes the action configuration shape.
+type UpdateMapChainActionModel struct {
+	Alias            types.String `tfsdk:"alias"`
+	PolicyAlias      types.String `tfsdk:"policy_alias"`
+	PriorityConfigs  types.List   `tfsdk:"priority_configs" json:"priorityConfigs"`
+	SourceAlias      types.String `tfsdk:"source_alias" json:"sourceAlias"`
+	SourceRulesAlias types.String `tfsdk:"source_rules_alias"`
+}
+
+// NewUpdateMapChainAction returns a new instance of the generated action.
+func NewUpdateMapChainAction() action.Action {
+	return &UpdateMapChainAction{}
+}
+
+// Metadata returns the action type name.
+func (r *UpdateMapChainAction) Metadata(_ context.Context, req action.MetadataRequest, resp *action.MetadataResponse) {
+	resp.TypeName = "gigavuecore_update_map_chain"
+}
+
+// Schema returns the action schema.
+func (r *UpdateMapChainAction) Schema(_ context.Context, _ action.SchemaRequest, resp *action.SchemaResponse) {
+	resp.Schema = schema.Schema{Description: "Update map chain for a given policy and source rule", Attributes: map[string]schema.Attribute{"alias": schema.StringAttribute{Required: true}, "policy_alias": schema.StringAttribute{MarkdownDescription: "Policy alias", Required: true}, "priority_configs": schema.ListNestedAttribute{Optional: true, NestedObject: schema.NestedAttributeObject{Attributes: map[string]schema.Attribute{"cluster_name": schema.StringAttribute{Required: true}, "collector_map_alias": schema.StringAttribute{Optional: true}, "map_chain_id": schema.StringAttribute{Optional: true}, "ordered_components": schema.ListNestedAttribute{Required: true, NestedObject: schema.NestedAttributeObject{Attributes: map[string]schema.Attribute{"alias": schema.StringAttribute{MarkdownDescription: "components alias is mandatory, it cannot be empty", Required: true}, "health_state": schema.StringAttribute{MarkdownDescription: "Read-only. 'green' indicates healthy state; 'yellow'  indicates warning state; 'orange'  indicates error state; 'red'  indicates critical state;", Optional: true}, "health_state_reasons": schema.ListNestedAttribute{Optional: true, NestedObject: schema.NestedAttributeObject{Attributes: map[string]schema.Attribute{"message": schema.StringAttribute{MarkdownDescription: "Read-only. Describes the reason for component's health state", Optional: true}, "severity": schema.StringAttribute{MarkdownDescription: "Read-only. 'green' indicates healthy state; 'yellow'  indicates warning state; 'orange'  indicates error state; 'red'  indicates critical state;", Optional: true}, "traffic_health_state_computation_type": schema.StringAttribute{MarkdownDescription: "Traffic Health State Computation Type", Optional: true}}}}, "source_alias": schema.StringAttribute{Optional: true}, "traffic_health_state": schema.StringAttribute{MarkdownDescription: "Read-only. 'green' indicates healthy state; 'yellow'  indicates warning state; 'orange'  indicates error state; 'red'  indicates critical state;", Optional: true}, "traffic_health_state_reasons": schema.ListNestedAttribute{Optional: true, NestedObject: schema.NestedAttributeObject{Attributes: map[string]schema.Attribute{"message": schema.StringAttribute{MarkdownDescription: "Read-only. Describes the reason for component's health state", Optional: true}, "severity": schema.StringAttribute{MarkdownDescription: "Read-only. 'green' indicates healthy state; 'yellow'  indicates warning state; 'orange'  indicates error state; 'red'  indicates critical state;", Optional: true}, "traffic_health_state_computation_type": schema.StringAttribute{MarkdownDescription: "Traffic Health State Computation Type", Optional: true}}}}, "type": schema.StringAttribute{Optional: true}}}}, "src_ports_as_id": schema.StringAttribute{Required: true}}}}, "source_alias": schema.StringAttribute{Required: true}, "source_rules_alias": schema.StringAttribute{MarkdownDescription: "Source rules alias", Required: true}}}
+}
+
+// Invoke executes the action against the remote API.
+func (r *UpdateMapChainAction) Invoke(ctx context.Context, req action.InvokeRequest, resp *action.InvokeResponse) {
+	var config UpdateMapChainActionModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	r.invokeRemote(ctx, &config, resp)
+}
+
+// invokeRemote performs the invoke HTTP exchange and surfaces any error via diagnostics. Extracted from Invoke so the request/response logic is unit-testable without a tfsdk.Config.
+func (r *UpdateMapChainAction) invokeRemote(ctx context.Context, config *UpdateMapChainActionModel, resp *action.InvokeResponse) {
+	if r.client == nil {
+		resp.Diagnostics.AddError("Client Not Configured", "The API client was not set on the resource. The provider Configure method must run before resource operations; this is a bug in the generated provider.")
+		return
+	}
+	reqPath := "/traffic-flows/mapChains/{policyAlias}/sourceRules/{sourceRulesAlias}"
+	reqPath = strings.ReplaceAll(reqPath, "{policyAlias}", url.PathEscape(config.PolicyAlias.ValueString()))
+	reqPath = strings.ReplaceAll(reqPath, "{sourceRulesAlias}", url.PathEscape(config.SourceRulesAlias.ValueString()))
+	body, err := modelToJSONMap(&config)
+	if err != nil {
+		resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", fmt.Sprintf("Could not build request body: %s", err))
+		return
+	}
+	payload, err := json.Marshal(body)
+	if err != nil {
+		resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", fmt.Sprintf("Could not encode request body: %s", err))
+		return
+	}
+	httpReq, err := r.client.NewRequest(ctx, http.MethodPatch, reqPath, bytes.NewReader(payload))
+	if err != nil {
+		resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", fmt.Sprintf("Could not build request: %s", err))
+		return
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+	httpResp, err := r.client.Do(httpReq)
+	if err != nil {
+		resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", fmt.Sprintf("Could not send request: %s", err))
+		return
+	}
+	defer httpResp.Body.Close()
+	if !(httpResp.StatusCode == 202) {
+		switch httpResp.StatusCode {
+		case 400:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", "Invalid request. See errors payload for details")
+			return
+		case 401:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", "Not Authenticated. See errors payload for details")
+			return
+		case 403:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", "Access Denied. See errors payload for details")
+			return
+		case 404:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", "Entity Not Found. See errors payload for details")
+			return
+		case 409:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", "Entity Already Exists. See errors payload for details")
+			return
+		case 500:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", "Internal Server Error. See errors payload for details")
+			return
+		case 503:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", "Service Unavailable. See errors payload for details")
+			return
+		default:
+			apiErr, err := client.NewAPIError(httpResp)
+			if err != nil {
+				resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", fmt.Sprintf("Could not read error response: %s", err))
+				return
+			}
+			resp.Diagnostics.AddError("Error invoking gigavuecore_update_map_chain", apiErr.Error())
+			return
+		}
+	}
+}
+
+// Configure stores the API client supplied by the provider.
+func (r *UpdateMapChainAction) Configure(_ context.Context, req action.ConfigureRequest, resp *action.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError("Unexpected Action Configure Type", fmt.Sprintf("Expected *client.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData))
+		return
+	}
+	r.client = c
+}
