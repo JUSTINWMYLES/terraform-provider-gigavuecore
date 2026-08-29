@@ -1273,11 +1273,8 @@ resource_overrides:
 - schema: archive_server
   operation: createFmBackupArchiveServer
   resource_name: archive_server
-  id_attribute: server_alias
-  import_format: '{server_alias}'
-  computed_attributes:
-  - server_alias
-  - user_pwd
+  id_attribute: alias
+  import_format: '{alias}'
 - schema: network_group
   operation: createGigaFlexInlineNetworkGroup
   resource_name: network_group
@@ -2936,8 +2933,8 @@ resource_overrides:
 - schema: v3_user
   operation: createV3User
   resource_name: v3_user
-  id_attribute: user_name
-  import_format: '{user_name}'
+  id_attribute: username
+  import_format: '{username}'
   computed_attributes:
   - auth_key
   - auth_protocol
@@ -2945,7 +2942,6 @@ resource_overrides:
   - priv_key
   - priv_protocol
   - read_only
-  - user_name
 - schema: vport
   operation: createVport
   resource_name: vport
@@ -3211,7 +3207,8 @@ resource_overrides:
 - schema: notif_meta_config
   operation: updateEventNotificationConfiguration
   resource_name: notif_meta_config
-  id_attribute: id
+  id_attribute: task_id
+  import_format: '{type}/{task_id}'
   computed_attributes:
   - allow_attachment
   - attachment_limit
