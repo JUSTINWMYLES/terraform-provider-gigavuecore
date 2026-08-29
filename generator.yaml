@@ -2178,8 +2178,8 @@ resource_overrides:
 - schema: port_filter
   operation: createPortFilter
   resource_name: port_filter
-  id_attribute: port_id
-  import_format: '{port_id}'
+  id_attribute: port
+  import_format: '{port}'
   computed_attributes:
   - port_id
   - drop_rules
