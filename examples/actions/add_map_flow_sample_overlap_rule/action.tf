@@ -1,0 +1,26 @@
+action "gigavuecore_add_map_flow_sample_overlap_rule" "example" {
+  config {
+    alias   = "example"
+    comment = "example"
+    gtp = {
+      apn       = "example"
+      eci       = "example"
+      imei      = "example"
+      imsi      = "example"
+      interface = "Gn"
+      msisdn    = "example"
+      nas_5_qi  = "0"
+      nci       = "example"
+      plmn_id   = "example"
+      qci       = 0
+      snssai    = "0"
+      tac       = "abc1"
+      tac_5_g   = "example"
+      version   = "any"
+    }
+    percentage      = 0
+    periodic_recalc = true
+    priority        = 1
+    rule_id         = 1
+  }
+}

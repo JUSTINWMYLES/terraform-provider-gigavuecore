@@ -1,28 +1,36 @@
-# terraform-provider-gigavuecore
-Gigamon GigaVUE-FM Core Terraform Provider
+# gigavuecore Terraform Provider
 
-This repository holds the OpenAPI specification sources and the
-[eidos](https://github.com/signalbreak-labs/eidos) `generator.yaml` used to
-generate the Terraform provider code. The generated provider code itself is not
-committed.
+The `gigavuecore` Terraform provider is used to manage resources on `registry.terraform.io/gigavuecore/gigavuecore`.
 
-## Layout
+## Requirements
 
-- `generator.yaml` — eidos generator configuration (117 resources, 457 data
-  sources, 554 actions, 2 ephemeral resources, 119 list resources, 3 functions).
-- `spec/openapi.fm.yaml` — the upstream GigaVUE-FM 6.14.00 Core OpenAPI spec
-  (contains external JSON Schema `$ref`s).
-- `spec/source/**` — the external JSON Schema files referenced by the spec.
-- `spec/openapi.fm.bundled.yaml` — the spec with every external ref inlined into
-  local `#/components/schemas` refs (the file eidos consumes).
-- `tools/bundle.py` — the bundler that produces the bundled spec.
+- [Terraform](https://www.terraform.io/downloads.html) >= 1.0
+- [Go](https://golang.org/doc/install) >= 1.26
 
-## Regenerating
+## Development
 
-```sh
-python3 tools/bundle.py          # rebuild spec/openapi.fm.bundled.yaml
-eidos generate --config generator.yaml --output ./gen
+Build and install the provider locally:
+
+```shell
+make install
 ```
 
-Run `eidos generate` from the repository root so the relative `spec.path` in
-`generator.yaml` resolves.
+To test the provider without publishing it, add a `dev_overrides` block to `~/.terraformrc`:
+
+```hcl
+provider_installation {
+  dev_overrides {
+    "registry.terraform.io/gigavuecore/gigavuecore" = "<path to go bin directory>"
+  }
+  direct {}
+}
+```
+
+## Registry
+
+This provider is prepared for publication to the Terraform Registry. The source
+address `registry.terraform.io/gigavuecore/gigavuecore` can be used once the provider is
+published by the operator. The generated release workflow and
+`.goreleaser.yml` produce Terraform Registry-compatible artifacts,
+but the repository itself does **not** automatically submit or list the provider
+on registry.terraform.io. Registry publishing is left to the operator.
