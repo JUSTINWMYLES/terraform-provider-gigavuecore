@@ -3073,6 +3073,13 @@ resource_overrides:
   generate_resource: true
   resource_name: activation
   read_operation: getEmsActivations
+  delete_operation: reclaimEmsActivations
+  id_attribute: eli_id
+  include_create_response_attributes:
+  - aid
+  path_params:
+    read:
+      entlItemId: eli_id
 - operation: redefineMapChain
   generate_resource: true
   resource_name: map_chain
@@ -5032,9 +5039,6 @@ action_overrides:
 - operation: setEmsPreferences
   name: set_ems_preferences
   description: Set opt-in preferences for entitlements/automatic renewals, usage reporting and telemetry
-- operation: reclaimEmsActivations
-  name: reclaim_ems_activations
-  description: Reclaim a license activation, return to entitlement the associated quantity(number of licenses)
 - operation: registerWithEms
   name: register_with_ems
   description: Register FM with EMS
