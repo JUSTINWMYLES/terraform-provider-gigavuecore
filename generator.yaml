@@ -28,8 +28,7 @@ resource_overrides:
   resource_name: global
   read_operation: loadsGlobalFMTemplate
   update_operation: RedefinesTheFMTemplate
-- schema: snmp_trap_receiver
-  operation: addExternalTrapReceiver
+- operation: addExternalTrapReceiver
   resource_name: snmp_trap_receiver
   id_attribute: alias
   import_format: '{alias}'
@@ -59,13 +58,11 @@ resource_overrides:
   read_operation: getNtpServerByAddress
   update_operation: updateNtpServer
   delete_operation: deleteNtpServer
-- schema: endpoint
-  operation: addSslDecryptionEndpoint
+- operation: addSslDecryptionEndpoint
   resource_name: endpoint
   id_attribute: alias
   import_format: '{alias}'
-- schema: interface
-  operation: configIpInterfaces
+- operation: configIpInterfaces
   resource_name: interface
   id_attribute: alias
   import_format: '{alias}'
@@ -93,8 +90,7 @@ resource_overrides:
   read_operation: loadAllCircuitTunnelVxlanGroup
   update_operation: updateCircuitTunnelVxlanGroup
   delete_operation: deleteCircuitTunnelVxlan
-- schema: engine
-  operation: configureGigasmartInterface
+- operation: configureGigasmartInterface
   resource_name: engine
   id_attribute: eport
   import_format: '{eport}'
@@ -110,8 +106,7 @@ resource_overrides:
   - proxy_server_profile
   - status
   - vlan
-- schema: header_strip
-  operation: configureHeaderStrip
+- operation: configureHeaderStrip
   resource_name: header_strip
   id_attribute: box_id
   import_format: '{box_id}'
@@ -122,8 +117,7 @@ resource_overrides:
   resource_name: header_strip_aging
   read_operation: loadBoxHeaderStripAging
   update_operation: updateHeaderStripAging
-- schema: alert_policy
-  operation: createAlertPolicy
+- operation: createAlertPolicy
   resource_name: alert_policy
   id_attribute: policy_name
   import_format: '{policy_name}'
@@ -138,8 +132,7 @@ resource_overrides:
   - tag_configs
   - tag_key
   - tag_values
-- schema: app_visibility
-  operation: createAppVisibilitySolution
+- operation: createAppVisibilitySolution
   resource_name: app_visibility
   id_attribute: solution_alias
   import_format: '{solution_alias}'
@@ -195,8 +188,7 @@ resource_overrides:
   - solution_desc
   - solution_modified_timestamp
   - traffic_policy_graph_alias
-- schema: solution
-  operation: createAppVizSolution
+- operation: createAppVizSolution
   resource_name: solution
   id_attribute: solution_alias
   import_format: '{solution_alias}'
@@ -537,8 +529,7 @@ resource_overrides:
   - solution_desc
   - solution_status
   - solution_type
-- schema: application_profile
-  operation: createApplicationProfile
+- operation: createApplicationProfile
   resource_name: application_profile
   id_attribute: alias
   import_format: '{alias}'
@@ -624,8 +615,7 @@ resource_overrides:
   - udp
   - msg_len
   - type
-- schema: exporter
-  operation: createAppsExporter
+- operation: createAppsExporter
   resource_name: exporter
   id_attribute: alias
   import_format: '{alias}'
@@ -647,16 +637,14 @@ resource_overrides:
   - tags
   - tcp_profile
   - type
-- schema: exporter_group
-  operation: createAppsExporterGroup
+- operation: createAppsExporterGroup
   resource_name: exporter_group
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
   - description
   - exporters
-- schema: listener
-  operation: createAppsListener
+- operation: createAppsListener
   resource_name: listener
   id_attribute: alias
   import_format: '{alias}'
@@ -692,8 +680,7 @@ resource_overrides:
   read_operation: getAppsTcpProfilesByAlias
   update_operation: modifyAppsTcpProfile
   delete_operation: deleteAppsTcpProfile
-- schema: tunnel_application
-  operation: createAppsTunnelApplication
+- operation: createAppsTunnelApplication
   resource_name: tunnel_application
   id_attribute: alias
   import_format: '{alias}'
@@ -827,8 +814,7 @@ resource_overrides:
   - tcp_profile_alias
   - traffic_dir
   - tunnel_type
-- schema: policy
-  operation: createAvisiPolicy
+- operation: createAvisiPolicy
   resource_name: policy
   id_attribute: policy_id
   import_format: '{policy_id}'
@@ -840,8 +826,7 @@ resource_overrides:
   - params
   - key
   - value
-- schema: circuit_tunnel
-  operation: createCircuitTunnel
+- operation: createCircuitTunnel
   resource_name: circuit_tunnel
   id_attribute: alias
   import_format: '{alias}'
@@ -853,8 +838,7 @@ resource_overrides:
   - l4_src_port
   - mode
   - type
-- schema: connection
-  operation: createConnection
+- operation: createConnection
   resource_name: connection
   computed_attributes:
   - unified_resources_connection_get_query_response
@@ -914,8 +898,7 @@ resource_overrides:
   resource_name: diameter_whitelist
   read_operation: loadDiameterWhitelists
   delete_operation: deleteDiameterWhitelists
-- schema: elb
-  operation: createElb
+- operation: createElb
   resource_name: elb
   id_attribute: alias
   import_format: '{alias}'
@@ -927,8 +910,7 @@ resource_overrides:
   resource_name: email_recipient
   read_operation: getRecipients
   delete_operation: deleteRecipientByEmailAddress
-- schema: enhanced_slicing
-  operation: createEnhancedSlicing
+- operation: createEnhancedSlicing
   resource_name: enhanced_slicing
   id_attribute: alias
   import_format: '{alias}'
@@ -944,11 +926,9 @@ resource_overrides:
   - ip
   - none
   - transport
-- schema: export_target
-  operation: createExternalExportServer
+- operation: createExternalExportServer
   resource_name: export_target
-- schema: fabric_map
-  operation: createFabricMap
+- operation: createFabricMap
   resource_name: fabric_map
   id_attribute: alias
   import_format: '{alias}'
@@ -1071,8 +1051,7 @@ resource_overrides:
   - error_message
   - parent_map_aliases
   - pending_reason
-- schema: fabric_port_group
-  operation: createFabricPortGroup
+- operation: createFabricPortGroup
   resource_name: fabric_port_group
   id_attribute: alias
   import_format: '{alias}'
@@ -1087,16 +1066,14 @@ resource_overrides:
   - tags
   - traffic_health_state
   - traffic_health_state_reasons
-- schema: filter_template
-  operation: createFilterTemplate
+- operation: createFilterTemplate
   resource_name: filter_template
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
   - qualifier_set
   - qualifiers
-- schema: flex_inline
-  operation: createFlexInlineSolution
+- operation: createFlexInlineSolution
   resource_name: flex_inline
   id_attribute: alias
   import_format: '{alias}'
@@ -1120,8 +1097,7 @@ resource_overrides:
   - side_a
   - side_b
   - target_traffic_path
-- schema: inline_ssl_app
-  operation: createFlexInlineSslApp
+- operation: createFlexInlineSslApp
   resource_name: inline_ssl_app
   id_attribute: alias
   import_format: '{alias}'
@@ -1270,13 +1246,11 @@ resource_overrides:
   - ria_enabled
   sensitive_attributes:
   - password
-- schema: archive_server
-  operation: createFmBackupArchiveServer
+- operation: createFmBackupArchiveServer
   resource_name: archive_server
   id_attribute: alias
   import_format: '{alias}'
-- schema: network_group
-  operation: createGigaFlexInlineNetworkGroup
+- operation: createGigaFlexInlineNetworkGroup
   resource_name: network_group
   id_attribute: alias
   import_format: '{alias}'
@@ -1290,8 +1264,7 @@ resource_overrides:
   - members
   - cluster_name
   - type
-- schema: gigastream
-  operation: createGigastream
+- operation: createGigastream
   resource_name: gigastream
   id_attribute: alias
   import_format: '{alias}'
@@ -1311,16 +1284,14 @@ resource_overrides:
   - ports
   - threshold_level
   - variance_threshold
-- schema: gpfcp_profile
-  operation: createGpfcpProfile
+- operation: createGpfcpProfile
   resource_name: gpfcp_profile
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
   - comment
   - ip_addresses
-- schema: gs_group
-  operation: createGsGroup
+- operation: createGsGroup
   resource_name: gs_group
   id_attribute: alias
   import_format: '{alias}'
@@ -1455,8 +1426,7 @@ resource_overrides:
   - session_timeout
   - tcp_syn_timeout
   - ticket_cache_timeout
-- schema: gsop
-  operation: createGsop
+- operation: createGsop
   resource_name: gsop
   id_attribute: alias
   import_format: '{alias}'
@@ -1539,8 +1509,7 @@ resource_overrides:
   - message
   - severity
   - traffic_health_state_computation_type
-- schema: gta_profile
-  operation: createGtaProfile
+- operation: createGtaProfile
   resource_name: gta_profile
   id_attribute: alias
   import_format: '{alias}'
@@ -1559,8 +1528,7 @@ resource_overrides:
   resource_name: gtp_whitelist
   read_operation: loadGtpWhitelists
   delete_operation: deleteGtpWhitelists
-- schema: hb_profile
-  operation: createHeartbeatProfile
+- operation: createHeartbeatProfile
   resource_name: hb_profile
   id_attribute: alias
   import_format: '{alias}'
@@ -1574,8 +1542,7 @@ resource_overrides:
   - recovery_time
   - retries
   - timeout
-- schema: hsm
-  operation: createHsm
+- operation: createHsm
   resource_name: hsm
   id_attribute: alias
   import_format: '{alias}'
@@ -1590,8 +1557,7 @@ resource_overrides:
   sensitive_attributes:
   - partition_password
   - server_password
-- schema: hsm_group
-  operation: createHsmGroup
+- operation: createHsmGroup
   resource_name: hsm_group
   id_attribute: alias
   import_format: '{alias}'
@@ -1599,8 +1565,7 @@ resource_overrides:
   - comment
   - hsms
   - operational_status
-- schema: ib_pathway
-  operation: createIbPathway
+- operation: createIbPathway
   resource_name: ib_pathway
   id_attribute: alias
   import_format: '{alias}'
@@ -1610,8 +1575,7 @@ resource_overrides:
   - operational_state
   - ports
   - traffic_path
-- schema: icap
-  operation: createIcapClient
+- operation: createIcapClient
   resource_name: icap
   id_attribute: alias
   import_format: '{alias}'
@@ -1640,8 +1604,7 @@ resource_overrides:
   - reqmod_service_url
   - respmod_service_url
   - ing_alias
-- schema: profile
-  operation: createIcapProfile
+- operation: createIcapProfile
   resource_name: profile
   id_attribute: alias
   import_format: '{alias}'
@@ -1652,8 +1615,7 @@ resource_overrides:
   - resp_mod
   - resp_timeout
   - resp_timeout_action
-- schema: server
-  operation: createIcapServer
+- operation: createIcapServer
   resource_name: server
   id_attribute: alias
   import_format: '{alias}'
@@ -1662,24 +1624,21 @@ resource_overrides:
   - options_service_url
   - reqmod_service_url
   - respmod_service_url
-- schema: server_group
-  operation: createIcapServerGroup
+- operation: createIcapServerGroup
   resource_name: server_group
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
   - comment
   - icap_servers
-- schema: image_server
-  operation: createImageServer
+- operation: createImageServer
   resource_name: image_server
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
   - user_pwd
   - username
-- schema: network
-  operation: createInlineNetwork
+- operation: createInlineNetwork
   resource_name: network
   id_attribute: alias
   import_format: '{alias}'
@@ -1704,8 +1663,7 @@ resource_overrides:
   read_operation: getInlineNetworkGroupByAlias
   update_operation: updateInlineNetworkGroup
   delete_operation: deleteInlineNetworkGroup
-- schema: network_lag
-  operation: createInlineNetworkLag
+- operation: createInlineNetworkLag
   resource_name: network_lag
   id_attribute: alias
   import_format: '{alias}'
@@ -1724,8 +1682,7 @@ resource_overrides:
   - redundancy_control_state
   - redundancy_profile
   - traffic_path
-- schema: serial_tool_group
-  operation: createInlineSerialToolGroup
+- operation: createInlineSerialToolGroup
   resource_name: serial_tool_group
   id_attribute: alias
   import_format: '{alias}'
@@ -1744,8 +1701,7 @@ resource_overrides:
   read_operation: loadInlineSslProfile
   update_operation: updateInlineSslProfile
   delete_operation: deleteInlineSslProfile
-- schema: tool
-  operation: createInlineTool
+- operation: createInlineTool
   resource_name: tool
   id_attribute: alias
   import_format: '{alias}'
@@ -1771,8 +1727,7 @@ resource_overrides:
   - recovery_mode
   - shared
   - timestamp
-- schema: tool_group
-  operation: createInlineToolGroup
+- operation: createInlineToolGroup
   resource_name: tool_group
   id_attribute: alias
   import_format: '{alias}'
@@ -1795,8 +1750,7 @@ resource_overrides:
   - oper_status
   - release_spare_if_possible
   - spare_inline_tool
-- schema: key
-  operation: createKeystoreKey
+- operation: createKeystoreKey
   resource_name: key
   id_attribute: alias
   import_format: '{alias}'
@@ -1821,8 +1775,7 @@ resource_overrides:
   resource_name: ldap_server
   read_operation: loadAllLdapServers
   delete_operation: deleteLdapServer
-- schema: local_user
-  operation: createLocalUser
+- operation: createLocalUser
   resource_name: local_user
   id_attribute: username
   import_format: '{username}'
@@ -1834,8 +1787,7 @@ resource_overrides:
   - roles
   sensitive_attributes:
   - current_password
-- schema: map
-  operation: createMap
+- operation: createMap
   resource_name: map
   id_attribute: alias
   import_format: '{alias}'
@@ -1950,15 +1902,13 @@ resource_overrides:
   - traffic_type
   - tx_cluster_ports
   - updated_time
-- schema: map_group
-  operation: createMapGroup
+- operation: createMapGroup
   resource_name: map_group
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
   - comment
-- schema: map_template
-  operation: createMapTemplate
+- operation: createMapTemplate
   resource_name: map_template
   id_attribute: alias
   import_format: '{alias}'
@@ -1989,8 +1939,7 @@ resource_overrides:
   - tag_protocol_id
   - vlan_id
   - pass_rules
-- schema: cache
-  operation: createMetadataCache
+- operation: createMetadataCache
   resource_name: cache
   id_attribute: alias
   import_format: '{alias}'
@@ -2070,8 +2019,7 @@ resource_overrides:
   read_operation: loadMetadataExporterByAlias
   update_operation: updateMetadataExporter
   delete_operation: deleteMetadataExporter
-- schema: negative_hb_profile
-  operation: createNegativeHeartbeatProfile
+- operation: createNegativeHeartbeatProfile
   resource_name: negative_hb_profile
   id_attribute: alias
   import_format: '{alias}'
@@ -2087,8 +2035,7 @@ resource_overrides:
   read_operation: getNetflowExporterByAlias
   update_operation: redefineNetflowExporter
   delete_operation: deleteNetflowExporter
-- schema: monitor
-  operation: createNetflowMonitor
+- operation: createNetflowMonitor
   resource_name: monitor
   id_attribute: alias
   import_format: '{alias}'
@@ -2106,8 +2053,7 @@ resource_overrides:
   - ssl_port_restrictions
   - ports
   - ssl_ports
-- schema: record
-  operation: createNetflowRecord
+- operation: createNetflowRecord
   resource_name: record
   id_attribute: alias
   import_format: '{alias}'
@@ -2146,8 +2092,7 @@ resource_overrides:
   - exporters
   - nf_version
   - sampling_rate
-- schema: network_profile
-  operation: createNetworkProfile
+- operation: createNetworkProfile
   resource_name: network_profile
   id_attribute: alias
   import_format: '{alias}'
@@ -2172,8 +2117,7 @@ resource_overrides:
   read_operation: getPolicy
   update_operation: updatePolicy
   delete_operation: deletePolicy
-- schema: port_filter
-  operation: createPortFilter
+- operation: createPortFilter
   resource_name: port_filter
   id_attribute: port
   import_format: '{port}'
@@ -2190,8 +2134,7 @@ resource_overrides:
   - cidr_mask
   - net_mask
   - pass_rules
-- schema: port_group
-  operation: createPortGroup
+- operation: createPortGroup
   resource_name: port_group
   id_attribute: alias
   import_format: '{alias}'
@@ -2208,8 +2151,7 @@ resource_overrides:
   - smart_lb
   - tunnel_lb_endpoints
   - weight
-- schema: port_pair
-  operation: createPortPair
+- operation: createPortPair
   resource_name: port_pair
   id_attribute: alias
   import_format: '{alias}'
@@ -2222,13 +2164,11 @@ resource_overrides:
   - severity
   - traffic_health_state_computation_type
   - lfp_enabled
-- schema: port_throttle
-  operation: createPortThrottle
+- operation: createPortThrottle
   resource_name: port_throttle
   id_attribute: alias
   import_format: '{alias}'
-- schema: radius_server
-  operation: createRadiusServer
+- operation: createRadiusServer
   resource_name: radius_server
   id_attribute: server_address
   import_format: '{server_address}'
@@ -2239,15 +2179,13 @@ resource_overrides:
   - timeout
   sensitive_attributes:
   - secret_key
-- schema: redundancy_profile
-  operation: createRedundancyProfile
+- operation: createRedundancyProfile
   resource_name: redundancy_profile
   id_attribute: alias
   import_format: '{alias}'
   computed_attributes:
   - protection_role
-- schema: sa_apf_profile
-  operation: createSessionAwareApfProfile
+- operation: createSessionAwareApfProfile
   resource_name: sa_apf_profile
   id_attribute: alias
   import_format: '{alias}'
@@ -2259,8 +2197,7 @@ resource_overrides:
   - packet_count
   - pos
   - timeout
-- schema: sffp_profile
-  operation: createSffpProfile
+- operation: createSffpProfile
   resource_name: sffp_profile
   id_attribute: alias
   import_format: '{alias}'
@@ -2271,8 +2208,7 @@ resource_overrides:
   resource_name: sip_whitelist
   read_operation: loadSipWhitelists
   delete_operation: deleteSipWhitelists
-- schema: notif_target
-  operation: createSnmpNotifTarget
+- operation: createSnmpNotifTarget
   resource_name: notif_target
   id_attribute: notif_target_address
   import_format: '{notif_target_address}'
@@ -2290,8 +2226,7 @@ resource_overrides:
   - v3_user
   - version
   - notify_type
-- schema: spine_link
-  operation: createSpineLink
+- operation: createSpineLink
   resource_name: spine_link
   id_attribute: alias
   import_format: '{alias}'
@@ -2303,8 +2238,7 @@ resource_overrides:
   - spine_box_id
   - spine_gigastream
   - stack_link
-- schema: key_map
-  operation: createSslDecryptionKeyMap
+- operation: createSslDecryptionKeyMap
   resource_name: key_map
   id_attribute: alias
   import_format: '{alias}'
@@ -2314,8 +2248,7 @@ resource_overrides:
   - port
   - key
   - comment
-- schema: stack_link
-  operation: createStackLink
+- operation: createStackLink
   resource_name: stack_link
   id_attribute: alias
   import_format: '{alias}'
@@ -2328,8 +2261,7 @@ resource_overrides:
   - traffic_health_state_computation_type
   - port_list1
   - port_list2
-- schema: tacacs_server
-  operation: createTacacsServer
+- operation: createTacacsServer
   resource_name: tacacs_server
   id_attribute: server_address
   import_format: '{server_address}'
@@ -2340,8 +2272,7 @@ resource_overrides:
   - timeout
   sensitive_attributes:
   - secret_key
-- schema: tag
-  operation: createTag
+- operation: createTag
   resource_name: tag
   id_attribute: tag_key
   import_format: '{tag_key}'
@@ -2349,8 +2280,7 @@ resource_overrides:
   - description
   - hierarchical
   - multi_valued
-- schema: ptp_config
-  operation: createTimeStampingPtpConfig
+- operation: createTimeStampingPtpConfig
   resource_name: ptp_config
   id_attribute: alias
   import_format: '{alias}'
@@ -2360,8 +2290,7 @@ resource_overrides:
   - mode
   - priority2
   - step_type
-- schema: tool_port_mirror
-  operation: createToolPortMirror
+- operation: createToolPortMirror
   resource_name: tool_port_mirror
   id_attribute: alias
   import_format: '{alias}'
@@ -2372,8 +2301,7 @@ resource_overrides:
   - message
   - severity
   - traffic_health_state_computation_type
-- schema: traffic_flow
-  operation: createTrafficFlows
+- operation: createTrafficFlows
   resource_name: traffic_flow
   id_attribute: alias
   import_format: '{alias}'
@@ -2829,8 +2757,7 @@ resource_overrides:
   - vlan_id
   - updated_by
   - updated_time
-- schema: traffic_policy_graph
-  operation: createTrafficPolicyGraph
+- operation: createTrafficPolicyGraph
   resource_name: traffic_policy_graph
   id_attribute: alias
   import_format: '{alias}'
@@ -2912,8 +2839,7 @@ resource_overrides:
   - flow_source_reference
   - traffic_health_state
   - traffic_health_state_reasons
-- schema: tunnel_lb_endpoint
-  operation: createTunnelEndpoint
+- operation: createTunnelEndpoint
   resource_name: tunnel_lb_endpoint
   id_attribute: te_id
   import_format: '{te_id}'
@@ -2930,8 +2856,7 @@ resource_overrides:
   read_operation: loadAllUserRoles
   update_operation: redefineUserRole
   delete_operation: deleteUserRole
-- schema: v3_user
-  operation: createV3User
+- operation: createV3User
   resource_name: v3_user
   id_attribute: username
   import_format: '{username}'
@@ -2942,8 +2867,7 @@ resource_overrides:
   - priv_key
   - priv_protocol
   - read_only
-- schema: vport
-  operation: createVport
+- operation: createVport
   resource_name: vport
   id_attribute: alias
   import_format: '{alias}'
@@ -2963,8 +2887,7 @@ resource_overrides:
   - mode
   - outer_traffic_path
   - sa_apf_profile
-- schema: group
-  operation: create_new_user_group
+- operation: create_new_user_group
   resource_name: group
   id_attribute: name
   import_format: '{name}'
@@ -2974,8 +2897,7 @@ resource_overrides:
   - tags
   - multi_valued
   - override_user
-- schema: mobility
-  operation: createmobilitysolution
+- operation: createmobilitysolution
   resource_name: mobility
   id_attribute: solution_alias
   import_format: '{solution_alias}'
@@ -3133,16 +3055,14 @@ resource_overrides:
   - up_nodes
   - stand_alone_mode
   - traffic_policies
-- schema: role
-  operation: createrole
+- operation: createrole
   resource_name: role
   id_attribute: name
   import_format: '{name}'
   computed_attributes:
   - description
   - hierarchy
-- schema: sysdump
-  operation: generateCopilotSysdump
+- operation: generateCopilotSysdump
   resource_name: sysdump
 - operation: modifyNotificationConfig
   generate_resource: true
@@ -3163,8 +3083,7 @@ resource_overrides:
   resource_name: port_config
   read_operation: getPortConfigByAlias
   update_operation: redefinePortConfig
-- schema: source_rule
-  operation: replaceSourceRules
+- operation: replaceSourceRules
   resource_name: source_rule
   id_attribute: id
   computed_attributes:
@@ -3197,15 +3116,13 @@ resource_overrides:
   read_operation: getCopilotConfig
   update_operation: updateCopilotConfig
   delete_operation: resetCopilotConfig
-- schema: adv_hash
-  operation: updateDeviceCardGigastreamAdvHash
+- operation: updateDeviceCardGigastreamAdvHash
   resource_name: adv_hash
   id_attribute: slot_id
   import_format: '{slot_id}'
   computed_attributes:
   - fields
-- schema: notif_meta_config
-  operation: updateEventNotificationConfiguration
+- operation: updateEventNotificationConfiguration
   resource_name: notif_meta_config
   id_attribute: task_id
   import_format: '{type}/{task_id}'
@@ -3233,13 +3150,11 @@ resource_overrides:
   - template_details
   - time_interval
   - time_left
-- schema: node
-  operation: updateGigaInsightToolConfig
+- operation: updateGigaInsightToolConfig
   resource_name: node
   id_attribute: node_id
   import_format: '{node_id}'
-- schema: sub_flow
-  operation: updateSubFlowByAlias
+- operation: updateSubFlowByAlias
   resource_name: sub_flow
   id_attribute: id
   computed_attributes:
@@ -3303,8 +3218,7 @@ resource_overrides:
   - protocol
   - match_type
   - id
-- schema: config
-  operation: uploadBulkReplicateConfigFile
+- operation: uploadBulkReplicateConfigFile
   resource_name: config
   id_attribute: filename
   import_format: '{filename}'
@@ -3313,8 +3227,7 @@ resource_overrides:
   - created_ts
   - created_ts_utc
   - family
-- schema: hb_packet
-  operation: uploadHeartbeatPacket
+- operation: uploadHeartbeatPacket
   resource_name: hb_packet
   id_attribute: alias
   import_format: '{alias}'
@@ -4383,9 +4296,6 @@ action_overrides:
 - operation: deleteAllInlineSslProfiles
   name: delete_all_inline_ssl_profiles
   description: Delete all inline SSL profiles
-- operation: replaceInlineSslProfile
-  name: replace_inline_ssl_profile
-  description: Replace inline SSL profile
 - operation: addProfileDecryptPortMap
   name: add_profile_decrypt_port_map
   description: Add a new port map entry to the profile
@@ -4437,12 +4347,6 @@ action_overrides:
 - operation: addInlineSslTrustStoreCert
   name: add_inline_ssl_trust_store_cert
   description: Add certificate to the inline SSL trust-store
-- operation: appendInlineSslTrustStoreFile
-  name: append_inline_ssl_trust_store_file
-  description: Append inline SSL trust-store from local file
-- operation: deleteTrustStoreCert
-  name: delete_trust_store_cert
-  description: Delete the Trust Store Certificate
 - operation: resetInlineSslTrustStore
   name: reset_inline_ssl_trust_store
   description: Reset inline SSL trust-store to default trust-store
@@ -4479,9 +4383,6 @@ action_overrides:
 - operation: deleteAllAppsListener
   name: delete_all_apps_listener
   description: Delete all Apps Listener
-- operation: redefineMetadataExporter
-  name: redefine_metadata_exporter
-  description: Redefine a metadata exporter
 - operation: createNetflowExporterFilter
   name: create_netflow_exporter_filter
   description: Create Netflow Exporter Filter
@@ -4545,12 +4446,6 @@ action_overrides:
 - operation: replaceSslClientTrustStoreCert
   name: replace_ssl_client_trust_store_cert
   description: Replace certificate to the SSL client trust-store
-- operation: appendSslClientTrustStoreFile
-  name: append_ssl_client_trust_store_file
-  description: Append certificate to the the SSL Client trust-store from local file
-- operation: deleteClientTrustStoreCertificate
-  name: delete_client_trust_store_certificate
-  description: Delete the Client Trust Store Certificate
 - operation: uploadSslClientTrustStoreFile
   name: upload_ssl_client_trust_store_file
   description: Create/Replace the SSL Client trust-store from local file
@@ -4563,12 +4458,6 @@ action_overrides:
 - operation: addSslTrustStoreCert
   name: add_ssl_trust_store_cert
   description: Add certificate to the inline SSL trust-store
-- operation: appendSslTrustStoreFile
-  name: append_ssl_trust_store_file
-  description: Append inline SSL trust-store from local file
-- operation: deleteTrustStoreCertificate
-  name: delete_trust_store_certificate
-  description: Delete the Trust Store Certificate
 - operation: resetSslTrustStore
   name: reset_ssl_trust_store
   description: Reset inline SSL trust-store to default trust-store
@@ -4788,9 +4677,6 @@ action_overrides:
 - operation: deleteAllCopilotSysdumpFile
   name: delete_all_copilot_sysdump_file
   description: Delete all Copilot Sysdump Files
-- operation: deleteNtpServerByServerName
-  name: delete_ntp_server_by_server_name
-  description: Delete NTP Server by servername as pathparam
 - operation: enableFMNTPService
   name: enable_fmntp_service
   description: Enable/Disable NTP Service in FM
@@ -5040,9 +4926,6 @@ action_overrides:
 - operation: uploadNegativeHeartbeatPacketFromFile
   name: upload_negative_heartbeat_packet_from_file
   description: Upload a Negative Heartbeat Packet from local file
-- operation: redefineInlineNetworkGroup
-  name: redefine_inline_network_group
-  description: Redefine an Inline Network Group
 - operation: clearHbStatisticsInlineTool
   name: clear_hb_statistics_inline_tool
   description: Clear heartbeat statistics of all Inline Tools
@@ -5500,15 +5383,9 @@ action_overrides:
 - operation: createNodeSystemConfigFile
   name: create_node_system_config_file
   description: Save the running configuration
-- operation: uploadSystemConfigFile
-  name: upload_system_config_file
-  description: Upload a configuration file from local file.
 - operation: fetchNodeSystemConfigFile
   name: fetch_node_system_config_file
   description: Instruct the device to download a configuration file from a remote host
-- operation: deleteNodeSystemConfigFile
-  name: delete_node_system_config_file
-  description: Delete a system configuration file
 - operation: revertNodeSystemConfigFile
   name: revert_node_system_config_file
   description: Revert running configuration to last saved configuration
@@ -5641,9 +5518,6 @@ action_overrides:
 - operation: deleteNtpAuthKey
   name: delete_ntp_auth_key
   description: Delete NTP Auth Key by alias
-- operation: redefineNtpServer
-  name: redefine_ntp_server
-  description: Redefine NTP Server configuration
 - operation: ntpSync
   name: ntp_sync
   description: Perform one-time synchronization of the H Series node's system clock with a specified NTP server.
@@ -5948,22 +5822,14 @@ ephemeral_resource_overrides:
   description: Revoke other user tokens of FM Users. Users with FM Security Management role with write access can access API.
   open_mapping: POST /tokens/manage/secret/regenerate
 list_resource_overrides:
-- resource: load_all_alarms
-  operation: loadAllAlarms
-- resource: get_all_app_filter_rsc
-  operation: getAllAppFilterRsc
-- resource: load_all_elbs
-  operation: loadAllElbs
-- resource: load_all_enhanced_slicings
-  operation: loadAllEnhancedSlicings
-- resource: get_all_apps_exporter
-  operation: getAllAppsExporter
-- resource: get_all_exporter_group
-  operation: getAllExporterGroup
-- resource: get_all_hsms
-  operation: getAllHsms
-- resource: load_all_icap_profiles
-  operation: loadAllIcapProfiles
+- operation: loadAllAlarms
+- operation: getAllAppFilterRsc
+- operation: loadAllElbs
+- operation: loadAllEnhancedSlicings
+- operation: getAllAppsExporter
+- operation: getAllExporterGroup
+- operation: getAllHsms
+- operation: loadAllIcapProfiles
   config_schema:
   - name: cluster_id
     type: string
@@ -5976,8 +5842,7 @@ list_resource_overrides:
     type: string
     optional: true
     description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
-- resource: load_all_icap_servers
-  operation: loadAllIcapServers
+- operation: loadAllIcapServers
   config_schema:
   - name: cluster_id
     type: string
@@ -5990,8 +5855,7 @@ list_resource_overrides:
     type: string
     optional: true
     description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
-- resource: load_all_icap_server_groups
-  operation: loadAllIcapServerGroups
+- operation: loadAllIcapServerGroups
   config_schema:
   - name: cluster_id
     type: string
@@ -6004,56 +5868,33 @@ list_resource_overrides:
     type: string
     optional: true
     description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
-- resource: load_inline_ssl_cert_valid_status
-  operation: loadInlineSslCertValidStatus
-- resource: load_inline_ssl_url_status
-  operation: loadInlineSslUrlStatus
-- resource: fetch_inline_ssl_profile_all_list_info
-  operation: fetchInlineSslProfileAllListInfo
-- resource: download_list
-  operation: downloadList
-- resource: get_keystore_keys
-  operation: getKeystoreKeys
-- resource: get_all_apps_listener
-  operation: getAllAppsListener
-- resource: load_all_metadata_application_profiles
-  operation: loadAllMetadataApplicationProfiles
-- resource: load_all_metadata_cache
-  operation: loadAllMetadataCache
-- resource: load_all_metadata_network_profiles
-  operation: loadAllMetadataNetworkProfiles
-- resource: load_all_netflow_monitors
-  operation: loadAllNetflowMonitors
-- resource: load_all_netflow_records
-  operation: loadAllNetflowRecords
-- resource: load_all_port_throttles
-  operation: loadAllPortThrottles
-- resource: load_all_session_aware_apf_profiles
-  operation: loadAllSessionAwareApfProfiles
-- resource: load_all_ssl_decryption_endpoints
-  operation: loadAllSslDecryptionEndpoints
-- resource: load_all_ssl_decryption_key_maps
-  operation: loadAllSslDecryptionKeyMaps
-- resource: get_ssl_client_trust_store_list
-  operation: getSslClientTrustStoreList
-- resource: get_all_tunnel_application
-  operation: getAllTunnelApplication
-- resource: load_all_app_viz_solutions
-  operation: loadAllAppVizSolutions
+- operation: loadInlineSslCertValidStatus
+- operation: loadInlineSslUrlStatus
+- operation: fetchInlineSslProfileAllListInfo
+- operation: downloadList
+- operation: getKeystoreKeys
+- operation: getAllAppsListener
+- operation: loadAllMetadataApplicationProfiles
+- operation: loadAllMetadataCache
+- operation: loadAllMetadataNetworkProfiles
+- operation: loadAllNetflowMonitors
+- operation: loadAllNetflowRecords
+- operation: loadAllPortThrottles
+- operation: loadAllSessionAwareApfProfiles
+- operation: loadAllSslDecryptionEndpoints
+- operation: loadAllSslDecryptionKeyMaps
+- operation: getSslClientTrustStoreList
+- operation: getAllTunnelApplication
+- operation: loadAllAppVizSolutions
   config_schema:
   - name: cluster_id
     type: string
     description: clusterId
-- resource: load_audit_log_entries
-  operation: loadAuditLogEntries
-- resource: get_avisi_policies
-  operation: getAvisiPolicies
-- resource: load_all_circuit_tunnels
-  operation: loadAllCircuitTunnels
-- resource: list_fm_stored_clusters_config_backup_snapshots
-  operation: listFmStoredClustersConfigBackupSnapshots
-- resource: list_bulk_replicate_config_files
-  operation: listBulkReplicateConfigFiles
+- operation: loadAuditLogEntries
+- operation: getAvisiPolicies
+- operation: loadAllCircuitTunnels
+- operation: listFmStoredClustersConfigBackupSnapshots
+- operation: listBulkReplicateConfigFiles
   config_schema:
   - name: page
     type: string
@@ -6063,8 +5904,7 @@ list_resource_overrides:
     type: string
     optional: true
     description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
-- resource: list_bulk_replicate_config_restore_logs
-  operation: listBulkReplicateConfigRestoreLogs
+- operation: listBulkReplicateConfigRestoreLogs
   config_schema:
   - name: page
     type: string
@@ -6074,52 +5914,34 @@ list_resource_overrides:
     type: string
     optional: true
     description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
-- resource: get_all_cluster_config_image_upgrade_status
-  operation: getAllClusterConfigImageUpgradeStatus
-- resource: get_all_cluster_config_image_upgrade_status_by_task_group_id
-  operation: getAllClusterConfigImageUpgradeStatusByTaskGroupId
-- resource: load_events
-  operation: loadEvents
-- resource: get_all_fabric_maps
-  operation: getAllFabricMaps
-- resource: get_all_cluster_circuit_tunnels_of_an_user_fabric_map
-  operation: getAllClusterCircuitTunnelsOfAnUserFabricMap
-- resource: get_all_cluster_maps_of_an_user_fabric_map
-  operation: getAllClusterMapsOfAnUserFabricMap
-- resource: get_all_internal_fabric_maps
-  operation: getAllInternalFabricMaps
-- resource: load_all_fabric_port_groups
-  operation: loadAllFabricPortGroups
-- resource: load_all_filter_resources
-  operation: loadAllFilterResources
-- resource: load_all_filter_templates
-  operation: loadAllFilterTemplates
-- resource: get_all_flex_inline_solutions
-  operation: getAllFlexInlineSolutions
-- resource: get_all_flex_inline_ssl_apps
-  operation: getAllFlexInlineSslApps
+- operation: getAllClusterConfigImageUpgradeStatus
+- operation: getAllClusterConfigImageUpgradeStatusByTaskGroupId
+- operation: loadEvents
+- operation: getAllFabricMaps
+- operation: getAllClusterCircuitTunnelsOfAnUserFabricMap
+- operation: getAllClusterMapsOfAnUserFabricMap
+- operation: getAllInternalFabricMaps
+- operation: loadAllFabricPortGroups
+- operation: loadAllFilterResources
+- operation: loadAllFilterTemplates
+- operation: getAllFlexInlineSolutions
+- operation: getAllFlexInlineSslApps
   config_schema:
   - name: cluster_id
     type: string
     optional: true
     description: If provided, ssl apps only for that cluster are returned
-- resource: get_all_giga_flex_inline_network_group
-  operation: getAllGigaFlexInlineNetworkGroup
+- operation: getAllGigaFlexInlineNetworkGroup
   config_schema:
   - name: cluster_id
     type: string
     optional: true
     description: if provided, Network groups only for that cluster is returned
-- resource: load_alert_policies
-  operation: loadAlertPolicies
-- resource: get_copilot_sysdumps
-  operation: getCopilotSysdumps
-- resource: load_all_fm_notification_target_config
-  operation: loadAllFmNotificationTargetConfig
-- resource: load_fm_backup_archive_servers
-  operation: loadFmBackupArchiveServers
-- resource: get_eports_interfaces
-  operation: getEportsInterfaces
+- operation: loadAlertPolicies
+- operation: getCopilotSysdumps
+- operation: loadAllFmNotificationTargetConfig
+- operation: loadFmBackupArchiveServers
+- operation: getEportsInterfaces
   config_schema:
   - name: cluster_id
     type: string
@@ -6132,73 +5954,42 @@ list_resource_overrides:
     type: string
     optional: true
     description: 'parentheses-enclosed comma-separated list of entity attributes, optionally qualified with the sort order attribute. The default sort order is ASC. Example: sort=(aaa,bbb:ASC,ccc:DESC)'
-- resource: get_all_gpfcp_profile
-  operation: getAllGpfcpProfile
-- resource: load_all_user_groups
-  operation: loadAllUserGroups
-- resource: load_all_gs_groups
-  operation: loadAllGsGroups
-- resource: load_all_gsops
-  operation: loadAllGsops
-- resource: get_all_gta_profiles
-  operation: getAllGtaProfiles
-- resource: load_all_header_strip
-  operation: loadAllHeaderStrip
-- resource: load_all_header_strip_aging
-  operation: loadAllHeaderStripAging
-- resource: get_allicap_client
-  operation: getAllicapClient
+- operation: getAllGpfcpProfile
+- operation: loadAllUserGroups
+- operation: loadAllGsGroups
+- operation: loadAllGsops
+- operation: getAllGtaProfiles
+- operation: loadAllHeaderStrip
+- operation: loadAllHeaderStripAging
+- operation: getAllicapClient
   config_schema:
   - name: cluster_id
     type: string
     optional: true
     description: If provided, icap client only for that cluster are returned
-- resource: load_all_image_servers
-  operation: loadAllImageServers
-- resource: load_all_heartbeat_packets
-  operation: loadAllHeartbeatPackets
-- resource: load_all_heartbeat_profiles
-  operation: loadAllHeartbeatProfiles
-- resource: load_all_ib_pathways
-  operation: loadAllIbPathways
-- resource: load_all_negative_heartbeat_profiles
-  operation: loadAllNegativeHeartbeatProfiles
-- resource: load_all_inline_network_lags
-  operation: loadAllInlineNetworkLags
-- resource: load_all_inline_networks
-  operation: loadAllInlineNetworks
-- resource: load_all_redundancy_profile
-  operation: loadAllRedundancyProfile
-- resource: load_all_inline_serial_tool_groups
-  operation: loadAllInlineSerialToolGroups
-- resource: load_all_inline_tool_groups
-  operation: loadAllInlineToolGroups
-- resource: load_all_inline_tools
-  operation: loadAllInlineTools
-- resource: load_all_app_visibility_solutions
-  operation: loadAllAppVisibilitySolutions
-- resource: get_all_intent_mobility
-  operation: getAllIntentMobility
-- resource: load_cards_details
-  operation: loadCardsDetails
-- resource: load_giga_ports
-  operation: loadGigaPorts
-- resource: load_ip_destination_statuses
-  operation: loadIpDestinationStatuses
-- resource: load_all_ip_interfaces
-  operation: loadAllIpInterfaces
-- resource: load_all_map_chains
-  operation: loadAllMapChains
-- resource: load_all_map_alias_chains
-  operation: loadAllMapAliasChains
-- resource: get_map_groups
-  operation: getMapGroups
-- resource: load_all_map_templates
-  operation: loadAllMapTemplates
-- resource: load_all_maps
-  operation: loadAllMaps
-- resource: get_all_ptp_counters
-  operation: getAllPtpCounters
+- operation: loadAllImageServers
+- operation: loadAllHeartbeatPackets
+- operation: loadAllHeartbeatProfiles
+- operation: loadAllIbPathways
+- operation: loadAllNegativeHeartbeatProfiles
+- operation: loadAllInlineNetworkLags
+- operation: loadAllInlineNetworks
+- operation: loadAllRedundancyProfile
+- operation: loadAllInlineSerialToolGroups
+- operation: loadAllInlineToolGroups
+- operation: loadAllInlineTools
+- operation: loadAllAppVisibilitySolutions
+- operation: getAllIntentMobility
+- operation: loadCardsDetails
+- operation: loadGigaPorts
+- operation: loadIpDestinationStatuses
+- operation: loadAllIpInterfaces
+- operation: loadAllMapChains
+- operation: loadAllMapAliasChains
+- operation: getMapGroups
+- operation: loadAllMapTemplates
+- operation: loadAllMaps
+- operation: getAllPtpCounters
   config_schema:
   - name: box_id
     type: integer
@@ -6207,8 +5998,7 @@ list_resource_overrides:
   - name: cluster_id
     type: string
     description: Target Cluster ID
-- resource: get_all_ptp_ports_counters
-  operation: getAllPtpPortsCounters
+- operation: getAllPtpPortsCounters
   config_schema:
   - name: box_id
     type: integer
@@ -6217,12 +6007,9 @@ list_resource_overrides:
   - name: cluster_id
     type: string
     description: Target Cluster ID
-- resource: load_all_device_credentials
-  operation: loadAllDeviceCredentials
-- resource: get_all_event_notification_configuration
-  operation: getAllEventNotificationConfiguration
-- resource: get_all_external_trap_receiver
-  operation: getAllExternalTrapReceiver
+- operation: loadAllDeviceCredentials
+- operation: getAllEventNotificationConfiguration
+- operation: getAllExternalTrapReceiver
   config_schema:
   - name: alias
     type: string
@@ -6276,91 +6063,61 @@ list_resource_overrides:
     type: string
     optional: true
     description: userName
-- resource: load_all_gigastream
-  operation: loadAllGigastream
-- resource: load_all_port_config
-  operation: loadAllPortConfig
-- resource: load_all_port_filter
-  operation: loadAllPortFilter
-- resource: load_all_port_group
-  operation: loadAllPortGroup
-- resource: load_all_port_pair
-  operation: loadAllPortPair
-- resource: load_all_stack_links
-  operation: loadAllStackLinks
-- resource: load_all_tool_port_mirror
-  operation: loadAllToolPortMirror
-- resource: get_all_ptp_clock_states
-  operation: getAllPtpClockStates
+- operation: loadAllGigastream
+- operation: loadAllPortConfig
+- operation: loadAllPortFilter
+- operation: loadAllPortGroup
+- operation: loadAllPortPair
+- operation: loadAllStackLinks
+- operation: loadAllToolPortMirror
+- operation: getAllPtpClockStates
   config_schema:
   - name: box_id
     type: integer
     optional: true
     description: specify the cluster node by boxId. By default all nodes are selected.
-- resource: get_all_ptp_parent
-  operation: getAllPtpParent
+- operation: getAllPtpParent
   config_schema:
   - name: box_id
     type: integer
     optional: true
     description: specify the cluster node by boxId. By default all nodes are selected.
-- resource: get_all_ptp_ports
-  operation: getAllPtpPorts
+- operation: getAllPtpPorts
   config_schema:
   - name: box_id
     type: integer
     optional: true
     description: specify the cluster node by boxId. By default all nodes are selected.
-- resource: get_all_time_stamping_ptp_configs
-  operation: getAllTimeStampingPtpConfigs
+- operation: getAllTimeStampingPtpConfigs
   config_schema:
   - name: box_id
     type: integer
     optional: true
     description: specify the cluster node by boxId. By default all nodes are selected.
-- resource: get_all_time_properties
-  operation: getAllTimeProperties
+- operation: getAllTimeProperties
   config_schema:
   - name: box_id
     type: integer
     optional: true
     description: specify the cluster node by boxId. By default all nodes are selected.
-- resource: load_all_roles
-  operation: loadAllRoles
-- resource: get_all_sffp_profile
-  operation: getAllSffpProfile
-- resource: load_spine_link_all
-  operation: loadSpineLinkAll
-- resource: get_all_external_export_target_server
-  operation: getAllExternalExportTargetServer
-- resource: get_system_diag_psu
-  operation: getSystemDiagPsu
-- resource: load_all_local_users
-  operation: loadAllLocalUsers
-- resource: load_all_radius_servers
-  operation: loadAllRadiusServers
-- resource: load_all_snmp_notif_targets
-  operation: loadAllSnmpNotifTargets
-- resource: load_all_v3_users
-  operation: loadAllV3Users
-- resource: load_all_tacacs_servers
-  operation: loadAllTacacsServers
-- resource: load_all_user_tags
-  operation: loadAllUserTags
-- resource: get_all_traffic_flows
-  operation: getAllTrafficFlows
-- resource: get_map_migration_results
-  operation: getMapMigrationResults
-- resource: get_all_traffic_policy_graph
-  operation: getAllTrafficPolicyGraph
-- resource: load_all_tunnel_endpoints
-  operation: loadAllTunnelEndpoints
-- resource: list_env
-  operation: listEnv
-- resource: list_connections
-  operation: listConnections
-- resource: get_all_app_info
-  operation: getAllAppInfo
+- operation: loadAllRoles
+- operation: getAllSffpProfile
+- operation: loadSpineLinkAll
+- operation: getAllExternalExportTargetServer
+- operation: getSystemDiagPsu
+- operation: loadAllLocalUsers
+- operation: loadAllRadiusServers
+- operation: loadAllSnmpNotifTargets
+- operation: loadAllV3Users
+- operation: loadAllTacacsServers
+- operation: loadAllUserTags
+- operation: getAllTrafficFlows
+- operation: getMapMigrationResults
+- operation: getAllTrafficPolicyGraph
+- operation: loadAllTunnelEndpoints
+- operation: listEnv
+- operation: listConnections
+- operation: getAllAppInfo
   config_schema:
   - name: env_id
     type: string
@@ -6368,10 +6125,8 @@ list_resource_overrides:
   - name: unify_id
     type: string
     description: unified resource identifier
-- resource: load_all_users
-  operation: loadAllUsers
-- resource: load_all_vports
-  operation: loadAllVports
+- operation: loadAllUsers
+- operation: loadAllVports
 function_overrides:
 - operation: Query_Raw_Data
   name: query_raw_data
