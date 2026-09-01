@@ -1,0 +1,72 @@
+---
+page_title: "gigavuecore_redefine_syslog_config Action - gigavuecore"
+subcategory: ""
+description: |-
+  Redefine Syslog config
+---
+
+# gigavuecore_redefine_syslog_config Action
+
+Redefine Syslog config
+
+-> **Note:** This action requires Terraform 1.14 or later. Standalone actions are invoked with `terraform apply -invoke=action.<type>.<name>` (or attached to a resource lifecycle `action_trigger`); a plain `terraform apply` does not invoke a standalone action block.
+
+## Example Usage
+
+```terraform
+action "gigavuecore_redefine_syslog_config" "example" {
+  config {
+    cluster_id   = "example"
+    cluster_name = "example"
+    syslog_config_list = [{
+      device_ip    = "example"
+      log_severity = "none"
+      target_hosts = [{
+        log_severity      = "none"
+        port              = 0
+        server            = "example"
+        ssh_enabled       = true
+        streaming_enabled = true
+        username          = "example"
+      }]
+    }]
+  }
+}
+```
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `cluster_id` (String, required) - Target Cluster ID
+* `cluster_name` (String, required) - Name of the cluster
+* `syslog_config_list` (Attributes List, required) - List of the syslog configuration specification for every node in the cluster (see [below for nested schema](#nestedatt--syslog_config_list))
+
+<a id="nestedatt--syslog_config_list"></a>
+### Nested Schema for `syslog_config_list`
+
+Required:
+
+* `device_ip` (String) - IP address of the device
+* `log_severity` (String) - Minimum syslog logging severity level
+
+Optional:
+
+* `target_hosts` (Attributes List) - List of syslog targets the device is streaming to (see [below for nested schema](#nestedatt--syslog_config_list--target_hosts))
+
+<a id="nestedatt--syslog_config_list--target_hosts"></a>
+### Nested Schema for `syslog_config_list.target_hosts`
+
+Required:
+
+* `log_severity` (String) - Minimum logging severity level the device will stream for this target
+* `port` (Number) - 0 represents UDP and non zero is TCP
+* `server` (String) - ipv4 or ipv6 or hostname
+* `streaming_enabled` (Boolean) - Is Syslog Streaming enabled
+
+Optional:
+
+* `ssh_enabled` (Boolean) - Is Syslog target configured to receive logs via SSH
+* `username` (String) - For syslog over UDP there won't be any user. Only valid for SSH type
+

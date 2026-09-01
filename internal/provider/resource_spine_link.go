@@ -1,0 +1,467 @@
+package provider
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"strings"
+	"time"
+)
+import (
+	client "github.com/JUSTINWMYLES/terraform-provider-gigavuecore/internal/client"
+	timeouts "github.com/hashicorp/terraform-plugin-framework-timeouts/resource/timeouts"
+	path "github.com/hashicorp/terraform-plugin-framework/path"
+	resource "github.com/hashicorp/terraform-plugin-framework/resource"
+	identityschema "github.com/hashicorp/terraform-plugin-framework/resource/identityschema"
+	schema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	types "github.com/hashicorp/terraform-plugin-framework/types"
+)
+
+// Compile-time interface assertions.
+var (
+	_ resource.Resource                = (*SpineLinkResource)(nil)
+	_ resource.ResourceWithIdentity    = (*SpineLinkResource)(nil)
+	_ resource.ResourceWithImportState = (*SpineLinkResource)(nil)
+	_ resource.ResourceWithConfigure   = (*SpineLinkResource)(nil)
+)
+
+// SpineLinkResource is the generated Terraform managed resource implementation.
+type SpineLinkResource struct {
+	client *client.Client
+}
+
+// SpineLinkResourceModel describes the Terraform state and plan shape for SpineLinkResource.
+type SpineLinkResourceModel struct {
+	Alias       types.String   `tfsdk:"alias"`
+	Comment     types.String   `tfsdk:"comment"`
+	Gigastreams types.List     `tfsdk:"gigastreams"`
+	LeafBoxId   types.Int64    `tfsdk:"leaf_box_id" json:"leafBoxId"`
+	Links       types.List     `tfsdk:"links"`
+	Timeouts    timeouts.Value `tfsdk:"timeouts"`
+}
+
+// Metadata returns the resource type name.
+func (r *SpineLinkResource) Metadata(_ context.Context, _ resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = "gigavuecore_spine_link"
+}
+
+// Schema returns the Terraform schema for this resource.
+func (r *SpineLinkResource) Schema(ctx context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{MarkdownDescription: "Add spine-link configuration", Attributes: map[string]schema.Attribute{"alias": schema.StringAttribute{Required: true}, "comment": schema.StringAttribute{Optional: true, Computed: true}, "gigastreams": schema.ListAttribute{MarkdownDescription: "leaf node stack gigastream aliases", Required: true, ElementType: types.StringType}, "leaf_box_id": schema.Int64Attribute{MarkdownDescription: "box-id of the leaf node this spineLink is configured on", Computed: true}, "links": schema.ListNestedAttribute{MarkdownDescription: "List of links from this Leaf node to the Spine Nodes", Computed: true, NestedObject: schema.NestedAttributeObject{Attributes: map[string]schema.Attribute{"leaf_gigastream": schema.StringAttribute{MarkdownDescription: "leaf node stack gigastream alias", Computed: true}, "spine_box_id": schema.Int64Attribute{MarkdownDescription: "box-id of the spine nodes this spineLink is connected to", Computed: true}, "spine_gigastream": schema.StringAttribute{MarkdownDescription: "spine node gigastream alias", Computed: true}, "stack_link": schema.StringAttribute{MarkdownDescription: "Alias of the Stack Link this Spine Link is running over. Will be empty if corresponding StackLink is not yet created", Computed: true}}}}}, Blocks: map[string]schema.Block{"timeouts": timeouts.Block(ctx, timeouts.Opts{Create: true, Read: true, Update: true, Delete: true})}}
+}
+
+// IdentitySchema returns the resource identity schema shared with the paired list resource.
+func (r *SpineLinkResource) IdentitySchema(_ context.Context, _ resource.IdentitySchemaRequest, resp *resource.IdentitySchemaResponse) {
+	resp.IdentitySchema = identityschema.Schema{Attributes: map[string]identityschema.Attribute{"alias": identityschema.StringAttribute{RequiredForImport: true}}}
+}
+
+// Create provisions the remote resource and stores the resulting state.
+func (r *SpineLinkResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan SpineLinkResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	timeout, diags := plan.Timeouts.Create(ctx, 20*time.Minute)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	ctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+	r.createRemote(ctx, &plan, resp)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("alias"), plan.Alias)...)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+}
+
+// createRemote performs the create HTTP exchange and decodes the response into plan. Extracted from Create so the request/response logic is unit-testable without a tfsdk.Plan.
+func (r *SpineLinkResource) createRemote(ctx context.Context, plan *SpineLinkResourceModel, resp *resource.CreateResponse) {
+	if r.client == nil {
+		resp.Diagnostics.AddError("Client Not Configured", "The API client was not set on the resource. The provider Configure method must run before resource operations; this is a bug in the generated provider.")
+		return
+	}
+	body, err := modelToJSONMap(&plan)
+	if err != nil {
+		resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", fmt.Sprintf("Could not build request body: %s", err))
+		return
+	}
+	payload, err := json.Marshal(body)
+	if err != nil {
+		resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", fmt.Sprintf("Could not encode request body: %s", err))
+		return
+	}
+	reqPath := "/spineLinks"
+	httpReq, err := r.client.NewRequest(ctx, http.MethodPost, reqPath, bytes.NewReader(payload))
+	if err != nil {
+		resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", fmt.Sprintf("Could not build request: %s", err))
+		return
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+	httpResp, err := r.client.Do(httpReq)
+	if err != nil {
+		resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", fmt.Sprintf("Could not send request: %s", err))
+		return
+	}
+	defer httpResp.Body.Close()
+	if !(httpResp.StatusCode == 201) {
+		switch httpResp.StatusCode {
+		case 400:
+			resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", "Invalid request. See errors payload for details")
+			return
+		case 401:
+			resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", "Not Authenticated. See errors payload for details")
+			return
+		case 403:
+			resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", "Access Denied. See errors payload for details")
+			return
+		case 404:
+			resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", "Entity Not Found. See errors payload for details")
+			return
+		case 409:
+			resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", "Entity Already Exists. See errors payload for details")
+			return
+		case 500:
+			resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", "Internal Server Error. See errors payload for details")
+			return
+		case 503:
+			resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", "Service Unavailable. See errors payload for details")
+			return
+		default:
+			apiErr, err := client.NewAPIError(httpResp)
+			if err != nil {
+				resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", fmt.Sprintf("Could not read error response: %s", err))
+				return
+			}
+			resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", apiErr.Error())
+			return
+		}
+	}
+	var data map[string]any
+	decoder := json.NewDecoder(httpResp.Body)
+	decoder.UseNumber()
+	if err := decoder.Decode(&data); err != nil && err != io.EOF {
+		resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", fmt.Sprintf("Could not decode response body: %s", err))
+		return
+	}
+	err = applyJSONToModel(&plan, data)
+	if err != nil {
+		resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", fmt.Sprintf("Could not map response to state: %s", err))
+		return
+	}
+	if plan.Alias.IsNull() || plan.Alias.IsUnknown() {
+		loc := httpResp.Header.Get("Location")
+		if loc != "" {
+			loc = strings.TrimRight(loc, "/")
+			i := strings.LastIndex(loc, "/")
+			if i >= 0 {
+				loc = loc[i+1:]
+			}
+			plan.Alias = types.StringValue(loc)
+		} else {
+			resp.Diagnostics.AddError("Error creating gigavuecore_spine_link", "The create response did not contain an identifier and no Location header was returned, so the resource cannot be tracked in state.")
+			return
+		}
+	}
+}
+
+// Read refreshes the Terraform state with the latest remote values.
+func (r *SpineLinkResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state SpineLinkResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	timeout, diags := state.Timeouts.Read(ctx, 10*time.Minute)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	ctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+	if r.readRemote(ctx, &state, resp) {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("alias"), state.Alias)...)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+}
+
+// readRemote performs the read HTTP exchange and decodes the response into state, returning removed=true when the API reports 404. Extracted from Read so the request/response logic is unit-testable without a tfsdk.State.
+func (r *SpineLinkResource) readRemote(ctx context.Context, state *SpineLinkResourceModel, resp *resource.ReadResponse) (removed bool) {
+	if r.client == nil {
+		resp.Diagnostics.AddError("Client Not Configured", "The API client was not set on the resource. The provider Configure method must run before resource operations; this is a bug in the generated provider.")
+		return
+	}
+	reqPath := "/spineLinks/{alias}"
+	reqPath = strings.ReplaceAll(reqPath, "{alias}", url.PathEscape(state.Alias.ValueString()))
+	httpReq, err := r.client.NewRequest(ctx, http.MethodGet, reqPath, nil)
+	if err != nil {
+		resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", fmt.Sprintf("Could not build request: %s", err))
+		return
+	}
+	httpResp, err := r.client.Do(httpReq)
+	if err != nil {
+		resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", fmt.Sprintf("Could not send request: %s", err))
+		return
+	}
+	defer httpResp.Body.Close()
+	if httpResp.StatusCode == http.StatusNotFound {
+		removed = true
+		return
+	}
+	if !(httpResp.StatusCode == 200) {
+		switch httpResp.StatusCode {
+		case 400:
+			resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", "Invalid request. See errors payload for details")
+			return
+		case 401:
+			resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", "Not Authenticated. See errors payload for details")
+			return
+		case 403:
+			resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", "Access Denied. See errors payload for details")
+			return
+		case 404:
+			resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", "Entity Not Found. See errors payload for details")
+			return
+		case 409:
+			resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", "Entity Already Exists. See errors payload for details")
+			return
+		case 500:
+			resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", "Internal Server Error. See errors payload for details")
+			return
+		case 503:
+			resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", "Service Unavailable. See errors payload for details")
+			return
+		default:
+			apiErr, err := client.NewAPIError(httpResp)
+			if err != nil {
+				resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", fmt.Sprintf("Could not read error response: %s", err))
+				return
+			}
+			resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", apiErr.Error())
+			return
+		}
+	}
+	var data map[string]any
+	decoder := json.NewDecoder(httpResp.Body)
+	decoder.UseNumber()
+	if err := decoder.Decode(&data); err != nil && err != io.EOF {
+		resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", fmt.Sprintf("Could not decode response body: %s", err))
+		return
+	}
+	err = applyJSONToModel(&state, data)
+	if err != nil {
+		resp.Diagnostics.AddError("Error reading gigavuecore_spine_link", fmt.Sprintf("Could not map response to state: %s", err))
+		return
+	}
+	return
+}
+
+// Update modifies the remote resource to match the desired plan.
+func (r *SpineLinkResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan SpineLinkResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	var state SpineLinkResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	timeout, diags := plan.Timeouts.Update(ctx, 20*time.Minute)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	ctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+	if plan.Alias.IsNull() || plan.Alias.IsUnknown() {
+		if !state.Alias.IsNull() && !state.Alias.IsUnknown() {
+			plan.Alias = state.Alias
+		}
+	}
+	preserveStateIntoPlan(&plan, &state)
+	r.updateRemote(ctx, &plan, resp)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.Identity.SetAttribute(ctx, path.Root("alias"), plan.Alias)...)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
+}
+
+// updateRemote performs the update HTTP exchange and decodes the response into plan. Extracted from Update so the request/response logic is unit-testable without a tfsdk.Plan.
+func (r *SpineLinkResource) updateRemote(ctx context.Context, plan *SpineLinkResourceModel, resp *resource.UpdateResponse) {
+	if r.client == nil {
+		resp.Diagnostics.AddError("Client Not Configured", "The API client was not set on the resource. The provider Configure method must run before resource operations; this is a bug in the generated provider.")
+		return
+	}
+	body, err := modelToJSONMap(&plan)
+	if err != nil {
+		resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", fmt.Sprintf("Could not build request body: %s", err))
+		return
+	}
+	payload, err := json.Marshal(body)
+	if err != nil {
+		resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", fmt.Sprintf("Could not encode request body: %s", err))
+		return
+	}
+	reqPath := "/spineLinks/{alias}"
+	reqPath = strings.ReplaceAll(reqPath, "{alias}", url.PathEscape(plan.Alias.ValueString()))
+	httpReq, err := r.client.NewRequest(ctx, http.MethodPatch, reqPath, bytes.NewReader(payload))
+	if err != nil {
+		resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", fmt.Sprintf("Could not build request: %s", err))
+		return
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+	httpResp, err := r.client.Do(httpReq)
+	if err != nil {
+		resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", fmt.Sprintf("Could not send request: %s", err))
+		return
+	}
+	defer httpResp.Body.Close()
+	if !(httpResp.StatusCode == 200) {
+		switch httpResp.StatusCode {
+		case 400:
+			resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", "Invalid request. See errors payload for details")
+			return
+		case 401:
+			resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", "Not Authenticated. See errors payload for details")
+			return
+		case 403:
+			resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", "Access Denied. See errors payload for details")
+			return
+		case 404:
+			resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", "Entity Not Found. See errors payload for details")
+			return
+		case 409:
+			resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", "Entity Already Exists. See errors payload for details")
+			return
+		case 500:
+			resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", "Internal Server Error. See errors payload for details")
+			return
+		case 503:
+			resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", "Service Unavailable. See errors payload for details")
+			return
+		default:
+			apiErr, err := client.NewAPIError(httpResp)
+			if err != nil {
+				resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", fmt.Sprintf("Could not read error response: %s", err))
+				return
+			}
+			resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", apiErr.Error())
+			return
+		}
+	}
+	var data map[string]any
+	decoder := json.NewDecoder(httpResp.Body)
+	decoder.UseNumber()
+	if err := decoder.Decode(&data); err != nil && err != io.EOF {
+		resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", fmt.Sprintf("Could not decode response body: %s", err))
+		return
+	}
+	err = applyJSONToModel(&plan, data)
+	if err != nil {
+		resp.Diagnostics.AddError("Error updating gigavuecore_spine_link", fmt.Sprintf("Could not map response to state: %s", err))
+		return
+	}
+}
+
+// Delete destroys the remote resource.
+func (r *SpineLinkResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state SpineLinkResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	timeout, diags := state.Timeouts.Delete(ctx, 10*time.Minute)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	ctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+	r.deleteRemote(ctx, &state, resp)
+}
+
+// deleteRemote performs the delete HTTP exchange, treating a 404 as already deleted. Extracted from Delete so the request/response logic is unit-testable without a tfsdk.State.
+func (r *SpineLinkResource) deleteRemote(ctx context.Context, state *SpineLinkResourceModel, resp *resource.DeleteResponse) {
+	if r.client == nil {
+		resp.Diagnostics.AddError("Client Not Configured", "The API client was not set on the resource. The provider Configure method must run before resource operations; this is a bug in the generated provider.")
+		return
+	}
+	reqPath := "/spineLinks/{alias}"
+	reqPath = strings.ReplaceAll(reqPath, "{alias}", url.PathEscape(state.Alias.ValueString()))
+	httpReq, err := r.client.NewRequest(ctx, http.MethodDelete, reqPath, nil)
+	if err != nil {
+		resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", fmt.Sprintf("Could not build request: %s", err))
+		return
+	}
+	httpResp, err := r.client.Do(httpReq)
+	if err != nil {
+		resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", fmt.Sprintf("Could not send request: %s", err))
+		return
+	}
+	defer httpResp.Body.Close()
+	if httpResp.StatusCode == http.StatusNotFound {
+		return
+	}
+	if !(httpResp.StatusCode == 204) {
+		switch httpResp.StatusCode {
+		case 400:
+			resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", "Invalid request. See errors payload for details")
+			return
+		case 401:
+			resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", "Not Authenticated. See errors payload for details")
+			return
+		case 403:
+			resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", "Access Denied. See errors payload for details")
+			return
+		case 404:
+			resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", "Entity Not Found. See errors payload for details")
+			return
+		case 409:
+			resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", "Entity Already Exists. See errors payload for details")
+			return
+		case 500:
+			resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", "Internal Server Error. See errors payload for details")
+			return
+		case 503:
+			resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", "Service Unavailable. See errors payload for details")
+			return
+		default:
+			apiErr, err := client.NewAPIError(httpResp)
+			if err != nil {
+				resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", fmt.Sprintf("Could not read error response: %s", err))
+				return
+			}
+			resp.Diagnostics.AddError("Error deleting gigavuecore_spine_link", apiErr.Error())
+			return
+		}
+	}
+}
+
+// Configure stores the API client supplied by the provider.
+func (r *SpineLinkResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError("Unexpected Resource Configure Type", fmt.Sprintf("Expected *client.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData))
+		return
+	}
+	r.client = c
+}
+
+// ImportState imports an existing remote resource into Terraform state.
+func (r *SpineLinkResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("alias"), req.ID)...)
+}
