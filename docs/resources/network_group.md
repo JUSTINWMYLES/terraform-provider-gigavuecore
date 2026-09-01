@@ -1,0 +1,81 @@
+---
+page_title: "gigavuecore_network_group Resource - gigavuecore"
+subcategory: ""
+description: |-
+  Create a FM level network group
+---
+
+# gigavuecore_network_group Resource
+
+Create a FM level network group
+
+## Example Usage
+
+```terraform
+resource "gigavuecore_network_group" "example" {
+  alias        = "example"
+  cluster_id   = "example"
+  health_state = "green"
+  health_state_reasons = [{
+    message                               = "example"
+    severity                              = "green"
+    traffic_health_state_computation_type = "PORT_LOW_UTIL"
+  }]
+  members = [{
+    alias        = "example"
+    cluster_name = "example"
+    type         = "IN"
+  }]
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `alias` (String, optional) - Alias of the network group
+* `cluster_id` (String, optional)
+* `health_state` (String, optional) - Read-only. 'green' indicates healthy state; 'yellow'  indicates warning state; 'orange'  indicates error state; 'red'  indicates critical state;
+* `health_state_reasons` (Attributes List, optional) (see [below for nested schema](#nestedatt--health_state_reasons))
+* `members` (Attributes List, optional) - Array holding inline network group members (see [below for nested schema](#nestedatt--members))
+
+### Nested Blocks
+
+* `timeouts` (Block Single) (see [below for nested schema](#nestedatt--timeouts))
+
+<a id="nestedatt--health_state_reasons"></a>
+### Nested Schema for `health_state_reasons`
+
+Optional:
+
+* `message` (String) - Read-only. Describes the reason for component's health state
+* `severity` (String) - Read-only. 'green' indicates healthy state; 'yellow'  indicates warning state; 'orange'  indicates error state; 'red'  indicates critical state;
+* `traffic_health_state_computation_type` (String) - Traffic Health State Computation Type
+
+<a id="nestedatt--members"></a>
+### Nested Schema for `members`
+
+Optional:
+
+* `alias` (String) - Alias of the inline network
+* `cluster_name` (String)
+* `type` (String) - Type of inline construct
+<a id="nestedatt--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+* `create` (String) - A create timeout for this operation, e.g. "20m0s". Overrides the generator default (20m0s).
+* `read` (String) - A read timeout for this operation, e.g. "10m0s". Overrides the generator default (10m0s).
+* `update` (String) - An update timeout for this operation, e.g. "20m0s". Overrides the generator default (20m0s).
+* `delete` (String) - A delete timeout for this operation, e.g. "10m0s". Overrides the generator default (10m0s).
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+terraform import gigavuecore_network_group.example {alias}
+```
