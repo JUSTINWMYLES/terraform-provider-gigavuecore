@@ -2,26 +2,50 @@ provider:
   name: gigavuecore
   display_name: terraform-provider-gigavuecore
   version: 0.1.0
-  description: |+
-    This provider is generated using [eidos](https://github.com/signalbreak-labs/eidos) from the Gigamon GigaVUE-FM [OpenAPI](https://docs.gigamon.com/ref-api/Content/apiref_514onwards/doc/webapp/release/6.14.00%20GigaVUE-FM%20Core/openapi.fm.yaml) specification.
-
-    ## Example Usage
-
-    ```hcl
-    provider "gigavuecore" {
-      endpoint = "https://fm.example.com"
-      username = "admin"
-      password = "changeme"
-    }
-    ```
-
+  description: This provider is generated using [eidos](https://github.com/signalbreak-labs/eidos) from the Gigamon GigaVUE-FM [OpenAPI](https://docs.gigamon.com/ref-api/Content/apiref_514onwards/doc/webapp/release/6.14.00%20GigaVUE-FM%20Core/openapi.fm.yaml) specification.
   author: JUSTINWMYLES
-  contact_email: opensource@gigamon.com
+  contact_email: justin.myles@gmail.com
   license: MPL-2.0
   repository: https://github.com/JUSTINWMYLES/terraform-provider-gigavuecore
   protocol_version: 6
 servers:
 - url: /api/v1.3
+generate_terraform_tests: false
+generation:
+spec:
+  path: spec/openapi.fm.bundled.yaml
+  format: yaml
+auth:
+- scheme: basic
+global_timeouts:
+  create: 1200
+  read: 1200
+  update: 1200
+  delete: 1200
+polymorphism:
+  strategy: dynamic_union
+  oneOf:
+  - schema: UnifiedResourcesConnectionGetQueryResponse
+    variants:
+    - schema: AwsConnection
+    - schema: AzureConnection
+    - schema: NsxtConnection
+    - schema: EsxiConnection
+    - schema: OpenStackConnection
+  - schema: UnifiedResourcesConnectionListQueryResponse
+    variants:
+    - schema: AwsConnections
+    - schema: AzureConnections
+    - schema: NsxtConnections
+    - schema: EsxiConnections
+    - schema: OpenStackConnection
+  - schema: UnifiedResourcesDeployGetGvTapQueryResponse
+    variants:
+    - schema: AwsGvTapDeployment
+    - schema: AzureGvTapDeployment
+    - schema: NsxtDeployment
+    - schema: EsxiDeployment
+    - schema: OpenStackGvTapDeployment
 resource_overrides:
 - operation: RedefinesTheFMTemplate
   generate_resource: true
@@ -6207,39 +6231,3 @@ function_overrides:
   name: load_all_default_search_domains
   type: giga-vue-fm-6-14-api-reference_load_all_default_search_domains
   return_type: dynamic
-auth:
-- scheme: basic
-global_timeouts:
-  create: 20m
-  read: 10m
-  update: 20m
-  delete: 10m
-polymorphism:
-  strategy: dynamic_union
-  oneOf:
-  - schema: UnifiedResourcesConnectionGetQueryResponse
-    variants:
-    - schema: AwsConnection
-    - schema: AzureConnection
-    - schema: NsxtConnection
-    - schema: EsxiConnection
-    - schema: OpenStackConnection
-  - schema: UnifiedResourcesConnectionListQueryResponse
-    variants:
-    - schema: AwsConnections
-    - schema: AzureConnections
-    - schema: NsxtConnections
-    - schema: EsxiConnections
-    - schema: OpenStackConnection
-  - schema: UnifiedResourcesDeployGetGvTapQueryResponse
-    variants:
-    - schema: AwsGvTapDeployment
-    - schema: AzureGvTapDeployment
-    - schema: NsxtDeployment
-    - schema: EsxiDeployment
-    - schema: OpenStackGvTapDeployment
-generate_terraform_tests: false
-generation:
-spec:
-  path: spec/openapi.fm.bundled.yaml
-  format: yaml
