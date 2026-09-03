@@ -5784,12 +5784,6 @@ action_overrides:
 - operation: clearTrafficPolicyConfiguration
   name: clear_traffic_policy_configuration
   description: Clear Prefiltering Policy configuration
-- operation: editUserDetails
-  name: edit_user_details
-  description: Edit User details
-- operation: deleteUser
-  name: delete_user
-  description: Delete a user
 - operation: fmUnlockUserConfig
   name: fm_unlock_user_config
   description: FM Unlock User
