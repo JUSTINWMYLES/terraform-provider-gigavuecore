@@ -2864,6 +2864,8 @@ resource_overrides:
   generate_resource: true
   resource_name: user
   read_operation: loadUserByUsername
+  update_operation: editUserDetails
+  delete_operation: deleteUser
 - operation: createUserRole
   generate_resource: true
   resource_name: user_role
