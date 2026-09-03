@@ -2121,9 +2121,12 @@ resource_overrides:
   resource_name: port_filter
   id_attribute: port
   import_format: '{port}'
+  # Rules are managed by the port_filter_rule child resource (add/update/remove
+  # rule operations), so the parent drops the nested rules collection entirely.
+  exclude_attributes:
+  - rules
   computed_attributes:
   - port_id
-  - drop_rules
   - comment
   - pos
   - subset
@@ -2133,7 +2136,18 @@ resource_overrides:
   - mask
   - cidr_mask
   - net_mask
-  - pass_rules
+- operation: addPortFilterRule
+  generate_resource: true
+  resource_name: port_filter_rule
+  read_operation: getPortFilterByPortId
+  update_operation: updatePortFilterRule
+  delete_operation: removePortFilterRule
+  # The read is a parent GET (getPortFilterByPortId); the rule is located by
+  # descending into the response's rules collection and selecting the element
+  # whose ruleId matches state. The "*" searches both passRules and dropRules
+  # arrays, since ruleId is unique across them.
+  read_collection_path: rules.*
+  id_attribute: rule_id
 - operation: createPortGroup
   resource_name: port_group
   id_attribute: alias
@@ -5303,15 +5317,6 @@ action_overrides:
 - operation: updatePortConfig
   name: update_port_config
   description: Update a PortConfig configuration
-- operation: removePortFilterRule
-  name: remove_port_filter_rule
-  description: Remove a filtering rule from a Port
-- operation: addPortFilterRule
-  name: add_port_filter_rule
-  description: Add new filtering rule to a Port
-- operation: updatePortFilterRule
-  name: update_port_filter_rule
-  description: update filtering rule of a Port
 - operation: deleteAllSxIps
   name: delete_all_sx_ips
   description: new in H 5.8
