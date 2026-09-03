@@ -6246,14 +6246,6 @@ polymorphism:
     - schema: OpenStackGvTapDeployment
 generate_terraform_tests: false
 generation:
-  # TEMPORARY unblock for the release workflow (issue #4): the acceptance
-  # tests eidos generates for alert_policy, app_visibility, mobility, node,
-  # solution, tag, and intent_policy fail against their mock servers due to
-  # upstream eidos bugs (mock ID lookup uses the snake_case tfsdk name instead
-  # of the camelCase wire name; Required Dynamic mutation params emit `null`).
-  # This also disables the passing unit/coverage tests until the eidos fixes
-  # land upstream. Remove this section once eidos is fixed and re-run.
-  skip_tests: true
 spec:
   path: spec/openapi.fm.bundled.yaml
   format: yaml
