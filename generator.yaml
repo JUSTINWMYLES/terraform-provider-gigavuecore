@@ -18,10 +18,10 @@ spec:
 auth:
 - scheme: basic
 global_timeouts:
-  create: 1200
-  read: 1200
-  update: 1200
-  delete: 1200
+  create: 20m
+  read: 20m
+  update: 20m
+  delete: 20m
 polymorphism:
   strategy: dynamic_union
   oneOf:
