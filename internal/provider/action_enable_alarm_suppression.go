@@ -1,0 +1,133 @@
+package provider
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+import (
+	client "github.com/JUSTINWMYLES/terraform-provider-gigavuecore/internal/client"
+	action "github.com/hashicorp/terraform-plugin-framework/action"
+	schema "github.com/hashicorp/terraform-plugin-framework/action/schema"
+	types "github.com/hashicorp/terraform-plugin-framework/types"
+)
+
+// Compile-time interface assertion for action.Action.
+var _ action.Action = (*EnableAlarmSuppressionAction)(nil)
+
+// Compile-time interface assertion for action.ActionWithConfigure.
+var _ action.ActionWithConfigure = (*EnableAlarmSuppressionAction)(nil)
+
+// EnableAlarmSuppressionAction is the generated Terraform action implementation.
+type EnableAlarmSuppressionAction struct {
+	client *client.Client
+}
+
+// EnableAlarmSuppressionActionModel describes the action configuration shape.
+type EnableAlarmSuppressionActionModel struct {
+	SuppressedEntities types.List `tfsdk:"suppressed_entities" json:"suppressedEntities"`
+}
+
+// NewEnableAlarmSuppressionAction returns a new instance of the generated action.
+func NewEnableAlarmSuppressionAction() action.Action {
+	return &EnableAlarmSuppressionAction{}
+}
+
+// Metadata returns the action type name.
+func (r *EnableAlarmSuppressionAction) Metadata(_ context.Context, req action.MetadataRequest, resp *action.MetadataResponse) {
+	resp.TypeName = "gigavuecore_enable_alarm_suppression"
+}
+
+// Schema returns the action schema.
+func (r *EnableAlarmSuppressionAction) Schema(_ context.Context, _ action.SchemaRequest, resp *action.SchemaResponse) {
+	resp.Schema = schema.Schema{Description: "Enable alarm suppression rules for multiple resources", Attributes: map[string]schema.Attribute{"suppressed_entities": schema.ListNestedAttribute{MarkdownDescription: "Suppression Rules for resource", Required: true, NestedObject: schema.NestedAttributeObject{Attributes: map[string]schema.Attribute{"alarm_types": schema.ListAttribute{Optional: true, ElementType: types.StringType}, "alias": schema.StringAttribute{MarkdownDescription: "Alias", Optional: true}, "cluster_id": schema.StringAttribute{MarkdownDescription: "Cluster/Node Id", Optional: true}, "created_by": schema.StringAttribute{MarkdownDescription: "Alarm suppression rule created by FM User", Optional: true}, "created_ts": schema.StringAttribute{MarkdownDescription: "Alarm suppression rule creation timestamp in ISO 8601 format", Optional: true}, "enable": schema.BoolAttribute{MarkdownDescription: "FM Alarm Suppression rule state", Optional: true}, "expiry_time": schema.Int64Attribute{MarkdownDescription: "Expiry interval for suppression rule", Optional: true}, "expiry_time_unit": schema.StringAttribute{MarkdownDescription: "Expiry interval unit", Optional: true}, "expiry_ts": schema.StringAttribute{MarkdownDescription: "Expiry Timestamp(UTC) for suppression rule", Optional: true}, "hostname": schema.StringAttribute{MarkdownDescription: "FM Hostname", Optional: true}, "resource_id": schema.StringAttribute{MarkdownDescription: "Id of the resource to be suppressed", Required: true}, "resource_type": schema.StringAttribute{Required: true}, "selected_reason": schema.StringAttribute{MarkdownDescription: "Suppression Reason", Optional: true}, "tags": schema.ListNestedAttribute{Optional: true, NestedObject: schema.NestedAttributeObject{Attributes: map[string]schema.Attribute{"tag_key": schema.StringAttribute{MarkdownDescription: "Name of the tag", Required: true}, "tag_values": schema.ListAttribute{MarkdownDescription: "All possible values of the tag", Required: true, ElementType: types.StringType}}}}, "updated_by": schema.StringAttribute{MarkdownDescription: "Alarm suppression rule updated by FM User", Optional: true}, "updated_ts": schema.StringAttribute{MarkdownDescription: "Alarm suppression rule updated timestamp in ISO 8601 format", Optional: true}}}}}}
+}
+
+// Invoke executes the action against the remote API.
+func (r *EnableAlarmSuppressionAction) Invoke(ctx context.Context, req action.InvokeRequest, resp *action.InvokeResponse) {
+	var config EnableAlarmSuppressionActionModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	r.invokeRemote(ctx, &config, resp)
+}
+
+// invokeRemote performs the invoke HTTP exchange and surfaces any error via diagnostics. Extracted from Invoke so the request/response logic is unit-testable without a tfsdk.Config.
+func (r *EnableAlarmSuppressionAction) invokeRemote(ctx context.Context, config *EnableAlarmSuppressionActionModel, resp *action.InvokeResponse) {
+	if r.client == nil {
+		resp.Diagnostics.AddError("Client Not Configured", "The API client was not set on the resource. The provider Configure method must run before resource operations; this is a bug in the generated provider.")
+		return
+	}
+	reqPath := "/alarms/suppression"
+	body, err := modelToJSONMap(&config)
+	if err != nil {
+		resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", fmt.Sprintf("Could not build request body: %s", err))
+		return
+	}
+	payload, err := json.Marshal(body)
+	if err != nil {
+		resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", fmt.Sprintf("Could not encode request body: %s", err))
+		return
+	}
+	httpReq, err := r.client.NewRequest(ctx, http.MethodPost, reqPath, bytes.NewReader(payload))
+	if err != nil {
+		resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", fmt.Sprintf("Could not build request: %s", err))
+		return
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+	httpResp, err := r.client.Do(httpReq)
+	if err != nil {
+		resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", fmt.Sprintf("Could not send request: %s", err))
+		return
+	}
+	defer httpResp.Body.Close()
+	if !(httpResp.StatusCode == 200) {
+		switch httpResp.StatusCode {
+		case 400:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", "Invalid request. See errors payload for details")
+			return
+		case 401:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", "Not Authenticated. See errors payload for details")
+			return
+		case 403:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", "Access Denied. See errors payload for details")
+			return
+		case 404:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", "Entity Not Found. See errors payload for details")
+			return
+		case 409:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", "Entity Already Exists. See errors payload for details")
+			return
+		case 500:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", "Internal Server Error. See errors payload for details")
+			return
+		case 503:
+			resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", "Service Unavailable. See errors payload for details")
+			return
+		default:
+			apiErr, err := client.NewAPIError(httpResp)
+			if err != nil {
+				resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", fmt.Sprintf("Could not read error response: %s", err))
+				return
+			}
+			resp.Diagnostics.AddError("Error invoking gigavuecore_enable_alarm_suppression", apiErr.Error())
+			return
+		}
+	}
+}
+
+// Configure stores the API client supplied by the provider.
+func (r *EnableAlarmSuppressionAction) Configure(_ context.Context, req action.ConfigureRequest, resp *action.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError("Unexpected Action Configure Type", fmt.Sprintf("Expected *client.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData))
+		return
+	}
+	r.client = c
+}

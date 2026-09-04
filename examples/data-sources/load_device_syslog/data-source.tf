@@ -1,0 +1,17 @@
+data "gigavuecore_load_device_syslog" "example" {
+  category        = "LINK"
+  cluster_id      = "example"
+  device_ip       = "example"
+  end_time        = "example"
+  hostname        = "example"
+  page            = "example"
+  process         = "example"
+  resource_id     = "example"
+  resource_type   = "Cpu"
+  severity        = "EMERG"
+  sort            = "example"
+  start_time      = "example"
+  syslog_priority = "example"
+  syslog_version  = "example"
+  type            = "example"
+}
