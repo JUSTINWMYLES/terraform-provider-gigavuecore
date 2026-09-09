@@ -1,0 +1,4 @@
+# Example: provider::gigavuecore::query_raw_data("<since>", "<start_time>", "<end_time>", "<index_pattern>", "<fm_tags>", "<group_by>", "<tags>", "<size>", true, "<response_scroll_timeout>", "<sort_by>", "<query_objects>", "<agg_field>", "<bucket_interval>", true, true, "<date_time_stamp_field>", true, "<exclude_fields>", "<sort_by_field>", true, "<aggregator>", "<metrics>", true, true, true, "<result_aggregator>", "<exclude_agg_from_response>")
+output "example" {
+  value = provider::gigavuecore::query_raw_data("<since>", "<start_time>", "<end_time>", "<index_pattern>", "<fm_tags>", "<group_by>", "<tags>", "<size>", true, "<response_scroll_timeout>", "<sort_by>", "<query_objects>", "<agg_field>", "<bucket_interval>", true, true, "<date_time_stamp_field>", true, "<exclude_fields>", "<sort_by_field>", true, "<aggregator>", "<metrics>", true, true, true, "<result_aggregator>", "<exclude_agg_from_response>")
+}

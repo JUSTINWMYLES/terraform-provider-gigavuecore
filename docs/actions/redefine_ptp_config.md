@@ -1,0 +1,35 @@
+---
+page_title: "gigavuecore_redefine_ptp_config Action - gigavuecore"
+subcategory: ""
+description: |-
+  Redefine PTP Configuration
+---
+
+# gigavuecore_redefine_ptp_config Action
+
+Redefine PTP Configuration
+
+-> **Note:** This action requires Terraform 1.14 or later. Standalone actions are invoked with `terraform apply -invoke=action.<type>.<name>` (or attached to a resource lifecycle `action_trigger`); a plain `terraform apply` does not invoke a standalone action block.
+
+## Example Usage
+
+```terraform
+action "gigavuecore_redefine_ptp_config" "example" {
+  config {
+    cluster_id = "example"
+    enabled    = true
+    mode       = "peer"
+  }
+}
+```
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `cluster_id` (String, required) - Target Cluster ID
+* `enabled` (Boolean, required) - enable/disable use of NTP for synchronization of the system's clock
+* `mode` (String, optional)
+
+

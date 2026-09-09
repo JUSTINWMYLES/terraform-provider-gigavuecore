@@ -1,0 +1,28 @@
+package provider
+
+import (
+	"context"
+	"testing"
+)
+import tfframeworkresource "github.com/hashicorp/terraform-plugin-framework/resource"
+
+// TestAlertPolicyResourceSchemaValidation verifies that the generated resource schema is valid.
+func TestAlertPolicyResourceSchemaValidation(t *testing.T) {
+	r := &AlertPolicyResource{}
+	var resp tfframeworkresource.SchemaResponse
+	r.Schema(context.Background(), tfframeworkresource.SchemaRequest{}, &resp)
+	diags := resp.Schema.ValidateImplementation(context.Background())
+	if diags.HasError() {
+		t.Fatalf("schema validation failed: %s", diags)
+	}
+}
+
+// TestAlertPolicyResourceMetadata verifies that the generated resource reports the expected type name.
+func TestAlertPolicyResourceMetadata(t *testing.T) {
+	r := &AlertPolicyResource{}
+	var resp tfframeworkresource.MetadataResponse
+	r.Metadata(context.Background(), tfframeworkresource.MetadataRequest{}, &resp)
+	if resp.TypeName != "gigavuecore_alert_policy" {
+		t.Fatalf("TypeName = %q, want %q", resp.TypeName, "gigavuecore_alert_policy")
+	}
+}
