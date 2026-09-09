@@ -117,7 +117,11 @@ resource_overrides:
 - operation: configureGigasmartInterface
   resource_name: engine
   id_attribute: eport
-  import_format: '{eport}'
+  # eport values are chassis/slot/port identifiers (e.g. 1/1/e1). eidos
+  # auto-extends a bare format with the required clusterId read param using
+  # a '/' delimiter, which collides with slashes in the port ID itself.
+  # Spelling the full format pins the ':' delimiter so the import ID parses.
+  import_format: '{eport}:{cluster_id}'
   computed_attributes:
   - dhcp
   - dns
@@ -2144,7 +2148,11 @@ resource_overrides:
 - operation: createPortFilter
   resource_name: port_filter
   id_attribute: port
-  import_format: '{port}'
+  # port values are chassis/slot/port identifiers (e.g. 1/1/c4). eidos
+  # auto-extends a bare format with the required clusterId read param using
+  # a '/' delimiter, which collides with slashes in the port ID itself.
+  # Spelling the full format pins the ':' delimiter so the import ID parses.
+  import_format: '{port}:{cluster_id}'
   # Rules are managed by the port_filter_rule child resource (add/update/remove
   # rule operations), so the parent drops the nested rules collection entirely.
   exclude_attributes:
