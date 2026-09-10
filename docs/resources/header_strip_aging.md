@@ -1,0 +1,49 @@
+---
+page_title: "gigavuecore_header_strip_aging Resource - gigavuecore"
+subcategory: ""
+description: |-
+  Configure headerstrip aging
+---
+
+# gigavuecore_header_strip_aging Resource
+
+Configure headerstrip aging
+
+~> **Note:** This resource is not yet wired to a remote API endpoint. Invoking it fails with an explicit "not wired" diagnostic instead of calling the API. The OpenAPI operations it was inferred from could not be resolved into a complete mapping; consult the eidos generation warnings for the exact cause.
+
+## Example Usage
+
+```terraform
+resource "gigavuecore_header_strip_aging" "example" {
+  aging_interval = 300
+  box_id         = "example"
+  dst_port       = 0
+  protocol_type  = "none"
+}
+```
+
+## Schema
+
+### Arguments
+
+The following arguments are supported:
+
+* `aging_interval` (Number, optional) - Interval in sec. Valid range 300-1000000. Enter 0 to disable.
+* `box_id` (String, required) - device box id. valid range 1 - 64. all is applicable only for post request.
+* `dst_port` (Number, optional) - L4 destination port number.Valid value is between 0 to 65535.
+* `protocol_type` (String, optional) - protocol type
+
+### Nested Blocks
+
+* `timeouts` (Block Single) (see [below for nested schema](#nestedatt--timeouts))
+
+<a id="nestedatt--timeouts"></a>
+### Nested Schema for `timeouts`
+
+Optional:
+
+* `create` (Number) - A create timeout in seconds for this operation. Overrides the generator default (1200 seconds).
+* `read` (Number) - A read timeout in seconds for this operation. Overrides the generator default (1200 seconds).
+* `update` (Number) - An update timeout in seconds for this operation. Overrides the generator default (1200 seconds).
+* `delete` (Number) - A delete timeout in seconds for this operation. Overrides the generator default (1200 seconds).
+
