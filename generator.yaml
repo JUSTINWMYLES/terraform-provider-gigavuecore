@@ -122,6 +122,12 @@ resource_overrides:
   # a '/' delimiter, which collides with slashes in the port ID itself.
   # Spelling the full format pins the ':' delimiter so the import ID parses.
   import_format: '{eport}:{cluster_id}'
+  # GigaVUE-FM REST API paths replace '/' with '_' in port ID segments
+  # ("5/2/x8" becomes "5_2_x8" per the REST API User's Guide) while body
+  # values keep the slash form. Rewrite the port value before it is
+  # substituted into a request path.
+  path_param_transforms:
+    eport: slash_to_underscore
   computed_attributes:
   - dhcp
   - dns
@@ -2153,6 +2159,12 @@ resource_overrides:
   # a '/' delimiter, which collides with slashes in the port ID itself.
   # Spelling the full format pins the ':' delimiter so the import ID parses.
   import_format: '{port}:{cluster_id}'
+  # GigaVUE-FM REST API paths replace '/' with '_' in port ID segments
+  # ("5/2/x8" becomes "5_2_x8" per the REST API User's Guide) while body
+  # values keep the slash form. Rewrite the port value before it is
+  # substituted into a request path.
+  path_param_transforms:
+    portId: slash_to_underscore
   # Rules are managed by the port_filter_rule child resource (add/update/remove
   # rule operations), so the parent drops the nested rules collection entirely.
   exclude_attributes:
@@ -2180,6 +2192,16 @@ resource_overrides:
   # arrays, since ruleId is unique across them.
   read_collection_path: rules.*
   id_attribute: rule_id
+  # Rules are identified by their FM-assigned rule_id, which is not derivable
+  # from port + cluster alone: without it in the import ID the generated read
+  # silently falls back to the first rule in the collection and the imported
+  # state tracks an arbitrary rule. Spelling the full format (port_id, rule_id,
+  # and the required clusterId read param) pins the ':' delimiter.
+  import_format: '{port_id}:{rule_id}:{cluster_id}'
+  # Same GigaVUE-FM underscore path convention as the port_filter parent:
+  # body values are slash-form (1/1/c4), path segments are 1_1_c4.
+  path_param_transforms:
+    portId: slash_to_underscore
 - operation: createPortGroup
   resource_name: port_group
   id_attribute: alias
